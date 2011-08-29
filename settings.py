@@ -4,6 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
+    ('Damien Ayers', 'd.ayers@uq.edu.au'),
     # ('Your Name', 'your_email@example.com'),
 )
 
@@ -120,6 +121,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'cat',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging
