@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
-from cat.models import MuseumObject,FunctionalCategory
+from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
 from django.core import management
+from django.db import transaction
 
 import csv
 import sys
@@ -12,6 +13,7 @@ def prepare_stdout():
     unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
     sys.stdout = unbuffered
 
+@transaction.commit_manually
 def import_csv(path):
     data = csv.DictReader(open(path + ARTEFACT_CSV))
 
@@ -28,16 +30,30 @@ def import_csv(path):
         m = MuseumObject()
         m.registration_number = r["Reg_counter"]
         m.old_registration_number = r["Old_Registration_nmbr"]
-        fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
-        m.functional_category = fc
+        if r["Aquisition_Date"] != "":
+            m.acquisition_date = r["Aquisition_Date"]
+        m.acquisition_method = r["Aquisition_Method"]
+        m.access_status = r["AccessStatus"]
+        m.loan_status = r["Loan_Status"]
+        m.country = r["Country_Name"]
         m.description = r["Description"]
         m.comment = r["Comment"]
-        m.country = r["Country_Name"]
+
+        fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
+        m.functional_category = fc
+
+        at, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
+        m.artefact_type = at
+
+        cb, created = CulturalBloc.objects.get_or_create(name=r['CulturalBloc'])
+        m.cultural_bloc = cb
+
         m.save()
 
         count += 1
         if count > 500:
             break
+    transaction.commit()
 
 class Command(BaseCommand):
 
