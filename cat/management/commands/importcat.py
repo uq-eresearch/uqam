@@ -1,11 +1,13 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
+from cat.models import Person
 from django.core import management
 from django.db import transaction
 
 import csv
 import sys
 import os
+import string
 
 ARTEFACT_CSV = 'Artefact.csv'
 
@@ -13,8 +15,33 @@ def prepare_stdout():
     unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
     sys.stdout = unbuffered
 
+def clean_row(row):
+    for key,value in row.items():
+        row[key] = value.strip()
+    row["Functional_Category"] = string.capwords(row["Functional_Category"])
+    row["Loan_Status"] = string.capwords(row["Loan_Status"])
+    return row
+
+
 @transaction.commit_manually
-def import_csv(path):
+def import_people(path):
+    data = csv.DictReader(open(path + "Person.csv"))
+
+    for r in data:
+        for key,value in r.items():
+            r[key] = value.strip()
+        p = Person()
+        p.id = r["Person idnmbr"]
+        p.name = r["Name"]
+        p.comments = r["PersonComments"]
+        p.save()
+    transaction.commit()
+
+
+
+
+@transaction.commit_manually
+def import_artefacts(path):
     data = csv.DictReader(open(path + ARTEFACT_CSV))
 
     count = 0
@@ -24,10 +51,10 @@ def import_csv(path):
     for r in data:
         sys.stdout.write('.')
 
-        for key,value in r.items():
-            r[key] = value.strip()
+        r = clean_row(r)
 
         m = MuseumObject()
+# Map simple fields
         m.registration_number = r["Reg_counter"]
         m.old_registration_number = r["Old_Registration_nmbr"]
         if r["Aquisition_Date"] != "":
@@ -39,6 +66,7 @@ def import_csv(path):
         m.description = r["Description"]
         m.comment = r["Comment"]
 
+# Map relations
         fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
         m.functional_category = fc
 
@@ -48,12 +76,16 @@ def import_csv(path):
         cb, created = CulturalBloc.objects.get_or_create(name=r['CulturalBloc'])
         m.cultural_bloc = cb
 
+        p = Person.objects.get(pk=int(r["Collector_photographerID"]))
+        m.collector = p
+
         m.save()
 
         count += 1
         if count > 500:
             break
     transaction.commit()
+
 
 class Command(BaseCommand):
 
@@ -70,6 +102,7 @@ class Command(BaseCommand):
         management.call_command('reset', 'cat', interactive=False)
         management.call_command('syncdb', interactive=False)
 
-        import_csv(dir)
+        import_people(dir)
+        import_artefacts(dir)
 
         

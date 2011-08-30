@@ -18,7 +18,7 @@ class MuseumObject(models.Model):
 #    region = models.CharField(max_length=30)
 #    place = models.CharField(max_length=30)
 #    australian_state = models.CharField(max_length=30)
-#    collector = models.CharField(max_length=30)
+    collector = models.ForeignKey('Person', null=True)
 #    how_collector_obtained = models.CharField(max_length=30)
 #    photographer = models.CharField(max_length=30)
 #    source = models.CharField(max_length=30)
@@ -62,3 +62,8 @@ class ArtefactType(models.Model):
 
 class Person(models.Model):
     name = models.CharField(max_length=30)
+    comments = models.TextField(blank=True)
+    def __unicode__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "People"
