@@ -1,11 +1,14 @@
 # Django settings for uqam project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+DIRNAME = os.path.dirname(__file__)
+# MEDIA_ROOT = os.path.join(DIRNAME, 'static')
+
 ADMINS = (
     ('Damien Ayers', 'd.ayers@uq.edu.au'),
-    # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
