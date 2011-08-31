@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
-from cat.models import Person
+from cat.models import Person, Place
 from django.core import management
 from django.db import transaction
 
@@ -50,11 +50,11 @@ def import_artefacts(path):
 
     for r in data:
         sys.stdout.write('.')
-
         r = clean_row(r)
 
         m = MuseumObject()
-# Map simple fields
+
+        # Map simple fields
         m.registration_number = r["Reg_counter"]
         m.old_registration_number = r["Old_Registration_nmbr"]
         if r["Aquisition_Date"] != "":
@@ -66,9 +66,12 @@ def import_artefacts(path):
         m.description = r["Description"]
         m.comment = r["Comment"]
 
-# Map relations
+        # Map relations
         fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
         m.functional_category = fc
+
+        pl, created = Place.objects.get_or_create(name=r['Place'],australian_state=r['State_Abbr'],region=r['Region'],country=r['Country_Name'])
+        m.place = pl
 
         at, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
         m.artefact_type = at

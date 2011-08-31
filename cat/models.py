@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-
 class MuseumObject(models.Model):
     registration_number = models.IntegerField()
     old_registration_number = models.CharField(max_length=30, blank=True)
@@ -18,6 +17,7 @@ class MuseumObject(models.Model):
 #    region = models.CharField(max_length=30)
 #    place = models.CharField(max_length=30)
 #    australian_state = models.CharField(max_length=30)
+    place = models.ForeignKey('Place', null=True)
     collector = models.ForeignKey('Person', null=True)
 #    how_collector_obtained = models.CharField(max_length=30)
 #    photographer = models.CharField(max_length=30)
@@ -57,6 +57,14 @@ class CulturalBloc(models.Model):
 
 class ArtefactType(models.Model):
     name = models.CharField(max_length=30)
+    def __unicode__(self):
+        return self.name
+
+class Place(models.Model):
+    country = models.CharField(max_length=30, blank=True)
+    region = models.CharField(max_length=40, blank=True)
+    australian_state = models.CharField(max_length=20, blank=True)
+    name = models.CharField(max_length=100)
     def __unicode__(self):
         return self.name
 
