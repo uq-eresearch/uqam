@@ -85,9 +85,10 @@ def import_artefacts(path):
         m.save()
 
         count += 1
-        if count > 500:
+        if (count % 1000) == 0:
+#            sys.stdout.write('C')
+            transaction.commit()
             break
-    transaction.commit()
 
 
 class Command(BaseCommand):
