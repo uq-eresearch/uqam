@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}Page Title{% endblock %}</title>
+    <link rel="stylesheet" href="{{static}}/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{static}}/blueprint/print.css" type="text/css" media="print"> 
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="{{static}}/blueprint/ie.css" type="text/css" media="screen, projection">
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <header>
+        <nav class="round">
+        <ul>
+            <li>Home</li>
+            <li>Help</li>
+            <li>Sign in</li>
+        </ul>
+        </nav>
+        </header>
+        <section class="round">
+    {% block content %}
+    {% endblock %}
+        </section>
+
+    </div>
+
+</body>
+</html>

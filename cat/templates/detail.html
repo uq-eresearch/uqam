@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>{{ museumobject }}</h1>
+
+    <pre>
+Registration Number: {{ museumobject.registration_number}}
+Functional Category: {{ museumobject.functional_category }}
+Artefact Type: {{ museumobject.artefact_type }}
+Acquisition Date: {{ museumobject.acquisition_date }}
+Acquisition Method: {{ museumobject.acquisition_method }}
+Cultural Bloc: <a href="{{museumobject.cultural_bloc.get_absolute_url}}">{{ museumobject.cultural_bloc }}</a>
+Collector: {{ museumobject.collector }}
+
+
+    </pre>
+
+
+{% endblock %}
