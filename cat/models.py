@@ -33,6 +33,10 @@ class MuseumObject(models.Model):
     comment = models.TextField(blank=True)
 #    condition_details = models.CharField(max_length=30)
     
+    @models.permalink
+    def get_absolute_url(self):
+        return ('artefact_view', [str(self.id)])
+
     class Meta:
         ordering = ['registration_number']
 
@@ -52,6 +56,9 @@ class FunctionalCategory(models.Model):
 
 class CulturalBloc(models.Model):
     name = models.CharField(max_length=30)
+    @models.permalink
+    def get_absolute_url(self):
+        return ('culturalbloc_detail', [str(self.name)])
     def __unicode__(self):
         return self.name
 
