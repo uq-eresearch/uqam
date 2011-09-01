@@ -70,7 +70,10 @@ def import_artefacts(path):
         fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
         m.functional_category = fc
 
-        pl, created = Place.objects.get_or_create(name=r['Place'],australian_state=r['State_Abbr'],region=r['Region'],country=r['Country_Name'])
+        pl, created = Place.objects.get_or_create(name=r['Place'],
+                                                  australian_state=r['State_Abbr'],
+                                                  region=r['Region'],
+                                                  country=r['Country_Name'])
         m.place = pl
 
         at, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
@@ -85,8 +88,8 @@ def import_artefacts(path):
         m.save()
 
         count += 1
-        if (count % 1000) == 0:
-#            sys.stdout.write('C')
+        if count % 1000:
+            sys.stdout.write('C')
             transaction.commit()
             break
 
