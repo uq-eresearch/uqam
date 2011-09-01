@@ -1,5 +1,6 @@
 from django.contrib import admin
 from models import MuseumObject,FunctionalCategory,Person, Place
+from models import CulturalBloc
 
 class MOAdmin(admin.ModelAdmin):
     list_display = ('registration_number','country','description','comment',)
@@ -17,6 +18,7 @@ class PlaceAdmin(admin.ModelAdmin):
 admin.site.register(Place, PlaceAdmin)
 
 admin.site.register(FunctionalCategory)
+admin.site.register(CulturalBloc)
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'comments',)
