@@ -11,6 +11,7 @@ import string
 
 ARTEFACT_CSV = 'Artefact.csv'
 ARTEFACT_MORE_CSV = 'ACCESS2_Artefact_More.csv'
+DONOR_CSV = 'Donor.csv'
 
 def prepare_stdout():
     unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
@@ -39,58 +40,68 @@ def import_people(path):
         p.save()
     transaction.commit()
 
+@transaction.commit_manually
+def process_csv(filename, row_handler):
+    with open(filename) as f:
+        data = csv.DictReader(f)
+        count = 0
+        print ('Importing from ', filename)
+        for row in data:
+            sys.stdout.write('.')
+            row_handler(row)
+            count+=1
+            if (count % 1000) == 0:
+                sys.stdout.write('C')
+                transaction.commit()
+                break
 
-#@transaction.commit_manually
-def import_artefact_more(path):
-    data = csv.DictReader(open(path + ARTEFACT_MORE_CSV))
-    count = 0
-    print ('Importing extra artefact details')
+def process_artefactmore_record(r):
+    '''Save details from an Artefact More.csv row into an Artefact Model'''
+    m = MuseumObject.objects.get(pk=r['Artefact_Registration'])
+    m.indigenous_name = r['Indigenous_Name']
+    m.recorded_use = r['Recorded_Use']
+    m.raw_material = r['Raw_Material']
+    m.assoc_cultural_group = r['Assoc_Cultural_Group']
+    m.maker_or_artist = r['Maker_Artist']
+    try:
+        m.width = int(r['Width(mm)'])
+    except ValueError:
+        pass
+    try:
+        m.length = int(r['Length(mm)'])
+    except ValueError:
+        pass
+    try:
+        m.height = int(r['Height(mm)'])
+    except ValueError:
+        pass
+    try:
+        m.depth = int(r['Depth(mm)'])
+    except ValueError:
+        pass
+    try:
+        m.circumference = int(r['Circumference(mm)'])
+    except ValueError:
+        pass
+    try:
+        m.longitude = int(r['Longitude'])
+    except ValueError:
+        pass
+    try:
+        m.latitude = int(r['Latitude'])
+    except ValueError:
+        pass
+    m.site_name_number = r['Site_Name_Nmbr']
+    m.save()
 
-    for r in data:
-        sys.stdout.write('.')
-        m = MuseumObject.objects.get(pk=r['Artefact_Registration'])
-        m.indigenous_name = r['Indigenous_Name']
-        m.recorded_use = r['Recorded_Use']
-        m.raw_material = r['Raw_Material']
-        m.assoc_cultural_group = r['Assoc_Cultural_Group']
-        m.maker_or_artist = r['Maker_Artist']
-        try:
-            m.width = int(r['Width(mm)'])
-        except ValueError:
-            pass
-        try:
-            m.length = int(r['Length(mm)'])
-        except ValueError:
-            pass
-        try:
-            m.height = int(r['Height(mm)'])
-        except ValueError:
-            pass
-        try:
-            m.depth = int(r['Depth(mm)'])
-        except ValueError:
-            pass
-        try:
-            m.circumference = int(r['Circumference(mm)'])
-        except ValueError:
-            pass
-        try:
-            m.longitude = int(r['Longitude'])
-        except ValueError:
-            pass
-        try:
-            m.latitude = int(r['Latitude'])
-        except ValueError:
-            pass
-        m.site_name_number = r['Site_Name_Nmbr']
-        m.save()
-
-        count+=1
-        if (count % 1000) == 0:
-            sys.stdout.write('C')
-            transaction.commit()
-            break
-
+def process_donorrecord(row):
+    m = MuseumObject.objects.get(pk=row['Artefact_Registration'])
+    p = Person.objects.get(pk=int(row["Person_idnbr"]))
+    m.donor = p
+    m.how_donor_obtained = row['How_obtained']
+    m.when_donor_obtained = row['When_obtained']
+    m.save()
+    
 
 @transaction.commit_manually
 def import_artefacts(path):
@@ -164,6 +175,8 @@ class Command(BaseCommand):
 
         import_people(dir)
         import_artefacts(dir)
-        import_artefact_more(dir)
+        process_csv(dir + ARTEFACT_MORE_CSV, process_artefactmore_record)
+        process_csv(dir + DONOR_CSV, process_donorrecord)
+        #import_artefact_more(dir)
 
         
