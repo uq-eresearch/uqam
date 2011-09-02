@@ -51,7 +51,7 @@ def process_csv(filename, row_handler):
             row_handler(row)
             count+=1
             if (count % 1000) == 0:
-                sys.stdout.write('C')
+                sys.stdout.write('C\n')
                 transaction.commit()
                 break
 
@@ -63,34 +63,21 @@ def process_artefactmore_record(r):
     m.raw_material = r['Raw_Material']
     m.assoc_cultural_group = r['Assoc_Cultural_Group']
     m.maker_or_artist = r['Maker_Artist']
-    try:
-        m.width = int(r['Width(mm)'])
-    except ValueError:
-        pass
-    try:
-        m.length = int(r['Length(mm)'])
-    except ValueError:
-        pass
-    try:
-        m.height = int(r['Height(mm)'])
-    except ValueError:
-        pass
-    try:
-        m.depth = int(r['Depth(mm)'])
-    except ValueError:
-        pass
-    try:
-        m.circumference = int(r['Circumference(mm)'])
-    except ValueError:
-        pass
-    try:
-        m.longitude = int(r['Longitude'])
-    except ValueError:
-        pass
-    try:
-        m.latitude = int(r['Latitude'])
-    except ValueError:
-        pass
+
+    def mapint(attr, fieldname):
+        try:
+            setattr(m, attr, int(r[fieldname]))
+        except ValueError:
+            pass
+
+    mapint('width', 'Width(mm)')
+    mapint('length', 'Length(mm)')
+    mapint('height', 'Height(mm)')
+    mapint('depth', 'Depth(mm)')
+    mapint('circumference', 'Circumference(mm)')
+    mapint('longitude', 'Longitude')
+    mapint('latitude', 'Latitude')
+
     m.site_name_number = r['Site_Name_Nmbr']
     m.save()
 
@@ -103,60 +90,42 @@ def process_donorrecord(row):
     m.save()
     
 
-@transaction.commit_manually
-def import_artefacts(path):
-    data = csv.DictReader(open(path + ARTEFACT_CSV))
+def process_artefact_record(r):
+    r = clean_row(r)
 
-    count = 0
-    prepare_stdout()
-    print ('Importing artefacts')
+    m = MuseumObject()
 
+    # Map simple fields
+    m.registration_number = r["Reg_counter"]
+    m.old_registration_number = r["Old_Registration_nmbr"]
+    if r["Aquisition_Date"] != "":
+        m.acquisition_date = r["Aquisition_Date"]
+    m.acquisition_method = r["Aquisition_Method"]
+    m.access_status = r["AccessStatus"]
+    m.loan_status = r["Loan_Status"]
+    m.description = r["Description"]
+    m.comment = r["Comment"]
 
-    for r in data:
-        sys.stdout.write('.')
-        r = clean_row(r)
+    # Map relations
+    fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
+    m.functional_category = fc
 
-        m = MuseumObject()
+    pl, created = Place.objects.get_or_create(name=r['Place'],
+                                              australian_state=r['State_Abbr'],
+                                              region=r['Region'],
+                                              country=r['Country_Name'])
+    m.place = pl
 
-        # Map simple fields
-        m.registration_number = r["Reg_counter"]
-        m.old_registration_number = r["Old_Registration_nmbr"]
-        if r["Aquisition_Date"] != "":
-            m.acquisition_date = r["Aquisition_Date"]
-        m.acquisition_method = r["Aquisition_Method"]
-        m.access_status = r["AccessStatus"]
-        m.loan_status = r["Loan_Status"]
-        m.country = r["Country_Name"]
-        m.description = r["Description"]
-        m.comment = r["Comment"]
+    at, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
+    m.artefact_type = at
 
-        # Map relations
-        fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
-        m.functional_category = fc
+    cb, created = CulturalBloc.objects.get_or_create(name=r['CulturalBloc'])
+    m.cultural_bloc = cb
 
-        pl, created = Place.objects.get_or_create(name=r['Place'],
-                                                  australian_state=r['State_Abbr'],
-                                                  region=r['Region'],
-                                                  country=r['Country_Name'])
-        m.place = pl
+    p = Person.objects.get(pk=int(r["Collector_photographerID"]))
+    m.collector = p
 
-        at, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
-        m.artefact_type = at
-
-        cb, created = CulturalBloc.objects.get_or_create(name=r['CulturalBloc'])
-        m.cultural_bloc = cb
-
-        p = Person.objects.get(pk=int(r["Collector_photographerID"]))
-        m.collector = p
-
-        m.save()
-
-        count += 1
-        if (count % 1000) == 0:
-            sys.stdout.write('C')
-            transaction.commit()
-            break
-
+    m.save()
 
 class Command(BaseCommand):
 
@@ -173,8 +142,10 @@ class Command(BaseCommand):
         management.call_command('reset', 'cat', interactive=False)
         management.call_command('syncdb', interactive=False)
 
+        prepare_stdout()
+
         import_people(dir)
-        import_artefacts(dir)
+        process_csv(dir + ARTEFACT_CSV, process_artefact_record)
         process_csv(dir + ARTEFACT_MORE_CSV, process_artefactmore_record)
         process_csv(dir + DONOR_CSV, process_donorrecord)
         #import_artefact_more(dir)
