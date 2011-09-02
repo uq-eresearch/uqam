@@ -46,6 +46,7 @@ def import_artefacts(path):
 
     count = 0
     prepare_stdout()
+    print ('Importing artefacts')
 
 
     for r in data:
@@ -88,7 +89,7 @@ def import_artefacts(path):
         m.save()
 
         count += 1
-        if count % 1000:
+        if (count % 1000) == 0:
             sys.stdout.write('C')
             transaction.commit()
             break
