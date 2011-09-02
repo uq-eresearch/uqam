@@ -3,6 +3,8 @@
 {% block content %}
 <h1>{{ person.name }}</h1>
 
+<p>{{ person.comments }}</p>
+
 <h2>Collected Objects</h2>
 {% for mo in person.collected_objects.all %}
 

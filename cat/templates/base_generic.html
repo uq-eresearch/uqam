@@ -10,19 +10,21 @@
 </head>
 <body>
     <div class="container">
-        <header>
-        <nav class="round">
-        <ul>
-            <li>Home</li>
-            <li>Help</li>
-            <li>Sign in</li>
-        </ul>
-        </nav>
-        </header>
-        <section class="round">
+        <div class="header">
+            <ul>
+                <li><a href="{% url index %}">Home</a></li>
+                <li><a href="{% url artefact_list %}">Artefacts</a></li>
+                <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
+                <li><a href="{% url person_list %}">People</a></li>
+                <li>Help</li>
+                <li>Sign in</li>
+            </ul>
+        </div>
+
+    <div class="content">
     {% block content %}
     {% endblock %}
-        </section>
+    </div>
 
     </div>
 

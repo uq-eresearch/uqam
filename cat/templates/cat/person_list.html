@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>People</h1>
+
+
+<table><tr>
+        <th>Name</th><th>Collected</th><th>Donated</th>
+    </tr>
+{% for person in person_list %}
+
+<tr><td>
+<a href="{{person.get_absolute_url}}">{{person.name}}</a>
+</td><td>
+ {{person.collected_objects.count}}
+ </td><td>
+ {{person.donated_objects.count}}
+ </td></tr>
+{% endfor %}
+</table>
+
+
+
+{% endblock %}

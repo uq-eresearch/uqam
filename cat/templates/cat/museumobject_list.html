@@ -1,0 +1,15 @@
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Artefacts</h1>
+
+{% for mo in museumobject_list %}
+
+<a href="{{mo.get_absolute_url}}">{{mo.registration_number}}</a>
+<br>
+{% endfor %}
+
+
+
+{% endblock %}
