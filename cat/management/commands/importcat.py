@@ -10,6 +10,7 @@ import os
 import string
 
 ARTEFACT_CSV = 'Artefact.csv'
+ARTEFACT_MORE_CSV = 'ACCESS2_Artefact_More.csv'
 
 def prepare_stdout():
     unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
@@ -26,6 +27,7 @@ def clean_row(row):
 @transaction.commit_manually
 def import_people(path):
     data = csv.DictReader(open(path + "Person.csv"))
+    print ("Importing People")
 
     for r in data:
         for key,value in r.items():
@@ -38,6 +40,56 @@ def import_people(path):
     transaction.commit()
 
 
+#@transaction.commit_manually
+def import_artefact_more(path):
+    data = csv.DictReader(open(path + ARTEFACT_MORE_CSV))
+    count = 0
+    print ('Importing extra artefact details')
+
+    for r in data:
+        sys.stdout.write('.')
+        m = MuseumObject.objects.get(pk=r['Artefact_Registration'])
+        m.indigenous_name = r['Indigenous_Name']
+        m.recorded_use = r['Recorded_Use']
+        m.raw_material = r['Raw_Material']
+        m.assoc_cultural_group = r['Assoc_Cultural_Group']
+        m.maker_or_artist = r['Maker_Artist']
+        try:
+            m.width = int(r['Width(mm)'])
+        except ValueError:
+            pass
+        try:
+            m.length = int(r['Length(mm)'])
+        except ValueError:
+            pass
+        try:
+            m.height = int(r['Height(mm)'])
+        except ValueError:
+            pass
+        try:
+            m.depth = int(r['Depth(mm)'])
+        except ValueError:
+            pass
+        try:
+            m.circumference = int(r['Circumference(mm)'])
+        except ValueError:
+            pass
+        try:
+            m.longitude = int(r['Longitude'])
+        except ValueError:
+            pass
+        try:
+            m.latitude = int(r['Latitude'])
+        except ValueError:
+            pass
+        m.site_name_number = r['Site_Name_Nmbr']
+        m.save()
+
+        count+=1
+        if (count % 1000) == 0:
+            sys.stdout.write('C')
+            transaction.commit()
+            break
 
 
 @transaction.commit_manually
@@ -112,5 +164,6 @@ class Command(BaseCommand):
 
         import_people(dir)
         import_artefacts(dir)
+        import_artefact_more(dir)
 
         
