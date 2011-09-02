@@ -86,6 +86,9 @@ class Place(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=30)
     comments = models.TextField(blank=True)
+    @models.permalink
+    def get_absolute_url(self):
+        return ('person_detail', [str(self.id)])
     def __unicode__(self):
         return self.name
     class Meta:

@@ -1,7 +1,7 @@
 
 from django.conf.urls.defaults import patterns, url
 from django.views.generic import DetailView, ListView
-from cat.models import MuseumObject, CulturalBloc
+from cat.models import MuseumObject, CulturalBloc, Person
 
 
 urlpatterns = patterns('cat.views',
@@ -14,5 +14,8 @@ urlpatterns = patterns('cat.views',
         DetailView.as_view(
             model=CulturalBloc,
             slug_field='name'), name="culturalbloc_detail"),
+    url(r'^person/(?P<pk>\d+)$',
+        DetailView.as_view(
+            model=Person), name="person_detail"),
     url(r'^table/$', 'table', name='table'),
 )
