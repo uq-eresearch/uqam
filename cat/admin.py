@@ -3,9 +3,9 @@ from models import MuseumObject,FunctionalCategory,Person, Place
 from models import CulturalBloc
 
 class MOAdmin(admin.ModelAdmin):
-    list_display = ('registration_number','country','description','comment',)
+    list_display = ('registration_number','cultural_bloc','description','comment',)
 
-    list_filter = ('country','functional_category__name', 'loan_status', 'cultural_bloc',)
+    list_filter = ('place__country','functional_category__name', 'access_status', 'loan_status', 'cultural_bloc',)
 
     search_fields = ['registration_number', 'description','comment']
 

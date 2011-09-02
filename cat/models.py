@@ -9,11 +9,10 @@ class MuseumObject(models.Model):
     artefact_type = models.ForeignKey('ArtefactType', blank=True)
 #    storage_location = models.CharField(max_length=30)
     acquisition_date = models.DateField(blank=True, null=True)
-    acquisition_method = models.CharField(max_length=30)
+    acquisition_method = models.CharField(max_length=30, blank=True)
     access_status = models.CharField(max_length=30, blank=True)
-    loan_status = models.CharField(max_length=30)
+    loan_status = models.CharField(max_length=30, blank=True)
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
-    country = models.CharField(max_length=30)
 #    region = models.CharField(max_length=30)
 #    place = models.CharField(max_length=30)
 #    australian_state = models.CharField(max_length=30)
@@ -24,14 +23,16 @@ class MuseumObject(models.Model):
 #    photographer = models.CharField(max_length=30)
 #    source = models.CharField(max_length=30)
 #    how_source_obtained = models.CharField(max_length=30)
-    how_donor_obtained = models.CharField(max_length=50)
-    when_donor_obtained = models.CharField(max_length=50)
-    maker_or_artist = models.CharField(max_length=30)
-    site_name_number = models.CharField(max_length=30)
-    raw_material = models.CharField(max_length=30)
-    indigenous_name = models.CharField(max_length=50)
-    recorded_use = models.CharField(max_length=30)
-    assoc_cultural_group = models.CharField(max_length=50)
+    how_donor_obtained = models.CharField(max_length=50, blank=True)
+
+    ## TODO: when_donor_obtained should be DateField
+    when_donor_obtained = models.CharField(max_length=50, blank=True)
+    maker_or_artist = models.CharField(max_length=30, blank=True)
+    site_name_number = models.CharField(max_length=30, blank=True)
+    raw_material = models.CharField(max_length=30, blank=True)
+    indigenous_name = models.CharField(max_length=50, blank=True)
+    recorded_use = models.CharField(max_length=30, blank=True)
+    assoc_cultural_group = models.CharField(max_length=50, blank=True)
 #    exhibition_history = models.CharField(max_length=30)
     description = models.TextField(blank=True)
     comment = models.TextField(blank=True)
@@ -84,7 +85,7 @@ class Place(models.Model):
     australian_state = models.CharField(max_length=20, blank=True)
     name = models.CharField(max_length=100)
     def __unicode__(self):
-        return self.name
+        return ' > '.join([self.country, self.region, self.australian_state, self.name])
 
 class Person(models.Model):
     name = models.CharField(max_length=30)
