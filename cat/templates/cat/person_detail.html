@@ -3,10 +3,19 @@
 {% block content %}
 <h1>{{ person.name }}</h1>
 
-{% for mo in person.museumobject_set.all %}
+<h2>Collected Objects</h2>
+{% for mo in person.collected_objects.all %}
 
 <a href="{{mo.get_absolute_url}}">{{mo.registration_number}}</a>
 <br>
-
 {% endfor %}
+
+<h2>Donated Objects</h2>
+{% for mo in person.donated_objects.all %}
+
+<a href="{{mo.get_absolute_url}}">{{mo.registration_number}}</a>
+<br>
+{% endfor %}
+
+
 {% endblock %}
