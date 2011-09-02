@@ -8,8 +8,7 @@ urlpatterns = patterns('cat.views',
     url(r'^$', 'index', name='index'),
     url(r'^artefact/(?P<pk>\d+)$',
         DetailView.as_view(
-            model=MuseumObject,
-            template_name="detail.html"), name='artefact_view'),
+            model=MuseumObject), name='artefact_view'),
     url(r'^blocs/(?P<slug>.*)$',
         DetailView.as_view(
             model=CulturalBloc,
