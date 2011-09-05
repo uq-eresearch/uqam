@@ -55,6 +55,9 @@ class MuseumObject(models.Model):
     def __unicode__(self):
         return "MO: %d" % self.registration_number
     
+class MediaRepresentation(models.Model):
+    name = models.CharField(max_length=30)
+    image = models.ImageField(upload_to='mediareps/')
 
 
 class FunctionalCategory(models.Model):
