@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Places</h1>
+
+
+<table><tr>
+        <th>Name</th><th>Objects</th>
+    </tr>
+{% for place in place_list %}
+
+<tr><td>
+<a href="{{place.get_absolute_url}}">{{place}}</a>
+</td><td>
+ {{place.museumobject_set.count}}
+ </td><td>
+ </td></tr>
+{% endfor %}
+</table>
+
+
+
+{% endblock %}

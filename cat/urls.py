@@ -1,7 +1,7 @@
 
 from django.conf.urls.defaults import patterns, url
 from django.views.generic import DetailView, ListView, TemplateView
-from cat.models import MuseumObject, CulturalBloc, Person
+from cat.models import MuseumObject, CulturalBloc, Person, Place
 
 
 urlpatterns = patterns('cat.views',
@@ -29,5 +29,13 @@ urlpatterns = patterns('cat.views',
     url(r'^person/(?P<pk>\d+)$',
         DetailView.as_view(
             model=Person), name="person_detail"),
+
+    url(r'^place/$',
+        ListView.as_view(
+            model=Place), name='place_list'),
+    url(r'^place/(?P<pk>\d+)$',
+        DetailView.as_view(
+            model=Place), name="place_detail"),
+
     url(r'^table/$', 'table', name='table'),
 )

@@ -84,6 +84,9 @@ class Place(models.Model):
     name = models.CharField(max_length=100)
     def __unicode__(self):
         return ' > '.join([self.country, self.region, self.australian_state, self.name])
+    @models.permalink
+    def get_absolute_url(self):
+        return ('place_detail', [str(self.id)])
 
 class Person(models.Model):
     name = models.CharField(max_length=30)

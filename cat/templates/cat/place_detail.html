@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>{{ place.name }}</h1>
+
+<p><b>Country:</b> {{ place.country }}</p>
+<p><b>Region:</b> {{ place.region }}</p>
+<p><b>Australian State:</b> {{ place.australian_state }}</p>
+
+<div class="span-12">
+<h2>Objects</h2>
+{% for mo in place.museumobject_set.all %}
+
+<a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
+<br>
+{% endfor %}
+</div>
+
+<div class="span-12 last">
+
+</div>
+
+
+{% endblock %}
