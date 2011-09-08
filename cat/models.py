@@ -5,17 +5,15 @@ from django.db import models
 class MuseumObject(models.Model):
     registration_number = models.IntegerField()
     old_registration_number = models.CharField(max_length=30, blank=True)
+    other_number = models.CharField(max_length=30, blank=True)
     functional_category = models.ForeignKey('FunctionalCategory')
     artefact_type = models.ForeignKey('ArtefactType', blank=True)
 #    storage_location = models.CharField(max_length=30)
     acquisition_date = models.DateField(blank=True, null=True)
     acquisition_method = models.CharField(max_length=30, blank=True)
-    access_status = models.CharField(max_length=30, blank=True)
     loan_status = models.CharField(max_length=30, blank=True)
+    access_status = models.CharField(max_length=30, blank=True)
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
-#    region = models.CharField(max_length=30)
-#    place = models.CharField(max_length=30)
-#    australian_state = models.CharField(max_length=30)
     place = models.ForeignKey('Place', null=True)
     collector = models.ForeignKey('Person', null=True, related_name="collected_objects")
     donor = models.ForeignKey('Person', null=True, related_name="donated_objects")
@@ -55,13 +53,10 @@ class MuseumObject(models.Model):
     def __unicode__(self):
         return "MO: %d" % self.registration_number
     
-class MediaRepresentation(models.Model):
-    name = models.CharField(max_length=30)
-    image = models.ImageField(upload_to='mediareps/')
 
 
 class FunctionalCategory(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField('function category', max_length=30)
 
     def __unicode__(self):
         return self.name

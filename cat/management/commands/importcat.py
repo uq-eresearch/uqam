@@ -42,18 +42,23 @@ def import_people(path):
 
 @transaction.commit_manually
 def process_csv(filename, row_handler):
-    with open(filename) as f:
-        data = csv.DictReader(f)
-        count = 0
-        print ('Importing from ', filename)
-        for row in data:
-            sys.stdout.write('.')
-            row_handler(row)
-            count+=1
-            if (count % 1000) == 0:
-                sys.stdout.write('C\n')
-                transaction.commit()
-                break
+    '''Read each line of a csv and process with the supplied function'''
+    try:
+        with open(filename) as f:
+            data = csv.DictReader(f)
+            count = 0
+            print ('Importing from ', filename)
+            for row in data:
+                sys.stdout.write('.')
+                row_handler(row)
+                count+=1
+                sys.stdout.write('%d\n' % count)
+                if (count % 1000) == 0:
+                    transaction.commit()
+    except:
+        print "Unexpected error: ", sys.exc_info()
+    else:
+        transaction.commit()
 
 def process_artefactmore_record(r):
     '''Save details from an Artefact More.csv row into an Artefact Model'''
@@ -97,7 +102,9 @@ def process_artefact_record(r):
 
     # Map simple fields
     m.registration_number = r["Reg_counter"]
+    m.registration_number = r["Artefact_Registration"]
     m.old_registration_number = r["Old_Registration_nmbr"]
+    m.other_number = r["Other_nmbr"]
     if r["Aquisition_Date"] != "":
         m.acquisition_date = r["Aquisition_Date"]
     m.acquisition_method = r["Aquisition_Method"]
@@ -122,9 +129,16 @@ def process_artefact_record(r):
     cb, created = CulturalBloc.objects.get_or_create(name=r['CulturalBloc'])
     m.cultural_bloc = cb
 
-    p = Person.objects.get(pk=int(r["Collector_photographerID"]))
-    m.collector = p
+    try:
+        p = Person.objects.get(pk=int(r["Collector_photographerID"]))
+        m.collector = p
+    except:
+        print("Could not find collector: ", r["Collector_photographerID"])
+        print(sys.exc_info())
+#        import pdb
+#        pdb.set_trace()
 
+#    print (m.registration_number)
     m.save()
 
 class Command(BaseCommand):
@@ -140,6 +154,7 @@ class Command(BaseCommand):
         dir, = args
 
         management.call_command('reset', 'cat', interactive=False)
+        management.call_command('reset', 'mediaman', interactive=False)
         management.call_command('syncdb', interactive=False)
 
         prepare_stdout()
