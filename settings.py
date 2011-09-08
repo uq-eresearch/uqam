@@ -140,6 +140,7 @@ INSTALLED_APPS = (
 #    'south',
     'django_extensions',
     'django_tables2',
+    'mediaman',
 )
 
 # A sample logging configuration. The only tangible logging
