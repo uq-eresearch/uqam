@@ -10,7 +10,7 @@ urlpatterns = patterns('cat.views',
             template_name='index.html'), name='index'),
     url(r'^artefact/$',
         ListView.as_view(
-            model=MuseumObject), name='artefact_list'),
+            model=MuseumObject, paginate_by=20), name='artefact_list'),
     url(r'^artefact/(?P<pk>\d+)$',
         DetailView.as_view(
             model=MuseumObject), name='artefact_view'),

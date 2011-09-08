@@ -1,9 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>{{ museumobject }}</h1>
+<h1>{{ museumobject.artefact_type }}</h1>
+<h2>{{ museumobject }}</h2>
 
-    <pre>
+<div class="span-8">
+<pre>
 Registration Number: {{ museumobject.registration_number}}
 Functional Category: {{ museumobject.functional_category }}
 Artefact Type: {{ museumobject.artefact_type }}
@@ -14,9 +16,22 @@ Collector: <a href="{{museumobject.collector.get_absolute_url}}">{{ museumobject
 Donor: <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
 Comment: {{ museumobject.comment }}
 Description: {{ museumobject.description }}
+</pre>
+
+</div>
 
 
-    </pre>
 
+<div class="span-16">
+{% for pic in museumobject.mediarepresentation_set.all %}
+
+<a href="{{ pic.image.url}}"><img src="{{ pic.image.url_400x400 }}" width="400px" height="400px"></a>
+
+{% endfor %}
+</div>
+
+<hr>
+
+<a href={% url admin:cat_museumobject_change museumobject.id %}>View in Admin</a>
 
 {% endblock %}

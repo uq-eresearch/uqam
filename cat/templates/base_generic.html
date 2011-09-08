@@ -1,30 +1,32 @@
+{% load static %}
+{% get_static_prefix  as STATIC_PREFIX %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{% block title %}Page Title{% endblock %}</title>
-    <link rel="stylesheet" href="{{static}}/blueprint/screen.css" type="text/css" media="screen, projection">
-    <link rel="stylesheet" href="{{static}}/blueprint/print.css" type="text/css" media="print"> 
+    <link rel="stylesheet" href="{{STATIC_PREFIX}}blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC_PREFIX}}blueprint/print.css" type="text/css" media="print"> 
+    <link rel="stylesheet" href="{{STATIC_PREFIX}}main.css" type="text/css" media="screen, projection">
     <!--[if lt IE 8]>
-    <link rel="stylesheet" href="{{static}}/blueprint/ie.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC_PREFIX}}blueprint/ie.css" type="text/css" media="screen, projection">
     <![endif]-->
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <h1>UQ Anthropology Museum</h1>
+        <hr>
+        <div class="menu">
             <ul>
                 <li><a href="{% url index %}">Home</a></li>
                 <li><a href="{% url artefact_list %}">Artefacts</a></li>
                 <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
                 <li><a href="{% url person_list %}">People</a></li>
-                <li>Help</li>
-                <li>Sign in</li>
             </ul>
         </div>
+        <hr>
 
-    <div class="content">
-    {% block content %}
-    {% endblock %}
-    </div>
+        {% block content %}
+        {% endblock %}
 
     </div>
 

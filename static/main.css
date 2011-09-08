@@ -1,0 +1,20 @@
+
+
+.menu ul {
+    list-style: none;
+}
+.menu li {
+    float: left;
+    position: relative;
+}
+
+.menu a {
+    display: block;
+    line-height: 38px;
+    padding: 0 10px;
+    text-decoration: none;
+}
+
+body {
+    background-color: white;
+}
