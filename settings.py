@@ -70,6 +70,7 @@ STATIC_URL = '/static/'
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = '/static/admin/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -131,11 +132,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
+    'grappelli',
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'cat',
-    'south',
+#    'south',
     'django_extensions',
     'django_tables2',
 )
@@ -162,3 +164,8 @@ LOGGING = {
         },
     }
 }
+
+#try:
+#    from local_settings import *
+#except ImportError:
+#    pass
