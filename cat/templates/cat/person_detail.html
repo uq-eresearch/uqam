@@ -9,7 +9,7 @@
 <h2>Collected Objects</h2>
 {% for mo in person.collected_objects.all %}
 
-<a href="{{mo.get_absolute_url}}">{{mo.registration_number}}</a>
+<a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
 <br>
 {% endfor %}
 </div>
@@ -19,7 +19,7 @@
 <h2>Donated Objects</h2>
 {% for mo in person.donated_objects.all %}
 
-<a href="{{mo.get_absolute_url}}">{{mo.registration_number}}</a>
+<a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
 <br>
 {% endfor %}
 </div>

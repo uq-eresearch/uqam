@@ -24,7 +24,7 @@ Description: {{ museumobject.description }}
 
 
 <div class="span-16">
-{% for pic in museumobject.mediarepresentation_set.all %}
+{% for pic in museumobject.artefactrepresentation_set.all %}
 
 <a href="{{ pic.image.url}}"><img src="{{ pic.image.url_400x400 }}" width="400px" height="400px"></a>
 
