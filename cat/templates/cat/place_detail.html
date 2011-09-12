@@ -17,8 +17,39 @@
 </div>
 
 <div class="span-12 last">
-
 </div>
+<h2>Map</h2>
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+    var geocoder, map;
+    $(document).ready(
+    function initialize() {
+        var myOptions = {
+            zoom: 4, // Zoomed out to show location in country
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': '{{place.name}}, {{place.country}}'}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                myOptions.center = results[0].geometry.location;
+                map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    title: "{{place.name}}, {{place.country}}"
+                });
+            } else {
+                alert("Geocode was not successful for the following reason: " + status);
+            }
+        });
+    });
+</script>
+
+<div id="map_canvas" style="width:450px; height:300px"></div>
+
 
 
 {% endblock %}
