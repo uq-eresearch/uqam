@@ -3,6 +3,7 @@ from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalB
 from cat.models import Person, Place
 from django.core import management
 from django.db import transaction
+from django import db
 
 import csv
 import sys
@@ -43,6 +44,7 @@ def import_people(path):
 @transaction.commit_manually
 def process_csv(filename, row_handler):
     '''Read each line of a csv and process with the supplied function'''
+    db.reset_queries() # Don't leak memory by forever storing SQL queries
     try:
         with open(filename) as f:
             data = csv.DictReader(f)
@@ -112,6 +114,10 @@ def process_artefact_record(r):
     m.loan_status = r["Loan_Status"]
     m.description = r["Description"]
     m.comment = r["Comment"]
+    m.storage_section = r['Storage_Section']
+    m.storage_unit = r['Storage_Unit']
+    m.storage_bay = r['Storage_Bay']
+    m.storage_shelf_box_drawer = r['Shelf_Box_Drawer']
 
     # Map relations
     fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])

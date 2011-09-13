@@ -3,29 +3,34 @@ from django.db import models
 # Create your models here.
 
 class MuseumObject(models.Model):
-    registration_number = models.IntegerField()
-    old_registration_number = models.CharField(max_length=30, blank=True)
-    other_number = models.CharField(max_length=30, blank=True)
+    registration_number = models.IntegerField(db_index=True, unique=True)
+    old_registration_number = models.CharField(max_length=10, blank=True)
+    other_number = models.CharField(max_length=10, blank=True)
     functional_category = models.ForeignKey('FunctionalCategory')
     artefact_type = models.ForeignKey('ArtefactType', blank=True)
-#    storage_location = models.CharField(max_length=30)
-    acquisition_date = models.DateField(blank=True, null=True)
+    storage_section = models.CharField(max_length=4, blank=True)
+    storage_unit = models.CharField(max_length=4, blank=True)
+    storage_bay = models.CharField(max_length=4, blank=True)
+    storage_shelf_box_drawer = models.CharField(max_length=4, blank=True)
+    acquisition_date = models.CharField(max_length=30, blank=True)
     acquisition_method = models.CharField(max_length=30, blank=True)
     loan_status = models.CharField(max_length=30, blank=True)
     access_status = models.CharField(max_length=30, blank=True)
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
     place = models.ForeignKey('Place', null=True)
-    collector = models.ForeignKey('Person', null=True, related_name="collected_objects")
     donor = models.ForeignKey('Person', null=True, related_name="donated_objects")
     donor_2 = models.ForeignKey('Person', null=True, related_name="donated_objects_2")
-#    how_collector_obtained = models.CharField(max_length=30)
-#    photographer = models.CharField(max_length=30)
-#    source = models.CharField(max_length=30)
-#    how_source_obtained = models.CharField(max_length=30)
     how_donor_obtained = models.CharField(max_length=50, blank=True)
+    when_donor_obtained = models.CharField(max_length=50, blank=True)
+
+    photographer = models.CharField(max_length=30)
+    collector = models.ForeignKey('Person', null=True, related_name="collected_objects")
+    how_collector_obtained = models.CharField(max_length=30)
+
+    source = models.CharField(max_length=30)
+    how_source_obtained = models.CharField(max_length=30)
 
     ## TODO: when_donor_obtained should be DateField
-    when_donor_obtained = models.CharField(max_length=50, blank=True)
     maker_or_artist = models.CharField(max_length=30, blank=True)
     site_name_number = models.CharField(max_length=30, blank=True)
     raw_material = models.CharField(max_length=30, blank=True)
@@ -83,11 +88,22 @@ class Place(models.Model):
     region = models.CharField(max_length=40, blank=True)
     australian_state = models.CharField(max_length=20, blank=True)
     name = models.CharField(max_length=100)
+#    latitude = models.FloatField(blank=True, null=True)
+#    longitude = models.FloatField(blank=True, null=True)
     def __unicode__(self):
         return ' > '.join([self.country, self.region, self.australian_state, self.name])
     @models.permalink
     def get_absolute_url(self):
         return ('place_detail', [str(self.id)])
+    def geocode(self):
+        from geopy import geocoders
+        geonames = geocoders.GeoNames()
+        place, (lat, lng) = geonames.geocode('%s, %s' % (self.name, self.country,),
+                                             exactly_one=False)[0]
+        self.latitude = lat
+        self.longitude = lng
+        self.save()
+
 
 class Person(models.Model):
     name = models.CharField(max_length=30)
