@@ -13,6 +13,8 @@ import string
 ARTEFACT_CSV = 'Artefact.csv'
 ARTEFACT_MORE_CSV = 'ACCESS2_Artefact_More.csv'
 DONOR_CSV = 'Donor.csv'
+COLLECTORPHOTO_CSV = 'Collector_Photographer.csv'
+PERSON_CSV = 'Person.csv'
 
 def prepare_stdout():
     unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
@@ -24,22 +26,6 @@ def clean_row(row):
     row["Functional_Category"] = string.capwords(row["Functional_Category"])
     row["Loan_Status"] = string.capwords(row["Loan_Status"])
     return row
-
-
-@transaction.commit_manually
-def import_people(path):
-    data = csv.DictReader(open(path + "Person.csv"))
-    print ("Importing People")
-
-    for r in data:
-        for key,value in r.items():
-            r[key] = value.strip()
-        p = Person()
-        p.id = r["Person idnmbr"]
-        p.name = r["Name"]
-        p.comments = r["PersonComments"]
-        p.save()
-    transaction.commit()
 
 @transaction.commit_manually
 def process_csv(filename, row_handler):
@@ -61,6 +47,16 @@ def process_csv(filename, row_handler):
         print "Unexpected error: ", sys.exc_info()
     else:
         transaction.commit()
+
+def process_person_record(r):
+    '''Read person records from a row of the csv and create DB records'''
+    for key,value in r.items():
+        r[key] = value.strip()
+    p = Person()
+    p.id = r["Person idnmbr"]
+    p.name = r["Name"]
+    p.comments = r["PersonComments"]
+    p.save()
 
 def process_artefactmore_record(r):
     '''Save details from an Artefact More.csv row into an Artefact Model'''
@@ -89,11 +85,21 @@ def process_artefactmore_record(r):
     m.save()
 
 def process_donorrecord(row):
+    '''Update a museumobject record with details from a row of the donor csv'''
     m = MuseumObject.objects.get(registration_number=row['Artefact_Registration'])
     p = Person.objects.get(pk=int(row["Person_idnbr"]))
     m.donor_2 = p
     m.how_donor_obtained = row['How_obtained']
     m.when_donor_obtained = row['When_obtained']
+    m.save()
+
+def process_collectorphotographer_record(r):
+    '''Update a museumobject record with details from a row of the collectorphotog csv'''
+    m = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
+    p = Person.objects.get(pk=int(r['Person_idnbr']))
+    m.collector_2 = p
+    m.how_collector_obtained = r['How_Obtained1']
+    m.when_collector_obtained = r['When_Obtained1']
     m.save()
     
 
@@ -103,7 +109,7 @@ def process_artefact_record(r):
     m = MuseumObject()
 
     # Map simple fields
-    m.registration_number = r["Reg_counter"]
+    m.id = r["Reg_counter"]
     m.registration_number = r["Artefact_Registration"]
     m.old_registration_number = r["Old_Registration_nmbr"]
     m.other_number = r["Other_nmbr"]
@@ -169,8 +175,10 @@ class Command(BaseCommand):
         prepare_stdout()
 
         import_people(dir)
+        process_csv(dir + PERSON_CSV, process_person_record)
         process_csv(dir + ARTEFACT_CSV, process_artefact_record)
         process_csv(dir + ARTEFACT_MORE_CSV, process_artefactmore_record)
         process_csv(dir + DONOR_CSV, process_donorrecord)
+        process_csv(dir + COLLECTORPHOTO_CSV, process_collectorphotographer_record)
 
         

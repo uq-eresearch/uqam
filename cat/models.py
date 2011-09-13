@@ -21,16 +21,18 @@ class MuseumObject(models.Model):
     donor = models.ForeignKey('Person', null=True, related_name="donated_objects")
     donor_2 = models.ForeignKey('Person', null=True, related_name="donated_objects_2")
     how_donor_obtained = models.CharField(max_length=50, blank=True)
+    ## TODO: when_donor_obtained should be DateField
     when_donor_obtained = models.CharField(max_length=50, blank=True)
 
     photographer = models.CharField(max_length=30)
     collector = models.ForeignKey('Person', null=True, related_name="collected_objects")
+    collector_2 = models.ForeignKey('Person', null=True, related_name="collected_objects_2")
     how_collector_obtained = models.CharField(max_length=30)
+    when_collector_obtained = models.CharField(max_length=30)
 
     source = models.CharField(max_length=30)
     how_source_obtained = models.CharField(max_length=30)
 
-    ## TODO: when_donor_obtained should be DateField
     maker_or_artist = models.CharField(max_length=30, blank=True)
     site_name_number = models.CharField(max_length=30, blank=True)
     raw_material = models.CharField(max_length=30, blank=True)
