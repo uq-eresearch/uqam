@@ -18,10 +18,10 @@ class MOAdmin(admin.ModelAdmin):
             ArtefactRepInline,
     ]
 
-    raw_id_fields = ('collector',)
-    related_lookup_fields = {
-            'fk': ['collector'],
-    }
+#    raw_id_fields = ('collector',)
+#    related_lookup_fields = {
+#            'fk': ['collector'],
+#    }
 #    autocomplete_lookup_fields = {
 #            'fk': ['artefact_type'],
 #    }
@@ -33,21 +33,27 @@ class MOAdmin(admin.ModelAdmin):
                        'cultural_bloc', 'place')
         }),
         ('Status', {
-            'fields': ('loan_status', 'access_status')
+            'classes': ('collapse',),
+            'fields': (('loan_status', 'access_status'),)
         }),
         ('Storage location', {
-            'fields': ('storage_section', 'storage_unit', 'storage_bay', 'storage_shelf_box_drawer')
+            'classes': ('collapse',),
+            'fields': (('storage_section', 'storage_unit',), ('storage_bay', 'storage_shelf_box_drawer'),)
         }),
         ('Acquisition', {
+            'classes': ('collapse',),
             'fields': ('acquisition_date', 'acquisition_method')
         }),
+        ('Collector', {
+            'classes': ('collapse',),
+            'fields': ('collector', 'collector_2', 'how_collector_obtained', 'when_collector_obtained')
+        }),
         ('Donor', {
+            'classes': ('collapse',),
             'fields': ('donor', 'donor_2', 'how_donor_obtained', 'when_donor_obtained')
         }),
-        ('Collector', {
-            'fields': ('collector', 'how_collector_obtained')
-        }),
         ('Details', {
+            'classes': ('collapse',),
             'fields': ('description', 'comment')
         }),
         ('Extra details', {
@@ -55,6 +61,7 @@ class MOAdmin(admin.ModelAdmin):
                        'indigenous_name', 'recorded_use', 'assoc_cultural_group')
         }),
         ('Location', {
+            'classes': ('collapse closed',),
             'fields': ('longitude', 'latitude')
         }),
         ('Dimensions', {
