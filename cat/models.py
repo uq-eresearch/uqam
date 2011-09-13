@@ -17,6 +17,7 @@ class MuseumObject(models.Model):
     place = models.ForeignKey('Place', null=True)
     collector = models.ForeignKey('Person', null=True, related_name="collected_objects")
     donor = models.ForeignKey('Person', null=True, related_name="donated_objects")
+    donor_2 = models.ForeignKey('Person', null=True, related_name="donated_objects_2")
 #    how_collector_obtained = models.CharField(max_length=30)
 #    photographer = models.CharField(max_length=30)
 #    source = models.CharField(max_length=30)

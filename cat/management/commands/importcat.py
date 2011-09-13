@@ -49,10 +49,10 @@ def process_csv(filename, row_handler):
             count = 0
             print ('Importing from ', filename)
             for row in data:
-                sys.stdout.write('.')
+#                sys.stdout.write('.')
                 row_handler(row)
                 count+=1
-                sys.stdout.write('%d\n' % count)
+                sys.stdout.write('\r{0}'.format(count))
                 if (count % 1000) == 0:
                     transaction.commit()
     except:
@@ -62,7 +62,7 @@ def process_csv(filename, row_handler):
 
 def process_artefactmore_record(r):
     '''Save details from an Artefact More.csv row into an Artefact Model'''
-    m = MuseumObject.objects.get(pk=r['Artefact_Registration'])
+    m = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
     m.indigenous_name = r['Indigenous_Name']
     m.recorded_use = r['Recorded_Use']
     m.raw_material = r['Raw_Material']
@@ -87,9 +87,9 @@ def process_artefactmore_record(r):
     m.save()
 
 def process_donorrecord(row):
-    m = MuseumObject.objects.get(pk=row['Artefact_Registration'])
+    m = MuseumObject.objects.get(registration_number=row['Artefact_Registration'])
     p = Person.objects.get(pk=int(row["Person_idnbr"]))
-    m.donor = p
+    m.donor_2 = p
     m.how_donor_obtained = row['How_obtained']
     m.when_donor_obtained = row['When_obtained']
     m.save()
@@ -133,12 +133,15 @@ def process_artefact_record(r):
         p = Person.objects.get(pk=int(r["Collector_photographerID"]))
         m.collector = p
     except:
-        print("Could not find collector: ", r["Collector_photographerID"])
-        print(sys.exc_info())
-#        import pdb
-#        pdb.set_trace()
+        print("\nCould not find collector: ", r["Collector_photographerID"])
+#        print(sys.exc_info())
+    try:
+        p = Person.objects.get(pk=int(r["DonorID"]))
+        m.donor = p
+    except:
+        print("\nCould not find donor: ", r["DonorID"])
+#        print(sys.exc_info())
 
-#    print (m.registration_number)
     m.save()
 
 class Command(BaseCommand):
@@ -163,6 +166,5 @@ class Command(BaseCommand):
         process_csv(dir + ARTEFACT_CSV, process_artefact_record)
         process_csv(dir + ARTEFACT_MORE_CSV, process_artefactmore_record)
         process_csv(dir + DONOR_CSV, process_donorrecord)
-        #import_artefact_more(dir)
 
         
