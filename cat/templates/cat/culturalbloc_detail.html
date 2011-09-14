@@ -5,7 +5,7 @@
 
 {% for mo in culturalbloc.museumobject_set.all %}
 
-<a href="{{mo.get_absolute_url}}">{{mo.registration_number}}</a>
+<a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
 <br>
 
 {% endfor %}

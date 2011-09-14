@@ -2,34 +2,57 @@
 
 {% block content %}
 <h1>{{ museumobject.artefact_type }}</h1>
-<h2>{{ museumobject }}</h2>
 
-<div class="span-8">
-<pre>
-Registration Number: {{ museumobject.registration_number}}
-Functional Category: {{ museumobject.functional_category }}
-Artefact Type: {{ museumobject.artefact_type }}
-Acquisition Date: {{ museumobject.acquisition_date }}
-Acquisition Method: {{ museumobject.acquisition_method }}
-Cultural Bloc: <a href="{{museumobject.cultural_bloc.get_absolute_url}}">{{ museumobject.cultural_bloc }}</a>
-Collector: <a href="{{museumobject.collector.get_absolute_url}}">{{ museumobject.collector }}</a>
-Donor: <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
-Place: <a href="{{museumobject.place.get_absolute_url}}">{{ museumobject.place }}</a>
-Comment: {{ museumobject.comment }}
-Description: {{ museumobject.description }}
-</pre>
+<div class="span-14">
+<h2>{{ museumobject }}</h2>
+    <b>Registration Number:</b> {{ museumobject.registration_number}}
+<br>
+<b>Functional Category:</b> {{ museumobject.functional_category }}
+<br>
+<b>Artefact Type:</b> {{ museumobject.artefact_type }}
+<br>
+<b>Acquisition Date:</b> {{ museumobject.acquisition_date }}
+<br>
+<b>Acquisition Method:</b> {{ museumobject.acquisition_method }}
+<br>
+<b>Cultural Bloc:</b> <a href="{{museumobject.cultural_bloc.get_absolute_url}}">{{ museumobject.cultural_bloc }}</a>
+<br>
+<b>Collector:</b> <a href="{{museumobject.collector.get_absolute_url}}">{{ museumobject.collector }}</a>
+<br>
+<b>Donor:</b> <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
+<br>
+<b>Place:</b> <a href="{{museumobject.place.get_absolute_url}}">{{ museumobject.place }}</a>
+<br>
+<b>Description:</b> {{ museumobject.description|linebreaks }}
+<br>
+<b>Comment:</b> {{ museumobject.comment|linebreaks }}
 
 </div>
 
 
+<stylesheet>
 
-<div class="span-16">
+<div class="span-10 last">
+    <div class="slider-wrapper theme-default">
+    <div class="ribbon"></div>
+    <div id="slider" class="nivoSlider">
 {% for pic in museumobject.artefactrepresentation_set.all %}
 
-<a href="{{ pic.image.url}}"><img src="{{ pic.image.url_400x400 }}" width="400px" height="400px"></a>
+    <a href="{{ pic.image.url}}"><img src="{{ pic.image.url_400x400 }}" width="400px" height="400px" alt=""></a>
 
 {% endfor %}
+    </div>
 </div>
+</div>
+<script type="text/javascript">
+$(window).load(function() {
+    $('#slider').nivoSlider({
+effect: 'fade',
+manualAdvance: true,
+animSpeed: 200
+    });
+});
+</script>
 
 <hr>
 
