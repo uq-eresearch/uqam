@@ -1,16 +1,16 @@
 {% load static %}
-{% get_static_prefix  as STATIC_PREFIX %}
+{% get_static_prefix  as STATIC %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{% block title %}Page Title{% endblock %}</title>
-    <link rel="stylesheet" href="{{STATIC_PREFIX}}blueprint/screen.css" type="text/css" media="screen, projection">
-    <link rel="stylesheet" href="{{STATIC_PREFIX}}blueprint/print.css" type="text/css" media="print"> 
-    <link rel="stylesheet" href="{{STATIC_PREFIX}}main.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC}}blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC}}blueprint/print.css" type="text/css" media="print"> 
+    <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
     <!--[if lt IE 8]>
-    <link rel="stylesheet" href="{{STATIC_PREFIX}}blueprint/ie.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC}}blueprint/ie.css" type="text/css" media="screen, projection">
     <![endif]-->
-    <script type="text/javascript" src="{{STATIC_PREFIX}}jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="{{STATIC}}jquery-1.6.2.js"></script>
 </head>
 <body>
     <div class="container">
@@ -23,6 +23,8 @@
                 <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
                 <li><a href="{% url person_list %}">People</a></li>
                 <li><a href="{% url place_list %}">Places</a></li>
+                <li><a href="{% url all_regions_list %}">Regions</a></li>
+                <li><a href="{% url country_list %}">Countries</a></li>
             </ul>
         </div>
         <hr>

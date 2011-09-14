@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Countries</h1>
+
+
+<table><tr>
+        <th>Name</th><th>Count</th>
+    </tr>
+{% for country in countries %}
+
+<tr><td>
+<a href="{{country.country}}">{{country.country}}</a>
+</td><td>
+{{country.count}}
+</td></tr>
+{% endfor %}
+</table>
+
+
+
+{% endblock %}
