@@ -109,9 +109,10 @@ def process_artefact_record(r):
     m = MuseumObject()
 
     # Map simple fields
-    m.id = r["Reg_counter"]
+    m.id = r["Artefact_Registration"]
     m.registration_number = r["Artefact_Registration"]
     m.old_registration_number = r["Old_Registration_nmbr"]
+    m.reg_counter = r["Reg_counter"]
     m.other_number = r["Other_nmbr"]
     if r["Aquisition_Date"] != "":
         m.acquisition_date = r["Aquisition_Date"]
@@ -171,6 +172,7 @@ class Command(BaseCommand):
         management.call_command('reset', 'cat', interactive=False)
         management.call_command('reset', 'mediaman', interactive=False)
         management.call_command('syncdb', interactive=False)
+        management.call_command('migrate','cat', interactive=False)
 
         prepare_stdout()
 

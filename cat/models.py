@@ -6,6 +6,7 @@ class MuseumObject(models.Model):
     registration_number = models.IntegerField(db_index=True, unique=True)
     old_registration_number = models.CharField(max_length=10, blank=True)
     other_number = models.CharField(max_length=10, blank=True)
+    reg_counter = models.CharField(max_length=10, blank=True)
     functional_category = models.ForeignKey('FunctionalCategory')
     artefact_type = models.ForeignKey('ArtefactType', blank=True)
     storage_section = models.CharField(max_length=4, blank=True)
@@ -27,8 +28,8 @@ class MuseumObject(models.Model):
     photographer = models.CharField(max_length=30)
     collector = models.ForeignKey('Person', null=True, related_name="collected_objects")
     collector_2 = models.ForeignKey('Person', null=True, related_name="collected_objects_2")
-    how_collector_obtained = models.CharField(max_length=30)
-    when_collector_obtained = models.CharField(max_length=30)
+    how_collector_obtained = models.CharField(max_length=30, blank=True)
+    when_collector_obtained = models.CharField(max_length=30, blank=True)
 
     source = models.CharField(max_length=30)
     how_source_obtained = models.CharField(max_length=30)
