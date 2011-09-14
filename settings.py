@@ -137,7 +137,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'cat',
-#    'south',
+    'south',
     'django_extensions',
     'django_tables2',
     'mediaman',
