@@ -174,7 +174,6 @@ class Command(BaseCommand):
 
         prepare_stdout()
 
-        import_people(dir)
         process_csv(dir + PERSON_CSV, process_person_record)
         process_csv(dir + ARTEFACT_CSV, process_artefact_record)
         process_csv(dir + ARTEFACT_MORE_CSV, process_artefactmore_record)
