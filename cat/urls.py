@@ -8,16 +8,23 @@ from cat.models import MuseumObject, CulturalBloc, Person, Place
 class CountryListView(ListView):
     model = MuseumObject
     paginate_by = 20
-
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(CountryListView, self).get_context_data(**kwargs)
+        context['name'] = self.args[0]
+        return context
     def get_queryset(self):
         return MuseumObject.objects.filter(place__country=self.args[0])
 
-class RegionListView(ListView):
-    model = MuseumObject
-    paginate_by = 20
-
+class RegionListView(CountryListView):
     def get_queryset(self):
         return MuseumObject.objects.filter(place__region=self.args[0])
+
+class WithImagesListView(ListView):
+    model = MuseumObject
+    paginate_by = 20
+    def get_queryset(self):
+        return MuseumObject.objects.exclude(artefactrepresentation__isnull=True)
 
 urlpatterns = patterns('cat.views',
     url(r'^$',
@@ -60,6 +67,9 @@ urlpatterns = patterns('cat.views',
     url(r'^place/(?P<pk>\d+)$',
         DetailView.as_view(
             model=Place), name="place_detail"),
+
+    url(r'^withimages/$', 
+        WithImagesListView.as_view(), name='with_images_list'),
 
     url(r'^table/$', 'table', name='table'),
 )
