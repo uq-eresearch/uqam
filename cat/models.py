@@ -52,6 +52,7 @@ class MuseumObject(models.Model):
     longitude = models.IntegerField(null=True,blank=True)
     latitude = models.IntegerField(null=True,blank=True)
     
+    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_museumobjects')
     @models.permalink
     def get_absolute_url(self):
         return ('artefact_view', [str(self.id)])
@@ -74,7 +75,7 @@ class FunctionalCategory(models.Model):
         verbose_name_plural = "Functional categories"
 
 class CulturalBloc(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, db_index=True)
     @models.permalink
     def get_absolute_url(self):
         return ('culturalbloc_detail', [str(self.name)])
@@ -111,6 +112,7 @@ class Place(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=30)
     comments = models.TextField(blank=True)
+    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people')
     @models.permalink
     def get_absolute_url(self):
         return ('person_detail', [str(self.id)])

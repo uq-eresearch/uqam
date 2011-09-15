@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import MuseumObject, FunctionalCategory,Person, Place
+from models import MuseumObject, FunctionalCategory, Person, Place
 from models import CulturalBloc, ArtefactType
 from mediaman.models import ArtefactRepresentation
 
@@ -25,6 +25,7 @@ class MOAdmin(admin.ModelAdmin):
 #    autocomplete_lookup_fields = {
 #            'fk': ['artefact_type'],
 #    }
+    filter_horizontal = ['related_documents']
 
     fieldsets = (
         (None, {
@@ -68,6 +69,10 @@ class MOAdmin(admin.ModelAdmin):
             'classes': ('collapse closed',),
             'fields': (('length', 'width', 'height'), ('depth', 'circumference'))
         }),
+        ('Related documents', {
+            'classes': ('collapse closed',),
+            'fields': ('related_documents',)
+        }),
     )
 
 
@@ -87,4 +92,5 @@ admin.site.register(ArtefactType)
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'comments',)
     search_fields = ['name', 'comments',]
+    filter_horizontal = ['related_documents']
 admin.site.register(Person, PersonAdmin)

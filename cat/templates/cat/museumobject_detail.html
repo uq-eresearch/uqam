@@ -26,6 +26,11 @@
 <b>Description:</b> {{ museumobject.description|linebreaks }}
 <br>
 <b>Comment:</b> {{ museumobject.comment|linebreaks }}
+<br>
+<b>Related documents:</b><br>
+{% for doc in museumobject.related_documents.all %}
+<a href="{{doc.document.url}}">{{doc.name}}</a> <br>
+{% endfor %}
 
 </div>
 
