@@ -30,7 +30,6 @@
 </div>
 
 
-<stylesheet>
 
 <div class="span-10 last">
     <div class="slider-wrapper theme-default">
@@ -38,7 +37,9 @@
     <div id="slider" class="nivoSlider">
 {% for pic in museumobject.artefactrepresentation_set.all %}
 
-    <a href="{{ pic.image.url}}"><img src="{{ pic.image.url_400x400 }}" width="400px" height="400px" alt=""></a>
+        <a href="{{ pic.image.url}}">
+            <img src="{{ pic.image.url_400x350 }}" width="400px" height="350px" alt="">
+        </a>
 
 {% endfor %}
     </div>

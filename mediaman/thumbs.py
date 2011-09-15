@@ -49,8 +49,19 @@ def generate_thumb(img, thumb_size, format):
         image2.thumbnail(thumb_size, Image.ANTIALIAS)
     else:
         # not quad
+        # make a thumbnail then expand the canvas to the full desired size
+        # centering as we go
         image2 = image
         image2.thumbnail(thumb_size, Image.ANTIALIAS)
+        oldX, oldY = image2.size
+        mode = "RGB"
+        image2 = Image.new(mode, thumb_size, "white")
+        if oldX < thumb_w:
+            x1, y1 = ((thumb_w-oldX)/2, 0)
+        else:
+            x1, y1 = (0, (thumb_h-oldY)/2)
+
+        image2.paste(image, (x1,y1))
     
     io = cStringIO.StringIO()
     # PNG and GIF are the same, JPG is JPEG
