@@ -46,9 +46,6 @@ urlpatterns = patterns('cat.views',
             model=CulturalBloc), name='bloc_list'),
     url(r'^blocs/(.*)$',
         CulturalBlocListView.as_view(), name='culturalbloc_detail'),
-#        DetailView.as_view(
-#            model=CulturalBloc,
-#            slug_field='name'), name="culturalbloc_detail"),
 
     url(r'^person/$',
         ListView.as_view(
@@ -57,14 +54,12 @@ urlpatterns = patterns('cat.views',
         DetailView.as_view(
             model=Person), name="person_detail"),
 
+    url(r'^country/$', 'all_countries', name='country_list'),
+    url(r'^country/(.+)/$', 'regions', name='country_region_list'),
     
     url(r'^region/$', 'all_regions', name='all_regions_list'),
     url(r'^region/(.+)/$',
         RegionListView.as_view(), name='region_list'),
-
-    url(r'^country/$', 'all_countries', name='country_list'),
-    url(r'^country/(.+)/$', 'regions', name='country_region_list'),
-#        CountryListView.as_view(), name='country_list'),
 
     url(r'^place/$',
         ListView.as_view(
