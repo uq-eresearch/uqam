@@ -36,3 +36,9 @@ body {
     border:0;
     display:block;
 }
+
+
+.highlighted {
+    background-color: yellow;
+
+}

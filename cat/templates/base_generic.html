@@ -35,6 +35,13 @@
                 <li><a href="{% url country_list %}">Countries</a></li>
                 <li><a href="{% url with_images_list %}">With Images</a></li>
             </ul>
+            <div style="float: right;">
+            <form method="get" action="/search/">
+                <input type="text" name="q" value="{{query}}">
+                <input type="hidden" name="models" value="cat.museumobject">
+                <input type="submit" value="Search">
+            </form>
+        </div>
         </div>
         <hr>
 

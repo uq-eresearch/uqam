@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'django_tables2',
     'mediaman',
+    'haystack',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -168,6 +169,10 @@ LOGGING = {
 }
 
 FILEBROWSER_DIRECTORY = ''
+
+HAYSTACK_SITECONF = 'cat.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'whoosh'
+HAYSTACK_WHOOSH_PATH = '/home/omad/whoosh/cat_index'
 
 #try:
 #    from local_settings import *

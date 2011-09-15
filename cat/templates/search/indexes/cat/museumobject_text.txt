@@ -1,0 +1,15 @@
+{{ object.donor }}
+{{ object.collector }}
+{{ object.functional_category }}
+{{ object.artefact_type }}
+{{ object.cultural_bloc }}
+{{ object.place }}
+{{ object.photographer }}
+{{ object.source }}
+{{ object.maker_or_artist }}
+{{ object.raw_material }}
+{{ object.indigenous_name }}
+{{ object.recorded_use }}
+{{ object.assoc_cultural_group }}
+{{ object.description }}
+{{ object.comment }}
