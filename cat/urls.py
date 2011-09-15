@@ -20,6 +20,10 @@ class RegionListView(CountryListView):
     def get_queryset(self):
         return MuseumObject.objects.filter(place__region=self.args[0])
 
+class CulturalBlocListView(CountryListView):
+    def get_queryset(self):
+        return MuseumObject.objects.filter(cultural_bloc__name=self.args[0])
+
 class WithImagesListView(ListView):
     model = MuseumObject
     paginate_by = 20
@@ -40,10 +44,11 @@ urlpatterns = patterns('cat.views',
     url(r'^blocs/$',
         ListView.as_view(
             model=CulturalBloc), name='bloc_list'),
-    url(r'^blocs/(?P<slug>.*)$',
-        DetailView.as_view(
-            model=CulturalBloc,
-            slug_field='name'), name="culturalbloc_detail"),
+    url(r'^blocs/(.*)$',
+        CulturalBlocListView.as_view(), name='culturalbloc_detail'),
+#        DetailView.as_view(
+#            model=CulturalBloc,
+#            slug_field='name'), name="culturalbloc_detail"),
 
     url(r'^person/$',
         ListView.as_view(
@@ -58,8 +63,8 @@ urlpatterns = patterns('cat.views',
         RegionListView.as_view(), name='region_list'),
 
     url(r'^country/$', 'all_countries', name='country_list'),
-    url(r'^country/(.+)/$',
-        CountryListView.as_view(), name='country_list'),
+    url(r'^country/(.+)/$', 'regions', name='country_region_list'),
+#        CountryListView.as_view(), name='country_list'),
 
     url(r'^place/$',
         ListView.as_view(

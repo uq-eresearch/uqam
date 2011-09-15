@@ -44,6 +44,6 @@ def all_regions(request):
     return render_to_response('cat/region_list.html', {'regions': regions})
 
 def regions(request, country):
-    regions = Place.objects.filter(country=country).values('region').distinct()
+    regions = Place.objects.filter(country=country).values('region').distinct().annotate(count=Count('museumobject'))
     return render_to_response('cat/region_list.html', {'regions': regions})
     

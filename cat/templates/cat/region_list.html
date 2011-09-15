@@ -10,10 +10,11 @@
 {% for region in regions %}
 
 <tr><td>
-<a href="{{region.region}}">{{region.region}}</a>
+    {% url region_list region.region as the_url %}
+    <a href="{{ the_url }}">{{region.region}}</a>
 </td><td>
-{{region.count}}
- </td></tr>
+    {{region.count}}
+</td></tr>
 {% endfor %}
 </table>
 
