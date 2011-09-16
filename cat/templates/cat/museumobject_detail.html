@@ -27,6 +27,17 @@
 <br>
 <b>Comment:</b> {{ museumobject.comment|linebreaks }}
 <br>
+
+{% if museumobject.length %}
+<b>Dimensions: </b> {{ museumobject.length }}mm x {{ museumobject.width }}mm
+<br>
+{% endif %}
+
+{% if museumobject.depth %}
+<b>Dimensions: </b> {{ museumobject.depth }}mm x {{ museumobject.width }}mm x {{ museumobject.height }}mm
+<br>
+{% endif %}
+
 <b>Related documents:</b><br>
 {% for doc in museumobject.related_documents.all %}
 <a href="{{doc.document.url}}">{{doc.name}}</a> <br>
@@ -59,7 +70,8 @@ $(window).load(function() {
     $('#slider').nivoSlider({
 effect: 'fade',
 manualAdvance: true,
-animSpeed: 200
+animSpeed: 200,
+directionNav: false
     });
 });
 </script>
