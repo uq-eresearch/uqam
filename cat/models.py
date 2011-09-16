@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class MuseumObject(models.Model):
+    id = models.IntegerField(primary_key=True)
     registration_number = models.IntegerField(db_index=True, unique=True)
     old_registration_number = models.CharField(max_length=10, blank=True)
     other_number = models.CharField(max_length=10, blank=True)
@@ -19,15 +20,15 @@ class MuseumObject(models.Model):
     access_status = models.CharField(max_length=30, blank=True)
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
     place = models.ForeignKey('Place', null=True)
-    donor = models.ForeignKey('Person', null=True, related_name="donated_objects")
-    donor_2 = models.ForeignKey('Person', null=True, related_name="donated_objects_2")
+    donor = models.ForeignKey('Person', null=True, blank=True, related_name="donated_objects")
+    donor_2 = models.ForeignKey('Person', null=True, blank=True, related_name="donated_objects_2")
     how_donor_obtained = models.CharField(max_length=50, blank=True)
     ## TODO: when_donor_obtained should be DateField
     when_donor_obtained = models.CharField(max_length=50, blank=True)
 
     photographer = models.CharField(max_length=30)
-    collector = models.ForeignKey('Person', null=True, related_name="collected_objects")
-    collector_2 = models.ForeignKey('Person', null=True, related_name="collected_objects_2")
+    collector = models.ForeignKey('Person', null=True, blank=True, related_name="collected_objects")
+    collector_2 = models.ForeignKey('Person', null=True, blank=True, related_name="collected_objects_2")
     how_collector_obtained = models.CharField(max_length=30, blank=True)
     when_collector_obtained = models.CharField(max_length=30, blank=True)
 
@@ -52,7 +53,7 @@ class MuseumObject(models.Model):
     longitude = models.IntegerField(null=True,blank=True)
     latitude = models.IntegerField(null=True,blank=True)
     
-    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_museumobjects')
+    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_museumobjects', null=True, blank=True)
     @models.permalink
     def get_absolute_url(self):
         return ('artefact_view', [str(self.id)])
@@ -73,6 +74,7 @@ class FunctionalCategory(models.Model):
 
     class Meta:
         verbose_name_plural = "Functional categories"
+        ordering = ['name']
 
 class CulturalBloc(models.Model):
     name = models.CharField(max_length=30, db_index=True)
@@ -80,12 +82,15 @@ class CulturalBloc(models.Model):
     def get_absolute_url(self):
         return ('culturalbloc_detail', [str(self.name)])
     def __unicode__(self):
+        ordering = ['name']
         return self.name
 
 class ArtefactType(models.Model):
     name = models.CharField(max_length=30)
     def __unicode__(self):
         return self.name
+    class Meta:
+        ordering = ['name']
 
 class Place(models.Model):
     country = models.CharField(max_length=30, blank=True)
@@ -119,4 +124,5 @@ class Person(models.Model):
     def __unicode__(self):
         return self.name
     class Meta:
+        ordering = ['name']
         verbose_name_plural = "People"
