@@ -42,7 +42,11 @@
     <div id="slider" class="nivoSlider">
 {% for pic in museumobject.artefactrepresentation_set.all %}
 
+{% if pic.url %}
+        <a href="{{ pic.url }}" >
+{% else %}
         <a href="{{ pic.image.url}}">
+{% endif %}
             <img src="{{ pic.image.url_400x350 }}" width="400px" height="350px" alt="">
         </a>
 

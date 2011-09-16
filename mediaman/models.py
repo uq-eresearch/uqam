@@ -24,6 +24,7 @@ add_introspection_rules(
 class ArtefactRepresentation(models.Model):
     name = models.CharField(max_length=30, blank=True)
     image = ImageWithThumbsField(upload_to='mediareps/', sizes=((64,64),(400,350)))
+    url = models.URLField(blank=True)
     artefact = models.ForeignKey(MuseumObject)
     def __unicode__(self):
         return self.name
