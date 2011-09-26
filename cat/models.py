@@ -82,8 +82,9 @@ class CulturalBloc(models.Model):
     def get_absolute_url(self):
         return ('culturalbloc_detail', [str(self.name)])
     def __unicode__(self):
-        ordering = ['name']
         return self.name
+    class Meta:
+        ordering = ['name']
 
 class ArtefactType(models.Model):
     name = models.CharField(max_length=30)
