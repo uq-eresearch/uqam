@@ -4,6 +4,15 @@
 
 {% block content %}
 
-<h1>Home Page</h1>
+<h2>Featured content</h2>
+
+{% for mo in museumobject_list %}
+
+<a href="{{mo.get_absolute_url}}">
+    
+    <img src="{{ mo.artefactrepresentation_set.all.0.image.url_64x64 }}" width="64px" height="64px" alt="">
+    {{mo.registration_number}} {{mo.artefact_type}}</a>
+<br>
+{% endfor %}
 
 {% endblock %}
