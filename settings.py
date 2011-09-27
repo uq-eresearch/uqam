@@ -174,7 +174,24 @@ HAYSTACK_SITECONF = 'cat.search_sites'
 HAYSTACK_SEARCH_ENGINE = 'whoosh'
 HAYSTACK_WHOOSH_PATH = '/home/omad/whoosh/cat_index'
 
-#try:
-#    from local_settings import *
-#except ImportError:
-#    pass
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+#AUTHENTICATION_BACKENDS = (
+#    'django_auth_ldap.backend.LDAPBackend',
+#    'django.contrib.auth.backends.ModelBackend',
+#)
+#AUTH_LDAP_SERVER_URI = "ldap://ldap.uq.edu.au"
+#import ldap
+#from django_auth_ldap.config import LDAPSearch
+#AUTH_LDAP_BIND_DN = ""
+#AUTH_LDAP_BIND_PASSWORD = ""
+#AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=staff,ou=people,o=the university of queensland,c=au", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+#
+AUTH_LDAP_USER_ATTR_MAP = {
+        "first_name": "givenName",
+        "last_name": "sn",
+        "email": "mail"
+    }
+#AUTH_LDAP_PROFILE_ATTR_MAP = {"home_directory": "homeDirectory"}
+
+
