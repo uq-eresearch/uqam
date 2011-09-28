@@ -10,19 +10,12 @@ import sys
 import os
 import string
 
-ARTEFACT_CSV = 'Artefact.csv'
-ARTEFACT_MORE_CSV = 'ACCESS2_Artefact_More.csv'
-DONOR_CSV = 'Donor.csv'
-COLLECTORPHOTO_CSV = 'Collector_Photographer.csv'
-PERSON_CSV = 'Person.csv'
 
 def prepare_stdout():
     unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
     sys.stdout = unbuffered
 
 def clean_row(row):
-    for key,value in row.items():
-        row[key] = value.strip()
     row["Functional_Category"] = string.capwords(row["Functional_Category"])
     row["Loan_Status"] = string.capwords(row["Loan_Status"])
     return row
@@ -37,7 +30,8 @@ def process_csv(filename, row_handler):
             count = 0
             print ('Importing from ', filename)
             for row in data:
-#                sys.stdout.write('.')
+                for key,value in row.items():
+                    row[key] = value.strip()
                 row_handler(row)
                 count+=1
                 sys.stdout.write('\r{0}'.format(count))
@@ -50,8 +44,6 @@ def process_csv(filename, row_handler):
 
 def process_person_record(r):
     '''Read person records from a row of the csv and create DB records'''
-    for key,value in r.items():
-        r[key] = value.strip()
     p = Person()
     p.id = r["Person idnmbr"]
     p.name = r["Name"]
@@ -94,13 +86,35 @@ def process_donorrecord(row):
     m.save()
 
 def process_collectorphotographer_record(r):
-    '''Update a museumobject record with details from a row of the collectorphotog csv'''
+    """
+    Update a museumobject record with details from a row of the collectorphotog csv
+    """
     m = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
     p = Person.objects.get(pk=int(r['Person_idnbr']))
     m.collector_2 = p
     m.how_collector_obtained = r['How_Obtained1']
     m.when_collector_obtained = r['When_Obtained1']
     m.save()
+
+def process_artefacttype_record(r):
+    a = ArtefactType()
+    a.name = r['Artefact_TypeName']
+    a.definition = r['Definition']
+    a.see_also = r['SeeAlso']
+    a.save()
+
+def process_cultural_bloc_record(r):
+    c = CulturalBloc()
+    c.name = r['CulturalBloc']
+    c.definition = r['Definition']
+    c.save()
+
+def process_functional_category_record(r):
+    f = FunctionalCategory()
+    f.name = string.capwords(r['Functional_Category'])
+    f.definition = r['Definition']
+    f.save()
+
     
 
 def process_artefact_record(r):
@@ -157,6 +171,17 @@ def process_artefact_record(r):
 
     m.save()
 
+mappings = (
+    ('Functional_Category.csv', process_functional_category_record),
+    ('Artefact_type.csv', process_artefacttype_record),
+    ('Cultural_Bloc_Combo.csv', process_cultural_bloc_record),
+    ('Person.csv', process_person_record),
+    ('Artefact.csv', process_artefact_record),
+    ('ACCESS2_Artefact_More.csv', process_artefactmore_record),
+    ('Donor.csv', process_donorrecord),
+    ('Collector_Photographer.csv', process_collectorphotographer_record),
+)
+
 class Command(BaseCommand):
 
     help = "Import an Anthropology Museum catalogue"
@@ -176,10 +201,7 @@ class Command(BaseCommand):
 
         prepare_stdout()
 
-        process_csv(dir + PERSON_CSV, process_person_record)
-        process_csv(dir + ARTEFACT_CSV, process_artefact_record)
-        process_csv(dir + ARTEFACT_MORE_CSV, process_artefactmore_record)
-        process_csv(dir + DONOR_CSV, process_donorrecord)
-        process_csv(dir + COLLECTORPHOTO_CSV, process_collectorphotographer_record)
+        for filename, function in mappings:
+            process_csv(dir + filename, function)
 
-        
+
