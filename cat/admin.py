@@ -81,7 +81,8 @@ admin.site.register(MuseumObject, MOAdmin)
 
 
 def merge_selected(modeladmin,request,queryset): #This is an admin/
-    """Provide the admin action for merging models
+    """
+    Provide the admin action for merging models
 
     From:
     http://djangosnippets.org/snippets/2213/
@@ -175,10 +176,12 @@ class PlaceAdmin(admin.ModelAdmin):
 admin.site.register(Place, PlaceAdmin)
 
 class FunctionCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'definition')
     actions = [merge_selected]
 admin.site.register(FunctionalCategory, FunctionCategoryAdmin)
 
 class CulturalBlocAdmin(admin.ModelAdmin):
+    list_display = ('name', 'definition')
     actions = [merge_selected]
 admin.site.register(CulturalBloc, CulturalBlocAdmin)
 
@@ -187,5 +190,6 @@ class ArtefactRepresentationAdmin(admin.ModelAdmin):
 admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
 
 class ArtefactTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'definition')
     actions = [merge_selected]
 admin.site.register(ArtefactType, ArtefactTypeAdmin)

@@ -68,6 +68,7 @@ class MuseumObject(models.Model):
 
 class FunctionalCategory(models.Model):
     name = models.CharField('function category', max_length=30)
+    definition = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
@@ -78,6 +79,7 @@ class FunctionalCategory(models.Model):
 
 class CulturalBloc(models.Model):
     name = models.CharField(max_length=30, db_index=True)
+    definition = models.TextField(blank=True)
     @models.permalink
     def get_absolute_url(self):
         return ('culturalbloc_detail', [str(self.name)])
@@ -88,6 +90,8 @@ class CulturalBloc(models.Model):
 
 class ArtefactType(models.Model):
     name = models.CharField(max_length=30)
+    definition = models.TextField(blank=True)
+    see_also = models.CharField(max_length=50, blank=True)
     def __unicode__(self):
         return self.name
     class Meta:
