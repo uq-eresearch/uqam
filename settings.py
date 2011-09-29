@@ -195,3 +195,5 @@ AUTH_LDAP_USER_ATTR_MAP = {
 #AUTH_LDAP_PROFILE_ATTR_MAP = {"home_directory": "homeDirectory"}
 
 
+SOUTH_TESTS_MIGRATE = False
+

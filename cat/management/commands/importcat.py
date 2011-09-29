@@ -32,9 +32,9 @@ def process_csv(filename, row_handler):
             for row in data:
                 for key,value in row.items():
                     row[key] = value.strip()
-                row_handler(row)
                 count+=1
                 sys.stdout.write('\r{0}'.format(count))
+                row_handler(row)
                 if (count % 1000) == 0:
                     transaction.commit()
     except:

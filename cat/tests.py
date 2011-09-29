@@ -16,14 +16,14 @@ from django.test.client import Client
 
 
 class ViewTest(TestCase):
+    fixtures = ['first_ten.json']
     def setUp(self):
         self.client = Client()
     def test_museumobjects_view(self):
         # Issue a GET request
-        response = self.client.get('/artefacts/1')
+        response = self.client.get('/artefact/1')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['artefacts']), 5)
 
 class SimpleTest(TestCase):
     def test_basic_addition(self):
