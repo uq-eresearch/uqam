@@ -181,6 +181,13 @@ mappings = (
     ('Donor.csv', process_donorrecord),
     ('Collector_Photographer.csv', process_collectorphotographer_record),
 )
+# Defined Dictionaries
+# Access_Status_Combo, Aquisition_method_Combo, Artefact_type,
+# Aust_State Combo, Condition_Combo, Conservation_action_Combo,
+# Country_Combo (no definitions), Cultural_Bloc_Combo, Deacession_Reason_Combo,
+# Functional_Category, Loan_Reason_Combo, Loan_Status_Combo, Obtained_Combo
+# Photo_Type_Combo, Region_combo, 
+
 
 class Command(BaseCommand):
 
