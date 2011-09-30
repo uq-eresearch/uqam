@@ -24,10 +24,11 @@ def import_xlsx(filename):
         vals = [str(v.value).strip() for v in row]
         m = MuseumObject()
         m.id = vals[0]
+        m.registration_number = vals[0]
         m.old_registration_number = vals[1]
         m.other_number = vals[2]
-        m.functional_category = vals[3] ####
-        m.Artefact_type = vals[4] ####
+        m.functional_category, created = FunctionalCategory.objects.get_or_create(name=vals[3])
+        m.artefact_type, created = ArtefactType.objects.get_or_create(name=vals[4])
         m.storage_section = vals[5]
         m.storage_unit = vals[6]
         m.storage_bay = vals[7]
@@ -42,26 +43,37 @@ def import_xlsx(filename):
         m.loan_status = vals[16]
         country = vals[17]
         place = vals[18]
-        cultural_bloc = vals[19]
+        m.place, created = Place.objects.get_or_create(name=place,
+                                              australian_state=state,
+                                              region=region,
+                                              country=country)
+        m.cultural_bloc, created = CulturalBloc.objects.get_or_create(name=vals[19])
+        #TODO: what is photographic_record, is it in Access anywhere
         photographic_record = vals[20]
-        collector = vals[21]
-        when_obtained = vals[22]
-        how_obtained = vals[23]
-        source = vals[24]
-        when_obtained = vals[25]
+        m.collector, created = Person.objects.get_or_create(name=vals[21])
+        m.when_collector_obtained = vals[22]
+        m.how_collector_obtained = vals[23]
+        m.donor, created = Person.objects.get_or_create(name=vals[24])
+# All empty        when_obtained = vals[25]
 # All empty       how_obtained = vals[26]
 # All empty       category_illustration = vals[27]
 # All empty       artefaction_illustration = vals[28]
-        raw_material = vals[29]
-        indigenous_name = vals[30]
-        associated_group = vals[31]
-        recorded_use = vals[32]
-        maker_artist = vals[33]
-        m.length = vals[34]
-        m.width = vals[35]
-        m.depth = vals[36]
-        m.circumference = vals[37]
-        m.weight = vals[38]
+        m.raw_material = vals[29]
+        m.indigenous_name = vals[30]
+        m.assoc_cultural_group = vals[31]
+        m.recorded_use = vals[32]
+        m.maker_or_artist = vals[33]
+        def mapint(attr, val):
+            try:
+                setattr(m, attr, int(val))
+            except ValueError:
+                pass
+        mapint('length', vals[34])
+        mapint('width', vals[35])
+        mapint('depth', vals[36])
+        mapint('circumference', vals[37])
+        mapint('weight', vals[38])
+        m.save()
 
 
 
