@@ -9,15 +9,22 @@ class LoanAgreement(models.Model):
     client = models.ForeignKey('Client')
     date_borrowed = models.DateField()
     return_date = models.DateField()
-    approved_by = models.ForeignKey(Person)
-    prepared_by = models.ForeignKey(Person)
+    approved_by = models.ForeignKey(Person, related_name="approved_by")
+    prepared_by = models.ForeignKey(Person, related_name="prepared_by")
     loan_type = models.CharField(max_length=20)
     loan_purpose = models.CharField(max_length=20)
     special_loan_conditions = models.TextField()
     comments = models.TextField()
-    loan_items = models.OneToManyField(MuseumObject)
+    items = models.ManyToManyField(MuseumObject, through='LoanItem')
+    def __unicode__(self):
+        return self.ref
+
+class LoanItem(models.Model):
+    loan = models.ForeignKey(LoanAgreement)
+    item = models.ForeignKey(MuseumObject)
     out_condition = models.CharField(max_length=30)
     return_condition = models.CharField(max_length=30)
+
 
 
 class Client(models.Model):
@@ -30,3 +37,6 @@ class Client(models.Model):
 
     phone1 = models.CharField(max_length=20)
     phone2 = models.CharField(max_length=20)
+
+    def __unicode__(self):
+        return self.name
