@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
 from cat.models import Person, Place
 from loans.models import LoanAgreement, LoanItem, Client
+from condition.models import ConditionReport, ConservationAction, Deaccession
 from django.core import management
 from django.db import transaction
 from django import db
@@ -224,6 +225,40 @@ loans = (
     ('Client.csv', process_client_record),
     ('Loan.csv', process_loan_record),
     ('Artefacts_on_Loan.csv', process_loanitem_record),
+)
+def process_condition(r):
+    c = ConditionReport()
+    c.item = MuseumObject.objects.get(registration_number=r['Registration'])
+    c.condition = r['ConditionCode']
+    c.date = r['Condition_Date']
+    c.details = r['Details']
+    c.report_author = r['Report_Produced'] ####
+    c.change_reason = r['Change_Reason']
+    c.save()
+def process_conservation(r):
+    c = ConditionReport()
+    c.item = MuseumObject.objects.get(registration_number=r['Registration'])
+    c.date = r['Action_Date']
+    c.action = r['Conservation_action']
+    c.details = r['Action_Details']
+    c.future_conservation = r['Future_Conservation']
+    c.future_conservation_date = r['Future_Conservation_Date']
+    c.comments = r['Comments']
+    c.material_used = r['Material_used']
+    c.conservator = r['ConservatorId']  #####
+def process_deaccession(r):
+    d = Deaccession()
+    d.item = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
+    d.reason = r['Reason']
+    d.date = r['Deaccession_Date']
+    d.person = r['Museum_StaffName']
+    d.save()
+
+
+conservation = (
+    ('Conservation_Details.csv', process_conservation),
+    ('Deaccession.csv', process_deaccession),
+    ('Artefact_Condition.csv', process_condition)
 )
 # Defined Dictionaries
 # Access_Status_Combo, Aquisition_method_Combo, Artefact_type,

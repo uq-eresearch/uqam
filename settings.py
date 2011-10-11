@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'cat',
     'loans',
+    'condition',
     'south',
     'django_extensions',
     'django_tables2',
