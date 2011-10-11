@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
 from cat.models import Person, Place
+from loans.models import LoanAgreement, LoanItem, Client
 from django.core import management
 from django.db import transaction
 from django import db
@@ -171,6 +172,44 @@ def process_artefact_record(r):
 
     m.save()
 
+def process_loan_record(r):
+    l = LoanAgreement()
+    l.id = r['LoanId']
+    l.date_borrowed = r['Borrowing_Date']
+    l.return_date = r['Return_Date']
+    l.approved_by = r['Approved by']
+    l.prepared_by = r['Prepared by']
+    l.clientNumber = r['ClientNumber']
+    l.special_loan_conditions = r['Loan_Conditions']
+    l.location = r['Location']
+    l.loan_type = r['Loan Type']
+    l.reason = r['Loan_Reason_type']
+    l.returned = r['Returned']
+    l.comments = r['Comments']
+    l.save()
+
+def process_client_record(r):
+    c = Client()
+    c.name = r['Title'] + r['FirstName(s)'] + r['Surname']
+    c.organisation = r['Organisation']
+    c.position = r['Position']
+    c.address = r['AddressLine1'] + r['AddressLine2'] + r['AddressLine3']
+    c.town_suburb = r['Town/suburb']
+    c.state = r['State']
+    c.country = r['OverseasCountry']
+    c.postcode = r['Postcode']
+    c.phone1 = r['Phone1']
+    c.phone2 = r['Phone2']
+    c.save()
+def process_loanitem_record(r):
+    l = LoanItem()
+    l.loan = r['LoanId']
+    l.item = r['Artefact_Registration']
+    l.out_condition = r['ConditionCode']
+    l.return_condition = r['Return_Condition']
+    l.save()
+
+
 mappings = (
     ('Functional_Category.csv', process_functional_category_record),
     ('Artefact_type.csv', process_artefacttype_record),
@@ -180,6 +219,11 @@ mappings = (
     ('ACCESS2_Artefact_More.csv', process_artefactmore_record),
     ('Donor.csv', process_donorrecord),
     ('Collector_Photographer.csv', process_collectorphotographer_record),
+)
+loans = (
+    ('Client.csv', process_client_record),
+    ('Loan.csv', process_loan_record),
+    ('Artefacts_on_Loan.csv', process_loanitem_record),
 )
 # Defined Dictionaries
 # Access_Status_Combo, Aquisition_method_Combo, Artefact_type,
