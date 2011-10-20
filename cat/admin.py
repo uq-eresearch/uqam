@@ -187,6 +187,7 @@ admin.site.register(CulturalBloc, CulturalBlocAdmin)
 
 class ArtefactRepresentationAdmin(admin.ModelAdmin):
     actions = [merge_selected]
+    raw_id_fields = ('artefact',)
 admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
 
 class ArtefactTypeAdmin(admin.ModelAdmin):
