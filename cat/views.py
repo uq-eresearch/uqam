@@ -21,7 +21,7 @@ def table(request):
     queryset = MuseumObject.objects.all()
     table = SimpleTable(queryset)
     RequestConfig(request, paginate={"per_page": 4}).configure(table)
-    return render_to_response("simple_list.html", {"table": table},
+    return render_to_response("../templates/simple_list.html", {"table": table},
                               context_instance=RequestContext(request))
 
 def detail(request, artefact_id):
@@ -36,14 +36,14 @@ def all_countries(request):
     countries = Place.objects.values('country').distinct().annotate(count=Count('museumobject'))
 
 #    countries = Place.objects.values('country').distinct()
-    return render_to_response('cat/country_list.html', {'countries': countries})
+    return render_to_response('../templates/cat/country_list.html', {'countries': countries})
 
 def all_regions(request):
     #regions = Place.objects.values('region').distinct()
     regions = Place.objects.values('region').distinct().annotate(count=Count('museumobject'))
-    return render_to_response('cat/region_list.html', {'regions': regions})
+    return render_to_response('../templates/cat/region_list.html', {'regions': regions})
 
 def regions(request, country):
     regions = Place.objects.filter(country=country).values('region').distinct().annotate(count=Count('museumobject'))
-    return render_to_response('cat/region_list.html', {'regions': regions})
+    return render_to_response('../templates/cat/region_list.html', {'regions': regions})
     

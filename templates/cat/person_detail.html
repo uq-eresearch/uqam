@@ -2,6 +2,9 @@
 
 {% block content %}
 <h1>{{ person.name }}</h1>
+<div>
+<a href={% url admin:cat_person_change person.id %}>Edit in Admin</a>
+</div>
 
 <p>{{ person.comments }}</p>
 
@@ -29,6 +32,7 @@
 <br>
 {% endfor %}
 </div>
+
 
 
 {% endblock %}

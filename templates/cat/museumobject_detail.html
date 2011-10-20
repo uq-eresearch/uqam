@@ -23,10 +23,38 @@
 <br>
 <b>Place:</b> <a href="{{museumobject.place.get_absolute_url}}">{{ museumobject.place }}</a>
 <br>
+
+{% if museumobject.maker_or_artist %}
+<b>Maker or artist: </b> {{ museumobject.maker_or_artist }}
+<br>
+{% endif %}
+
+{% if museumobject.assoc_cultural_group %}
+<b>Associated cultural group: </b> {{ museumobject.assoc_cultural_group }}
+<br>
+{% endif %}
+
+{% if museumobject.raw_material %}
+<b>Raw material: </b> {{ museumobject.raw_material }}
+<br>
+{% endif %}
+
+{% if museumobject.indigenous_name %}
+<b>Indigenous name: </b> {{ museumobject.indigenous_name }}
+<br>
+{% endif %}
+
+{% if museumobject.recorded_use %}
+<b>Recorded use: </b> {{ museumobject.recorded_use }}
+<br>
+{% endif %}
+
+
 <b>Description:</b> {{ museumobject.description|linebreaks }}
 <br>
 <b>Comment:</b> {{ museumobject.comment|linebreaks }}
 <br>
+
 
 {% if museumobject.length %}
 <b>Dimensions: </b> {{ museumobject.length }}mm x {{ museumobject.width }}mm

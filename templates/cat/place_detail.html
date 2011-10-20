@@ -5,7 +5,9 @@
 
 <p><b>Country:</b> {{ place.country }}</p>
 <p><b>Region:</b> {{ place.region }}</p>
+{% if place.australian_state %}
 <p><b>Australian State:</b> {{ place.australian_state }}</p>
+{% endif %}
 
 <div class="span-12">
 <h2>Objects</h2>
