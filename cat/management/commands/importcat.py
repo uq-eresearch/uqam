@@ -6,6 +6,7 @@ from condition.models import ConditionReport, ConservationAction, Deaccession
 from django.core import management
 from django.db import transaction
 from django import db
+from os.path import join
 
 import csv
 import sys
@@ -43,6 +44,7 @@ def process_csv(filename, row_handler):
         print "Unexpected error: ", sys.exc_info()
     else:
         transaction.commit()
+    print("")
 
 def process_person_record(r):
     '''Read person records from a row of the csv and create DB records'''
@@ -178,8 +180,8 @@ def process_loan_record(r):
     l.id = r['LoanId']
     l.date_borrowed = r['Borrowing_Date']
     l.return_date = r['Return_Date']
-    l.approved_by = r['Approved by']
-    l.prepared_by = r['Prepared by']
+    l.approved_by, created = Person.objects.get_or_create(name=r['Approved by'])
+    l.prepared_by, created = Person.objects.get_or_create(name=r['Prepared by'])
     l.clientNumber = r['ClientNumber']
     l.special_loan_conditions = r['Loan_Conditions']
     l.location = r['Location']
@@ -187,14 +189,16 @@ def process_loan_record(r):
     l.reason = r['Loan_Reason_type']
     l.returned = r['Returned']
     l.comments = r['Comments']
+    l.client = Client.objects.get(id=r['ClientNumber'])
     l.save()
 
 def process_client_record(r):
     c = Client()
-    c.name = r['Title'] + r['FirstName(s)'] + r['Surname']
+    c.id = r['ClientNumber']
+    c.name = string.join((r['Title'], r['FirstName(s)'], r['Surname']))
     c.organisation = r['Organisation']
     c.position = r['Position']
-    c.address = r['AddressLine1'] + r['AddressLine2'] + r['AddressLine3']
+    c.address = string.join((r['AddressLine1'], r['AddressLine2'], r['AddressLine3']), "\n")
     c.town_suburb = r['Town/suburb']
     c.state = r['State']
     c.country = r['OverseasCountry']
@@ -204,8 +208,8 @@ def process_client_record(r):
     c.save()
 def process_loanitem_record(r):
     l = LoanItem()
-    l.loan = r['LoanId']
-    l.item = r['Artefact_Registration']
+    l.loan = LoanAgreement.objects.get(id=int(r['LoanId']))
+    l.item = MuseumObject.objects.get(id=r['Artefact_Registration'])
     l.out_condition = r['ConditionCode']
     l.return_condition = r['Return_Condition']
     l.save()
@@ -251,11 +255,11 @@ def process_deaccession(r):
     d.item = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
     d.reason = r['Reason']
     d.date = r['Deaccession_Date']
-    d.person = r['Museum_StaffName']
+    d.person, created = Person.objects.get_or_create(name=r['Museum_StaffName'])
     d.save()
 
 
-conservation = (
+condition = (
     ('Conservation_Details.csv', process_conservation),
     ('Deaccession.csv', process_deaccession),
     ('Artefact_Condition.csv', process_condition)
@@ -280,14 +284,24 @@ class Command(BaseCommand):
 
         dir, = args
 
-        management.call_command('reset', 'cat', interactive=False)
-        management.call_command('reset', 'mediaman', interactive=False)
-        management.call_command('syncdb', interactive=False)
-        management.call_command('migrate','cat', interactive=False)
+#        management.call_command('reset', 'cat', interactive=False)
+#        management.call_command('reset', 'mediaman', interactive=False)
+#        management.call_command('syncdb', interactive=False)
+#        management.call_command('migrate','cat', interactive=False)
 
         prepare_stdout()
 
-        for filename, function in mappings:
-            process_csv(dir + filename, function)
+#        for filename, function in mappings:
+#            process_csv(join(dir, filename), function)
+
+#        management.call_command('reset', 'loans', interactive=False)
+#        management.call_command('migrate','loans', interactive=False)
+#        for filename, function in loans:
+#            process_csv(join(dir, filename), function)
+
+        management.call_command('reset', 'condition', interactive=False)
+        management.call_command('migrate', 'condition', interactive=False)
+        for filename, function in condition:
+            process_csv(join(dir, filename), function)
 
 

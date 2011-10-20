@@ -16,14 +16,18 @@ class LoanAgreement(models.Model):
     special_loan_conditions = models.TextField()
     comments = models.TextField()
     items = models.ManyToManyField(MuseumObject, through='LoanItem')
+    class Meta:
+        ordering = ['id']
     def __unicode__(self):
-        return self.ref
+        return "LoanAgreement " + str(self.id) + " " + self.ref
 
 class LoanItem(models.Model):
     loan = models.ForeignKey(LoanAgreement)
     item = models.ForeignKey(MuseumObject)
     out_condition = models.CharField(max_length=30)
     return_condition = models.CharField(max_length=30)
+    def __unicode__(self):
+        return self.item.__unicode__()
 
 
 
@@ -37,6 +41,9 @@ class Client(models.Model):
 
     phone1 = models.CharField(max_length=20)
     phone2 = models.CharField(max_length=20)
+
+    class Meta:
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
