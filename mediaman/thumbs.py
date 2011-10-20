@@ -32,36 +32,21 @@ def generate_thumb(img, thumb_size, format):
         
     # get size
     thumb_w, thumb_h = thumb_size
-    # If you want to generate a square thumbnail
-    if thumb_w == thumb_h:
-        # quad
-        xsize, ysize = image.size
-        # get minimum size
-        minsize = min(xsize,ysize)
-        # largest square possible in the image
-        xnewsize = (xsize-minsize)/2
-        ynewsize = (ysize-minsize)/2
-        # crop it
-        image2 = image.crop((xnewsize, ynewsize, xsize-xnewsize, ysize-ynewsize))
-        # load is necessary after crop                
-        image2.load()
-        # thumbnail of the cropped image (with ANTIALIAS to make it look better)
-        image2.thumbnail(thumb_size, Image.ANTIALIAS)
-    else:
-        # not quad
-        # make a thumbnail then expand the canvas to the full desired size
-        # centering as we go
-        image2 = image
-        image2.thumbnail(thumb_size, Image.ANTIALIAS)
-        oldX, oldY = image2.size
-        mode = "RGB"
-        image2 = Image.new(mode, thumb_size, "white")
-        if oldX < thumb_w:
-            x1, y1 = ((thumb_w-oldX)/2, 0)
-        else:
-            x1, y1 = (0, (thumb_h-oldY)/2)
 
-        image2.paste(image, (x1,y1))
+    # not quad
+    # make a thumbnail then expand the canvas to the full desired size
+    # centering as we go
+    image2 = image
+    image2.thumbnail(thumb_size, Image.ANTIALIAS)
+    oldX, oldY = image2.size
+    mode = "RGB"
+    image2 = Image.new(mode, thumb_size, "white")
+    if oldX < thumb_w:
+        x1, y1 = ((thumb_w-oldX)/2, 0)
+    else:
+        x1, y1 = (0, (thumb_h-oldY)/2)
+
+    image2.paste(image, (x1,y1))
     
     io = cStringIO.StringIO()
     # PNG and GIF are the same, JPG is JPEG
