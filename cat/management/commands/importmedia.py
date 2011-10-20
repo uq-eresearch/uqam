@@ -12,7 +12,8 @@ def process_path(path):
             processfile(root, f)
 
 def processfile(root, name):
-    match = re.match('(\d+).*jpg$', name)
+    """Match file type and name to an artefact and store"""
+    match = re.match(r'(\d+).*jpg$', name)
     if match is None:
         return
 
@@ -22,16 +23,20 @@ def processfile(root, name):
 
 
 def add_rep(id, root, name):
-    f = open(join(root,name))
-    ar = ArtefactRepresentation()
-    ar.name = name
-    ar.image = File(f)
-    ar.artefact = MuseumObject.objects.get(id=int(id))
-    ar.save()
-def add_doc(id, name):
-    f = open(name)
-    doc = Document()
-    doc.name = name
+    """Add artefact representation from file"""
+    if ArtefactRepresentation.objects.filter(name=name).exists():
+        return
+    with open(join(root,name)) as f:
+        ar = ArtefactRepresentation()
+        ar.name = name
+        ar.image = File(f)
+        ar.artefact = MuseumObject.objects.get(id=int(id))
+        ar.save()
+def add_doc(id, root, name):
+    with open(join(root,name)) as f:
+        doc = Document()
+        doc.name = name
+        doc.document = File(f)
     
 
 
