@@ -76,5 +76,4 @@ urlpatterns = patterns('cat.views',
     url(r'^withimages/$', 
         WithImagesListView.as_view(template_name='../templates/cat/withimages.html'), name='with_images_list'),
 
-    url(r'^table/$', 'table', name='table'),
 )

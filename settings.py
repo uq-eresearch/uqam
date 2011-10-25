@@ -143,7 +143,6 @@ INSTALLED_APPS = (
     'condition',
     'south',
     'django_extensions',
-    'django_tables2',
     'mediaman',
     'haystack',
 )
