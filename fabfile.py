@@ -1,4 +1,4 @@
-from fabric.api import env, local, run
+from fabric.api import env, local, run, put, cd
 
 env.user = 'uqdayers'
 env.gateway = 'gladys'
@@ -30,3 +30,31 @@ def uname():
 
 def uat():
     env.hosts = ['anthropology']
+
+
+def pack():
+    local('git archive master | bzip2 > /tmp/uqam.tar.bz2')
+
+def bootstrap():
+    pack()
+    put('/tmp/uqam.tar.bz2', '/tmp/uqam.tar.bz2')
+    depdir = 'test/uqam'
+    run('mkdir -p %s' % depdir)
+    with cd(depdir):
+        run('tar xjf /tmp/uqam.tar.bz2')
+
+        run('./manage.py syncdb')
+        run('./manage.py migrate')
+
+def copyimages():
+    # something with rsync, probably
+    put('images')
+
+def importdata(db):
+    # Either:
+    # - copy from another database
+    # - do a fresh import
+
+    sudo('yum install mdbtools')
+    put(db, '/tmp/db.mdb')
+    run('./manage.py importcat pathtomdb')
