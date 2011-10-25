@@ -42,6 +42,9 @@
     -->
                 <li><a href="{% url country_list %}">Countries</a></li>
                 <li><a href="{% url with_images_list %}">With Images</a></li>
+                {% if user.is_staff %}
+                <li><a href="/admin/">Admin</a></li>
+                {% endif %}
             </ul>
             <div style="float: right;">
             <form method="get" action="/search/">
