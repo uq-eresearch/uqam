@@ -113,6 +113,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'uqam.middleware.RequireLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
@@ -199,3 +200,11 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 SOUTH_TESTS_MIGRATE = False
 
+LOGIN_REQUIRED_URLS = (
+    r'/(.*)$',
+)
+LOGIN_REQUIRED_URLS_EXCEPTIONS = (
+    r'/accounts/login(.*)$',
+    r'/admin/logout(.*)$',
+    r'/$',
+)
