@@ -163,7 +163,7 @@ def merge_selected(modeladmin,request,queryset): #This is an admin/
 merge_selected.short_description = "Merge selected records"
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'comments',)
+    list_display = ('id', 'name', 'comments',)
     search_fields = ['name', 'comments',]
     filter_horizontal = ['related_documents']
     actions = [merge_selected]
