@@ -1,5 +1,6 @@
 from django.contrib import admin
 from models import ConditionReport, ConservationAction, Deaccession
+from models import Conservator
 
 
 class ConditionReportAdmin(admin.ModelAdmin):
@@ -18,3 +19,4 @@ class DeaccessionAdmin(admin.ModelAdmin):
 admin.site.register(ConditionReport, ConditionReportAdmin)
 admin.site.register(ConservationAction, ConservationActionAdmin)
 admin.site.register(Deaccession)
+admin.site.register(Conservator)

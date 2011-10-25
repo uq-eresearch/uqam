@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
 from cat.models import Person, Place
 from loans.models import LoanAgreement, LoanItem, Client
-from condition.models import ConditionReport, ConservationAction, Deaccession
+from condition.models import ConditionReport, ConservationAction, Deaccession, Conservator
 from django.core import management
 from django.db import transaction
 from django import db
@@ -48,6 +48,8 @@ def process_csv(filename, row_handler):
 
 def process_person_record(r):
     '''Read person records from a row of the csv and create DB records'''
+    if r['Name'] == '':
+        return
     p = Person()
     p.id = r["Person idnmbr"]
     p.name = r["Name"]
@@ -234,32 +236,68 @@ def process_condition(r):
     c = ConditionReport()
     c.item = MuseumObject.objects.get(registration_number=r['Registration'])
     c.condition = r['ConditionCode']
-    c.date = r['Condition_Date']
+    if r['Condition_Date']:
+        c.date = r['Condition_Date']
     c.details = r['Details']
-    c.report_author = r['Report_Produced'] ####
+    c.report_author,created = Person.objects.get_or_create(name=r['Report_Produced'])
     c.change_reason = r['Change_Reason']
-    c.save()
+    try:
+        c.save()
+    except:
+        print("Error with condition report for item: %s" % c.item)
+        print sys.exc_info()
+        
 def process_conservation(r):
-    c = ConditionReport()
+    c = ConservationAction()
     c.item = MuseumObject.objects.get(registration_number=r['Registration'])
     c.date = r['Action_Date']
     c.action = r['Conservation_action']
     c.details = r['Action_Details']
     c.future_conservation = r['Future_Conservation']
-    c.future_conservation_date = r['Future_Conservation_Date']
+    if r['Future_Conservation_Date']:
+        c.future_conservation_date = r['Future_Conservation_Date']
     c.comments = r['Comments']
     c.material_used = r['Material_used']
-    c.conservator = r['ConservatorId']  #####
+    c.conservator = Conservator.objects.get(id=r['ConservatorId'])
+    try:
+        c.save()
+    except:
+        print("Error with conservation report for item: %s" % c.item)
+        print sys.exc_info()
 def process_deaccession(r):
     d = Deaccession()
     d.item = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
     d.reason = r['Reason']
-    d.date = r['Deaccession_Date']
+    if r["Deaccession_Date"] != "":
+        d.date = r['Deaccession_Date']
     d.person, created = Person.objects.get_or_create(name=r['Museum_StaffName'])
     d.save()
 
+def process_museumstaff(r):
+    p, created = Person.objects.get_or_create(name=r['Museum_StaffName'])
+    if not created:
+        p.comments = r['Details']
+    else:
+        p.comments = p.comments + '\n' + r['Details']
+
+    p.save()
+
+def process_conservator(r):
+    c = Conservator()
+    c.id = r['ConservatorId']
+    c.title = r['Title']
+    c.firstname = r['First_Name']
+    c.surname = r['Surname']
+    c.organisationname = r['OrganisationName']
+    c.email = r['Email']
+    c.fax = r['Fax']
+    c.phone = r['Phone1']
+    c.save()
+
 
 condition = (
+    ('Museum_Staff.csv', process_museumstaff),
+    ('Conservator.csv', process_conservator),
     ('Conservation_Details.csv', process_conservation),
     ('Deaccession.csv', process_deaccession),
     ('Artefact_Condition.csv', process_condition)

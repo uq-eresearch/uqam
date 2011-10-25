@@ -8,6 +8,19 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Adding model 'Conservator'
+        db.create_table('condition_conservator', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('firstname', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('surname', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('organisationname', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=30, blank=True)),
+            ('fax', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+        ))
+        db.send_create_signal('condition', ['Conservator'])
+
         # Adding model 'ConditionReport'
         db.create_table('condition_conditionreport', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -15,7 +28,7 @@ class Migration(SchemaMigration):
             ('condition', self.gf('django.db.models.fields.CharField')(max_length=30)),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('details', self.gf('django.db.models.fields.TextField')()),
-            ('report_author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cat.Person'])),
+            ('report_author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cat.Person'], null=True, blank=True)),
             ('change_reason', self.gf('django.db.models.fields.CharField')(max_length=50)),
         ))
         db.send_create_signal('condition', ['ConditionReport'])
@@ -31,7 +44,7 @@ class Migration(SchemaMigration):
             ('future_conservation_date', self.gf('django.db.models.fields.DateField')()),
             ('comments', self.gf('django.db.models.fields.TextField')()),
             ('material_used', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('conservator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cat.Person'])),
+            ('conservator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['condition.Conservator'], null=True)),
         ))
         db.send_create_signal('condition', ['ConservationAction'])
 
@@ -48,6 +61,9 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
+        # Deleting model 'Conservator'
+        db.delete_table('condition_conservator')
+
         # Deleting model 'ConditionReport'
         db.delete_table('condition_conditionreport')
 
@@ -148,13 +164,13 @@ class Migration(SchemaMigration):
             'details': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.MuseumObject']"}),
-            'report_author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.Person']"})
+            'report_author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.Person']", 'null': 'True', 'blank': 'True'})
         },
         'condition.conservationaction': {
             'Meta': {'object_name': 'ConservationAction'},
             'action': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'comments': ('django.db.models.fields.TextField', [], {}),
-            'conservator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.Person']"}),
+            'conservator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['condition.Conservator']", 'null': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'details': ('django.db.models.fields.TextField', [], {}),
             'future_conservation': ('django.db.models.fields.TextField', [], {}),
@@ -162,6 +178,17 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.MuseumObject']"}),
             'material_used': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'condition.conservator': {
+            'Meta': {'object_name': 'Conservator'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '30', 'blank': 'True'}),
+            'fax': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'firstname': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'organisationname': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'surname': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'})
         },
         'condition.deaccession': {
             'Meta': {'object_name': 'Deaccession'},
