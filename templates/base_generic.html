@@ -21,7 +21,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>UQ Anthropology Museum</h1>
+        <h1 style="float: left;">UQ Anthropology Museum</h1>
+        <div style="float: right; text-align: right;">
+            {% if user.is_authenticated %}
+            Logged in as: {{ user }}<br>
+            <a href="{% url auth_logout %}">Log out</a>
+            {% else %}
+            <a href="{% url auth_login %}?next={{request.path}}">Log in</a>
+            {% endif %}
+        </div>
         <hr>
         <div class="menu">
             <ul>
