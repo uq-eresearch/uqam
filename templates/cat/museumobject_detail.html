@@ -71,6 +71,21 @@
 <a href="{{doc.document.url}}">{{doc.name}}</a> <br>
 {% endfor %}
 
+
+{% if user.is_staff %}
+<b>Condition Reports</b><br>
+{% for report in museumobject.conditionreport_set.all %}
+<a href="{% url admin:condition_conditionreport_change report.id %}">{{ report.date }} - {{ report.condition }}</a><br>
+{% endfor %}
+
+<b>Conservation Actions</b><br>
+{% for action in museumobject.conservationaction_set.all %}
+<a href="{% url admin:condition_conservationaction_change action.id %}">
+    {{ action }} </a><br>
+{% endfor %}
+
+{% endif %}
+
 </div>
 
 
