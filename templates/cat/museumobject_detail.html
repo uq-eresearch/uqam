@@ -25,28 +25,28 @@
 <br>
 
 {% if museumobject.maker_or_artist %}
-<b>Maker or artist: </b> {{ museumobject.maker_or_artist }}
-<br>
+    <b>Maker or artist: </b> {{ museumobject.maker_or_artist }}
+    <br>
 {% endif %}
 
 {% if museumobject.assoc_cultural_group %}
-<b>Associated cultural group: </b> {{ museumobject.assoc_cultural_group }}
-<br>
+    <b>Associated cultural group: </b> {{ museumobject.assoc_cultural_group }}
+    <br>
 {% endif %}
 
 {% if museumobject.raw_material %}
-<b>Raw material: </b> {{ museumobject.raw_material }}
-<br>
+    <b>Raw material: </b> {{ museumobject.raw_material }}
+    <br>
 {% endif %}
 
 {% if museumobject.indigenous_name %}
-<b>Indigenous name: </b> {{ museumobject.indigenous_name }}
-<br>
+    <b>Indigenous name: </b> {{ museumobject.indigenous_name }}
+    <br>
 {% endif %}
 
 {% if museumobject.recorded_use %}
-<b>Recorded use: </b> {{ museumobject.recorded_use }}
-<br>
+    <b>Recorded use: </b> {{ museumobject.recorded_use }}
+    <br>
 {% endif %}
 
 
@@ -57,32 +57,57 @@
 
 
 {% if museumobject.length %}
-<b>Dimensions: </b> {{ museumobject.length }}mm x {{ museumobject.width }}mm
-<br>
+    <b>Length: </b> {{ museumobject.length }}mm
+    <br>
+{% endif %}
+{% if museumobject.width %}
+    <b>Width: </b> {{ museumobject.width }}mm
+    <br>
+{% endif %}
+{% if museumobject.height %}
+    <b>Height: </b> {{ museumobject.height }}mm
+    <br>
 {% endif %}
 
 {% if museumobject.depth %}
-<b>Dimensions: </b> {{ museumobject.depth }}mm x {{ museumobject.width }}mm x {{ museumobject.height }}mm
-<br>
+    <b>Depth: </b> {{ museumobject.depth }}mm
+    <br>
 {% endif %}
 
-<b>Related documents:</b><br>
-{% for doc in museumobject.related_documents.all %}
-<a href="{{doc.document.url}}">{{doc.name}}</a> <br>
-{% endfor %}
+
+{% if museumobject.related_documents.all %}
+    <b>Related documents:</b><br>
+    {% for doc in museumobject.related_documents.all %}
+        <a href="{{doc.document.url}}">{{doc.name}}</a> <br>
+    {% endfor %}
+{% endif %}
 
 
 {% if user.is_staff %}
-<b>Condition Reports</b><br>
-{% for report in museumobject.conditionreport_set.all %}
-<a href="{% url admin:condition_conditionreport_change report.id %}">{{ report.date }} - {{ report.condition }}</a><br>
-{% endfor %}
+{% if museumobject.conditionreport_set.all %}
+    <b>Condition Reports</b><br>
+    {% for report in museumobject.conditionreport_set.all %}
+    <a href="{% url admin:condition_conditionreport_change report.id %}">
+        {{ report.date }} - {{ report.condition }}
+    </a><br>
+    {% endfor %}
+{% endif %}
 
-<b>Conservation Actions</b><br>
-{% for action in museumobject.conservationaction_set.all %}
-<a href="{% url admin:condition_conservationaction_change action.id %}">
-    {{ action }} </a><br>
-{% endfor %}
+{% if museumobject.conservationaction_set.all %}
+    <b>Conservation Actions</b><br>
+    {% for action in museumobject.conservationaction_set.all %}
+    <a href="{% url admin:condition_conservationaction_change action.id %}">
+        {{ action }} </a><br>
+    {% endfor %}
+{% endif %}
+
+{% if museumobject.deaccession_set.all %}
+    <b>Deacession</b><br>
+    {% for deaccession in museumobject.deaccession_set.all %}
+    <a href="{% url admin:condition_deaccession_change deaccession.id %}">
+        {{ deaccession }}</a><br>
+    {% endfor %}
+{% endif %}
 
 {% endif %}
 
