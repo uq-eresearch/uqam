@@ -5,18 +5,29 @@ from models import Conservator
 
 class ConditionReportAdmin(admin.ModelAdmin):
     model = ConditionReport
-    raw_id_fields = ('item','report_author')
+    list_display = ('item','condition','date')
+    list_filter = ('condition','date','report_author')
+    raw_id_fields = ('report_author',)
+    readonly_fields = ('item',)
 
 class ConservationActionAdmin(admin.ModelAdmin):
     model = ConservationAction
-    raw_id_fields = ('item','conservator')
+    list_display = ('item','date','action','conservator')
+    list_filter = ('date','action','conservator')
+    raw_id_fields = ('conservator',)
+    readonly_fields = ('item',)
 
 class DeaccessionAdmin(admin.ModelAdmin):
     model = Deaccession
-    raw_id_fields = ('item','person')
+    raw_id_fields = ('person',)
+    readonly_fields = ('item',)
+
+class ConservatorAdmin(admin.ModelAdmin):
+    model = Conservator
+    list_display = ('__unicode__','organisation')
 
 
 admin.site.register(ConditionReport, ConditionReportAdmin)
 admin.site.register(ConservationAction, ConservationActionAdmin)
-admin.site.register(Deaccession)
-admin.site.register(Conservator)
+admin.site.register(Deaccession, DeaccessionAdmin)
+admin.site.register(Conservator, ConservatorAdmin)
