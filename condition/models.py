@@ -6,12 +6,14 @@ class Conservator(models.Model):
     title = models.CharField(max_length=30, blank=True)
     firstname = models.CharField(max_length=30, blank=True)
     surname = models.CharField(max_length=30, blank=True)
-    organisationname = models.CharField(max_length=30, blank=True)
+    organisation = models.CharField(max_length=30, blank=True)
     email = models.EmailField(max_length=30, blank=True)
     fax = models.CharField(max_length=30, blank=True)
     phone = models.CharField(max_length=30, blank=True)
     def __unicode__(self):
-        return "Conservator: %s %s %s" % (self.title, self.firstname, self.surname)
+        return "%s %s %s" % (self.title, self.firstname, self.surname)
+    class Meta:
+        ordering = ['surname','firstname']
 
 
 class ConditionReport(models.Model):
@@ -23,6 +25,8 @@ class ConditionReport(models.Model):
     change_reason = models.CharField(max_length=50)
     def __unicode__(self):
         return "Condition Report: %s %s" % (self.item, self.date)
+    class Meta:
+        ordering = ['item']
 
 class ConservationAction(models.Model):
     item = models.ForeignKey(MuseumObject)
@@ -36,6 +40,8 @@ class ConservationAction(models.Model):
     conservator = models.ForeignKey(Conservator,null=True)
     def __unicode__(self):
         return "%s: %s" % (self.item, self.action)
+    class Meta:
+        ordering = ['item']
 
 class Deaccession(models.Model):
     item = models.ForeignKey(MuseumObject)
@@ -44,3 +50,5 @@ class Deaccession(models.Model):
     person = models.ForeignKey(Person)
     def __unicode__(self):
         return "Deaccession: %s" % self.item
+    class Meta:
+        ordering = ['item']

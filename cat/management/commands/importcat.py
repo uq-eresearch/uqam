@@ -7,7 +7,7 @@ from django.core import management
 from django.db import transaction
 from django import db
 from os.path import join
-
+import re
 import csv
 import sys
 import os
@@ -235,7 +235,9 @@ loans = (
 def process_condition(r):
     c = ConditionReport()
     c.item = MuseumObject.objects.get(registration_number=r['Registration'])
-    c.condition = r['ConditionCode']
+    cond = r['ConditionCode']
+    cond = re.sub(' ?- ?', ' - ', cond)
+    c.condition = string.capwords(cond)
     if r['Condition_Date']:
         c.date = r['Condition_Date']
     c.details = r['Details']
@@ -288,7 +290,7 @@ def process_conservator(r):
     c.title = r['Title']
     c.firstname = r['First_Name']
     c.surname = r['Surname']
-    c.organisationname = r['OrganisationName']
+    c.organisation = r['OrganisationName']
     c.email = r['Email']
     c.fax = r['Fax']
     c.phone = r['Phone1']

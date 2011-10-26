@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
             ('title', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
             ('firstname', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
             ('surname', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('organisationname', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('organisation', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=30, blank=True)),
             ('fax', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
             ('phone', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
