@@ -27,11 +27,14 @@ def add_rep(id, root, name):
     if ArtefactRepresentation.objects.filter(name=name).exists():
         return
     with open(join(root,name)) as f:
-        ar = ArtefactRepresentation()
-        ar.name = name
-        ar.image = File(f)
-        ar.artefact = MuseumObject.objects.get(id=int(id))
-        ar.save()
+        try:
+            ar = ArtefactRepresentation()
+            ar.name = name
+            ar.image = File(f)
+            ar.artefact = MuseumObject.objects.get(id=int(id))
+            ar.save()
+        except:
+            print('Error importing %s' % name)
 def add_doc(id, root, name):
     with open(join(root,name)) as f:
         doc = Document()
