@@ -1,31 +1,11 @@
-from fabric.api import env, local, run, put, cd
+from fabric.api import env, local, run, put, cd, prefix
 
 env.user = 'uqdayers'
 env.gateway = 'gladys'
 env.hosts = ['anthropology']
 
 
-
-def sshagent_run(cmd):
-    """
-    Helper function.
-    Runs a command with SSH agent forwarding enabled.
-    
-    Note:: Fabric (and paramiko) can't forward your SSH agent. 
-    This helper uses your system's ssh to do so.
-    """
-
-    for h in env.hosts:
-        try:
-            # catch the port number to pass to ssh
-            host, port = h.split(':')
-            local('ssh -p %s -A %s "%s"' % (port, host, cmd))
-        except ValueError:
-            local('ssh -A %s "%s"' % (h, cmd))
-
-
 def uname():
-#    sshagent_run('uname -a')
     run('uname -a')
 
 def uat():
@@ -40,8 +20,12 @@ def bootstrap():
     put('/tmp/uqam.tar.bz2', '/tmp/uqam.tar.bz2')
     depdir = 'test/uqam'
     run('mkdir -p %s' % depdir)
+    virtenv = '/home/omad/temp'
+    reqfile = 'requirements.txt'
     with cd(depdir):
         run('tar xjf /tmp/uqam.tar.bz2')
+
+        run('%s/bin/pip install --requirement=%s' % (virtenv,reqfile))
 
         run('./manage.py syncdb')
         run('./manage.py migrate')
@@ -49,6 +33,7 @@ def bootstrap():
 def copyimages():
     # something with rsync, probably
     put('images')
+    local('rsync')
 
 def importdata(db):
     # Either:
@@ -58,3 +43,9 @@ def importdata(db):
     sudo('yum install mdbtools')
     put(db, '/tmp/db.mdb')
     run('./manage.py importcat pathtomdb')
+
+def runremote():
+    with cd('test/uqam'):
+        with prefix('source ../bin/activate'):
+            run('./manage.py runserver')
+
