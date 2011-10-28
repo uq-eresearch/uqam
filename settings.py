@@ -2,7 +2,7 @@
 import os
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = False
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -115,6 +115,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'uqam.middleware.RequireLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'uqam.urls'
@@ -133,11 +134,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'grappelli',
     'filebrowser',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'cat',
     'loans',
@@ -146,6 +145,9 @@ INSTALLED_APPS = (
     'django_extensions',
     'mediaman',
     'haystack',
+    'debug_toolbar',
+    'gunicorn',
+    'django_jenkins',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -179,26 +181,49 @@ HAYSTACK_WHOOSH_PATH = '/home/omad/whoosh/cat_index'
 
 # Keep ModelBackend around for per-user permissions and maybe a local
 # superuser.
-#AUTHENTICATION_BACKENDS = (
-#    'django_auth_ldap.backend.LDAPBackend',
-#    'django.contrib.auth.backends.ModelBackend',
-#)
-#AUTH_LDAP_SERVER_URI = "ldap://ldap.uq.edu.au"
-#import ldap
-#from django_auth_ldap.config import LDAPSearch
-#AUTH_LDAP_BIND_DN = ""
-#AUTH_LDAP_BIND_PASSWORD = ""
-#AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=staff,ou=people,o=the university of queensland,c=au", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
-#
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+AUTH_LDAP_SERVER_URI = "ldap://ldap.uq.edu.au"
+import ldap
+from django_auth_ldap.config import LDAPSearch
+AUTH_LDAP_BIND_DN = ""
+AUTH_LDAP_BIND_PASSWORD = ""
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=staff,ou=people,o=the university of queensland,c=au", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+
 AUTH_LDAP_USER_ATTR_MAP = {
         "first_name": "givenName",
         "last_name": "sn",
         "email": "mail"
     }
-#AUTH_LDAP_PROFILE_ATTR_MAP = {"home_directory": "homeDirectory"}
+AUTH_LDAP_PROFILE_ATTR_MAP = {"home_directory": "homeDirectory"}
 
 
 SOUTH_TESTS_MIGRATE = False
+
+INTERNAL_IPS = ('127.0.0.1','10.0.2.2')
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False
+}
+
+# So django-jenkins knows what is local code
+PROJECT_APPS = (
+    'cat',
+    'loans',
+    'condition'
+)
 
 LOGIN_REQUIRED_URLS = (
     r'/(.*)$',

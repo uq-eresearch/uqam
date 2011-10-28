@@ -8,20 +8,25 @@
 import string, sys, subprocess # the subprocess module is new in python v 2.4
 
 DATABASE = sys.argv[1]
+DIR = sys.argv[2]
 
-# Get the list of table names with "mdb-tables"
-table_names = subprocess.Popen(["mdb-tables", "-1", DATABASE],
-                               stdout=subprocess.PIPE).communicate()[0]
-tables = table_names.split('\n')
 
-# Dump each table as a CSV file using "mdb-export",
-# converting " " in table names to "_" for the CSV filenames.
-for table in tables:
-    if table != '':
-        filename = table.replace(" ","_") + ".csv"
-        file = open(filename, 'w')
-        print("Dumping " + table)
-        contents = subprocess.Popen(["mdb-export", "-D", "%F", DATABASE, table],
-                                    stdout=subprocess.PIPE).communicate()[0]
-        file.write(string.replace(contents, '\r', ''))
-        file.close()
+def export_access(mdbfile, folder):
+    # Get the list of table names with "mdb-tables"
+    table_names = subprocess.Popen(["mdb-tables", "-1", DATABASE],
+                                stdout=subprocess.PIPE).communicate()[0]
+    tables = table_names.split('\n')
+
+    # Dump each table as a CSV file using "mdb-export",
+    # converting " " in table names to "_" for the CSV filenames.
+    for table in tables:
+        if table != '':
+            filename = table.replace(" ","_") + ".csv"
+            file = open(filename, 'w')
+            print("Dumping " + table)
+            contents = subprocess.Popen(["mdb-export", "-D", "%F", DATABASE, table],
+                                        stdout=subprocess.PIPE).communicate()[0]
+            file.write(string.replace(contents, '\r', ''))
+            file.close()
+
+export_access(DATABASE, DIR)
