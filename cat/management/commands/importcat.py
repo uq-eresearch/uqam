@@ -323,21 +323,20 @@ class Command(BaseCommand):
             raise CommandError("need exactly one argument for db directory")
 
         dir, = args
-
-#        management.call_command('reset', 'cat', interactive=False)
-#        management.call_command('reset', 'mediaman', interactive=False)
-#        management.call_command('syncdb', interactive=False)
-#        management.call_command('migrate','cat', interactive=False)
-
         prepare_stdout()
 
-#        for filename, function in mappings:
-#            process_csv(join(dir, filename), function)
+        management.call_command('reset', 'cat', interactive=False)
+        management.call_command('reset', 'mediaman', interactive=False)
+        management.call_command('migrate','cat', interactive=False)
 
-#        management.call_command('reset', 'loans', interactive=False)
-#        management.call_command('migrate','loans', interactive=False)
-#        for filename, function in loans:
-#            process_csv(join(dir, filename), function)
+
+        for filename, function in mappings:
+            process_csv(join(dir, filename), function)
+
+        management.call_command('reset', 'loans', interactive=False)
+        management.call_command('migrate','loans', interactive=False)
+        for filename, function in loans:
+            process_csv(join(dir, filename), function)
 
         management.call_command('reset', 'condition', interactive=False)
         management.call_command('migrate', 'condition', interactive=False)
