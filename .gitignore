@@ -2,3 +2,4 @@
 *.db
 media/*
 .idea/*
+development_mode
