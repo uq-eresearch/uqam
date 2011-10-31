@@ -1,0 +1,3 @@
+-e git+https://github.com/ebolwidt/fabric.git@defdc76bc5a1a0dc044a6c8971b6fd3148a32f89#egg=Fabric-1.2.0-py2.7-dev
+django-debug-toolbar==0.8.5
+ipython==0.10.2
