@@ -1,9 +1,9 @@
-from fabric.api import env, local, run, put, cd, prefix
+from fabric.api import env, local, run, put, cd, prefix, sudo, settings
 
 env.user = 'django'
 env.gateway = 'uqdayers@gladys'
 env.hosts = ['anthropology-uat']
-env.appdir = '/home/django/app'
+env.appdir = '/home/django/uqam'
 env.virtenv = '/home/django/env'
 env.reqfile = env.appdir + '/requirements.txt'
 
@@ -16,9 +16,15 @@ def pack():
 def bootstrap():
     updatesource()
 
-
     run('virtualenv --no-site-packages %(virtenv)s' % env)
 
+    updatereqs()
+
+def installsyspackages():
+    with settings(user='uqdayers'):
+        sudo('yum install openldap-devel openssl-devel')
+
+def updatereqs():
     with prefix('source %(virtenv)s/bin/activate' % env):
         run('pip install --requirement=%(reqfile)s' % env)
 
@@ -44,17 +50,17 @@ def copyimages():
     # something with rsync, probably
     local('rsync -rv %s(imagesdir) django@anthropology-uat:images')
 
-def importdata(db):
+#def importdata(db):
     # Either:
     # - copy from another database
     # - do a fresh import
 
-    sudo('yum install mdbtools')
-    put(db, '/tmp/db.mdb')
-    run('./manage.py importcat pathtomdb')
+#    sudo('yum install mdbtools')
+#    put(db, '/tmp/db.mdb')
+#    run('./manage.py importcat pathtomdb')
 
 def runremote():
-    with cd('test/uqam'):
-        with prefix('source ../bin/activate'):
+    with cd(env.appdir):
+        with prefix('source %(virtenv)s/bin/activate' % env):
             run('./manage.py runserver')
 
