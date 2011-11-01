@@ -194,3 +194,4 @@ class ArtefactTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'definition')
     actions = [merge_selected]
 admin.site.register(ArtefactType, ArtefactTypeAdmin)
+
