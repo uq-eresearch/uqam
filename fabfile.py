@@ -47,6 +47,9 @@ def importcat():
     virtualenv('./manage.py importcat /home/django/origdb')
     virtualenv('./manage.py importmedia /home/django/images')
 
+def importimages():
+    virtualenv('./manage.py importmedia /home/django/images')
+
 def copyimages():
     # something with rsync, probably
     local('rsync -rv %s(imagesdir) django@anthropology-uat:images')

@@ -41,3 +41,4 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False
 }
 
+MEDIA_ROOT = os.path.join(DIRNAME, 'media')
