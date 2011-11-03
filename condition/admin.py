@@ -7,20 +7,17 @@ class ConditionReportAdmin(admin.ModelAdmin):
     model = ConditionReport
     list_display = ('item','condition','date')
     list_filter = ('condition','date','report_author')
-    raw_id_fields = ('report_author',)
-    readonly_fields = ('item',)
+    raw_id_fields = ('report_author','item',)
 
 class ConservationActionAdmin(admin.ModelAdmin):
     model = ConservationAction
     list_display = ('item','date','action','conservator')
     list_filter = ('date','action','conservator')
-    raw_id_fields = ('conservator',)
-    readonly_fields = ('item',)
+    raw_id_fields = ('conservator','item',)
 
 class DeaccessionAdmin(admin.ModelAdmin):
     model = Deaccession
-    raw_id_fields = ('person',)
-    readonly_fields = ('item',)
+    raw_id_fields = ('person','item',)
 
 class ConservatorAdmin(admin.ModelAdmin):
     model = Conservator
