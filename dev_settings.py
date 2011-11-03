@@ -42,3 +42,5 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 MEDIA_ROOT = os.path.join(DIRNAME, 'media')
+
+HAYSTACK_WHOOSH_PATH = '/home/omad/whoosh/cat_index'
