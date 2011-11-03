@@ -114,6 +114,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'uqam.middleware.RequireLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'uqam.middleware.ReverseProxyHttpsHeadersMiddleware',
 )
 
 ROOT_URLCONF = 'uqam.urls'
@@ -214,4 +215,5 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/admin/logout(.*)$',
     r'/$',
 )
+
 
