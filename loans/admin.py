@@ -10,7 +10,7 @@ class ClientInline(admin.StackedInline):
 
 class LoanAgreementAdmin(admin.ModelAdmin):
     inlines = [
-            LoanItemInline, ClientInline
+            LoanItemInline#, ClientInline
     ]
     model = LoanAgreement
     raw_id_fields = ('approved_by', 'prepared_by',)
