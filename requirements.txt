@@ -12,3 +12,4 @@ python-ldap==2.3.13
 wsgiref==0.1.2
 gunicorn==0.13.4
 django-context-extras==0.2.4
+openpyxl==1.5.4

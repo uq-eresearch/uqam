@@ -1,14 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
 from cat.models import Person, Place
-from django.core import management
-from django.db import transaction
-from django import db
-
-import csv
-import sys
-import os
-import string
 
 from openpyxl.reader.excel import load_workbook
 
