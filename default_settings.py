@@ -174,7 +174,7 @@ FILEBROWSER_DIRECTORY = ''
 
 HAYSTACK_SITECONF = 'cat.search_sites'
 HAYSTACK_SEARCH_ENGINE = 'whoosh'
-HAYSTACK_WHOOSH_PATH = '/home/omad/whoosh/cat_index'
+HAYSTACK_WHOOSH_PATH = '/home/django/whoosh/cat_index'
 
 # Keep ModelBackend around for per-user permissions and maybe a local
 # superuser.
