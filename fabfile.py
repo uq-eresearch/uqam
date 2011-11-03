@@ -14,22 +14,22 @@ def pack():
     local('git archive master | bzip2 > /tmp/uqam.tar.bz2')
 
 def bootstrap():
-    updatesource()
+    push()
 
     run('virtualenv --no-site-packages %(virtenv)s' % env)
 
-    updatereqs()
+    reqs()
 
 def installsyspackages():
     with settings(user='uqdayers'):
         sudo('yum install openldap-devel openssl-devel')
 
-def updatereqs():
+def reqs():
     """Update the remote virtualenv to newest requirements"""
     with prefix('source %(virtenv)s/bin/activate' % env):
         run('pip install --requirement=%(reqfile)s' % env)
 
-def updatesource():
+def push():
     """Deploy the newest source to the server"""
     pack()
     put('/tmp/uqam.tar.bz2', '/tmp/uqam.tar.bz2')
@@ -49,6 +49,9 @@ def importcat():
 
 def importimages():
     virtualenv('./manage.py importmedia /home/django/images')
+
+def import_xls():
+    virtualenv('./manage.py importxls /home/django/origdb/Museum.xlsx')
 
 def copyimages():
     # something with rsync, probably
@@ -73,3 +76,17 @@ def runremote():
 
 def collectstatic():
     virtualenv('./manage.py collectstatic')
+
+def reload():
+    with settings(user='uqdayers'):
+        sudo('service nginx reload')
+        sudo('initctl reload uqam-gunicorn')
+
+
+def rebuild_index():
+    """Rebuild the entire search index"""
+    virtualenv('./manage.py rebuild_index')
+
+def update_index():
+    """Update search index"""
+    virtualenv('./manage.py update_index')
