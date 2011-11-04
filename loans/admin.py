@@ -1,5 +1,6 @@
 from django.contrib import admin
 from models import LoanAgreement, LoanItem, Client
+from common.admin import UndeleteableModelAdmin
 
 class LoanItemInline(admin.TabularInline):
     model = LoanItem
@@ -8,7 +9,7 @@ class LoanItemInline(admin.TabularInline):
 class ClientInline(admin.StackedInline):
     model = Client
 
-class LoanAgreementAdmin(admin.ModelAdmin):
+class LoanAgreementAdmin(UndeleteableModelAdmin):
     inlines = [
             LoanItemInline#, ClientInline
     ]

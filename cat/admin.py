@@ -2,12 +2,13 @@ from django.contrib import admin
 from models import MuseumObject, FunctionalCategory, Person, Place
 from models import CulturalBloc, ArtefactType
 from mediaman.models import ArtefactRepresentation
+from common.admin import UndeleteableModelAdmin
 
 class ArtefactRepInline(admin.TabularInline):
     model = ArtefactRepresentation
     classes = ('collapse closed',)
 
-class MOAdmin(admin.ModelAdmin):
+class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number','cultural_bloc','description','comment',)
 
     list_filter = ('place__country','functional_category__name', 'access_status', 'loan_status', 'cultural_bloc',)
