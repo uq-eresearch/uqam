@@ -122,7 +122,7 @@ class Place(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=30)
     comments = models.TextField(blank=True)
-    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people')
+    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people',blank=True)
     @models.permalink
     def get_absolute_url(self):
         return ('person_detail', [str(self.id)])

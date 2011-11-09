@@ -8,6 +8,9 @@ class Collection(models.Model):
     agent = models.ForeignKey('cat.Person')
     items = models.ManyToManyField('cat.MuseumObject', related_name='items')
 
+    def __unicode__(self):
+        return self.title
+
 
 
 class Exhibition(Collection):

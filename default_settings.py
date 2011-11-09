@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'mediaman',
     'haystack',
     'gunicorn',
+    'uqamcollections',
 )
 
 # A sample logging configuration. The only tangible logging
