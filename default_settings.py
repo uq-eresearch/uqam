@@ -171,6 +171,8 @@ LOGGING = {
     }
 }
 
+EMAIL_HOST = 'mail.uq.edu.au'
+
 FILEBROWSER_DIRECTORY = ''
 
 HAYSTACK_SITECONF = 'cat.search_sites'
