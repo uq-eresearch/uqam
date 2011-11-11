@@ -8,6 +8,7 @@
 {% if place.australian_state %}
 <p><b>Australian State:</b> {{ place.australian_state }}</p>
 {% endif %}
+<p><a href="{% url admin:cat_place_change place.id %}">Admin</a></p>
 
 <div class="span-12">
 <h2>Objects</h2>

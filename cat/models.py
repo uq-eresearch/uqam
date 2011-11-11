@@ -50,8 +50,8 @@ class MuseumObject(models.Model):
     height = models.IntegerField(null=True,blank=True)
     depth = models.IntegerField(null=True,blank=True)
     circumference = models.IntegerField(null=True,blank=True)
-    longitude = models.IntegerField(null=True,blank=True)
-    latitude = models.IntegerField(null=True,blank=True)
+    longitude = models.FloatField(null=True,blank=True)
+    latitude = models.FloatField(null=True,blank=True)
     
     related_documents = models.ManyToManyField('mediaman.Document', related_name='related_museumobjects', null=True, blank=True)
     @models.permalink
@@ -99,13 +99,13 @@ class ArtefactType(models.Model):
 
 class Place(models.Model):
     country = models.CharField(max_length=30, blank=True)
-    region = models.CharField(max_length=40, blank=True)
+    region = models.ForeignKey('Region')
     australian_state = models.CharField(max_length=20, blank=True)
     name = models.CharField(max_length=100)
-#    latitude = models.FloatField(blank=True, null=True)
-#    longitude = models.FloatField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     def __unicode__(self):
-        return ' > '.join([self.country, self.region, self.name])
+        return ' > '.join([self.country, self.region.name, self.name])
     @models.permalink
     def get_absolute_url(self):
         return ('place_detail', [str(self.id)])
@@ -131,3 +131,9 @@ class Person(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name_plural = "People"
+
+class Region(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.name
