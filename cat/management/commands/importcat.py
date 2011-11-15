@@ -330,16 +330,17 @@ class Command(BaseCommand):
     can_import_settings = True
 
     def handle(self, *args, **options):
-        if len(args) != 1:
-            raise CommandError("need exactly one argument for db directory")
+        if len(args) < 2:
+            raise CommandError("Need at least two arguments. Import dir, and at least one app name")
 
         directory, = args
         prepare_stdout()
 
-        management.call_command('reset', 'mediaman', interactive=False)
+        for app_name in args[1:]:
+            migrate_and_import(directory, app_name, mappings)
 
 #        migrate_and_import(directory, 'cat', mappings)
 #        migrate_and_import(directory, 'loans', loans)
-        migrate_and_import(directory, 'condition', condition)
+#        migrate_and_import(directory, 'condition', condition)
 
 
