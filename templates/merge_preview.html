@@ -1,4 +1,4 @@
-{# extends "section_base.html" #}
+{# extends "base_generic.html" #}
 {# load form_tags #}
 {% block title %}Confirm Merger{% endblock %}
 {% block breadcrumbs %}{#{{ block.super }}#} Merge Preview{% endblock %}
@@ -10,7 +10,7 @@ and all related information from the other records will be moved to it. The othe
 If you are unsure how to use this, please contact the site admin. Changes made here cannot
 be reversed.</p>
 <hr />
-<form method="POST" action="../cat/templates">{% csrf_token %}
+<form method="POST" action=".">{% csrf_token %}
 <table class="admin small no_actions">
     <thead>
         <tr>
