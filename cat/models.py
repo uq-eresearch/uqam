@@ -62,7 +62,12 @@ class MuseumObject(models.Model):
         ordering = ['registration_number']
 
     def __unicode__(self):
-        return "MO: %d" % self.registration_number
+        return "%s: %d" % (self.artefact_type, self.registration_number)
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__startswith",)
+
     
 
 
@@ -131,3 +136,6 @@ class Person(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name_plural = "People"
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__iexact",)
