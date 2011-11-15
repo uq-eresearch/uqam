@@ -149,11 +149,9 @@ def process_artefact_record(r):
     fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
     m.functional_category = fc
 
-    region, created = Region.objects.get_or_create(name=r['Region'])
-
     pl, created = Place.objects.get_or_create(name=r['Place'],
                                               australian_state=r['State_Abbr'],
-                                              region=region,
+                                              region=r['Region'],
                                               country=r['Country_Name'])
     m.place = pl
 

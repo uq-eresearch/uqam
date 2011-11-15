@@ -99,7 +99,7 @@ class ArtefactType(models.Model):
 
 class Place(models.Model):
     country = models.CharField(max_length=30, blank=True)
-    region = models.ForeignKey('Region')
+    region = models.CharField(max_length=40, blank=True)
     australian_state = models.CharField(max_length=20, blank=True)
     name = models.CharField(max_length=100)
     latitude = models.FloatField(blank=True, null=True)
