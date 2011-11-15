@@ -1,0 +1,11 @@
+section_bas RAW fk popup selector:
+
+Has a search link, that calls showRelatedObjectLookupPopup(), with url to the admin changelist page, with added paramter pop=1
+
+
+Django Admin itself has a related object lookup function.
+Calls dismissRelatedLookupPopup from a change_list page when the item is selected.
+
+
+
+e
