@@ -174,6 +174,7 @@ class PlaceAdmin(admin.ModelAdmin):
     list_display = ('country', 'region', 'australian_state', 'name',)
     list_filter = ('country', 'australian_state', 'region',)
     actions = [merge_selected]
+    search_fields = ['country', 'region__name','australian_state', 'name']
 admin.site.register(Place, PlaceAdmin)
 
 class FunctionCategoryAdmin(admin.ModelAdmin):
