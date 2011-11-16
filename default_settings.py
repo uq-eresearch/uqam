@@ -216,4 +216,4 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/$',
 )
 
-
+GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
