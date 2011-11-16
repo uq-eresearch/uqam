@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+{# load form_tags #}
+{% block title %}Add to Collection{% endblock %}
+{% block breadcrumbs %}{#{{ block.super }}#}
+        <div id="breadcrumbs">
+            <a href="../../">Home</a> &rsaquo;
+            <a href="../">{{app_label|capfirst|escape }}</a> &rsaquo;
+            {{ cl.opts.verbose_name_plural|capfirst }} &rsaquo;
+            Add to Collection
+        </div>{% endblock %}
+
+<!-- CONTENT-TITLE -->
+{% block content_title %}
+    <h1>Add to Collection</h1>
+{% endblock %}
+
+{% block content %}
+<div class="span-24">
+<p>Please select which collection you wish to add these items to.</p>
+<hr />
+<form method="POST">{% csrf_token %}
+<table class="admin small no_actions">
+    <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Collection</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for collection in collections %}
+        <tr class="{% cycle '' 'clarify' %}">
+            <td><input type="radio" name="selected_collection" value="{{ collection.id }}"></td>
+            <td>{{collection.title}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+
+{# Request variables from Django Admin's handling of actions. #}
+{% for id in ids %}
+<input type="hidden" name="_selected_action" value="{{ id }}">
+{% endfor %}
+<input type="hidden" name="return_url" value="{{ return_url }}">
+
+<input type="submit">
+
+{% endblock %}
