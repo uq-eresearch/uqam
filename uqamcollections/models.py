@@ -6,7 +6,7 @@ class Collection(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField()
     agent = models.ForeignKey('cat.Person')
-    items = models.ManyToManyField('cat.MuseumObject', related_name='items')
+    items = models.ManyToManyField('cat.MuseumObject', related_name='items', blank=True)
 
     def __unicode__(self):
         return self.title

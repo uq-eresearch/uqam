@@ -19,6 +19,8 @@ urlpatterns = patterns('',
 
     (r'^grappelli/', include('grappelli.urls')),
 
+    url(r'^collection/', include('uqamcollections.urls')),
+
     (r'^search/', include('haystack.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='auth_login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/', 'redirect_field_name': 'next'}, name='auth_logout'),

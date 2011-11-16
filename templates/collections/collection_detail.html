@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>{{ collection.title }}</h1>
+
+<b>Description:</b> {{ collection.description }} <br>
+<b>Agent:</b> {{ collection.agent }} <br>
+<b>Items:</b><br>
+
+{% for item in collection.items.all %}
+
+<a href="{{item.get_absolute_url}}">
+    {{ item }}</a> <br>
+
+{% endfor %}
+{% endblock %}
