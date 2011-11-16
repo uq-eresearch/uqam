@@ -44,7 +44,7 @@ def syncdb():
 
 def importcat():
     """Remotely import the catalogue and images"""
-    virtualenv('./manage.py importcat /home/django/origdb')
+    virtualenv('./manage.py importcat /home/django/origdb cat loans condition')
     virtualenv('./manage.py importmedia /home/django/images')
 
 def importimages():
