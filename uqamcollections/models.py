@@ -11,8 +11,15 @@ class Collection(models.Model):
     def __unicode__(self):
         return self.title
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('collection_detail', [str(self.id)])
+
 
 
 class Exhibition(Collection):
     start_date = models.DateField()
     end_date = models.DateField()
+
+class Syndication(models.Model):
+   remote_url = models.CharField(max_length=300) 

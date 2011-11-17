@@ -1,5 +1,5 @@
-
 from django.conf.urls.defaults import patterns, url
+from feeds import AllCollectionsFeed, CollectionFeed
 
 
 
@@ -9,5 +9,11 @@ urlpatterns = patterns('uqamcollections.views',
     url(r'^(\d+)$', 'collection_detail', name='collection_detail'),
 
     url(r'^add_objects', 'collection_add', name='collection_add'),
+
+    url(r'^feed/$', AllCollectionsFeed()),
+    url(r'^(?P<collection_id>\d+)/xml$', CollectionFeed()),
+
+
+#    url(r'^(\d+)\xml$', 'collection_feed', name='collection_feed'),
 
 )
