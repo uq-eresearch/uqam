@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
-from cat.models import Person, Place
+from cat.models import Person, Place, Region
 from loans.models import LoanAgreement, LoanItem, Client
 from condition.models import ConditionReport, ConservationAction, Deaccession, Conservator
 from django.core import management
@@ -31,7 +31,7 @@ def process_csv(filename, row_handler):
         with open(filename) as f:
             data = csv.DictReader(f)
             count = 0
-            print ('Importing from ', filename)
+            print 'Importing from ', filename
             for row in data:
                 for key,value in row.items():
                     row[key] = value.strip()
@@ -41,7 +41,7 @@ def process_csv(filename, row_handler):
                 if (count % 1000) == 0:
                     transaction.commit()
     except:
-        print "Unexpected error: ", sys.exc_info()
+        print "\nUnexpected error: ", sys.exc_info()
     else:
         transaction.commit()
     print("")
@@ -76,6 +76,7 @@ def process_artefactmore_record(r):
     mapint('height', 'Height(mm)')
     mapint('depth', 'Depth(mm)')
     mapint('circumference', 'Circumference(mm)')
+
     mapint('longitude', 'Longitude')
     mapint('latitude', 'Latitude')
 
@@ -103,21 +104,19 @@ def process_collectorphotographer_record(r):
     m.save()
 
 def process_artefacttype_record(r):
-    a = ArtefactType()
-    a.name = r['Artefact_TypeName']
+    a, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
     a.definition = r['Definition']
     a.see_also = r['SeeAlso']
     a.save()
 
 def process_cultural_bloc_record(r):
-    c = CulturalBloc()
-    c.name = r['CulturalBloc']
+    c,created = CulturalBloc.objects.get_or_create(name = r['CulturalBloc'])
     c.definition = r['Definition']
     c.save()
 
 def process_functional_category_record(r):
-    f = FunctionalCategory()
-    f.name = string.capwords(r['Functional_Category'])
+    name = string.capwords(r['Functional_Category'])
+    f,created = FunctionalCategory.objects.get_or_create(name=name)
     f.definition = r['Definition']
     f.save()
 
@@ -166,13 +165,13 @@ def process_artefact_record(r):
         p = Person.objects.get(pk=int(r["Collector_photographerID"]))
         m.collector = p
     except:
-        print("\nCould not find collector: ", r["Collector_photographerID"])
+        print "\nCould not find collector: ", r["Collector_photographerID"]
 #        print(sys.exc_info())
     try:
         p = Person.objects.get(pk=int(r["DonorID"]))
         m.donor = p
     except:
-        print("\nCould not find donor: ", r["DonorID"])
+        print "\nCould not find donor: ", r["DonorID"]
 #        print(sys.exc_info())
 
     m.save()
@@ -216,8 +215,14 @@ def process_loanitem_record(r):
     l.return_condition = r['Return_Condition']
     l.save()
 
+def process_regioncombo(row):
+    r, created = Region.objects.get_or_create(name=row['Region'])
+    r.description = row['Definition']
+    r.save()
+
 
 mappings = (
+    ('Region_combo.csv', process_regioncombo),
     ('Functional_Category.csv', process_functional_category_record),
     ('Artefact_type.csv', process_artefacttype_record),
     ('Cultural_Bloc_Combo.csv', process_cultural_bloc_record),
@@ -250,9 +255,8 @@ def process_condition(r):
         print sys.exc_info()
         
 def process_conservation(r):
-    c = ConservationAction()
-    c.item = MuseumObject.objects.get(registration_number=r['Registration'])
-    c.date = r['Action_Date']
+    item = MuseumObject.objects.get(registration_number=r['Registration'])
+    c, created = ConservationAction.objects.get_or_create(item=item, date=r['Action_Date'])
     c.action = r['Conservation_action']
     c.details = r['Action_Details']
     c.future_conservation = r['Future_Conservation']
@@ -267,12 +271,14 @@ def process_conservation(r):
         print("Error with conservation report for item: %s" % c.item)
         print sys.exc_info()
 def process_deaccession(r):
-    d = Deaccession()
-    d.item = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
-    d.reason = r['Reason']
+    item = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
+    person, created = Person.objects.get_or_create(name=r['Museum_StaffName'])
+
+    d,created = Deaccession.objects.get_or_create(item=item,
+                                                  person=person,
+                                                  reason=r['Reason'])
     if r["Deaccession_Date"] != "":
         d.date = r['Deaccession_Date']
-    d.person, created = Person.objects.get_or_create(name=r['Museum_StaffName'])
     d.save()
 
 def process_museumstaff(r):
@@ -311,6 +317,11 @@ condition = (
 # Functional_Category, Loan_Reason_Combo, Loan_Status_Combo, Obtained_Combo
 # Photo_Type_Combo, Region_combo, 
 
+def migrate_and_import(directory, appname, mapping):
+    management.call_command('reset', appname, interactive=False)
+    management.call_command('migrate', appname, interactive=False)
+    for filename, function in mapping:
+        process_csv(join(directory, filename), function)
 
 class Command(BaseCommand):
 
@@ -319,28 +330,17 @@ class Command(BaseCommand):
     can_import_settings = True
 
     def handle(self, *args, **options):
-        if len(args) != 1:
-            raise CommandError("need exactly one argument for db directory")
+        if len(args) < 2:
+            raise CommandError("Need at least two arguments. Import dir, and at least one app name")
 
-        dir, = args
+        directory, = args
         prepare_stdout()
 
-        management.call_command('reset', 'cat', interactive=False)
-        management.call_command('reset', 'mediaman', interactive=False)
-        management.call_command('migrate','cat', interactive=False)
+        for app_name in args[1:]:
+            migrate_and_import(directory, app_name, mappings)
 
-
-        for filename, function in mappings:
-            process_csv(join(dir, filename), function)
-
-        management.call_command('reset', 'loans', interactive=False)
-        management.call_command('migrate','loans', interactive=False)
-        for filename, function in loans:
-            process_csv(join(dir, filename), function)
-
-        management.call_command('reset', 'condition', interactive=False)
-        management.call_command('migrate', 'condition', interactive=False)
-        for filename, function in condition:
-            process_csv(join(dir, filename), function)
+#        migrate_and_import(directory, 'cat', mappings)
+#        migrate_and_import(directory, 'loans', loans)
+#        migrate_and_import(directory, 'condition', condition)
 
 
