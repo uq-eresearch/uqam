@@ -1,16 +1,14 @@
 from django.http import HttpResponseRedirect
 from django.forms import ModelForm
 from django import forms
-from django.template import RequestContext
 from uqamcollections.models import Collection
 from cat.models import MuseumObject
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 
 def collections_home(request):
     collections = Collection.objects.all()
-    return render_to_response('collections/collections_list.html',
-            {'collections': collections},
-            context_instance=RequestContext(request))
+    return render(request, 'collections/collections_list.html',
+            {'collections': collections})
 
 class SearchSelectMultipleWidget(forms.widgets.SelectMultiple):
     def render():
@@ -31,18 +29,22 @@ def collection_edit(request, collection_id):
     else:
         collection = get_object_or_404(Collection, pk=collection_id)
         form = CollectionsForm(instance=collection)
-    return render_to_response('collections/collection_edit.html',
-            {'collection': collection, 'form': form},
-            context_instance=RequestContext(request))
+    return render(request, 'collections/collection_edit.html',
+            {'collection': collection, 'form': form})
 
 def collection_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
-    return render_to_response('collections/collection_detail.html',
-            {'collection': collection},
-            context_instance=RequestContext(request))
+    return render(request, 'collections/collection_detail.html',
+            {'collection': collection})
 
 
 def collection_add(request):
+    """
+    Add a group of MuseumObjects to a Collection
+
+    If a Collection is selected, do the modification, if not prompt
+    the user to select a Collection.
+    """
     ids = []
     if 'ids' in request.GET:
         ids = request.GET.get('ids').split(',')
@@ -54,6 +56,7 @@ def collection_add(request):
         return HttpResponseRedirect("/admin/cat/museumobject/")
 
     collections = Collection.objects.all()
-    return render_to_response('add_to_collection.html',{ 'collections': collections, 'ids': ids},
-                              context_instance=RequestContext(request))
+    return render(request, 'add_to_collection.html',
+                {'collections': collections, 'ids': ids})
+
 
