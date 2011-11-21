@@ -1,6 +1,6 @@
 from django.contrib import admin
 from models import MuseumObject, FunctionalCategory, Person, Place
-from models import CulturalBloc, ArtefactType, Region
+from models import CulturalBloc, ArtefactType, Region, Category
 from mediaman.models import ArtefactRepresentation
 from common.admin import UndeleteableModelAdmin
 from cat.adminactions import merge_selected, add_to_collection
@@ -123,3 +123,5 @@ admin.site.register(ArtefactType, ArtefactTypeAdmin)
 class RegionAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 admin.site.register(Region, RegionAdmin)
+
+admin.site.register(Category)
