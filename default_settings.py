@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'filebrowser',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'djcelery',
     'cat',
     'loans',
     'condition',
@@ -220,3 +221,12 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
 )
 
 GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
+
+import djcelery
+djcelery.setup_loader()
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
+
