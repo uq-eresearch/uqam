@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'filebrowser',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'djcelery',
     'cat',
     'loans',
     'condition',
@@ -145,6 +146,7 @@ INSTALLED_APPS = (
     'mediaman',
     'haystack',
     'gunicorn',
+    'uqamcollections',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -169,6 +171,8 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_HOST = 'mail.uq.edu.au'
 
 FILEBROWSER_DIRECTORY = ''
 
@@ -217,3 +221,12 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
 )
 
 GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
+
+import djcelery
+djcelery.setup_loader()
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
+

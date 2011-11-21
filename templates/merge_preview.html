@@ -1,8 +1,21 @@
-{# extends "base_generic.html" #}
+{% extends "admin/base_site.html" %}
 {# load form_tags #}
 {% block title %}Confirm Merger{% endblock %}
-{% block breadcrumbs %}{#{{ block.super }}#} Merge Preview{% endblock %}
-{% block body %}
+{% block breadcrumbs %}{#{{ block.super }}#}
+        <div id="breadcrumbs">
+            <a href="../../">Home</a> &rsaquo;
+            <a href="../">{{app_label|capfirst|escape }}</a> &rsaquo;
+            {{ cl.opts.verbose_name_plural|capfirst }} &rsaquo;
+            Merge Preview
+            
+        </div>{% endblock %}
+
+<!-- CONTENT-TITLE -->
+{% block content_title %}
+    <h1>Merge Items</h1>
+{% endblock %}
+
+{% block content %}
 <div class="span-24">
 <h2>Important!</h2>
 <p>Please select which record you would like to keep. The selected record's information will be used,

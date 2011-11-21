@@ -62,7 +62,12 @@ class MuseumObject(models.Model):
         ordering = ['registration_number']
 
     def __unicode__(self):
-        return "MO: %d" % self.registration_number
+        return "%s: %d" % (self.artefact_type, self.registration_number)
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__startswith",)
+
     
 
 
@@ -105,7 +110,7 @@ class Place(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     def __unicode__(self):
-        return ' > '.join([self.country, self.region.name, self.name])
+        return ' > '.join([self.country, self.region, self.name])
     @models.permalink
     def get_absolute_url(self):
         return ('place_detail', [str(self.id)])
@@ -122,7 +127,7 @@ class Place(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=30)
     comments = models.TextField(blank=True)
-    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people')
+    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people',blank=True)
     @models.permalink
     def get_absolute_url(self):
         return ('person_detail', [str(self.id)])
@@ -131,6 +136,9 @@ class Person(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name_plural = "People"
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__iexact",)
 
 class Region(models.Model):
     name = models.CharField(max_length=30)
