@@ -146,9 +146,9 @@ class Region(models.Model):
     def __unicode__(self):
         return self.name
 
-class Category(models.Model):
-    name = models.CharField(max_length=30)
-    description = models.TextField(blank=True)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name="children")
-    def __unicode__(self):
-        return self.name
+#class Category(models.Model):
+#    name = models.CharField(max_length=30)
+#    description = models.TextField(blank=True)
+#    parent = models.ForeignKey('self', blank=True, null=True, related_name="children")
+#    def __unicode__(self):
+#        return self.name
