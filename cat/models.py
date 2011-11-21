@@ -110,7 +110,7 @@ class Place(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     def __unicode__(self):
-        return ' > '.join([self.country, self.region.name, self.name])
+        return ' > '.join([self.country, self.region, self.name])
     @models.permalink
     def get_absolute_url(self):
         return ('place_detail', [str(self.id)])

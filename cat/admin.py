@@ -94,7 +94,7 @@ class PersonAdmin(admin.ModelAdmin):
 admin.site.register(Person, PersonAdmin)
 
 class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('country', 'region', 'australian_state', 'name',)
+    list_display = ('id', 'country', 'region', 'australian_state', 'name',)
     list_filter = ('country', 'australian_state', 'region',)
     actions = [merge_selected]
     search_fields = ['country', 'region__name','australian_state', 'name']
@@ -120,4 +120,6 @@ class ArtefactTypeAdmin(admin.ModelAdmin):
     actions = [merge_selected]
 admin.site.register(ArtefactType, ArtefactTypeAdmin)
 
-admin.site.register(Region)
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+admin.site.register(Region, RegionAdmin)
