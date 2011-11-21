@@ -1,12 +1,12 @@
 from django.contrib import admin
 from uqamcollections.models import Collection
 
-from django.db.models import ManyToManyField
+#from django.db.models import ManyToManyField
 
 
 class CollectionAdmin(admin.ModelAdmin):
-    search_fields = ['title','description','agent']
-    raw_id_fields = ('items','agent')
+    search_fields = ['title','description','author']
+    raw_id_fields = ('items','author')
 
     autocomplete_lookup_fields = {
         'm2m': ['items'],
