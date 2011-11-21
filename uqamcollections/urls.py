@@ -12,6 +12,7 @@ urlpatterns = patterns('uqamcollections.views',
 
     url(r'^feed/$', AllCollectionsFeed()),
     url(r'^(?P<collection_id>\d+)/xml$', CollectionFeed()),
+    url(r'^(?P<collection_id>\d+)/atom$', 'atom_detail', name='collection_atom_detail'),
 
 
 #    url(r'^(\d+)\xml$', 'collection_feed', name='collection_feed'),

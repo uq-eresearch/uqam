@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.forms import ModelForm
 from django import forms
 from uqamcollections.models import Collection
@@ -59,4 +59,11 @@ def collection_add(request):
     return render(request, 'add_to_collection.html',
                 {'collections': collections, 'ids': ids})
 
+
+from feeds import write_collection_as_atom
+def atom_detail(request, collection_id):
+    collection = get_object_or_404(Collection, pk=collection_id)
+    
+    response = write_collection_as_atom(request, collection)
+    return response
 
