@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
-from cat.models import Person, Place, Region
+from cat.models import Person, Place, Region, Category
 from loans.models import LoanAgreement, LoanItem, Client
 from condition.models import ConditionReport, ConservationAction, Deaccession, Conservator
+from dataimport.models import ImportIssue
 from django.core import management
 from django.db import transaction
 from django import db
@@ -176,6 +177,26 @@ def process_artefact_record(r):
 #        print(sys.exc_info())
 
     m.save()
+
+    # Set Category
+    artefact_name = r['Artefact_TypeName']
+    try:
+        cat = Category.objects.get(name__iexact=artefact_name)
+        m.category.add(cat)
+        m.save()
+    except Category.MultipleObjectsReturned:
+        issue = ImportIssue(
+                description="Multiple matching categories '%s'" % artefact_name,
+                content_object=m)
+        issue.save()
+    except Category.DoesNotExist:
+        issue = ImportIssue(
+                description="Could not find category '%s'" % artefact_name,
+                content_object=m)
+        issue.save()
+
+    m.save()
+
 
 def process_loan_record(r):
     l = LoanAgreement()
