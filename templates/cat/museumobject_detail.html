@@ -115,25 +115,32 @@
 
 
 
-{% if museumobject.artefactrepresentation_set.length %}
 <div class="span-10 last">
-    <div class="slider-wrapper theme-default">
-    <div class="ribbon"></div>
-    <div id="slider" class="nivoSlider">
-{% for pic in museumobject.artefactrepresentation_set.all %}
-
-{% if pic.url %}
-        <a href="{{ pic.url }}" >
-{% else %}
-        <a href="{{ pic.image.url}}">
+{% if museumobject.place.gn_id %}
+    <div id="map_canvas" style="width:400px; height:150px"></div>
+    <hr>
 {% endif %}
+{% if museumobject.artefactrepresentation_set.exists %}
+    <div class="slider-wrapper theme-default">
+        <div class="ribbon"></div>
+        <div id="slider" class="nivoSlider">
+    {% for pic in museumobject.artefactrepresentation_set.all %}
+    {% if pic.url %}
+            <a href="{{ pic.url }}" >
+    {% else %}
+            <a href="{{ pic.image.url}}">
+    {% endif %}
             <img src="{{ pic.image.url_400x350 }}" width="400px" height="350px" alt="">
-        </a>
-
-{% endfor %}
+            </a>
+    {% endfor %}
+        </div>
     </div>
+{% endif %}
 </div>
-</div>
+
+
+
+{% if museumobject.artefactrepresentation_set.exists %}
 <script type="text/javascript">
 $(window).load(function() {
     $('#slider').nivoSlider({
@@ -146,8 +153,39 @@ directionNav: false
 </script>
 {% endif %}
 
-<hr>
+{% if museumobject.place.gn_id %}{% with p=museumobject.place %}
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+    var geocoder, map;
+    $(document).ready(
+    function initialize() {
+        var myOptions = {
+            zoom: 3, // Zoomed out to show location in country
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
 
+        var latlng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}})
+
+        myOptions.center = latlng;
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: latlng,
+            title: "{{p.name}}, {{p.country}}",
+            url: "{{p.get_absolute_url}}"
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+            window.location.href = marker.url;
+        });
+    });
+</script>
+{% endwith %}{% endif %}
+
+
+
+<hr style="clear:both;">
 <a href={% url admin:cat_museumobject_change museumobject.id %}>View in Admin</a>
 
 {% endblock %}

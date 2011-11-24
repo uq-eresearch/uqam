@@ -8,6 +8,9 @@
 {% if place.australian_state %}
 <p><b>Australian State:</b> {{ place.australian_state }}</p>
 {% endif %}
+{% if place.gn_id %}
+<p><b>GeoNames:</b> <a href="{{place.get_geonames_url}}">{{place.gn_name}}</a></p>
+{% endif %}
 <p><a href="{% url admin:cat_place_change place.id %}">Admin</a></p>
 
 <div class="span-12">
@@ -33,20 +36,18 @@
             mapTypeId: google.maps.MapTypeId.SATELLITE
         };
 
-        geocoder = new google.maps.Geocoder();
-        geocoder.geocode( { 'address': '{{place.name}}, {{place.country}}'}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                myOptions.center = results[0].geometry.location;
-                map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location,
-                    title: "{{place.name}}, {{place.country}}"
-                });
-            } else {
-                $('#map_canvas').html("Geocode was not successful for the following reason: " + status);
-            }
-        });
+        {% if place.gn_id %}
+            var latlng = new google.maps.LatLng({{place.latitude}}, {{place.longitude}})
+            myOptions.center = latlng;
+            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: latlng,
+                title: "{{place.name}}, {{place.country}}"
+            });
+        {% else %}
+            $('#map_canvas').html("Unknown location.");
+        {% endif %}
     });
 </script>
 
