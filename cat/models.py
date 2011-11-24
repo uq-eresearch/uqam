@@ -128,6 +128,11 @@ class CulturalBloc(models.Model):
         ordering = ['name']
 
 class ArtefactType(models.Model):
+    """
+    The type or intended use of an object
+
+    Soon to be superseded by `Category`
+    """
     name = models.CharField(max_length=30)
     definition = models.TextField(blank=True)
     see_also = models.CharField(max_length=50, blank=True)
@@ -180,6 +185,9 @@ class Place(models.Model):
 
 
 class Person(models.Model):
+    """
+    A collector or photographer who has contributed to the museum
+    """
     name = models.CharField(max_length=30)
     comments = models.TextField(blank=True)
     related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people',blank=True)
@@ -213,4 +221,5 @@ class Category(models.Model):
             return self.parent.__unicode__() + " :: " + self.name
         return self.name
     class Meta:
+        ordering = ['name']
         verbose_name_plural = "Categories"
