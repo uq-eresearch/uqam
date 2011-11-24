@@ -158,6 +158,7 @@ def process_artefact_record(r):
     at, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
     m.artefact_type = at
 
+
     cb, created = CulturalBloc.objects.get_or_create(name=r['CulturalBloc'])
     m.cultural_bloc = cb
 
@@ -221,22 +222,6 @@ def process_regioncombo(row):
     r.save()
 
 
-mappings = (
-    ('Region_combo.csv', process_regioncombo),
-    ('Functional_Category.csv', process_functional_category_record),
-    ('Artefact_type.csv', process_artefacttype_record),
-    ('Cultural_Bloc_Combo.csv', process_cultural_bloc_record),
-    ('Person.csv', process_person_record),
-    ('Artefact.csv', process_artefact_record),
-    ('ACCESS2_Artefact_More.csv', process_artefactmore_record),
-    ('Donor.csv', process_donorrecord),
-    ('Collector_Photographer.csv', process_collectorphotographer_record),
-)
-loans = (
-    ('Client.csv', process_client_record),
-    ('Loan.csv', process_loan_record),
-    ('Artefacts_on_Loan.csv', process_loanitem_record),
-)
 def process_condition(r):
     c = ConditionReport()
     c.item = MuseumObject.objects.get(registration_number=r['Registration'])
@@ -302,14 +287,32 @@ def process_conservator(r):
     c.phone = r['Phone1']
     c.save()
 
+mappings = {
+    'cat': (
+        ('Region_combo.csv', process_regioncombo),
+        ('Functional_Category.csv', process_functional_category_record),
+        ('Artefact_type.csv', process_artefacttype_record),
+        ('Cultural_Bloc_Combo.csv', process_cultural_bloc_record),
+        ('Person.csv', process_person_record),
+        ('Artefact.csv', process_artefact_record),
+        ('ACCESS2_Artefact_More.csv', process_artefactmore_record),
+        ('Donor.csv', process_donorrecord),
+        ('Collector_Photographer.csv', process_collectorphotographer_record),
+    ),
+    'loans': (
+        ('Client.csv', process_client_record),
+        ('Loan.csv', process_loan_record),
+        ('Artefacts_on_Loan.csv', process_loanitem_record),
+    ),
+    'condition': (
+        ('Museum_Staff.csv', process_museumstaff),
+        ('Conservator.csv', process_conservator),
+        ('Conservation_Details.csv', process_conservation),
+        ('Deaccession.csv', process_deaccession),
+        ('Artefact_Condition.csv', process_condition)
+    )
+}
 
-condition = (
-    ('Museum_Staff.csv', process_museumstaff),
-    ('Conservator.csv', process_conservator),
-    ('Conservation_Details.csv', process_conservation),
-    ('Deaccession.csv', process_deaccession),
-    ('Artefact_Condition.csv', process_condition)
-)
 # Defined Dictionaries
 # Access_Status_Combo, Aquisition_method_Combo, Artefact_type,
 # Aust_State Combo, Condition_Combo, Conservation_action_Combo,
@@ -318,9 +321,9 @@ condition = (
 # Photo_Type_Combo, Region_combo, 
 
 def migrate_and_import(directory, appname, mapping):
-    management.call_command('reset', appname, interactive=False)
+#    management.call_command('reset', appname, interactive=False)
     management.call_command('migrate', appname, interactive=False)
-    for filename, function in mapping:
+    for filename, function in mapping[appname]:
         process_csv(join(directory, filename), function)
 
 class Command(BaseCommand):
@@ -333,7 +336,7 @@ class Command(BaseCommand):
         if len(args) < 2:
             raise CommandError("Need at least two arguments. Import dir, and at least one app name")
 
-        directory, = args
+        directory = args[0]
         prepare_stdout()
 
         for app_name in args[1:]:
