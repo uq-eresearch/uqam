@@ -1,59 +1,93 @@
 from django.db import models
 
-# Create your models here.
 
 class MuseumObject(models.Model):
+    """
+    An object held by the museum, typically a physical object or photo
+    """
     id = models.IntegerField(primary_key=True)
     registration_number = models.IntegerField(db_index=True, unique=True)
     old_registration_number = models.CharField(max_length=10, blank=True)
     other_number = models.CharField(max_length=10, blank=True)
     reg_counter = models.CharField(max_length=10, blank=True)
+
     functional_category = models.ForeignKey('FunctionalCategory')
     artefact_type = models.ForeignKey('ArtefactType', blank=True)
+    category = models.ManyToManyField('Category', blank=True)
+
     storage_section = models.CharField(max_length=4, blank=True)
     storage_unit = models.CharField(max_length=4, blank=True)
     storage_bay = models.CharField(max_length=4, blank=True)
     storage_shelf_box_drawer = models.CharField(max_length=4, blank=True)
+
     acquisition_date = models.CharField(max_length=30, blank=True)
     acquisition_method = models.CharField(max_length=30, blank=True)
     loan_status = models.CharField(max_length=30, blank=True)
     access_status = models.CharField(max_length=30, blank=True)
+
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
     place = models.ForeignKey('Place', null=True)
-    donor = models.ForeignKey('Person', null=True, blank=True, related_name="donated_objects")
-    donor_2 = models.ForeignKey('Person', null=True, blank=True, related_name="donated_objects_2")
+
+    donor = models.ForeignKey(
+            'Person', 
+            null=True, 
+            blank=True, 
+            related_name="donated_objects")
+    donor_2 = models.ForeignKey(
+            'Person', 
+            null=True, 
+            blank=True, 
+            related_name="donated_objects_2")
     how_donor_obtained = models.CharField(max_length=50, blank=True)
     ## TODO: when_donor_obtained should be DateField
     when_donor_obtained = models.CharField(max_length=50, blank=True)
 
-    photographer = models.CharField(max_length=30)
-    collector = models.ForeignKey('Person', null=True, blank=True, related_name="collected_objects")
-    collector_2 = models.ForeignKey('Person', null=True, blank=True, related_name="collected_objects_2")
+    photographer = models.CharField(max_length=100)
+    collector = models.ForeignKey(
+            'Person', 
+            null=True, 
+            blank=True, 
+            related_name="collected_objects")
+    collector_2 = models.ForeignKey(
+            'Person', 
+            null=True, 
+            blank=True, 
+            related_name="collected_objects_2")
     how_collector_obtained = models.CharField(max_length=30, blank=True)
     when_collector_obtained = models.CharField(max_length=30, blank=True)
 
     source = models.CharField(max_length=30)
     how_source_obtained = models.CharField(max_length=30)
 
-    maker_or_artist = models.CharField(max_length=30, blank=True)
+    maker_or_artist = models.CharField(max_length=100, blank=True)
     site_name_number = models.CharField(max_length=30, blank=True)
     raw_material = models.CharField(max_length=30, blank=True)
-    indigenous_name = models.CharField(max_length=50, blank=True)
+    indigenous_name = models.CharField(max_length=100, blank=True)
     recorded_use = models.CharField(max_length=30, blank=True)
     assoc_cultural_group = models.CharField(max_length=50, blank=True)
-#    exhibition_history = models.CharField(max_length=30)
+    exhibition_history = models.TextField(blank=True)
     description = models.TextField(blank=True)
+
+    is_public_comment = models.BooleanField(default=False)
     comment = models.TextField(blank=True)
-#    condition_details = models.CharField(max_length=30)
+    private_comment = models.TextField(
+            blank=True, 
+            help_text="Only visible to staff")
+
     width = models.IntegerField(null=True,blank=True)
     length = models.IntegerField(null=True,blank=True)
     height = models.IntegerField(null=True,blank=True)
     depth = models.IntegerField(null=True,blank=True)
     circumference = models.IntegerField(null=True,blank=True)
+
     longitude = models.FloatField(null=True,blank=True)
     latitude = models.FloatField(null=True,blank=True)
     
-    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_museumobjects', null=True, blank=True)
+    related_documents = models.ManyToManyField(
+            'mediaman.Document', 
+            related_name='related_museumobjects', 
+            null=True, blank=True)
+
     @models.permalink
     def get_absolute_url(self):
         return ('artefact_view', [str(self.id)])
