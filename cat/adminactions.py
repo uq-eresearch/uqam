@@ -3,8 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 from django.contrib import messages
 from cat.modelmerge import merge_model_objects
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.contrib import admin
 
 
@@ -91,9 +90,8 @@ def merge_selected(modeladmin,request,queryset): #This is an admin/
         display_table[-1:][0].insert(0,q.pk)
     #----------------------------------------
 
-    return render_to_response('merge_preview.html',{'queryset': queryset,
+    return render(request,'merge_preview.html',{'queryset': queryset,
                                                     'model': model, 'return_url':return_url,
-                                                    'display_table':display_table, 'ids': ids},
-                              context_instance=RequestContext(request))
+                                                    'display_table':display_table, 'ids': ids})
 
 merge_selected.short_description = "Merge selected records"
