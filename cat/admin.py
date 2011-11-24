@@ -94,9 +94,16 @@ class PersonAdmin(admin.ModelAdmin):
 admin.site.register(Person, PersonAdmin)
 
 class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'country', 'region', 'australian_state', 'name',)
+    list_display = ('id', 'country', 'region', 'australian_state', 'name', 'gn_name')
     list_filter = ('country', 'australian_state', 'region',)
-    actions = [merge_selected]
+    
+    def geocode_place(modeladmin, request, queryset):
+        from cat.tasks import GeocodePlace
+        for place in queryset:
+            GeocodePlace.delay(place.id)
+    geocode_place.short_description = "Lookup latitude/longitude"
+
+    actions = [merge_selected, geocode_place]
     search_fields = ['country', 'region__name','australian_state', 'name']
 admin.site.register(Place, PlaceAdmin)
 
