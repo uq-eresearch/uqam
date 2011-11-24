@@ -15,11 +15,27 @@
 
 <div class="span-12">
 <h2>Objects</h2>
-{% for mo in place.museumobject_set.all %}
+{% for mo in objects.object_list %}
 
 <a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
 <br>
 {% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if objects.has_previous %}
+            <a href="?page={{ objects.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
+        </span>
+
+        {% if objects.has_next %}
+            <a href="?page={{ objects.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
 </div>
 
 <div class="span-12 last">

@@ -69,11 +69,9 @@ urlpatterns = patterns('cat.views',
     url(r'^place/$',
         ListView.as_view(
             model=Place), name='place_list'),
-    url(r'^place/(?P<pk>\d+)$',
-        DetailView.as_view(
-            model=Place), name="place_detail"),
+    url(r'^place/(?P<place_id>\d+)$', 'place_detail', name='place_detail'),
 
     url(r'^withimages/$', 
-        WithImagesListView.as_view(template_name='../templates/cat/withimages.html'), name='with_images_list'),
+        WithImagesListView.as_view(template_name='cat/withimages.html'), name='with_images_list'),
 
 )
