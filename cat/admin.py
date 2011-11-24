@@ -23,13 +23,15 @@ class MOAdmin(UndeleteableModelAdmin):
             ArtefactRepInline,
     ]
 
-#    raw_id_fields = ('collector',)
+    raw_id_fields = ('category', 'place', 'collector', 'collector_2', 'donor',
+            'donor_2', 'artefact_type')
 #    related_lookup_fields = {
 #            'fk': ['collector'],
 #    }
-#    autocomplete_lookup_fields = {
-#            'fk': ['artefact_type'],
-#    }
+    autocomplete_lookup_fields = {
+            'fk': ['place', 'collector', 'donor', 'artefact_type'],
+            'm2m': ['category']
+    }
     filter_horizontal = ['related_documents']
 
     fieldsets = (
@@ -67,15 +69,15 @@ class MOAdmin(UndeleteableModelAdmin):
                        'indigenous_name', 'recorded_use', 'assoc_cultural_group')
         }),
         ('Location', {
-            'classes': ('collapse closed',),
+            'classes': ('collapse',),
             'fields': ('longitude', 'latitude')
         }),
         ('Dimensions', {
-            'classes': ('collapse closed',),
+            'classes': ('collapse',),
             'fields': (('length', 'width', 'height'), ('depth', 'circumference'))
         }),
         ('Related documents', {
-            'classes': ('collapse closed',),
+            'classes': ('collapse',),
             'fields': ('related_documents',)
         }),
     )
