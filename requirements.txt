@@ -15,3 +15,5 @@ django-context-extras==0.2.4
 openpyxl==1.5.4
 Celery==2.4.2
 django-celery==2.4.2
+geopy==0.94.1
+requests==0.8.2
