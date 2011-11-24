@@ -7,17 +7,17 @@ def import_categories(filename):
     wb = load_workbook(filename = filename)
     categories_sheet = wb.get_sheet_by_name(name = 'Categories')
 
-    _import_sheet(categories_sheet, skip=("Equipment",))
+    _import_sheet(categories_sheet)#, skip=("Equipment",))
 
     equipment_sheet = wb.get_sheet_by_name(name="Equipment")
-    equipment = Category(name="Equipment")
+    equipment = Category.objects.get(name="Equipment")
     equipment.save()
     _import_sheet(equipment_sheet, parent=equipment)
 
 
 def _import_sheet(sheet, skip=(), parent=None):
     for column in sheet.columns:
-        title = column[0].value
+        title = column[0].value.strip()
         if title in skip:
             continue
         print title
@@ -25,10 +25,12 @@ def _import_sheet(sheet, skip=(), parent=None):
         toplevel.parent = parent
         toplevel.save()
         for cell in column[1:]:
-            if cell.value is None:
+            leaf_title = cell.value
+            if leaf_title is None:
                 break
-            print "  ", cell.value
-            cat = Category(name=cell.value)
+            leaf_title = leaf_title.strip()
+            print "  ", leaf_title
+            cat = Category(name=leaf_title)
             cat.parent = toplevel
             cat.save()
             
