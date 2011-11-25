@@ -6,7 +6,7 @@ from cat.models import MuseumObject
 from django.shortcuts import render, get_object_or_404
 
 def collections_home(request):
-    collections = Collection.objects.all()
+    collections = Collection.objects.filter(is_public=True)
     return render(request, 'collections/collections_list.html',
             {'collections': collections})
 
@@ -33,7 +33,7 @@ def collection_edit(request, collection_id):
             {'collection': collection, 'form': form})
 
 def collection_detail(request, collection_id):
-    collection = get_object_or_404(Collection, pk=collection_id)
+    collection = get_object_or_404(Collection, pk=collection_id, is_public=True)
     return render(request, 'collections/collection_detail.html',
             {'collection': collection})
 

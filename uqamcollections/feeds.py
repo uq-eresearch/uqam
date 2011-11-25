@@ -63,6 +63,7 @@ def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='te
     current_site = get_current_site(request)
     link = collection.get_absolute_url()
     link = add_domain(current_site.domain, link, request.is_secure())
+    site_id = add_domain(current_site.domain, "/", request.is_secure())
 
     handler = SimplerXMLGenerator(response, encoding)
     handler.startDocument()
@@ -83,8 +84,7 @@ def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='te
 
     handler.addQuickElement(u"rights", collection.rights)
     handler.startElement(u"rdfa:meta",
-            {u'rel': u'license', 
-                u'property': u'http://purl.org/dc/terms/accessRights',
+            { u'property': u'http://purl.org/dc/terms/accessRights',
                 u'content': collection.access_rights})
     handler.endElement(u"rdfa:meta")
 
@@ -93,6 +93,19 @@ def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='te
     handler.addQuickElement(u"email", collection.author.email)
     handler.endElement(u"author")
 
+    handler.startElement(u"source", {})
+    handler.addQuickElement(u"id", site_id)
+    handler.addQuickElement(u"title", current_site.name)
+    handler.startElement(u"author", {})
+    handler.addQuickElement(u"name", collection.author.get_full_name())
+    handler.addQuickElement(u"email", collection.author.email)
+    handler.endElement(u"author")
+    handler.endElement(u"source")
+
+    handler.startElement(u"link",
+            {u"rel": "http://xmlns.com/foaf/0.1/homepage",
+             u"href": link})
+    handler.endElement(u"link")
 
     handler.endElement(u"entry")
 

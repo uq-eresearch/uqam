@@ -5,6 +5,7 @@ from uqamcollections.models import Collection
 
 
 class CollectionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'is_public', 'is_syndicated', 'updated')
     search_fields = ['title','description','author']
     raw_id_fields = ('items','author')
 
