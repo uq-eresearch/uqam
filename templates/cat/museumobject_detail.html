@@ -49,6 +49,16 @@
     <br>
 {% endif %}
 
+{% if museumobject.collections.all %}
+    <b>Collections: </b>
+    {% for collection in museumobject.collections.all %}
+    <a href="{{ collection.get_absolute_url }}">{{ collection.title }}</a>; 
+
+    {% endfor %}
+
+    <br>
+
+{% endif %}
 
 <b>Description:</b> {{ museumobject.description|linebreaks }}
 <br>
