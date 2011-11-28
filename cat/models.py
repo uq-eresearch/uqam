@@ -100,7 +100,7 @@ class MuseumObject(models.Model):
 
     @staticmethod
     def autocomplete_search_fields():
-        return ("id__startswith",)
+        return ("id__iexact",)
 
     
 
