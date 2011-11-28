@@ -1,0 +1,27 @@
+
+{% if objects.object_list %}
+<table>
+{% for object in objects.object_list %}
+    <tr><td>
+    <img src="{{ object.artefactrepresentation_set.all.0.image.url_64x64 }}" width="64px" height="64px" alt="">
+        <a href="{{ object.get_absolute_url }}">{{object}}</a>
+    </td></tr>
+{% endfor %}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if objects.has_previous %}
+            <a href="?page={{ objects.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
+        </span>
+
+        {% if objects.has_next %}
+            <a href="?page={{ objects.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
