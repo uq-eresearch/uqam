@@ -38,6 +38,32 @@ def place_detail(request, place_id):
     place = get_object_or_404(Place, pk=place_id)
     place_objects = place.museumobject_set.all()
     paginator = Paginator(place_objects, 25)
+def categories_list(request, full_slug=None):
+    """
+    Hierarchical browsing of categories
+
+    Based on http://djangosnippets.org/snippets/362/
+    """
+    parent = None
+    breadcrumbs = []
+    if full_slug:
+        slugs = full_slug.split('/')
+        for slug in slugs:
+            parent = get_object_or_404(Category, parent=parent, slug__exact=slug)
+            breadcrumbs.append(parent)
+
+    cat_list = Category.objects.filter(parent=parent)
+
+    objects = MuseumObject.objects.filter(category=parent)
+    objects = _do_paging(request, objects)
+
+    return render(request, "cat/category_list.html", 
+            {"categories": cat_list,
+             "objects": objects,
+             "breadcrumbs": breadcrumbs})
+
+def _do_paging(request, queryset):
+    paginator = Paginator(queryset, 25)
 
     # Make sure page request is an int. If not, deliver first page.
     try:
@@ -50,6 +76,7 @@ def place_detail(request, place_id):
         objects = paginator.page(page)
     except (EmptyPage, InvalidPage):
         objects = paginator.page(paginator.num_pages)
+    return objects
 
 
     return render(request, "cat/place_detail.html",

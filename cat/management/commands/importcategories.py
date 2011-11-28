@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import Category
+from django.template.defaultfilters import slugify
 
 from openpyxl.reader.excel import load_workbook
 
@@ -23,6 +24,7 @@ def _import_sheet(sheet, skip=(), parent=None):
         print title
         toplevel = Category(name=title)
         toplevel.parent = parent
+        toplevel.slug = slugify(title)
         toplevel.save()
         for cell in column[1:]:
             leaf_title = cell.value
@@ -32,6 +34,7 @@ def _import_sheet(sheet, skip=(), parent=None):
             print "  ", leaf_title
             cat = Category(name=leaf_title)
             cat.parent = toplevel
+            cat.slug = slugify(title)
             cat.save()
             
 class Command(BaseCommand):

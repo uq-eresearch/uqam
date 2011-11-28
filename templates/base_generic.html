@@ -32,14 +32,17 @@
         <div class="menu">
             <ul>
                 <li><a href="{% url index %}">Home</a></li>
+                <li><a href="{% url categories_list %}">Artefacts</a></li>
+    <!--
                 <li><a href="{% url artefact_list %}">Artefacts</a></li>
+    -->
                 <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
                 <li><a href="{% url person_list %}">People</a></li>
-    <!--                 <li><a href="{% url place_list %}">Places</a></li>
+    <!--        
+                <li><a href="{% url place_list %}">Places</a></li>
                 <li><a href="{% url all_regions_list %}">Regions</a></li>
     -->
                 <li><a href="{% url country_list %}">Countries</a></li>
-                <li><a href="{% url with_images_list %}">With Images</a></li>
                 <li><a href="{% url collections_home %}">Collections</a></li>
                 {% if user.is_staff %}
                 <li><a href="/admin/">Admin</a></li>

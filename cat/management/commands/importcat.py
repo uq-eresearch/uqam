@@ -181,8 +181,8 @@ def process_artefact_record(r):
     # Set Category
     artefact_name = r['Artefact_TypeName']
     try:
-        cat = Category.objects.get(name__iexact=artefact_name)
-        m.category.add(cat)
+        categories = Category.objects.filter(name__iexact=artefact_name)
+        m.category.add(categories)
         m.save()
     except Category.MultipleObjectsReturned:
         issue = ImportIssue(

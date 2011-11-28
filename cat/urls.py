@@ -68,4 +68,8 @@ urlpatterns = patterns('cat.views',
     url(r'^withimages/$', 
         WithImagesListView.as_view(template_name='cat/withimages.html'), name='with_images_list'),
 
+    url(r'^categories/$', 'categories_list', name='categories_list'),
+
+    url(r'^categories/(?P<full_slug>.+)/$', 'categories_list', name='categories_list'),
+
 )

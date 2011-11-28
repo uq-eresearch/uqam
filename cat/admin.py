@@ -133,4 +133,6 @@ class RegionAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 admin.site.register(Region, RegionAdmin)
 
-admin.site.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
+admin.site.register(Category, CategoryAdmin)
