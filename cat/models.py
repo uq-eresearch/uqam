@@ -153,6 +153,8 @@ class Place(models.Model):
     gn_id = models.CharField(max_length=20, help_text="GeoNames ID", blank=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+    class Meta:
+        ordering = ["id"]
     def __unicode__(self):
         return ' > '.join([self.country, self.region, self.name])
     @models.permalink
@@ -163,6 +165,8 @@ class Place(models.Model):
             return "http://www.geonames.org/%s" % self.gn_id
         else:
             return False
+    def get_kml_coordinates(self):
+        return "%s,%s,0" % (self.longitude, self.latitude)
     def geocode(self, force=False):
         """
         Lookup the latitude and longitude of this place with GeoNames

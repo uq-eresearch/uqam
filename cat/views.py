@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from models import MuseumObject, Place
+from models import MuseumObject, Place, Category
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
+from django.utils.xmlutils import SimplerXMLGenerator
 
 
 def home_page(request):
@@ -86,6 +87,33 @@ def _do_paging(request, queryset):
         objects = paginator.page(paginator.num_pages)
     return objects
 
+def place_kml(request, encoding='utf-8', mimetype='text/plain'):
+    """
+    Write out all the knows places to KML
+    """
+    mimetype = "application/vnd.google-earth.kml+xml"
+    places = Place.objects.exclude(latitude=None)
 
-    return render(request, "cat/place_detail.html",
-            {'place': place, 'objects': objects})
+    response = HttpResponse(mimetype=mimetype)
+    handler = SimplerXMLGenerator(response, encoding)
+
+    handler.startDocument()
+    handler.startElement(u"kml", {u"xmlns": u"http://www.opengis.net/kml/2.2"})
+    handler.startElement(u"Document", {})
+
+    for place in places:
+        handler.startElement(u"Placemark", {})
+        handler.addQuickElement(u"name", place.name)
+        handler.addQuickElement(u"description", 
+                '<a href="%s">%s</a>' % (place.get_absolute_url(), place.__unicode__()))
+        handler.startElement(u"Point", {})
+        handler.addQuickElement(u"coordinates", place.get_kml_coordinates())
+        handler.endElement(u"Point")
+        handler.endElement(u"Placemark")
+
+    handler.endElement(u"Document")
+    handler.endElement(u"kml")
+
+    return response
+
+

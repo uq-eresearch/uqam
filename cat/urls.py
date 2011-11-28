@@ -63,6 +63,8 @@ urlpatterns = patterns('cat.views',
     url(r'^place/$',
         ListView.as_view(
             model=Place), name='place_list'),
+    url(r'^place/kml$', 'place_kml', name='place_kml'),
+    url(r'^place/map$', TemplateView.as_view(template_name="cat/map.html"), name='place_map'),
     url(r'^place/(?P<place_id>\d+)$', 'place_detail', name='place_detail'),
 
     url(r'^withimages/$', 

@@ -1,0 +1,40 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div>
+<h1>Places</h1>
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<script type="text/javascript">
+    var map;
+    $(document).ready(
+    function initialize() {
+        var myOptions = {
+            zoom: 2, // Zoomed out to show location in world
+            disableDefaultUI: false,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+        var latlng = new google.maps.LatLng(0, 0)
+        myOptions.center = latlng;
+
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+//        var placesLayer = new google.maps.KmlLayer('http://localhost:8000/place/kml');
+        var placesLayer = new google.maps.KmlLayer('http://omad.net/uqamplaces.kml');
+        placesLayer.setMap(map);
+
+//        var latlng = new google.maps.LatLng({{place.latitude}}, {{place.longitude}})
+//        myOptions.center = latlng;
+//        var marker = new google.maps.Marker({
+//            map: map,
+//            position: latlng,
+//            title: "{{place.name}}, {{place.country}}"
+//        });
+    });
+</script>
+
+<div id="map_canvas" style="width:900px; height:600px"></div>
+
+</div>
+{% endblock %}
