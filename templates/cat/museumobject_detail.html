@@ -116,10 +116,6 @@
 
 
 <div class="span-10 last">
-{% if museumobject.place.gn_id %}
-    <div id="map_canvas" style="width:400px; height:150px"></div>
-    <hr>
-{% endif %}
 {% if museumobject.artefactrepresentation_set.exists %}
     <div class="slider-wrapper theme-default">
         <div class="ribbon"></div>
@@ -135,6 +131,10 @@
     {% endfor %}
         </div>
     </div>
+{% endif %}
+{% if museumobject.place.gn_id %}
+    <hr>
+    <div id="map_canvas" style="margin-top: 60px; width:400px; height:150px"></div>
 {% endif %}
 </div>
 
@@ -186,6 +186,6 @@ directionNav: false
 
 
 <hr style="clear:both;">
-<a href={% url admin:cat_museumobject_change museumobject.id %}>View in Admin</a>
+<a href="{% url admin:cat_museumobject_change museumobject.id %}">View in Admin</a>
 
 {% endblock %}
