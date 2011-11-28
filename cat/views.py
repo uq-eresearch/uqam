@@ -4,9 +4,13 @@ from models import MuseumObject, Place
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the catalogue index.")
 
+def home_page(request):
+    objects = MuseumObject.objects.exclude(artefactrepresentation__isnull=True)
+    objects = _do_paging(request, objects)
+
+    return render(request, 'index.html',
+            {'objects': objects})
 
 def detail(request, artefact_id):
     a = get_object_or_404(MuseumObject, pk=artefact_id)

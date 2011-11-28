@@ -30,15 +30,9 @@ class WithImagesListView(ListView):
     def get_queryset(self):
         return MuseumObject.objects.exclude(artefactrepresentation__isnull=True)
 
-class HomeListView(ListView):
-    model = MuseumObject
-    paginate_by = 20
-    def get_queryset(self):
-        return MuseumObject.objects.exclude(artefactrepresentation__isnull=True).exclude(artefact_type__name='Tapacloth').exclude(artefact_type__name='Waistskirt')
 
 urlpatterns = patterns('cat.views',
-    url(r'^$', 
-        HomeListView.as_view(template_name='../templates/index.html'), name='index'),
+    url(r'^$', 'home_page', name='index'),
     url(r'^artefact/$',
         ListView.as_view(
             model=MuseumObject, paginate_by=20), name='artefact_list'),
