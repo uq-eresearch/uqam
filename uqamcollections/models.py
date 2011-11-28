@@ -8,7 +8,7 @@ class Collection(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField()
     author = models.ForeignKey('auth.User')
-    items = models.ManyToManyField('cat.MuseumObject', related_name='items', blank=True)
+    items = models.ManyToManyField('cat.MuseumObject', related_name='collections', blank=True)
 
     is_public = models.BooleanField(
             help_text="Should collection be visible to the public")

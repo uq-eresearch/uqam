@@ -32,10 +32,15 @@ def collection_edit(request, collection_id):
     return render(request, 'collections/collection_edit.html',
             {'collection': collection, 'form': form})
 
+from cat.views import _do_paging
 def collection_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id, is_public=True)
+    collection_objects = collection.items.all()
+
+    objects = _do_paging(request, collection_objects)
+
     return render(request, 'collections/collection_detail.html',
-            {'collection': collection})
+            {'collection': collection, 'objects': objects})
 
 
 def collection_add(request):

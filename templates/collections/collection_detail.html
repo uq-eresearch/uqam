@@ -1,16 +1,22 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<div style="float:right;font-size: 80%;"><a href="{% url admin:uqamcollections_collection_change collection.id %}">Admin</a>
+<a href="{{collection.get_absolute_url}}/atom">Atom</a></div>
 <h1>{{ collection.title }}</h1>
 
 <b>Description:</b> {{ collection.description }} <br>
-<b>Agent:</b> {{ collection.agent }} <br>
-<b>Items:</b><br>
+<b>Author:</b> {{ collection.author.first_name }} {{ collection.author.last_name }} <br>
+<b>Copyright:</b> {{ collection.rights }}<br>
+<b>Access rights:</b> {{ collection.access_rights }}<br>
+{% if collection.categories %}
+<b>Keywords:</b> {{ collection.categories }}<br>
+{% endif %}
+<b>Date updated:</b> {{ collection.last_published }}<br>
 
-{% for item in collection.items.all %}
+<h2>Items</h2>
+{% include "snippets/paged_object_list.html" %}
 
-<a href="{{item.get_absolute_url}}">
-    {{ item }}</a> <br>
 
-{% endfor %}
 {% endblock %}
+
