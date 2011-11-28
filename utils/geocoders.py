@@ -13,6 +13,10 @@ class GeoNamesWithId(geocoders.GeoNames):
     """
     Use GeoNames geocoder, also returning geonamesId with location
     """
+    def __init__(self, *args, **kwargs):
+        super(GeoNamesWithId, self).__init__(*args, **kwargs)
+# FIXME: Don't hard code
+        self.url = "http://ws.geonames.org/searchJSON?user=uqamcatalogue&%s"
 
     def parse_json(self, page, exactly_one):
         if not isinstance(page, basestring):
