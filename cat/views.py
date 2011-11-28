@@ -17,15 +17,15 @@ def detail(request, artefact_id):
     return render(request, 'detail.html', {'artefact': a})
 
 def all_countries(request):
-    countries = Place.objects.values('country').distinct().annotate(count=Count('museumobject'))
+    countries = Place.objects.values('country')
+    countries = countries.distinct().annotate(count=Count('museumobject'))
 
-#    countries = Place.objects.values('country').distinct()
     return render(request, 'cat/country_list.html',
             {'countries': countries})
 
 def all_regions(request):
-    #regions = Place.objects.values('region').distinct()
-    regions = Place.objects.values('region').distinct().annotate(count=Count('museumobject'))
+    regions = Place.objects.values('region')
+    regions = regions.distinct().annotate(count=Count('museumobject'))
     return render(request, 'cat/region_list.html',
             {'regions': regions})
 
@@ -35,9 +35,17 @@ def regions(request, country):
             {'regions': regions})
     
 def place_detail(request, place_id):
+    """
+    Lookup a ``Place`` based on its id. Pagination its objects.
+    """
     place = get_object_or_404(Place, pk=place_id)
     place_objects = place.museumobject_set.all()
-    paginator = Paginator(place_objects, 25)
+
+    objects = _do_paging(request, place_objects)
+
+    return render(request, "cat/place_detail.html",
+            {'place': place, 'objects': objects})
+
 def categories_list(request, full_slug=None):
     """
     Hierarchical browsing of categories
