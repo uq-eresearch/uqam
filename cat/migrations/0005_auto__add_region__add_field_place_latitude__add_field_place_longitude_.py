@@ -22,14 +22,6 @@ class Migration(SchemaMigration):
         # Adding field 'Place.longitude'
         db.add_column('cat_place', 'longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True), keep_default=False)
 
-        # Renaming column for 'Place.region' to match new field type.
-        db.rename_column('cat_place', 'region', 'region_id')
-        # Changing field 'Place.region'
-        db.alter_column('cat_place', 'region_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cat.Region']))
-
-        # Adding index on 'Place', fields ['region']
-        db.create_index('cat_place', ['region_id'])
-
         # Changing field 'MuseumObject.latitude'
         db.alter_column('cat_museumobject', 'latitude', self.gf('django.db.models.fields.FloatField')(null=True))
 
@@ -39,9 +31,6 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
-        # Removing index on 'Place', fields ['region']
-        db.delete_index('cat_place', ['region_id'])
-
         # Deleting model 'Region'
         db.delete_table('cat_region')
 
@@ -50,11 +39,6 @@ class Migration(SchemaMigration):
 
         # Deleting field 'Place.longitude'
         db.delete_column('cat_place', 'longitude')
-
-        # Renaming column for 'Place.region' to match new field type.
-        db.rename_column('cat_place', 'region_id', 'region')
-        # Changing field 'Place.region'
-        db.alter_column('cat_place', 'region', self.gf('django.db.models.fields.CharField')(max_length=40))
 
         # Changing field 'MuseumObject.latitude'
         db.alter_column('cat_museumobject', 'latitude', self.gf('django.db.models.fields.IntegerField')(null=True))
