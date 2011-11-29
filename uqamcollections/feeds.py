@@ -3,8 +3,7 @@ from django.utils.feedgenerator import Atom1Feed, rfc3339_date
 from uqamcollections.models import Collection
 from django.shortcuts import get_object_or_404
 from django.utils.xmlutils import SimplerXMLGenerator
-from django.contrib.syndication.views import add_domain
-from django.contrib.sites.models import get_current_site
+from utils.utils import get_site_url
 from django.http import HttpResponse
 
 class AllCollectionsFeed(Feed):
@@ -60,10 +59,8 @@ def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='te
     Uses the profile from http://dataspace.metadata.net/doc/atom
     """
     response = HttpResponse(mimetype=mimetype)
-    current_site = get_current_site(request)
-    link = collection.get_absolute_url()
-    link = add_domain(current_site.domain, link, request.is_secure())
-    site_id = add_domain(current_site.domain, "/", request.is_secure())
+    link = get_site_url(request, collection.get_absolute_url())
+    site_id = get_site_url(request, "/")
 
     handler = SimplerXMLGenerator(response, encoding)
     handler.startDocument()

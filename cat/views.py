@@ -2,13 +2,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from models import MuseumObject, Place, Category
 from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.utils.xmlutils import SimplerXMLGenerator
+from utils.utils import do_paging, get_site_url
 
 
 def home_page(request):
     objects = MuseumObject.objects.exclude(artefactrepresentation__isnull=True)
-    objects = _do_paging(request, objects)
+    objects = do_paging(request, objects)
 
     return render(request, 'index.html',
             {'objects': objects})
@@ -42,7 +42,7 @@ def place_detail(request, place_id):
     place = get_object_or_404(Place, pk=place_id)
     place_objects = place.museumobject_set.all()
 
-    objects = _do_paging(request, place_objects)
+    objects = do_paging(request, place_objects)
 
     return render(request, "cat/place_detail.html",
             {'place': place, 'objects': objects})
@@ -64,28 +64,13 @@ def categories_list(request, full_slug=None):
     cat_list = Category.objects.filter(parent=parent)
 
     objects = MuseumObject.objects.filter(category=parent)
-    objects = _do_paging(request, objects)
+    objects = do_paging(request, objects)
 
     return render(request, "cat/category_list.html", 
             {"categories": cat_list,
              "objects": objects,
              "breadcrumbs": breadcrumbs})
 
-def _do_paging(request, queryset):
-    paginator = Paginator(queryset, 25)
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
-
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        objects = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        objects = paginator.page(paginator.num_pages)
-    return objects
 
 def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     """
