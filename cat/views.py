@@ -76,7 +76,7 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     """
     Write out all the knows places to KML
     """
-    mimetype = "application/vnd.google-earth.kml+xml"
+#    mimetype = "application/vnd.google-earth.kml+xml"
     places = Place.objects.exclude(latitude=None)
 
     response = HttpResponse(mimetype=mimetype)
@@ -87,10 +87,12 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     handler.startElement(u"Document", {})
 
     for place in places:
+        place_url = get_site_url(request, place.get_absolute_url())
         handler.startElement(u"Placemark", {})
-        handler.addQuickElement(u"name", place.name)
+        handler.addQuickElement(u"name", 
+                "%s (%s)" % (place.name, place.museumobject_set.count()))
         handler.addQuickElement(u"description", 
-                '<a href="%s">%s</a>' % (place.get_absolute_url(), place.__unicode__()))
+                '<a href="%s">%s</a>' % (place_url, place.__unicode__()))
         handler.startElement(u"Point", {})
         handler.addQuickElement(u"coordinates", place.get_kml_coordinates())
         handler.endElement(u"Point")
