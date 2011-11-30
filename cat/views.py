@@ -3,7 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from models import MuseumObject, Place, Category
 from django.db.models import Count
 from django.utils.xmlutils import SimplerXMLGenerator
-from utils.utils import do_paging, get_site_url
+from utils.utils import do_paging
+from django.db.models import Count
 
 
 def home_page(request):
@@ -77,7 +78,8 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     Write out all the knows places to KML
     """
     mimetype = "application/vnd.google-earth.kml+xml"
-    places = Place.objects.exclude(latitude=None)
+#    mimetype = "text/html"
+    places = Place.objects.exclude(latitude=None).annotate(Count('museumobject'))
 
     response = HttpResponse(mimetype=mimetype)
     handler = SimplerXMLGenerator(response, encoding)
@@ -90,7 +92,7 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
         place_url = request.build_absolute_uri(place.get_absolute_url())
         handler.startElement(u"Placemark", {})
         handler.addQuickElement(u"name", 
-                "%s (%s)" % (place.name, place.museumobject_set.count()))
+                "%s (%s)" % (place.name, place.museumobject__count))
         handler.addQuickElement(u"description", 
                 '<a href="%s">%s</a>' % (place_url, place.__unicode__()))
         handler.startElement(u"Point", {})
