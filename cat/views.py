@@ -76,7 +76,7 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     """
     Write out all the knows places to KML
     """
-#    mimetype = "application/vnd.google-earth.kml+xml"
+    mimetype = "application/vnd.google-earth.kml+xml"
     places = Place.objects.exclude(latitude=None)
 
     response = HttpResponse(mimetype=mimetype)
@@ -87,7 +87,7 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     handler.startElement(u"Document", {})
 
     for place in places:
-        place_url = get_site_url(request, place.get_absolute_url())
+        place_url = request.build_absolute_uri(place.get_absolute_url())
         handler.startElement(u"Placemark", {})
         handler.addQuickElement(u"name", 
                 "%s (%s)" % (place.name, place.museumobject_set.count()))
@@ -103,4 +103,8 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
 
     return response
 
-
+from django.core.urlresolvers import reverse
+def place_map(request):
+    kml_url = request.build_absolute_uri(reverse('place_kml'))
+    return render(request, "cat/map.html",
+            {"kml_url": kml_url})

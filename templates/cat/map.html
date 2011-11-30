@@ -21,7 +21,7 @@
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
 //        var placesLayer = new google.maps.KmlLayer('http://localhost:8000/place/kml');
-        var placesLayer = new google.maps.KmlLayer('http://omad.net/uqamplaces.kml');
+        var placesLayer = new google.maps.KmlLayer({{kml_url}});
         placesLayer.setMap(map);
 
 //        var latlng = new google.maps.LatLng({{place.latitude}}, {{place.longitude}})
