@@ -20,6 +20,18 @@ def bootstrap():
 
     reqs()
 
+def init_celery():
+    put('etc/init-celery.conf', '/tmp/celery.conf')
+    put('etc/init-celeryd', '/tmp/celeryd')
+    with settings(user='uqdayers'):
+        sudo('mv /tmp/celery.conf /etc/default/celeryd')
+        sudo('mv /tmp/celeryd /etc/init.d/')
+        sudo('chown root.root /etc/init.d/celeryd /etc/default/celeryd')
+        sudo('chmod 644 /etc/default/celeryd')
+        sudo('chmod 755 /etc/init.d/celeryd')
+        sudo('service celeryd stop')
+        sudo('service celeryd start')
+
 def installsyspackages():
     with settings(user='uqdayers'):
         sudo('yum install openldap-devel openssl-devel')
