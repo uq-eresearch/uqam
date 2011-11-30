@@ -219,6 +219,7 @@ LOGIN_REQUIRED_URLS = (
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/accounts/login(.*)$',
     r'/admin/logout(.*)$',
+    r'/place/kml$',
     r'/$',
 )
 
