@@ -1,23 +1,30 @@
-from fabric.api import env, local, run, put, cd, prefix, sudo, settings
+from fabric.api import env, local, run, put, cd, prefix, sudo, settings, get
+from fabric.api import lcd, open_shell
+from fabric.contrib.files import sed
 
 env.user = 'django'
 env.gateway = 'uqdayers@gladys'
 env.hosts = ['anthropology-uat']
+env.appname = 'uqam'
 env.appdir = '/home/django/uqam'
 env.virtenv = '/home/django/env'
 env.reqfile = env.appdir + '/requirements.txt'
 
 
+def upgrade():
+    """
+    Push the latest code, update all requirements, restart everything
+    """
+    push()
+    reqs()
+    collectstatic()
+    syncdb()
+    reload()
 
-
-def pack():
-    local('git archive master | bzip2 > /tmp/uqam.tar.bz2')
 
 def bootstrap():
     push()
-
     run('virtualenv --no-site-packages %(virtenv)s' % env)
-
     reqs()
 
 def init_celery():
@@ -29,8 +36,7 @@ def init_celery():
         sudo('chown root.root /etc/init.d/celeryd /etc/default/celeryd')
         sudo('chmod 644 /etc/default/celeryd')
         sudo('chmod 755 /etc/init.d/celeryd')
-        sudo('service celeryd stop')
-        sudo('service celeryd start')
+        sudo('service celeryd restart')
 
 def installsyspackages():
     with settings(user='uqdayers'):
@@ -43,11 +49,19 @@ def reqs():
 
 def push():
     """Deploy the newest source to the server"""
-    pack()
-    put('/tmp/uqam.tar.bz2', '/tmp/uqam.tar.bz2')
+    filename = pack()
+    put(filename, filename)
     with cd(env.appdir):
-        run('tar xjf /tmp/uqam.tar.bz2')
-    collectstatic()
+        run('tar xjf %s' % filename)
+
+def collectstatic():
+    virtualenv('./manage.py collectstatic --noinput')
+
+def pack():
+    filename = '/tmp/uqam.tar.bz2'
+    local('git archive master | bzip2 > %s' % filename)
+    return filename
+
 
 def syncdb():
     """Migrate the remote database to the latest version"""
@@ -56,17 +70,15 @@ def syncdb():
 
 def importcat():
     """Remotely import the catalogue and images"""
+    virtualenv('./manage.py importcategories /home/django/origdb/ClassificationsNov11.xlsx')
     virtualenv('./manage.py importcat /home/django/origdb cat loans condition')
+    virtualenv('./manage.py importxls /home/django/origdb/Museum.xlsx')
     virtualenv('./manage.py importmedia /home/django/images')
 
 def importimages():
     virtualenv('./manage.py importmedia /home/django/images')
 
-def import_xls():
-    virtualenv('./manage.py importxls /home/django/origdb/Museum.xlsx')
-
 def copyimages():
-    # something with rsync, probably
     local('rsync -rv %s(imagesdir) django@anthropology-uat:images')
 
 #def importdata(db):
@@ -83,16 +95,12 @@ def virtualenv(cmd):
         with prefix('source %(virtenv)s/bin/activate' % env):
             run(cmd)
 
-def runremote():
-    virtualenv('./manage.py runserver')
-
-def collectstatic():
-    virtualenv('./manage.py collectstatic')
-
 def reload():
     with settings(user='uqdayers'):
         sudo('service nginx reload')
-        sudo('initctl reload uqam-gunicorn')
+        sudo('service celeryd reload')
+        sudo('initctl stop uqam-gunicorn')
+        sudo('initctl start uqam-gunicorn')
 
 
 def rebuild_index():
@@ -102,3 +110,27 @@ def rebuild_index():
 def update_index():
     """Update search index"""
     virtualenv('./manage.py update_index')
+
+def test_upgrade():
+    temp_archive = "/tmp/current.tar.gz"
+    run('rm -f %s' % temp_archive)
+    run('tar czf %s --exclude=media %s uqam.db' % (temp_archive, env.appname))
+    get(temp_archive, temp_archive)
+
+    with lcd('/tmp'):
+        local('rm -rf /tmp/uqam.db /tmp/uqam')
+        local('tar xzf %s' % temp_archive)
+
+    filename = pack()
+    with lcd('/tmp/uqam'):
+        local('tar xjf %s' % filename)
+        local('sed -i -r -e "s/\\/home\\/django/\\/tmp/g" default_settings.py')
+        local('./manage.py syncdb')
+        local('./manage.py migrate')
+        local('sed -i -r -e "s/DEBUG = False/DEBUG = True/g" default_settings.py')
+#        local('rm -rf ../public; mkdir -p ../public/static ../public/media')
+#        local('./manage.py collectstatic --noinput')
+        local('./manage.py runserver 0.0.0.0:8000')
+
+def shell():
+    open_shell()
