@@ -135,4 +135,5 @@ admin.site.register(Region, RegionAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
+    search_fields = ('name', 'slug')
 admin.site.register(Category, CategoryAdmin)
