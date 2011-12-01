@@ -230,9 +230,10 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
         unique_together = ("slug", "parent")
     def get_absolute_url(self):
-        url = "/categories/%s/" % self.slug
+        url = "/%s/" % self.slug
         category = self
         while category.parent:
             url = "/%s%s" % (category.parent.slug, url)
             category = category.parent
+        url = "/categories" + url
         return url
