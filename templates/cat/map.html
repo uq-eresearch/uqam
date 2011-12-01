@@ -21,7 +21,8 @@
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
 //        var placesLayer = new google.maps.KmlLayer('http://localhost:8000/place/kml');
-        var placesLayer = new google.maps.KmlLayer('{{kml_url}}');
+//        var placesLayer = new google.maps.KmlLayer('{{kml_url}}');
+        var placesLayer = new google.maps.KmlLayer("http://anthropology-uat.metadata.net/static/places.kml");
         placesLayer.setMap(map);
 
 //        var latlng = new google.maps.LatLng({{place.latitude}}, {{place.longitude}})
