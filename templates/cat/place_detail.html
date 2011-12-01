@@ -1,6 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<div style="float:right;font-size: 80%;">
+    {% if user.is_staff %}
+        <a href="{% url admin:cat_place_change place.id %}">Admin</a>
+    {% endif %}
+</div>
 <h1>{{ place.name }}</h1>
 
 <p><b>Country:</b> {{ place.country }}</p>
@@ -11,7 +16,6 @@
 {% if place.gn_id %}
 <p><b>GeoNames:</b> <a href="{{place.get_geonames_url}}">{{place.gn_name}}</a></p>
 {% endif %}
-<p><a href="{% url admin:cat_place_change place.id %}">Admin</a></p>
 
 <div class="span-12">
 <h2>Items</h2>

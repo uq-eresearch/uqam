@@ -1,8 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<div style="float:right;font-size: 80%;"><a href="{% url admin:uqamcollections_collection_change collection.id %}">Admin</a>
-<a href="{{collection.get_absolute_url}}/atom">Atom</a></div>
+<div style="float:right;font-size: 80%;">
+    {% if user.is_staff %}
+    <a href="{% url admin:uqamcollections_collection_change collection.id %}">Admin</a>
+    {% endif %}
+    <a href="{{collection.get_absolute_url}}/atom">Atom</a>
+</div>
 <h1>{{ collection.title }}</h1>
 
 <b>Description:</b> {{ collection.description }} <br>

@@ -1,6 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<div style="float:right;font-size: 80%;">
+    {% if user.is_staff %}
+        <a href="{% url admin:cat_museumobject_change museumobject.id %}">Admin</a>
+    {% endif %}
+</div>
 <h1>{{ museumobject.artefact_type }}</h1>
 
 <div class="span-14">
@@ -204,6 +209,5 @@ directionNav: false
 
 
 <hr style="clear:both;">
-<a href="{% url admin:cat_museumobject_change museumobject.id %}">View in Admin</a>
 
 {% endblock %}
