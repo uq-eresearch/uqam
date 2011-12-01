@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from models import MuseumObject, Place, Category
+from models import MuseumObject, Place, Category, Region
 from django.db.models import Count
 from django.utils.xmlutils import SimplerXMLGenerator
 from utils.utils import do_paging
@@ -41,12 +41,17 @@ def place_detail(request, place_id):
     Lookup a ``Place`` based on its id. Pagination its objects.
     """
     place = get_object_or_404(Place, pk=place_id)
+    try:
+        region = Region.objects.get(name=place.region)
+    except:
+        region = None
     place_objects = place.museumobject_set.all()
 
     objects = do_paging(request, place_objects)
 
     return render(request, "cat/place_detail.html",
-            {'place': place, 'objects': objects})
+            {'place': place, 'objects': objects,
+             'region': region})
 
 def categories_list(request, full_slug=None):
     """

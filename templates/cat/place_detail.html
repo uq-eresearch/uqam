@@ -10,6 +10,9 @@
 
 <p><b>Country:</b> {{ place.country }}</p>
 <p><b>Region:</b> {{ place.region }}</p>
+{% if region.description %}
+    <p><b>Region description:</b> {{ region.description }}
+{% endif %}
 {% if place.australian_state %}
 <p><b>Australian State:</b> {{ place.australian_state }}</p>
 {% endif %}
