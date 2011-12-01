@@ -4,14 +4,20 @@ from django.template.defaultfilters import slugify
 
 from openpyxl.reader.excel import load_workbook
 
+def delete_all_categories():
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM `cat_category`")
+
 def import_categories(filename):
+    delete_all_categories()
     wb = load_workbook(filename = filename)
     categories_sheet = wb.get_sheet_by_name(name = 'Categories')
 
     _import_sheet(categories_sheet)#, skip=("Equipment",))
 
     equipment_sheet = wb.get_sheet_by_name(name="Equipment")
-    equipment = Category.objects.get(name="Equipment")
+    equipment = Category.objects.get(name="Equipment", parent=None)
     equipment.save()
     _import_sheet(equipment_sheet, parent=equipment)
 
@@ -21,6 +27,7 @@ def _import_sheet(sheet, skip=(), parent=None):
         title = column[0].value.strip()
         if title in skip:
             continue
+        title = title.title()
         print title
         toplevel = Category(name=title)
         toplevel.parent = parent
@@ -30,11 +37,11 @@ def _import_sheet(sheet, skip=(), parent=None):
             leaf_title = cell.value
             if leaf_title is None:
                 break
-            leaf_title = leaf_title.strip()
+            leaf_title = leaf_title.strip().title()
             print "  ", leaf_title
             cat = Category(name=leaf_title)
             cat.parent = toplevel
-            cat.slug = slugify(title)
+            cat.slug = slugify(leaf_title)
             cat.save()
             
 class Command(BaseCommand):
