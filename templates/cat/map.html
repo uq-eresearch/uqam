@@ -2,6 +2,9 @@
 
 {% block content %}
 <div>
+<div style="float:right;font-size: 80%;">
+    <a href="{% url place_kml %}">View in Google Earth</a>
+</div>
 <h1>Places</h1>
 <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -35,7 +38,7 @@
     });
 </script>
 
-<div id="map_canvas" style="width:900px; height:600px"></div>
+<div id="map_canvas" style="width:940px; height:600px"></div>
 
 </div>
 {% endblock %}
