@@ -122,6 +122,35 @@ def process_functional_category_record(r):
     f.save()
 
     
+category_name_map = {
+    "Ancestralboard": "ancestral board",
+    "Ancestralfigure": "ancestral figure",
+    "ArtificialHorizon": "artificial horizon",
+    "Chestornament": "chest ornament",
+    "Danceornament": "dance ornament",
+    "Dancepaddle": "dance paddle",
+    "Dancingfeather": "dancing feather",
+    "Flutestopper": "flute stopper",
+    "Foodcontainer": "food container",
+    "Frictionidiophone": "friction idiophone",
+    "Grindingblock": "grinding block",
+    "Headfacemask": "head face mask",
+    "Headornament": "head ornament",
+    "Houselinteldecoration": "houselintel decoration",
+    "Limecontainerstopper": "limecontainer stopper",
+    "Modelcanoe": "model canoe",
+    "Modelhouse": "model house",
+    "Modelpaddle": "model paddle",
+    "Noseornament": "nose ornament",
+    "Skeletalmaterial": "skeletal material",
+    "Slitdrumstick": "slitdrum stick",
+    "Smokingutensil": "smoking utensil",
+    "Spearpointwrapping": "spearpoint wrapping",
+    "Stringedinstrument": "stringed instrument",
+    "Watercontainer": "water container",
+    "Weighinginstrument": "weighing instrument",
+    "Weighingutensil": "weighing utensil",
+        }
 
 def process_artefact_record(r):
     r = clean_row(r)
@@ -180,9 +209,11 @@ def process_artefact_record(r):
 
     # Set Category
     artefact_name = r['Artefact_TypeName']
+    if artefact_name in category_name_map:
+        artefact_name = category_name_map[artefact_name]
     try:
         categories = Category.objects.filter(name__iexact=artefact_name)
-        m.category.add(categories)
+        m.category.add(*categories)
         m.save()
     except Category.MultipleObjectsReturned:
         issue = ImportIssue(
