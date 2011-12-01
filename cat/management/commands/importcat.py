@@ -39,7 +39,7 @@ def process_csv(filename, row_handler):
                 count+=1
                 sys.stdout.write('\r{0}'.format(count))
                 row_handler(row)
-                if (count % 1000) == 0:
+                if (count % 500) == 0:
                     transaction.commit()
     except:
         print "\nUnexpected error: ", sys.exc_info()
@@ -206,9 +206,10 @@ def process_artefact_record(r):
 #        print(sys.exc_info())
 
     m.save()
+    set_category(m, r['Artefact_TypeName'])
 
+def set_category(m, artefact_name):
     # Set Category
-    artefact_name = r['Artefact_TypeName']
     if artefact_name in category_name_map:
         artefact_name = category_name_map[artefact_name]
     try:

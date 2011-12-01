@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
 from cat.models import Person, Place
+from importcat import set_category
 
 from openpyxl.reader.excel import load_workbook
 
@@ -66,6 +67,7 @@ def import_xlsx(filename):
         mapint('circumference', vals[37])
         mapint('weight', vals[38])
         m.save()
+        set_category(m, vals[4])
 
 
 
