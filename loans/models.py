@@ -52,5 +52,9 @@ class MuseumStaff(models.Model):
     name = models.CharField(max_length=200)
     comments = models.TextField(blank=True)
 
+    class Meta:
+        verbose_name_plural = "Museum staff"
+        ordering = ['name']
+
     def __unicode__(self):
         return self.name
