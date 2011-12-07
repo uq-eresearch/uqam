@@ -13,10 +13,13 @@ class ArtefactRepInline(admin.TabularInline):
 
 
 class MOAdmin(UndeleteableModelAdmin):
-    list_display = ('registration_number','cultural_bloc','description','comment',)
+    list_display = ('registration_number', 'cultural_bloc',
+                    'description', 'comment',)
     actions = [add_to_collection]
 
-    list_filter = ('place__country','functional_category__name', 'access_status', 'loan_status', 'cultural_bloc', 'artefact_type', 'collector__name', 'donor__name')
+    list_filter = ('place__country','functional_category__name',
+                    'access_status', 'loan_status', 'cultural_bloc',
+                    'artefact_type', 'collector__name', 'donor__name')
 
     search_fields = ['registration_number', 'description','comment']
 
@@ -135,7 +138,7 @@ admin.site.register(ArtefactType, ArtefactTypeAdmin)
 
 class RegionAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    search_fields = ['name',]
+    search_fields = ['name', 'description']
 admin.site.register(Region, RegionAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
