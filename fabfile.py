@@ -69,7 +69,8 @@ def _syncdb():
 
 def importcat():
     """Remotely import the catalogue and images"""
-#    _virtualenv('./manage.py importcategories /home/django/origdb/ClassificationsNov11.xlsx')
+    classificationsfile = '/home/django/origdb/ClassificationsNov11.xlsx'
+#    _virtualenv('./manage.py importcategories %s' % classificationsfile)
 #    _virtualenv('./manage.py importcat /home/django/origdb cat loans condition')
     _virtualenv('./manage.py importxls /home/django/origdb/Museum.xlsx')
 

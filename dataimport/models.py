@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+
 class ImportIssue(models.Model):
     """
     Tracks any problems which occurred when importing data.
@@ -19,5 +20,4 @@ class ImportIssue(models.Model):
 
     def __unicode__(self):
         return self.description
-
 

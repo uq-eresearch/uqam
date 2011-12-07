@@ -1,8 +1,6 @@
 from django.db import models
-
 from cat.models import MuseumObject
 
-# Create your models here.
 
 class LoanAgreement(models.Model):
     ref = models.CharField(max_length=10)
@@ -16,8 +14,10 @@ class LoanAgreement(models.Model):
     special_loan_conditions = models.TextField()
     comments = models.TextField()
     items = models.ManyToManyField(MuseumObject, through='LoanItem')
+
     class Meta:
         ordering = ['id']
+
     def __unicode__(self):
         return "LoanAgreement " + str(self.id) + " " + self.ref
 
@@ -26,9 +26,9 @@ class LoanItem(models.Model):
     item = models.ForeignKey(MuseumObject)
     out_condition = models.CharField(max_length=30)
     return_condition = models.CharField(max_length=30)
+
     def __unicode__(self):
         return self.item.__unicode__()
-
 
 
 class Client(models.Model):

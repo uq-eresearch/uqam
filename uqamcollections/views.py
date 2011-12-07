@@ -6,19 +6,24 @@ from cat.models import MuseumObject
 from utils.utils import do_paging
 from django.shortcuts import render, get_object_or_404
 
+
 def collections_home(request):
     collections = Collection.objects.filter(is_public=True)
     return render(request, 'collections/collections_list.html',
             {'collections': collections})
 
 class SearchSelectMultipleWidget(forms.widgets.SelectMultiple):
+
     def render():
         pass
+
     def value_from_datadict():
         pass
 
 class CollectionsForm(ModelForm):
-    items = forms.CharField(max_length=100)#, widget=SearchSelectMultipleWidget)
+    items = forms.CharField(max_length=100)  
+    #, widget=SearchSelectMultipleWidget)
+
     class Meta:
         model = Collection
 
@@ -68,7 +73,6 @@ def collection_add(request):
 from feeds import write_collection_as_atom
 def atom_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
-    
+
     response = write_collection_as_atom(request, collection)
     return response
-

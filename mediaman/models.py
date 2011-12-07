@@ -19,13 +19,17 @@ add_introspection_rules(
             },
         ),
     ],
-    ["^mediaman.thumbs.ImageWithThumbsField",])
+    ["^mediaman.thumbs.ImageWithThumbsField", ])
+
 
 class ArtefactRepresentation(models.Model):
     name = models.CharField(max_length=30, blank=True)
-    image = ImageWithThumbsField(upload_to='mediareps/', sizes=((64,64),(400,350)))
+    image = ImageWithThumbsField(
+                upload_to='mediareps/',
+                sizes=((64, 64), (400, 350)))
     url = models.URLField(blank=True)
     artefact = models.ForeignKey(MuseumObject)
+
     def __unicode__(self):
         return self.name
 
@@ -34,8 +38,6 @@ class Document(models.Model):
     name = models.CharField(max_length=30, blank=True)
 #    document = models.FileField(upload_to='docs/')
     document = FileBrowseField('Document', max_length=200, directory='docs/')
+
     def __unicode__(self):
         return self.name
-
-
-

@@ -10,7 +10,8 @@ TEMPLATE_DEBUG = True
 
 #DATABASES = {
 #    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+#        'ENGINE': 'django.db.backends.sqlite3',
+# Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 #        'NAME': 'uqam.db',                      # Or path to database file if using sqlite3.
 #        'USER': '',                      # Not used with sqlite3.
 #        'PASSWORD': '',                  # Not used with sqlite3.
@@ -25,7 +26,7 @@ INSTALLED_APPS += ('debug_toolbar',)
 
 
 # Debug Toolbar configuration
-INTERNAL_IPS = ('127.0.0.1','10.0.2.2')
+INTERNAL_IPS = ('127.0.0.1', '10.0.2.2')
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
     'debug_toolbar.panels.timer.TimerDebugPanel',

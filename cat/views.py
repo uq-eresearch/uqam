@@ -13,9 +13,11 @@ def home_page(request):
     return render(request, 'index.html',
             {'objects': objects})
 
+
 def detail(request, artefact_id):
     a = get_object_or_404(MuseumObject, pk=artefact_id)
     return render(request, 'detail.html', {'artefact': a})
+
 
 def all_countries(request):
     countries = Place.objects.values('country')
@@ -24,17 +26,21 @@ def all_countries(request):
     return render(request, 'cat/country_list.html',
             {'countries': countries})
 
+
 def all_regions(request):
     regions = Place.objects.values('region')
     regions = regions.distinct().annotate(count=Count('museumobject'))
     return render(request, 'cat/region_list.html',
             {'regions': regions})
 
+
 def regions(request, country):
-    regions = Place.objects.filter(country=country).values('region').distinct().annotate(count=Count('museumobject'))
+    regions = Place.objects.filter(country=country).values('region').\
+                    distinct().annotate(count=Count('museumobject'))
     return render(request, 'cat/region_list.html',
             {'regions': regions})
-    
+
+
 def place_detail(request, place_id):
     """
     Lookup a ``Place`` based on its id. Pagination its objects.
@@ -71,7 +77,7 @@ def categories_list(request, full_slug=None):
     objects = MuseumObject.objects.filter(category=parent)
     objects = do_paging(request, objects)
 
-    return render(request, "cat/category_list.html", 
+    return render(request, "cat/category_list.html",
             {"categories": cat_list,
              "objects": objects,
              "breadcrumbs": breadcrumbs})

@@ -3,6 +3,7 @@ from django.db import models
 from cat.models import MuseumObject
 from loans.models import MuseumStaff
 
+
 class Conservator(models.Model):
     title = models.CharField(max_length=30, blank=True)
     firstname = models.CharField(max_length=60, blank=True)
@@ -11,10 +12,11 @@ class Conservator(models.Model):
     email = models.EmailField(max_length=60, blank=True)
     fax = models.CharField(max_length=30, blank=True)
     phone = models.CharField(max_length=30, blank=True)
+
     def __unicode__(self):
         return "%s %s %s" % (self.title, self.firstname, self.surname)
     class Meta:
-        ordering = ['surname','firstname']
+        ordering = ['surname', 'firstname']
 
 
 class ConditionReport(models.Model):

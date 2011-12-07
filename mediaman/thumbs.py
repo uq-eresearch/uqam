@@ -9,9 +9,11 @@ from PIL import Image
 from django.core.files.base import ContentFile
 import cStringIO
 
+
 def generate_thumb(img, thumb_size, format):
     """
-    Generates a thumbnail image and returns a ContentFile object with the thumbnail
+    Generates a thumbnail image and returns a ContentFile object
+    with the thumbnail
     
     Parameters:
     ===========
@@ -20,10 +22,10 @@ def generate_thumb(img, thumb_size, format):
     thumb_size  desired thumbnail size, ie: (200,120)
     
     format      format of the original image ('jpeg','gif','png',...)
-                (this format will be used for the generated thumbnail, too)
+                (will also be used for the generated thumbnail)
     """
-    
-    img.seek(0) # see http://code.djangoproject.com/ticket/8222 for details
+ 
+    img.seek(0)  # see http://code.djangoproject.com/ticket/8222 for details
     image = Image.open(img)
     
     # Convert to RGB if necessary
@@ -42,11 +44,11 @@ def generate_thumb(img, thumb_size, format):
     mode = "RGB"
     image2 = Image.new(mode, thumb_size, "white")
     if oldX < thumb_w:
-        x1, y1 = ((thumb_w-oldX)/2, 0)
+        x1, y1 = ((thumb_w - oldX) / 2, 0)
     else:
         x1, y1 = (0, (thumb_h-oldY)/2)
 
-    image2.paste(image, (x1,y1))
+    image2.paste(image, (x1, y1))
     
     io = cStringIO.StringIO()
     # PNG and GIF are the same, JPG is JPEG
@@ -54,7 +56,7 @@ def generate_thumb(img, thumb_size, format):
         format = 'JPEG'
     
     image2.save(io, format)
-    return ContentFile(io.getvalue())    
+    return ContentFile(io.getvalue())
 
 class ImageWithThumbsFieldFile(ImageFieldFile):
     """
