@@ -14,22 +14,20 @@
     $(document).ready(
     function initialize() {
         var myOptions = {
-            zoom: 2, // Zoomed out to show location in world
+            zoom: 4, // Zoomed out to show location in world
             disableDefaultUI: false,
             mapTypeId: google.maps.MapTypeId.SATELLITE
         };
-        var latlng = new google.maps.LatLng(0, 0)
-        myOptions.center = latlng;
+        var center = new google.maps.LatLng(-23.5, 145.3); // Near Barcaldine
+        myOptions.center = center;
 
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
 //        var placesLayer = new google.maps.KmlLayer('http://localhost:8000/place/kml');
 //        var placesLayer = new google.maps.KmlLayer('{{kml_url}}');
-        var placesLayer = new google.maps.KmlLayer("http://anthropology-uat.metadata.net/static/places.kml");
+        var placesLayer = new google.maps.KmlLayer("http://anthropology-uat.metadata.net/static/places.kml", {preserveViewport: true});
         placesLayer.setMap(map);
 
-//        var latlng = new google.maps.LatLng({{place.latitude}}, {{place.longitude}})
-//        myOptions.center = latlng;
 //        var marker = new google.maps.Marker({
 //            map: map,
 //            position: latlng,
