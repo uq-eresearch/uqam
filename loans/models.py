@@ -1,6 +1,6 @@
 from django.db import models
 
-from cat.models import MuseumObject, Person
+from cat.models import MuseumObject
 
 # Create your models here.
 
@@ -9,8 +9,8 @@ class LoanAgreement(models.Model):
     client = models.ForeignKey('Client')
     date_borrowed = models.DateField()
     return_date = models.DateField()
-    approved_by = models.ForeignKey(Person, related_name="approved_by")
-    prepared_by = models.ForeignKey(Person, related_name="prepared_by")
+    approved_by = models.ForeignKey('MuseumStaff', related_name="approved_by")
+    prepared_by = models.ForeignKey('MuseumStaff', related_name="prepared_by")
     loan_type = models.CharField(max_length=20)
     loan_purpose = models.CharField(max_length=20)
     special_loan_conditions = models.TextField()
@@ -44,6 +44,13 @@ class Client(models.Model):
 
     class Meta:
         ordering = ['name']
+
+    def __unicode__(self):
+        return self.name
+
+class MuseumStaff(models.Model):
+    name = models.CharField(max_length=200)
+    comments = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
