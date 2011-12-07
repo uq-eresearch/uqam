@@ -7,9 +7,9 @@ class MuseumObject(models.Model):
     """
     id = models.IntegerField(primary_key=True)
     registration_number = models.IntegerField(db_index=True, unique=True)
-    old_registration_number = models.CharField(max_length=10, blank=True)
-    other_number = models.CharField(max_length=10, blank=True)
-    reg_counter = models.CharField(max_length=10, blank=True)
+    old_registration_number = models.CharField(max_length=50, blank=True)
+    other_number = models.CharField(max_length=50, blank=True)
+    reg_counter = models.CharField(max_length=50, blank=True)
 
     functional_category = models.ForeignKey('FunctionalCategory')
     artefact_type = models.ForeignKey('ArtefactType', blank=True)
@@ -20,18 +20,19 @@ class MuseumObject(models.Model):
     storage_bay = models.CharField(max_length=4, blank=True)
     storage_shelf_box_drawer = models.CharField(max_length=4, blank=True)
 
-    acquisition_date = models.CharField(max_length=30, blank=True)
-    acquisition_method = models.CharField(max_length=30, blank=True)
-    loan_status = models.CharField(max_length=30, blank=True)
-    access_status = models.CharField(max_length=30, blank=True)
+    acquisition_date = models.CharField(max_length=50, blank=True)
+    acquisition_method = models.CharField(max_length=50, blank=True)
+    loan_status = models.CharField(max_length=50, blank=True)
+    access_status = models.CharField(max_length=50, blank=True)
 
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
-    place = models.ForeignKey('Place', null=True)
+    place = models.ForeignKey('Place', null=True, db_index=True)
 
     donor = models.ForeignKey(
             'Person', 
             null=True, 
             blank=True, 
+            db_index=True,
             related_name="donated_objects")
     donor_2 = models.ForeignKey(
             'Person', 
@@ -47,24 +48,25 @@ class MuseumObject(models.Model):
             'Person', 
             null=True, 
             blank=True, 
+            db_index=True,
             related_name="collected_objects")
     collector_2 = models.ForeignKey(
             'Person', 
             null=True, 
             blank=True, 
             related_name="collected_objects_2")
-    how_collector_obtained = models.CharField(max_length=30, blank=True)
-    when_collector_obtained = models.CharField(max_length=30, blank=True)
+    how_collector_obtained = models.CharField(max_length=50, blank=True)
+    when_collector_obtained = models.CharField(max_length=50, blank=True)
 
-    source = models.CharField(max_length=30)
-    how_source_obtained = models.CharField(max_length=30)
+    source = models.CharField(max_length=50)
+    how_source_obtained = models.CharField(max_length=50)
 
-    maker_or_artist = models.CharField(max_length=100, blank=True)
-    site_name_number = models.CharField(max_length=30, blank=True)
-    raw_material = models.CharField(max_length=30, blank=True)
+    maker = models.ForeignKey('Maker', null=True, blank=True)
+    site_name_number = models.CharField(max_length=150, blank=True)
+    raw_material = models.CharField(max_length=150, blank=True)
     indigenous_name = models.CharField(max_length=100, blank=True)
-    recorded_use = models.CharField(max_length=30, blank=True)
-    assoc_cultural_group = models.CharField(max_length=50, blank=True)
+    recorded_use = models.CharField(max_length=300, blank=True)
+    assoc_cultural_group = models.CharField(max_length=100, blank=True)
     exhibition_history = models.TextField(blank=True)
     description = models.TextField(blank=True)
 
@@ -106,7 +108,7 @@ class MuseumObject(models.Model):
 
 
 class FunctionalCategory(models.Model):
-    name = models.CharField('function category', max_length=30)
+    name = models.CharField('function category', max_length=30, unique=True)
     definition = models.TextField(blank=True)
 
     def __unicode__(self):
@@ -117,7 +119,7 @@ class FunctionalCategory(models.Model):
         ordering = ['name']
 
 class CulturalBloc(models.Model):
-    name = models.CharField(max_length=30, db_index=True)
+    name = models.CharField(max_length=30, db_index=True, unique=True)
     definition = models.TextField(blank=True)
     @models.permalink
     def get_absolute_url(self):
@@ -133,9 +135,9 @@ class ArtefactType(models.Model):
 
     Soon to be superseded by `Category`
     """
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=150, unique=True)
     definition = models.TextField(blank=True)
-    see_also = models.CharField(max_length=50, blank=True)
+    see_also = models.CharField(max_length=150, blank=True)
     def __unicode__(self):
         return self.name
     class Meta:
@@ -145,7 +147,7 @@ class Place(models.Model):
     country = models.CharField(max_length=30, blank=True)
     region = models.CharField(max_length=40, blank=True)
     australian_state = models.CharField(max_length=20, blank=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=150)
 
     is_corrected = models.BooleanField(default=False, 
             help_text="Has someone manually moved the marker to it's correct location.")
@@ -192,7 +194,7 @@ class Person(models.Model):
     """
     A collector or photographer who has contributed to the museum
     """
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=150)
     comments = models.TextField(blank=True)
     related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people',blank=True)
     @models.permalink
@@ -208,7 +210,7 @@ class Person(models.Model):
         return ("name__iexact",)
 
 class Region(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=60, unique=True)
     description = models.CharField(max_length=200)
     def __unicode__(self):
         return self.name
@@ -217,7 +219,7 @@ class Category(models.Model):
     """
     A hierarchical set of categories for classifying Museum Objects
     """
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     description = models.TextField(blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name="children")
     slug = models.SlugField(help_text="Used in URLs")
