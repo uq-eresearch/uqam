@@ -4,13 +4,16 @@ from django.template.defaultfilters import slugify
 
 from openpyxl.reader.excel import load_workbook
 
-def delete_all_categories():
+def delete_all_categories_sqlite():
     from django.db import connection
     cursor = connection.cursor()
     cursor.execute("DELETE FROM `cat_category`")
+def delete_all_categories_postgres():
+    Category.objects.all().delete()
 
 def import_categories(filename):
-    delete_all_categories()
+#    delete_all_categories()
+    delete_all_categories_postgres()
     wb = load_workbook(filename = filename)
     categories_sheet = wb.get_sheet_by_name(name = 'Categories')
 

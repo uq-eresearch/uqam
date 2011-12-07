@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
-from cat.models import Person, Place, Region, Category
-from loans.models import LoanAgreement, LoanItem, Client
+from cat.models import Person, Place, Region, Category, Maker
+from loans.models import LoanAgreement, LoanItem, Client, MuseumStaff
 from condition.models import ConditionReport, ConservationAction, Deaccession, Conservator
 from dataimport.models import ImportIssue
 from django.core import management
@@ -59,12 +59,14 @@ def process_person_record(r):
 
 def process_artefactmore_record(r):
     '''Save details from an Artefact More.csv row into an Artefact Model'''
+    sys.stdout.write(' Id=%s' % r['Artefact_Registration'])
     m = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
     m.indigenous_name = r['Indigenous_Name']
     m.recorded_use = r['Recorded_Use']
     m.raw_material = r['Raw_Material']
     m.assoc_cultural_group = r['Assoc_Cultural_Group']
-    m.maker_or_artist = r['Maker_Artist']
+
+    m.maker_or_artist, created = Maker.objects.get_or_create(name=r['Maker_Artist'])
 
     def mapint(attr, fieldname):
         try:
@@ -153,6 +155,7 @@ category_name_map = {
         }
 
 def process_artefact_record(r):
+    sys.stdout.write(' Id=%s' % r['Artefact_Registration'])
     r = clean_row(r)
 
     m = MuseumObject()
@@ -235,8 +238,8 @@ def process_loan_record(r):
     l.id = r['LoanId']
     l.date_borrowed = r['Borrowing_Date']
     l.return_date = r['Return_Date']
-    l.approved_by, created = Person.objects.get_or_create(name=r['Approved by'])
-    l.prepared_by, created = Person.objects.get_or_create(name=r['Prepared by'])
+    l.approved_by, created = MuseumStaff.objects.get_or_create(name=r['Approved by'])
+    l.prepared_by, created = MuseumStaff.objects.get_or_create(name=r['Prepared by'])
     l.clientNumber = r['ClientNumber']
     l.special_loan_conditions = r['Loan_Conditions']
     l.location = r['Location']
@@ -276,6 +279,7 @@ def process_regioncombo(row):
 
 
 def process_condition(r):
+    sys.stdout.write(' Registration=%s' % r['Registration'])
     c = ConditionReport()
     c.item = MuseumObject.objects.get(registration_number=r['Registration'])
     cond = r['ConditionCode']
@@ -284,7 +288,7 @@ def process_condition(r):
     if r['Condition_Date']:
         c.date = r['Condition_Date']
     c.details = r['Details']
-    c.report_author,created = Person.objects.get_or_create(name=r['Report_Produced'])
+    c.report_author,created = MuseumStaff.objects.get_or_create(name=r['Report_Produced'])
     c.change_reason = r['Change_Reason']
     try:
         c.save()
@@ -293,6 +297,7 @@ def process_condition(r):
         print sys.exc_info()
         
 def process_conservation(r):
+    sys.stdout.write(' Registration=%s' % r['Registration'])
     item = MuseumObject.objects.get(registration_number=r['Registration'])
     c, created = ConservationAction.objects.get_or_create(item=item, date=r['Action_Date'])
     c.action = r['Conservation_action']
@@ -310,7 +315,7 @@ def process_conservation(r):
         print sys.exc_info()
 def process_deaccession(r):
     item = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
-    person, created = Person.objects.get_or_create(name=r['Museum_StaffName'])
+    person, created = MuseumStaff.objects.get_or_create(name=r['Museum_StaffName'])
 
     d,created = Deaccession.objects.get_or_create(item=item,
                                                   person=person,
@@ -320,7 +325,7 @@ def process_deaccession(r):
     d.save()
 
 def process_museumstaff(r):
-    p, created = Person.objects.get_or_create(name=r['Museum_StaffName'])
+    p, created = MuseumStaff.objects.get_or_create(name=r['Museum_StaffName'])
     if not created:
         p.comments = r['Details']
     else:
@@ -375,7 +380,7 @@ mappings = {
 
 def migrate_and_import(directory, appname, mapping):
 #    management.call_command('reset', appname, interactive=False)
-    management.call_command('migrate', appname, interactive=False)
+#    management.call_command('migrate', appname, interactive=False)
     for filename, function in mapping[appname]:
         process_csv(join(directory, filename), function)
 

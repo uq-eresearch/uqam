@@ -239,3 +239,10 @@ class Category(models.Model):
             category = category.parent
         url = "/categories" + url
         return url
+
+class Maker(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    comment = models.TextField(blank=True)
+
+    def __unicode__(self):
+        return self.name

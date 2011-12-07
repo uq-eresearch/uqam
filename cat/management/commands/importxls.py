@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
-from cat.models import Person, Place
+from cat.models import Person, Place, Maker
 from importcat import set_category
 
 from openpyxl.reader.excel import load_workbook
@@ -55,7 +55,7 @@ def import_xlsx(filename):
         m.indigenous_name = vals[30]
         m.assoc_cultural_group = vals[31]
         m.recorded_use = vals[32]
-        m.maker_or_artist = vals[33]
+        m.maker_or_artist, created = Maker.objects.get_or_create(name=vals[33])
         def mapint(attr, val):
             try:
                 setattr(m, attr, int(val))
