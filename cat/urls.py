@@ -46,9 +46,9 @@ urlpatterns = patterns('cat.views',
     url(r'^blocs/(.*)$',
         CulturalBlocListView.as_view(), name='culturalbloc_detail'),
 
-    url(r'^person/$',
-        ListView.as_view(
-            model=Person), name='person_list'),
+    url(r'^person/$', 'person_list', name='person_list'),
+#        ListView.as_view(
+#            model=Person), name='person_list'),
     url(r'^person/(?P<pk>\d+)$',
         DetailView.as_view(
             model=Person), name="person_detail"),

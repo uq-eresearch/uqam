@@ -1,10 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from models import MuseumObject, Place, Category, Region
+from models import MuseumObject, Place, Category, Region, Person
 from django.db.models import Count
 from django.utils.xmlutils import SimplerXMLGenerator
 from utils.utils import do_paging
-from django.db.models import Count
 
 
 def home_page(request):
@@ -82,7 +81,7 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     """
     Write out all the knows places to KML
     """
-    mimetype = "application/vnd.google-earth.kml+xml"
+#    mimetype = "application/vnd.google-earth.kml+xml"
 #    mimetype = "text/html"
     places = Place.objects.exclude(latitude=None).annotate(Count('museumobject'))
 
@@ -115,3 +114,13 @@ def place_map(request):
     kml_url = request.build_absolute_uri(reverse('place_kml'))
     return render(request, "cat/map.html",
             {"kml_url": kml_url})
+
+def person_list(request):
+#    collectors = Person.objects.annotate(Count('collected_objects'))
+#    donators = Person.objects.annotate(Count('donated_objects'))
+    person_list = Person.objects.annotate(Count('donated_objects')).annotate(Count('collected_objects'))
+    #.annotate(Count('collected_objects'))
+    return render(request, "cat/person_list.html",
+            {"person_list": person_list})
+#            {"collectors": collectors,
+#             "donators": donators})

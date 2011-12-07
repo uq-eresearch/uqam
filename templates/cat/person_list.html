@@ -12,9 +12,9 @@
 <tr><td>
 <a href="{{person.get_absolute_url}}">{{person.name}}</a>
 </td><td>
- {{person.collected_objects.count}}
+ {{person.collected_objects__count}}
  </td><td>
- {{person.donated_objects.count}}
+ {{person.donated_objects__count}}
  </td></tr>
 {% endfor %}
 </table>
