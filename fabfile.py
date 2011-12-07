@@ -1,6 +1,5 @@
 from fabric.api import env, local, run, put, cd, prefix, sudo, settings, get
 from fabric.api import lcd, open_shell
-from fabric.contrib.files import sed
 
 env.user = 'django'
 env.gateway = 'uqdayers@gladys'
@@ -17,8 +16,8 @@ def upgrade():
     """
     push()
     reqs()
-    collectstatic()
-    syncdb()
+    _collectstatic()
+    _syncdb()
     reload()
 
 
@@ -49,34 +48,33 @@ def reqs():
 
 def push():
     """Deploy the newest source to the server"""
-    filename = pack()
+    filename = _pack()
     put(filename, filename)
     with cd(env.appdir):
         run('tar xjf %s' % filename)
 
-def collectstatic():
-    virtualenv('./manage.py collectstatic --noinput')
+def _collectstatic():
+    _virtualenv('./manage.py collectstatic --noinput')
 
-def pack():
+def _pack():
     filename = '/tmp/uqam.tar.bz2'
     local('git archive master | bzip2 > %s' % filename)
     return filename
 
 
-def syncdb():
+def _syncdb():
     """Migrate the remote database to the latest version"""
-    virtualenv('./manage.py syncdb')
-    virtualenv('./manage.py migrate')
+    _virtualenv('./manage.py syncdb')
+    _virtualenv('./manage.py migrate')
 
 def importcat():
     """Remotely import the catalogue and images"""
-    virtualenv('./manage.py importcategories /home/django/origdb/ClassificationsNov11.xlsx')
-    virtualenv('./manage.py importcat /home/django/origdb cat loans condition')
-    virtualenv('./manage.py importxls /home/django/origdb/Museum.xlsx')
-    virtualenv('./manage.py importmedia /home/django/images')
+#    _virtualenv('./manage.py importcategories /home/django/origdb/ClassificationsNov11.xlsx')
+#    _virtualenv('./manage.py importcat /home/django/origdb cat loans condition')
+    _virtualenv('./manage.py importxls /home/django/origdb/Museum.xlsx')
 
 def importimages():
-    virtualenv('./manage.py importmedia /home/django/images')
+    _virtualenv('./manage.py importmedia /home/django/images')
 
 def copyimages():
     local('rsync -rv %s(imagesdir) django@anthropology-uat:images')
@@ -90,7 +88,7 @@ def copyimages():
 #    put(db, '/tmp/db.mdb')
 #    run('./manage.py importcat pathtomdb')
 
-def virtualenv(cmd):
+def _virtualenv(cmd):
     with cd(env.appdir):
         with prefix('source %(virtenv)s/bin/activate' % env):
             run(cmd)
@@ -105,11 +103,11 @@ def reload():
 
 def rebuild_index():
     """Rebuild the entire search index"""
-    virtualenv('./manage.py rebuild_index')
+    _virtualenv('./manage.py rebuild_index')
 
 def update_index():
     """Update search index"""
-    virtualenv('./manage.py update_index')
+    _virtualenv('./manage.py update_index')
 
 def test_upgrade():
     temp_archive = "/tmp/current.tar.gz"
@@ -121,7 +119,7 @@ def test_upgrade():
         local('rm -rf /tmp/uqam.db /tmp/uqam')
         local('tar xzf %s' % temp_archive)
 
-    filename = pack()
+    filename = _pack()
     with lcd('/tmp/uqam'):
         local('tar xjf %s' % filename)
         local('sed -i -r -e "s/\\/home\\/django/\\/tmp/g" default_settings.py')
@@ -134,3 +132,6 @@ def test_upgrade():
 
 def shell():
     open_shell()
+
+def setup_local_database():
+    local()
