@@ -29,8 +29,8 @@
 <b>Place:</b> <a href="{{museumobject.place.get_absolute_url}}">{{ museumobject.place }}</a>
 <br>
 
-{% if museumobject.maker_or_artist %}
-    <b>Maker or artist: </b> {{ museumobject.maker_or_artist }}
+{% if museumobject.maker %}
+<b>Maker or artist: </b> <a href="{{ museumobject.maker.get_absolute_url }}">{{ museumobject.maker }} </a>
     <br>
 {% endif %}
 

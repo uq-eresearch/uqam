@@ -1,6 +1,6 @@
 from django.contrib import admin
 from models import MuseumObject, FunctionalCategory, Person, Place
-from models import CulturalBloc, ArtefactType, Region, Category
+from models import CulturalBloc, ArtefactType, Region, Category, Maker
 from mediaman.models import ArtefactRepresentation
 from common.admin import UndeleteableModelAdmin
 from cat.adminactions import merge_selected, add_to_collection
@@ -66,7 +66,7 @@ class MOAdmin(UndeleteableModelAdmin):
             'fields': ('description', 'comment')
         }),
         ('Extra details', {
-            'fields': ('maker_or_artist', 'site_name_number', 'raw_material',
+            'fields': ('maker', 'site_name_number', 'raw_material',
                        'indigenous_name', 'recorded_use', 'assoc_cultural_group')
         }),
         ('Location', {
@@ -142,3 +142,8 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ('name', 'slug')
 admin.site.register(Category, CategoryAdmin)
+
+class MakerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'comment')
+    search_fields = ('name', 'comment')
+admin.site.register(Maker, MakerAdmin)

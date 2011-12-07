@@ -55,7 +55,7 @@ def import_xlsx(filename):
         m.indigenous_name = vals[30]
         m.assoc_cultural_group = vals[31]
         m.recorded_use = vals[32]
-        m.maker_or_artist, created = Maker.objects.get_or_create(name=vals[33])
+        m.maker, created = Maker.objects.get_or_create(name=vals[33])
         def mapint(attr, val):
             try:
                 setattr(m, attr, int(val))
