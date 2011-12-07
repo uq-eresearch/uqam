@@ -240,9 +240,33 @@ class Category(models.Model):
         url = "/categories" + url
         return url
 
+class FirstLetterManager(models.Manager):
+    def first_letters(self):
+        """Returns all the first letters of names, in lowercase"""
+        from django.db import connection
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT DISTINCT LOWER(LEFT(name, 1)) as character
+            FROM cat_person
+            ORDER by character""")
+        result_list = []
+        for row in cursor.fetchall():
+            result_list.append(row[0])
+        return result_list
+
+
 class Maker(models.Model):
     name = models.CharField(max_length=200, unique=True)
     comment = models.TextField(blank=True)
+
+    objects = FirstLetterManager()
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('maker_detail', [str(self.id)])
+
+    class Meta:
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name

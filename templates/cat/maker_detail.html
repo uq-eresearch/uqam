@@ -1,0 +1,29 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div style="float:right;font-size: 80%;">
+    {% if user.is_staff %}
+        <a href={% url admin:cat_person_change person.id %}>Admin</a>
+    {% endif %}
+</div>
+<h1>{{ person.name }}</h1>
+
+<p>{{ person.comments }}</p>
+
+<h3>Related Documents</h3>
+{% for doc in person.related_documents.all %}
+<a href="{{doc.document.url}}">{{doc.name}}</a> <br>
+{% endfor %}
+
+
+<div class="span-12">
+<h2>Created objects</h2>
+{% for mo in person.museumobject_set.all %}
+
+<a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
+<br>
+{% endfor %}
+</div>
+
+
+{% endblock %}

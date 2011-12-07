@@ -74,4 +74,9 @@ urlpatterns = patterns('cat.views',
 
     url(r'^categories/(?P<full_slug>.+)/$', 'categories_list', name='categories_list'),
 
+
+
+    url(r'^maker/$', 'maker_list', name='maker_list'),
+    url(r'^maker/([a-z])/$', 'maker_list_letter'),
+    url(r'^maker/(\d+)/$', 'maker_detail', name='maker_detail'),
 )

@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from models import MuseumObject, Place, Category, Region, Person
+from models import MuseumObject, Place, Category, Region, Person, Maker
 from django.db.models import Count
 from django.utils.xmlutils import SimplerXMLGenerator
 from utils.utils import do_paging
@@ -130,3 +130,24 @@ def person_list(request):
             {"person_list": person_list})
 #            {"collectors": collectors,
 #             "donators": donators})
+
+def maker_list(request):
+    maker_list = Maker.objects.exclude(name="").annotate(Count('museumobject'))
+    objects = do_paging(request, maker_list)
+    return render(request, "cat/person_list.html",
+            {"objects": objects})
+
+def maker_list_letter(request, letter):
+    import string
+    maker_list = Maker.objects.filter(name__istartswith=letter).annotate(Count('museumobject'))
+    first_letters = Maker.objects.first_letters()
+    first_letters = [(a, a in first_letters) for a in string.lowercase]
+
+    objects = do_paging(request, maker_list)
+    return render(request, "cat/person_list.html",
+            {"objects": objects,
+             "first_letters": first_letters})
+
+def maker_detail(request, maker_id):
+    maker = get_object_or_404(Maker, pk=maker_id)
+    return render(request, 'cat/maker_detail.html', {'person': maker})

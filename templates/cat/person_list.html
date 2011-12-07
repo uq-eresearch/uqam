@@ -3,22 +3,40 @@
 {% block content %}
 <h1>People</h1>
 
+{% for letter, some_exist in first_letters %}
+{% if some_exist %}
+    <a href="{% url maker_list %}{{ letter }}/">{{letter}}</a> 
+{% else %}
+    {{letter}} 
+{% endif %}
+{% endfor %}
 
-<table><tr>
-        <th>Name</th><th>Collected</th><th>Donated</th>
-    </tr>
-{% for person in person_list %}
-
-<tr><td>
-<a href="{{person.get_absolute_url}}">{{person.name}}</a>
-</td><td>
- {{person.collected_objects__count}}
- </td><td>
- {{person.donated_objects__count}}
- </td></tr>
+{% if objects.object_list %}
+<table>
+{% for object in objects.object_list %}
+    <tr><td>
+        <a href="{{ object.get_absolute_url }}">{{object}}</a>
+    </td><td>
+        {{ object.museumobject__count }}
+    </td></tr>
 {% endfor %}
 </table>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if objects.has_previous %}
+            <a href="?page={{ objects.previous_page_number }}">previous</a>
+        {% endif %}
 
+        <span class="current">
+            Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
+        </span>
+
+        {% if objects.has_next %}
+            <a href="?page={{ objects.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
 
 {% endblock %}
