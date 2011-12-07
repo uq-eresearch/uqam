@@ -7,6 +7,7 @@ from cat.adminactions import merge_selected, add_to_collection
 
 class ArtefactRepInline(admin.TabularInline):
     model = ArtefactRepresentation
+    search_fields = ['name',]
 #    classes = ('collapse closed',)
 
 
@@ -15,7 +16,7 @@ class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number','cultural_bloc','description','comment',)
     actions = [add_to_collection]
 
-    list_filter = ('place__country','functional_category__name', 'access_status', 'loan_status', 'cultural_bloc', 'artefact_type')
+    list_filter = ('place__country','functional_category__name', 'access_status', 'loan_status', 'cultural_bloc', 'artefact_type', 'collector__name', 'donor__name')
 
     search_fields = ['registration_number', 'description','comment']
 
@@ -111,11 +112,13 @@ admin.site.register(Place, PlaceAdmin)
 
 class FunctionCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'definition')
+    search_fields = ['name',]
     actions = [merge_selected]
 admin.site.register(FunctionalCategory, FunctionCategoryAdmin)
 
 class CulturalBlocAdmin(admin.ModelAdmin):
     list_display = ('name', 'definition')
+    search_fields = ['name',]
     actions = [merge_selected]
 admin.site.register(CulturalBloc, CulturalBlocAdmin)
 
@@ -126,11 +129,13 @@ admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
 
 class ArtefactTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'definition')
+    search_fields = ['name',]
     actions = [merge_selected]
 admin.site.register(ArtefactType, ArtefactTypeAdmin)
 
 class RegionAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
+    search_fields = ['name',]
 admin.site.register(Region, RegionAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
