@@ -66,7 +66,8 @@ def process_artefactmore_record(r):
     m.raw_material = r['Raw_Material']
     m.assoc_cultural_group = r['Assoc_Cultural_Group']
 
-    m.maker, created = Maker.objects.get_or_create(name=r['Maker_Artist'])
+    if r['Maker_Artist']:
+        m.maker, created = Maker.objects.get_or_create(name=r['Maker_Artist'])
 
     def mapint(attr, fieldname):
         try:
