@@ -1,42 +1,27 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>People</h1>
+<h1>{{ page_title }}</h1>
 
 {% for letter, some_exist in first_letters %}
 {% if some_exist %}
-    <a href="{% url maker_list %}{{ letter }}/">{{letter}}</a> 
+    <a href="{{base_url}}{{ letter }}/">{{letter}}</a>
 {% else %}
-    {{letter}} 
+    {{letter}}
 {% endif %}
 {% endfor %}
 
-{% if objects.object_list %}
+{% if object_list %}
 <table>
-{% for object in objects.object_list %}
+{% for object in object_list %}
     <tr><td>
         <a href="{{ object.get_absolute_url }}">{{object}}</a>
     </td><td>
-        {{ object.museumobject__count }}
+        {{ object.num_objects }}
     </td></tr>
 {% endfor %}
 </table>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if objects.has_previous %}
-            <a href="?page={{ objects.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
-        </span>
-
-        {% if objects.has_next %}
-            <a href="?page={{ objects.next_page_number }}">next</a>
-        {% endif %}
-    </span>
-</div>
 {% endif %}
 
 {% endblock %}

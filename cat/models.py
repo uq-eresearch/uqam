@@ -196,7 +196,9 @@ class Person(models.Model):
     """
     name = models.CharField(max_length=150)
     comments = models.TextField(blank=True)
-    related_documents = models.ManyToManyField('mediaman.Document', related_name='related_people',blank=True)
+    related_documents = models.ManyToManyField('mediaman.Document',
+            related_name='related_people',blank=True)
+
     @models.permalink
     def get_absolute_url(self):
         return ('person_detail', [str(self.id)])
@@ -212,6 +214,7 @@ class Person(models.Model):
 class Region(models.Model):
     name = models.CharField(max_length=60, unique=True)
     description = models.CharField(max_length=200)
+
     def __unicode__(self):
         return self.name
 
@@ -242,26 +245,12 @@ class Category(models.Model):
         url = "/categories" + url
         return url
 
-class FirstLetterManager(models.Manager):
-    def first_letters(self):
-        """Returns all the first letters of names, in lowercase"""
-        from django.db import connection
-        cursor = connection.cursor()
-        cursor.execute("""
-            SELECT DISTINCT LOWER(LEFT(name, 1)) as character
-            FROM cat_person
-            ORDER by character""")
-        result_list = []
-        for row in cursor.fetchall():
-            result_list.append(row[0])
-        return result_list
 
 
 class Maker(models.Model):
+    """A person or entity who created an item in the collection"""
     name = models.CharField(max_length=200, unique=True)
     comment = models.TextField(blank=True)
-
-    objects = FirstLetterManager()
 
     @models.permalink
     def get_absolute_url(self):

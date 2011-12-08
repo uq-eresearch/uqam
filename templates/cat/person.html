@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>People</h1>
+<div class="span-8">
+<h2><a href="{% url maker_list %}">Makers</a></h2>
+</div>
+
+<div class="span-8">
+<h2><a href="{% url donor_list %}">Donors</a></h2>
+</div>
+
+<div class="span-8 last">
+<h2><a href="{% url collector_list %}">Collectors</a></h2>
+</div>
+
+{% endblock %}

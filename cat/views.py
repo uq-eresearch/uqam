@@ -1,13 +1,16 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from models import MuseumObject, Place, Category, Region, Person, Maker
+from django.core.urlresolvers import reverse
+from models import MuseumObject, Place, Category, Region
 from django.db.models import Count
 from django.utils.xmlutils import SimplerXMLGenerator
 from utils.utils import do_paging
+import string
 
 
 def home_page(request):
-    objects = MuseumObject.objects.exclude(artefactrepresentation__isnull=True)
+    objects = MuseumObject.objects.exclude(
+            artefactrepresentation__isnull=True)
     objects = do_paging(request, objects)
 
     return render(request, 'index.html',
@@ -69,7 +72,8 @@ def categories_list(request, full_slug=None):
     if full_slug:
         slugs = full_slug.split('/')
         for slug in slugs:
-            parent = get_object_or_404(Category, parent=parent, slug__exact=slug)
+            parent = get_object_or_404(Category,
+                    parent=parent, slug__exact=slug)
             breadcrumbs.append(parent)
 
     cat_list = Category.objects.filter(parent=parent)
@@ -89,21 +93,23 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     """
 #    mimetype = "application/vnd.google-earth.kml+xml"
 #    mimetype = "text/html"
-    places = Place.objects.exclude(latitude=None).annotate(Count('museumobject'))
+    places = Place.objects.exclude(
+            latitude=None).annotate(Count('museumobject'))
 
     response = HttpResponse(mimetype=mimetype)
     handler = SimplerXMLGenerator(response, encoding)
 
     handler.startDocument()
-    handler.startElement(u"kml", {u"xmlns": u"http://www.opengis.net/kml/2.2"})
+    handler.startElement(u"kml",
+            {u"xmlns": u"http://www.opengis.net/kml/2.2"})
     handler.startElement(u"Document", {})
 
     for place in places:
         place_url = request.build_absolute_uri(place.get_absolute_url())
         handler.startElement(u"Placemark", {})
-        handler.addQuickElement(u"name", 
+        handler.addQuickElement(u"name",
                 "%s (%s)" % (place.name, place.museumobject__count))
-        handler.addQuickElement(u"description", 
+        handler.addQuickElement(u"description",
                 '<a href="%s">%s</a>' % (place_url, place.__unicode__()))
         handler.startElement(u"Point", {})
         handler.addQuickElement(u"coordinates", place.get_kml_coordinates())
@@ -115,39 +121,49 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
 
     return response
 
-from django.core.urlresolvers import reverse
 def place_map(request):
     kml_url = request.build_absolute_uri(reverse('place_kml'))
     return render(request, "cat/map.html",
             {"kml_url": kml_url})
 
-def person_list(request):
-#    collectors = Person.objects.annotate(Count('collected_objects'))
-#    donators = Person.objects.annotate(Count('donated_objects'))
-    person_list = Person.objects.annotate(Count('donated_objects')).annotate(Count('collected_objects'))
-    #.annotate(Count('collected_objects'))
-    return render(request, "cat/person_list.html",
-            {"person_list": person_list})
-#            {"collectors": collectors,
-#             "donators": donators})
 
-def maker_list(request):
-    maker_list = Maker.objects.exclude(name="").annotate(Count('museumobject'))
-    objects = do_paging(request, maker_list)
-    return render(request, "cat/person_list.html",
-            {"objects": objects})
+from django.views.generic import ListView
+class PeopleListView(ListView):
+    template_name = "cat/person_list.html"
+    counted_obj = "museumobject"
+    paginate_by = 25
+    view_name = 'maker_list'
+    page_title = 'People'
+    def get_queryset(self):
+        return self.model.objects.filter(
+                name__istartswith=self.kwargs['letter']
+            ).exclude(**{self.counted_obj: None}
+            ).annotate(
+                num_objects=Count(self.counted_obj)
+            )
 
-def maker_list_letter(request, letter):
-    import string
-    maker_list = Maker.objects.filter(name__istartswith=letter).annotate(Count('museumobject'))
-    first_letters = Maker.objects.first_letters()
-    first_letters = [(a, a in first_letters) for a in string.lowercase]
+    def get_context_data(self, **kwargs):
+        context = super(PeopleListView, self).get_context_data(**kwargs)
+        first_letters = self.first_letters()
 
-    objects = do_paging(request, maker_list)
-    return render(request, "cat/person_list.html",
-            {"objects": objects,
-             "first_letters": first_letters})
+        # turn into a list of tuples, all letters with a boolean for exists
+        first_letters = [(a, a in first_letters) for a in string.lowercase]
+        context['first_letters'] = first_letters
 
-def maker_detail(request, maker_id):
-    maker = get_object_or_404(Maker, pk=maker_id)
-    return render(request, 'cat/maker_detail.html', {'person': maker})
+        context['base_url'] = reverse(self.view_name)
+        context['page_title'] = self.page_title
+        return context
+
+    def first_letters(self, name='name'):
+        """Returns all the first letters of names, in lowercase"""
+        from django.db import connection
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT DISTINCT LOWER(LEFT({0}, 1)) as character
+            FROM {1}
+            WHERE {0} <> ''
+            ORDER by character""".format(name, self.model._meta.db_table))
+        result_list = []
+        for row in cursor.fetchall():
+            result_list.append(row[0])
+        return result_list
