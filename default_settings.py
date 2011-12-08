@@ -13,22 +13,13 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-# Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#        'NAME': '/home/django/uqam.db',                      # Or path to database file if using sqlite3.
-#        'USER': '',                      # Not used with sqlite3.
-#        'PASSWORD': '',                  # Not used with sqlite3.
-#        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-#    },
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'uqam',                      # Or path to database file if using sqlite3.
-        'USER': 'uqam',                      # Not used with sqlite3.
-        'PASSWORD': 'uqam',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+# Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '/home/django/uqam.db',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     },
 }
