@@ -219,10 +219,12 @@ class Category(models.Model):
     """
     A hierarchical set of categories for classifying Museum Objects
     """
-    name = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=30)
     description = models.TextField(blank=True)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name="children")
+    parent = models.ForeignKey('self', blank=True,
+            null=True, related_name="children")
     slug = models.SlugField(help_text="Used in URLs")
+
     def __unicode__(self):
         if self.parent:
             return self.parent.__unicode__() + " :: " + self.name
@@ -230,7 +232,7 @@ class Category(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name_plural = "Categories"
-        unique_together = ("slug", "parent")
+        unique_together = (("slug", "parent"), ("name", "parent"))
     def get_absolute_url(self):
         url = "/%s/" % self.slug
         category = self
