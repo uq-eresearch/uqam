@@ -159,7 +159,7 @@ class PeopleListView(ListView):
         from django.db import connection
         cursor = connection.cursor()
         cursor.execute("""
-            SELECT DISTINCT LOWER(LEFT({0}, 1)) as character
+            SELECT DISTINCT LOWER(SUBSTR({0}, 1, 1)) as character
             FROM {1}
             WHERE {0} <> ''
             ORDER by character""".format(name, self.model._meta.db_table))
