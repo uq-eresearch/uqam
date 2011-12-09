@@ -30,7 +30,19 @@
 <br>
 
 {% if museumobject.maker %}
-<b>Maker or artist: </b> <a href="{{ museumobject.maker.get_absolute_url }}">{{ museumobject.maker }} </a>
+<b>Maker (or artist): </b>
+    <a href="{{ museumobject.maker.get_absolute_url }}">
+    {{ museumobject.maker }}</a>
+    <br>
+{% endif %}
+
+{% if museumobject.manufacture_technique %}
+    <b>Manufacture technique: </b> {{ museumobject.manufacture_technique }}
+    <br>
+{% endif %}
+
+{% if museumobject.creation_date %}
+    <b>Creation date: </b> {{ museumobject.creation_date }}
     <br>
 {% endif %}
 
@@ -78,6 +90,10 @@
 <b>Comment:</b> {{ museumobject.comment|linebreaks }}
 <br>
 
+{% if museumobject.significance %}
+    <b>Statement of significance: </b> {{ museumobject.significance }}
+    <br>
+{% endif %}
 
 {% if museumobject.length %}
     <b>Length: </b> {{ museumobject.length }}mm

@@ -21,19 +21,21 @@ class MOAdmin(UndeleteableModelAdmin):
                     'access_status', 'loan_status', 'cultural_bloc',
                     'artefact_type', 'collector__name', 'donor__name')
 
-    search_fields = ['registration_number', 'description','comment']
+    search_fields = ['registration_number', 'description', 'comment',
+                     'donor__name', 'collector__name', 'maker__name']
 
     inlines = [
             ArtefactRepInline,
     ]
 
-    raw_id_fields = ('category', 'place', 'collector', 'collector_2', 'donor',
-            'donor_2', 'artefact_type')
+    raw_id_fields = ('category', 'place', 'collector', 'collector_2',
+            'donor', 'donor_2', 'artefact_type', 'maker')
 #    related_lookup_fields = {
 #            'fk': ['collector'],
 #    }
     autocomplete_lookup_fields = {
-            'fk': ['place', 'collector', 'donor', 'artefact_type'],
+            'fk': ['place', 'collector', 'donor', 'artefact_type',
+                   'maker'],
             'm2m': ['category']
     }
     filter_horizontal = ['related_documents']
@@ -54,7 +56,8 @@ class MOAdmin(UndeleteableModelAdmin):
         }),
         ('Acquisition', {
             'classes': ('collapse',),
-            'fields': ('acquisition_date', 'acquisition_method')
+            'fields': ('acquisition_date', 'acquisition_method',
+                       'reg_info')
         }),
         ('Collector', {
             'classes': ('collapse',),
@@ -66,11 +69,14 @@ class MOAdmin(UndeleteableModelAdmin):
         }),
         ('Details', {
             'classes': ('collapse',),
-            'fields': ('description', 'comment')
+            'fields': ('description', 'is_public_comment',
+                'comment', 'significance')
         }),
         ('Extra details', {
-            'fields': ('maker', 'site_name_number', 'raw_material',
-                       'indigenous_name', 'recorded_use', 'assoc_cultural_group')
+            'fields': ('maker', 'manufacture_technique', 'creation_date',
+                'site_name_number', 'raw_material', 'indigenous_name',
+                'recorded_use', 'assoc_cultural_group',
+                'exhibition_history')
         }),
         ('Location', {
             'classes': ('collapse',),

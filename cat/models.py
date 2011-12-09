@@ -24,6 +24,7 @@ class MuseumObject(models.Model):
     acquisition_method = models.CharField(max_length=50, blank=True)
     loan_status = models.CharField(max_length=50, blank=True)
     access_status = models.CharField(max_length=50, blank=True)
+    reg_info = models.TextField("registration information", blank=True)
 
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
     place = models.ForeignKey('Place', null=True, db_index=True)
@@ -62,6 +63,8 @@ class MuseumObject(models.Model):
     how_source_obtained = models.CharField(max_length=50)
 
     maker = models.ForeignKey('Maker', null=True, blank=True)
+    manufacture_technique = models.CharField(max_length=200, blank=True)
+    creation_date = models.DateField(null=True, blank=True)
     site_name_number = models.CharField(max_length=150, blank=True)
     raw_material = models.CharField(max_length=150, blank=True)
     indigenous_name = models.CharField(max_length=100, blank=True)
@@ -75,6 +78,8 @@ class MuseumObject(models.Model):
     private_comment = models.TextField(
             blank=True, 
             help_text="Only visible to staff")
+    significance = models.TextField("statement of significance",
+            blank=True)
 
     width = models.IntegerField(null=True,blank=True)
     length = models.IntegerField(null=True,blank=True)
