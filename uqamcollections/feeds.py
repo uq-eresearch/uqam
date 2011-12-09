@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.xmlutils import SimplerXMLGenerator
 from utils.utils import get_site_url
 from django.http import HttpResponse
+from django.contrib.sites.models import get_current_site
 
 class AllCollectionsFeed(Feed):
     """
@@ -59,6 +60,8 @@ def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='te
     Uses the profile from http://dataspace.metadata.net/doc/atom
     """
     response = HttpResponse(mimetype=mimetype)
+    current_site = get_current_site(request)
+
     link = get_site_url(request, collection.get_absolute_url())
     site_id = get_site_url(request, "/")
 
