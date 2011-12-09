@@ -54,9 +54,9 @@ class Collection(models.Model):
                 u"xmlns:rdfa": u"http://www.w3.org/ns/rdfa#"}
 
 
-class Exhibition(Collection):
-    start_date = models.DateField()
-    end_date = models.DateField()
+#class Exhibition(Collection):
+#    start_date = models.DateField()
+#    end_date = models.DateField()
 
 class Syndication(models.Model):
     remote_url = models.CharField(max_length=300) 
