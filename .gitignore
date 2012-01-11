@@ -3,3 +3,4 @@
 media/*
 .idea/*
 development_mode
+_build
