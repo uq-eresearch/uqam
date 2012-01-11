@@ -51,6 +51,7 @@ def merge_selected(modeladmin, request, queryset): #This is an admin/
         queryset = model.objects.filter(pk__in=ids)
         for q in queryset.exclude(pk=master.pk):
             merge_model_objects(master, q)
+        # self.message_user(request, "Merged Successfully")
         messages.success(request, "All " + model_name 
                 + " records have been merged into the selected " + model_name + ".")
         return HttpResponseRedirect(return_url)
