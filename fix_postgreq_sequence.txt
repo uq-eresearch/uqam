@@ -1,0 +1,5 @@
+select * from cat_person_id_seq;
+select max(id) from cat_person;
+
+
+alter sequence cat_person_id_seq restart with 1059;
