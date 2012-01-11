@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Places</h1>
+
+
+<table><tr>
+        <th>Geoname ID</th><th>Count</th>
+    </tr>
+{% for place in places %}
+
+<tr><td>
+        <a href="gn/{{place.gn_id}}">{{place.gn_id}}</a>
+</td><td>
+ {{place.count}}
+ </td><td>
+ </td></tr>
+{% endfor %}
+</table>
+
+
+
+{% endblock %}

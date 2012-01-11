@@ -86,10 +86,18 @@ def categories_list(request, full_slug=None):
              "objects": objects,
              "breadcrumbs": breadcrumbs})
 
+def place_json(request, encoding='utf-8', mimetype='text/plain'):
+    import json
+    places = Place.objects.exclude(
+            latitude=None).annotate(Count('museumobject')).values(
+            'id', 'name', 'latitude', 'longitude', 'country',
+            'museumobject__count')
+    return HttpResponse(json.dumps(list(places), indent=2))
+
 
 def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     """
-    Write out all the knows places to KML
+    Write out all the known places to KML
     """
 #    mimetype = "application/vnd.google-earth.kml+xml"
 #    mimetype = "text/html"
@@ -125,6 +133,23 @@ def place_map(request):
     kml_url = request.build_absolute_uri(reverse('place_kml'))
     return render(request, "cat/map.html",
             {"kml_url": kml_url})
+
+def place_mapcluster(request):
+    kml_url = request.build_absolute_uri(reverse('place_kml'))
+    return render(request, "cat/mapcluster.html",
+            {"kml_url": kml_url})
+
+def place_duplicates(request):
+    '''
+    Used for finding duplicate places, by Geoname ID
+    '''
+    places = Place.objects.values('gn_id').order_by().annotate(count=Count('gn_id')).filter(count__gt=1)
+    return render(request, "cat/place_dups_list.html",
+            {'places': places})
+
+def place_geoname(request, geoname_id):
+    places = Place.objects.filter(gn_id=geoname_id)
+    return render(request, "cat/place_geoname.html", {'places': places})
 
 
 from django.views.generic import ListView

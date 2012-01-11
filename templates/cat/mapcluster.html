@@ -1,0 +1,84 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div>
+<div style="float:right;font-size: 80%;">
+    <a href="{% url place_kml %}">View in Google Earth</a>
+</div>
+<h1>Places</h1>
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript"
+    src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/styledmarker/src/StyledMarker.js"></script>
+<script type="text/javascript"
+    src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.0.7/src/markerclusterer_packed.js"></script>
+<script type="text/javascript">
+
+function newCalculator(markers, numStyles) {
+  var index = 0;
+  var count = markers.length;
+
+  count = 0;
+  for (var i = 0; i < markers.length; i++) {
+    count += markers[i].objcount;
+  }
+
+
+  var dv = count;
+  while (dv !== 0) {
+    dv = parseInt(dv / 10, 10);
+    index++;
+  }
+
+  index = Math.min(index, numStyles);
+  return {
+    text: count,
+    index: index
+  };
+}
+
+    var map;
+    $(document).ready(
+    function initialize() {
+        var myOptions = {
+            zoom: 4, // Zoomed out to show location in world
+            disableDefaultUI: false,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+        var center = new google.maps.LatLng(-23.5, 145.3); // Near Barcaldine
+        myOptions.center = center;
+
+        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+
+        $.getJSON("/place/json", function(data) {
+            var markers = [];
+            for (var i = 0; i < data.length; i++) {
+                var latlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+//                var marker = new google.maps.Marker({
+                var marker = new StyledMarker({
+                    position: latlng,
+                    title: data[i].name + ", " + data[i].country + 
+                           " (" + data[i].museumobject__count + ")",
+                    objcount: data[i].museumobject__count,
+//                    map: map,
+                    styleIcon: new StyledIcon(StyledIconTypes.BUBBLE,
+                        {text: data[i].museumobject__count})
+                });
+                markers.push(marker);
+                
+            }
+            var mc = new MarkerClusterer(map, markers);
+            mc.setCalculator(newCalculator);
+
+            google.maps.event.addListener(mc, "click", function (c) {
+                
+            });
+        });
+    });
+</script>
+
+<div id="map_canvas" style="width:940px; height:600px"></div>
+
+</div>
+{% endblock %}

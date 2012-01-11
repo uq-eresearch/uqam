@@ -25,14 +25,21 @@
 
 //        var placesLayer = new google.maps.KmlLayer('http://localhost:8000/place/kml');
 //        var placesLayer = new google.maps.KmlLayer('{{kml_url}}');
-        var placesLayer = new google.maps.KmlLayer("http://anthropology-uat.metadata.net/static/places.kml", {preserveViewport: true});
-        placesLayer.setMap(map);
+//        var placesLayer = new google.maps.KmlLayer("http://anthropology-uat.metadata.net/static/places.kml", {preserveViewport: true});
+//        placesLayer.setMap(map);
 
-//        var marker = new google.maps.Marker({
-//            map: map,
-//            position: latlng,
-//            title: "{{place.name}}, {{place.country}}"
-//        });
+        $.getJSON("/place/json", function(data) {
+            var items = [];
+            for (var i = 0; i < data.length; i++) {
+                var latlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: latlng,
+                    title: data[i].name + ", " + data[i].country
+                });
+                
+            }
+        });
     });
 </script>
 

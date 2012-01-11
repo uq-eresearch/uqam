@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Places</h1>
+
+
+<table><tr>
+        <th>Place</th><th>Num Objects</th>
+    </tr>
+{% for place in places %}
+
+<tr><td>
+        <a href="gn/{{place.gn_id}}">{{place}}</a>
+</td><td>
+ {{place.museumobject_set.count}}
+ </td><td>
+ </td></tr>
+{% endfor %}
+</table>
+
+
+
+{% endblock %}

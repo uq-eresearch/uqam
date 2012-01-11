@@ -61,7 +61,12 @@ urlpatterns = patterns('cat.views',
             model=Place), name='place_list'),
     url(r'^place/kml$', 'place_kml', name='place_kml'),
     url(r'^place/map$', 'place_map', name='place_map'),
+    url(r'^place/mapcluster$', 'place_mapcluster', name='place_mapcluster'),
+    url(r'^place/json$', 'place_json', name='place_json'),
     url(r'^place/(?P<place_id>\d+)$', 'place_detail', name='place_detail'),
+
+    url(r'^place/dups$', 'place_duplicates', name='place_duplicates'),
+    url(r'place/gn/(\d+)$', 'place_geoname'),
 
     url(r'^withimages/$',
         WithImagesListView.as_view(template_name='cat/withimages.html'), name='with_images_list'),
