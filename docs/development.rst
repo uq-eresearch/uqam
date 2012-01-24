@@ -50,10 +50,80 @@ Set to using development settings::
 
 Install PostgreSQL database server::
 
-    $ sudo apt-get install postgresql pgadmin3
+    $ sudo apt-get install postgresql pgadmin3 postgresql-contrib
     
 
 
+Database Configuration
+----------------------
+Set a password for accessing postgresql::
+
+    $ sudo -u postgres psql
+    postgres=# ALTER ROLE postgres WITH ENCRYPTED PASSWORD 'mypassword';
+    \q
+
+    CREATE EXTENSION adminpack;
+    CREATE DATABASE 'uqam' WITH ENCODING 'UTF-8';
+
+Python PosgreSQL drivers
+------------------------
+Install the python postgres drivers into the virtual environment.
+
+First install the ubuntu development packages::
+
+    $ sudo apt-get install libpq-dev
+
+Django Database Setup
+---------------------
+Check the `dev_settings.py` file that the correct postgres username,
+password, and database are configured. Then get django to generate all the
+required tables::
+
+    (uqam)$ ./manage.py syncdb --migrate
+
+
+Run Development Server
+----------------------
+Once everything is setup, the development server can be run::
+
+    $ ./manage.py runserver
+
+
+
+Import Geonames Data
+---------------------
+
+Install the django-geonames app::
+
+    $ pip install https://github.com/ramusus/django-geonames/tarball/master
+
+Modify to remove GeoDjango requirements. Remote point and add latitude and
+longitude fields, customising the import scripts also.
+
+Download the geonames data::
+
+    $ ./manage.py download_geonames
+
+Compress ready for insertion into database::
+
+    $ ./manage.py compress_geonames
+
+Load into PostgreSQL::
+
+    $ ./manage.py load_geonames
+
+
+Import UQAM Data
+----------------
+Import the new categories used by the museum::
+
+    $ ./manage.py importcategories ~/temp/Classifications\ Nov11.xlsx
+
+Export the Access MDB file to CSV files::
+
+Import the CSV files into the new museum catalogue::
+
+    ./manage.py importcat ~/temp/ cat loans condition
 
 .. _docs:
 
