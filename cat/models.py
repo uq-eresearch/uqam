@@ -21,7 +21,8 @@ class MuseumObject(models.Model):
     storage_bay = models.CharField(max_length=4, blank=True)
     storage_shelf_box_drawer = models.CharField(max_length=4, blank=True)
 
-    acquisition_date = models.CharField(max_length=50, blank=True)
+    acquisition_date = models.DateField("Date acquired by museum",
+            null=True, blank=True)
     acquisition_method = models.CharField(max_length=50, blank=True)
     loan_status = models.CharField(max_length=50, blank=True)
     access_status = models.CharField(max_length=50, blank=True)
