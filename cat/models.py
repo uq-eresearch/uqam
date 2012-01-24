@@ -1,4 +1,5 @@
 from django.db import models
+import string
 
 
 class MuseumObject(models.Model):
@@ -94,6 +95,17 @@ class MuseumObject(models.Model):
             'mediaman.Document', 
             related_name='related_museumobjects', 
             null=True, blank=True)
+
+    def dimensions(self):
+        '''Returns textual dimensions for the item
+        
+        Combining length, width, height, depth, circumference
+        '''
+        dims = [self.length, self.width, self.height, self.depth, self.circumference]
+        dims = [str(d/10) for d in dims if d != None]
+        s = string.join(dims, " x ")
+        return s + " cm" if s else ''
+
 
     @models.permalink
     def get_absolute_url(self):

@@ -1,11 +1,47 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+
+{% if user.is_staff %}
+<style type="text/css">
+    #printableLabel {
+        background-color: white;
+        display:none;
+/*        height:252px;
+        width:454px;
+        */
+        padding: 15px;
+    }
+</style>
+<script type="text/javascript" src="/static/jquery.bpopup-0.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#printLabelLink").bind("click", function() {
+            $("#printableLabel").bPopup();
+            return false;
+        });
+    });
+</script>
 <div style="float:right;font-size: 80%;">
-    {% if user.is_staff %}
-        <a href="{% url admin:cat_museumobject_change museumobject.id %}">Admin</a>
-    {% endif %}
+    <a href="#" id="printLabelLink">Printable Label</a>
+    <a href="{% url admin:cat_museumobject_change museumobject.id %}">Admin</a>
 </div>
+
+<div id="printableLabel">
+<b>Printable label</b>
+<pre id="printLabelText">
+{% firstof museumobject.maker "Maker unknown" %}, {% firstof museumobject.creation_date|date:"Y" "creation date unknown" %}
+{{ museumobject.artefact_type }}
+{{ museumobject.dimensions }}{% if museumobject.raw_material %}, {{ museumobject.raw_material }}{%endif%}
+{% firstof museumobject.assoc_cultural_group museumobject.place.country %}
+Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ museumobject.acquisition_date|date:"Y" }}{% endif %}
+</pre>
+<div id="d_clip_container" style="position:relative">
+   <div id="d_clip_button">Copy to Clipboard</div>
+</div>
+</div>
+
+{% endif %}
 <h1>{{ museumobject.artefact_type }}</h1>
 
 <div class="span-14">
