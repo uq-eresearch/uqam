@@ -36,9 +36,7 @@
 {% firstof museumobject.assoc_cultural_group museumobject.place.country %}
 Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ museumobject.acquisition_date|date:"Y" }}{% endif %}
 </pre>
-<div id="d_clip_container" style="position:relative">
-   <div id="d_clip_button">Copy to Clipboard</div>
-</div>
+
 </div>
 
 {% endif %}
@@ -159,6 +157,7 @@ Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ mus
 
 
 {% if user.is_staff %}
+
 {% if museumobject.conditionreport_set.all %}
     <b>Condition Reports</b><br>
     {% for report in museumobject.conditionreport_set.all %}
