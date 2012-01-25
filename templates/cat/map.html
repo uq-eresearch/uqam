@@ -23,21 +23,35 @@
 
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-//        var placesLayer = new google.maps.KmlLayer('http://localhost:8000/place/kml');
-//        var placesLayer = new google.maps.KmlLayer('{{kml_url}}');
-//        var placesLayer = new google.maps.KmlLayer("http://anthropology-uat.metadata.net/static/places.kml", {preserveViewport: true});
-//        placesLayer.setMap(map);
+// see http://code.google.com/apis/chart/image/docs/gallery/dynamic_icons.html#pins
+        var redIcon = 'https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF9999';
+        var blueIcon = 'https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF4c4c';
+        var yellowIcon = 'https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.7|0|FF0000|1|_|';
 
+        function goToUrl() {
+            location.href = this.url; 
+        }
         $.getJSON("/place/json", function(data) {
             var items = [];
             for (var i = 0; i < data.length; i++) {
                 var latlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+                var styleIcon = redIcon;
+                var count = data[i].museumobject__count;
+                if (count > 100) {
+                    styleIcon = yellowIcon;
+                } else if (count > 10) {
+                    styleIcon = blueIcon;
+                }
                 var marker = new google.maps.Marker({
+                    icon: styleIcon,
                     map: map,
                     position: latlng,
-                    title: data[i].name + ", " + data[i].country
+                    title: data[i].name + ", " + data[i].country + " (" + count + ")",
+                    zIndex: count,
+                    url: '/place/' + data[i].id
                 });
                 
+                google.maps.event.addListener(marker, 'click', goToUrl);
             }
         });
     });
@@ -45,5 +59,12 @@
 
 <div id="map_canvas" style="width:940px; height:600px"></div>
 
+</div>
+<div>
+    <ul><li>
+        <img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF9999'> less than 10</li>
+        <li><img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF4c4c'> less than 100</li>
+        <li><img src='https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.7|0|FF0000|1|_|'FF0000> 100 or more</li>
+    </ul>
 </div>
 {% endblock %}
