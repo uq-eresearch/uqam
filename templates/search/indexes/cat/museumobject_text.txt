@@ -1,3 +1,4 @@
+{{ object.id }}
 {{ object.donor }}
 {{ object.collector }}
 {{ object.functional_category }}
