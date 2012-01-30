@@ -151,6 +151,25 @@ def place_geoname(request, geoname_id):
     places = Place.objects.filter(gn_id=geoname_id)
     return render(request, "cat/place_geoname.html", {'places': places})
 
+from haystack.views import basic_search
+from haystack.forms import SearchForm
+from django.shortcuts import redirect
+def search(request):
+    '''
+    The public search interface.
+
+    Also provides a shortcut of just typing in an object id
+    '''
+    form = SearchForm(request.GET)
+    try:
+        if form.is_valid():
+            id = int(form.cleaned_data['q'])
+            mo = MuseumObject.objects.get(pk=id)
+            return redirect(mo)
+    except:
+        pass
+    return basic_search(request)
+
 
 from django.views.generic import ListView
 class PeopleListView(ListView):

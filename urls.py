@@ -21,7 +21,7 @@ urlpatterns = patterns('',
 
     url(r'^collection/', include('uqamcollections.urls')),
 
-    (r'^search/', include('haystack.urls')),
+#    (r'^search/', include('haystack.urls')),
     url(r'^accounts/login/$',
         'django.contrib.auth.views.login',
         name='auth_login'),
