@@ -112,5 +112,6 @@ urlpatterns = patterns('cat.views',
             view_name='collector_list',
             page_title='Collectors',
         ), name='collector_list'),
-    url(r'^search/', 'search', name='search'),
+# Custom search to redirect straight to objects
+#    url(r'^search/', 'search', name='search'),
 )
