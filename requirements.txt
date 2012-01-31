@@ -18,3 +18,5 @@ django-celery==2.4.2
 geopy==0.94.1
 requests==0.8.2
 django-kombu==0.9.4
+docutils==0.8.1
+psycopg2==2.4.4
