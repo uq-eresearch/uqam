@@ -187,7 +187,7 @@ HAYSTACK_WHOOSH_PATH = '/home/django/whoosh/cat_index'
 # Keep ModelBackend around for per-user permissions and maybe a local
 # superuser.
 AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend',
+    'uqam.auth.backend.StricterLDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 AUTH_LDAP_SERVER_URI = "ldap://ldap.uq.edu.au"
