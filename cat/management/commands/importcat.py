@@ -1,8 +1,10 @@
 from django.core.management.base import BaseCommand, CommandError
-from cat.models import MuseumObject, FunctionalCategory, ArtefactType, CulturalBloc
+from cat.models import MuseumObject, FunctionalCategory
+from cat.models import ArtefactType, CulturalBloc
 from cat.models import Person, Place, Region, Category, Maker
 from loans.models import LoanAgreement, LoanItem, Client, MuseumStaff
-from condition.models import ConditionReport, ConservationAction, Deaccession, Conservator
+from condition.models import ConditionReport, ConservationAction
+from condition.models import  Deaccession, Conservator
 from dataimport.models import ImportIssue
 from django.core import management
 from django.db import transaction
@@ -19,24 +21,26 @@ def prepare_stdout():
     unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
     sys.stdout = unbuffered
 
+
 def clean_row(row):
     row["Functional_Category"] = string.capwords(row["Functional_Category"])
     row["Loan_Status"] = string.capwords(row["Loan_Status"])
     return row
 
+
 @transaction.commit_manually
 def process_csv(filename, row_handler):
     '''Read each line of a csv and process with the supplied function'''
-    db.reset_queries() # Don't leak memory by forever storing SQL queries
+    db.reset_queries()  # Don't leak memory by forever storing SQL queries
     try:
         with open(filename) as f:
             data = csv.DictReader(f)
             count = 0
             print 'Importing from ', filename
             for row in data:
-                for key,value in row.items():
+                for key, value in row.items():
                     row[key] = value.strip()
-                count+=1
+                count += 1
                 sys.stdout.write('\r{0}'.format(count))
                 row_handler(row)
                 if (count % 500) == 0:
@@ -46,6 +50,7 @@ def process_csv(filename, row_handler):
     else:
         transaction.commit()
     print("")
+
 
 def process_person_record(r):
     '''Read person records from a row of the csv and create DB records'''
@@ -57,10 +62,12 @@ def process_person_record(r):
     p.comments = r["PersonComments"]
     p.save()
 
+
 def process_artefactmore_record(r):
     '''Save details from an Artefact More.csv row into an Artefact Model'''
     sys.stdout.write(' Id=%s' % r['Artefact_Registration'])
-    m = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
+    m = MuseumObject.objects.get(
+            registration_number=r['Artefact_Registration'])
     m.indigenous_name = r['Indigenous_Name']
     m.recorded_use = r['Recorded_Use']
     m.raw_material = r['Raw_Material']
@@ -87,44 +94,53 @@ def process_artefactmore_record(r):
     m.site_name_number = r['Site_Name_Nmbr']
     m.save()
 
+
 def process_donorrecord(row):
     '''Update a museumobject record with details from a row of the donor csv'''
-    m = MuseumObject.objects.get(registration_number=row['Artefact_Registration'])
+    m = MuseumObject.objects.get(
+            registration_number=row['Artefact_Registration'])
     p = Person.objects.get(pk=int(row["Person_idnbr"]))
     m.donor_2 = p
     m.how_donor_obtained = row['How_obtained']
     m.when_donor_obtained = row['When_obtained']
     m.save()
 
+
 def process_collectorphotographer_record(r):
     """
     Update a museumobject record with details from a row of the collectorphotog csv
     """
-    m = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
+    m = MuseumObject.objects.get(
+            registration_number=r['Artefact_Registration'])
     p = Person.objects.get(pk=int(r['Person_idnbr']))
     m.collector_2 = p
     m.how_collector_obtained = r['How_Obtained1']
     m.when_collector_obtained = r['When_Obtained1']
     m.save()
 
+
 def process_artefacttype_record(r):
-    a, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
+    a, created = ArtefactType.objects.get_or_create(
+            name=r['Artefact_TypeName'])
     a.definition = r['Definition']
     a.see_also = r['SeeAlso']
     a.save()
 
+
 def process_cultural_bloc_record(r):
-    c,created = CulturalBloc.objects.get_or_create(name = r['CulturalBloc'])
+    c, created = CulturalBloc.objects.get_or_create(
+            name=r['CulturalBloc'])
     c.definition = r['Definition']
     c.save()
 
+
 def process_functional_category_record(r):
     name = string.capwords(r['Functional_Category'])
-    f,created = FunctionalCategory.objects.get_or_create(name=name)
+    f, created = FunctionalCategory.objects.get_or_create(name=name)
     f.definition = r['Definition']
     f.save()
 
-    
+
 category_name_map = {
     "Ancestralboard": "ancestral board",
     "Ancestralfigure": "ancestral figure",
@@ -155,6 +171,7 @@ category_name_map = {
     "Weighingutensil": "weighing utensil",
         }
 
+
 def process_artefact_record(r):
     sys.stdout.write(' Id=%s' % r['Artefact_Registration'])
     r = clean_row(r)
@@ -180,7 +197,8 @@ def process_artefact_record(r):
     m.storage_shelf_box_drawer = r['Shelf_Box_Drawer']
 
     # Map relations
-    fc, created = FunctionalCategory.objects.get_or_create(name=r['Functional_Category'])
+    fc, created = FunctionalCategory.objects.get_or_create(
+            name=r['Functional_Category'])
     m.functional_category = fc
 
     pl, created = Place.objects.get_or_create(name=r['Place'],
@@ -189,11 +207,12 @@ def process_artefact_record(r):
                                               country=r['Country_Name'])
     m.place = pl
 
-    at, created = ArtefactType.objects.get_or_create(name=r['Artefact_TypeName'])
+    at, created = ArtefactType.objects.get_or_create(
+            name=r['Artefact_TypeName'])
     m.artefact_type = at
 
-
-    cb, created = CulturalBloc.objects.get_or_create(name=r['CulturalBloc'])
+    cb, created = CulturalBloc.objects.get_or_create(
+            name=r['CulturalBloc'])
     m.cultural_bloc = cb
 
     try:
@@ -211,6 +230,7 @@ def process_artefact_record(r):
 
     m.save()
     set_category(m, r['Artefact_TypeName'])
+
 
 def set_category(m, artefact_name):
     # Set Category
@@ -239,8 +259,10 @@ def process_loan_record(r):
     l.id = r['LoanId']
     l.date_borrowed = r['Borrowing_Date']
     l.return_date = r['Return_Date']
-    l.approved_by, created = MuseumStaff.objects.get_or_create(name=r['Approved by'])
-    l.prepared_by, created = MuseumStaff.objects.get_or_create(name=r['Prepared by'])
+    l.approved_by, created = MuseumStaff.objects.get_or_create(
+            name=r['Approved by'])
+    l.prepared_by, created = MuseumStaff.objects.get_or_create(
+            name=r['Prepared by'])
     l.clientNumber = r['ClientNumber']
     l.special_loan_conditions = r['Loan_Conditions']
     l.location = r['Location']
@@ -251,13 +273,15 @@ def process_loan_record(r):
     l.client = Client.objects.get(id=r['ClientNumber'])
     l.save()
 
+
 def process_client_record(r):
     c = Client()
     c.id = r['ClientNumber']
     c.name = string.join((r['Title'], r['FirstName(s)'], r['Surname']))
     c.organisation = r['Organisation']
     c.position = r['Position']
-    c.address = string.join((r['AddressLine1'], r['AddressLine2'], r['AddressLine3']), "\n")
+    c.address = string.join(
+            (r['AddressLine1'], r['AddressLine2'], r['AddressLine3']), "\n")
     c.town_suburb = r['Town/suburb']
     c.state = r['State']
     c.country = r['OverseasCountry']
@@ -265,6 +289,8 @@ def process_client_record(r):
     c.phone1 = r['Phone1']
     c.phone2 = r['Phone2']
     c.save()
+
+
 def process_loanitem_record(r):
     l = LoanItem()
     l.loan = LoanAgreement.objects.get(id=int(r['LoanId']))
@@ -272,6 +298,7 @@ def process_loanitem_record(r):
     l.out_condition = r['ConditionCode']
     l.return_condition = r['Return_Condition']
     l.save()
+
 
 def process_regioncombo(row):
     r, created = Region.objects.get_or_create(name=row['Region'])
@@ -289,18 +316,21 @@ def process_condition(r):
     if r['Condition_Date']:
         c.date = r['Condition_Date']
     c.details = r['Details']
-    c.report_author,created = MuseumStaff.objects.get_or_create(name=r['Report_Produced'])
+    c.report_author, created = MuseumStaff.objects.get_or_create(
+            name=r['Report_Produced'])
     c.change_reason = r['Change_Reason']
     try:
         c.save()
     except:
         print("Error with condition report for item: %s" % c.item)
         print sys.exc_info()
-        
+
+
 def process_conservation(r):
     sys.stdout.write(' Registration=%s' % r['Registration'])
     item = MuseumObject.objects.get(registration_number=r['Registration'])
-    c, created = ConservationAction.objects.get_or_create(item=item, date=r['Action_Date'])
+    c, created = ConservationAction.objects.get_or_create(
+            item=item, date=r['Action_Date'])
     c.action = r['Conservation_action']
     c.details = r['Action_Details']
     c.future_conservation = r['Future_Conservation']
@@ -314,16 +344,21 @@ def process_conservation(r):
     except:
         print("Error with conservation report for item: %s" % c.item)
         print sys.exc_info()
-def process_deaccession(r):
-    item = MuseumObject.objects.get(registration_number=r['Artefact_Registration'])
-    person, created = MuseumStaff.objects.get_or_create(name=r['Museum_StaffName'])
 
-    d,created = Deaccession.objects.get_or_create(item=item,
+
+def process_deaccession(r):
+    item = MuseumObject.objects.get(
+            registration_number=r['Artefact_Registration'])
+    person, created = MuseumStaff.objects.get_or_create(
+            name=r['Museum_StaffName'])
+
+    d, created = Deaccession.objects.get_or_create(item=item,
                                                   person=person,
                                                   reason=r['Reason'])
     if r["Deaccession_Date"] != "":
         d.date = r['Deaccession_Date']
     d.save()
+
 
 def process_museumstaff(r):
     p, created = MuseumStaff.objects.get_or_create(name=r['Museum_StaffName'])
@@ -333,6 +368,7 @@ def process_museumstaff(r):
         p.comments = p.comments + '\n' + r['Details']
 
     p.save()
+
 
 def process_conservator(r):
     c = Conservator()
@@ -377,13 +413,15 @@ mappings = {
 # Aust_State Combo, Condition_Combo, Conservation_action_Combo,
 # Country_Combo (no definitions), Cultural_Bloc_Combo, Deacession_Reason_Combo,
 # Functional_Category, Loan_Reason_Combo, Loan_Status_Combo, Obtained_Combo
-# Photo_Type_Combo, Region_combo, 
+# Photo_Type_Combo, Region_combo
+
 
 def migrate_and_import(directory, appname, mapping):
 #    management.call_command('reset', appname, interactive=False)
 #    management.call_command('migrate', appname, interactive=False)
     for filename, function in mapping[appname]:
         process_csv(join(directory, filename), function)
+
 
 class Command(BaseCommand):
 
@@ -393,7 +431,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if len(args) < 2:
-            raise CommandError("Need at least two arguments. Import dir, and at least one app name")
+            raise CommandError("Need at least two arguments. Import dir,"
+                    "and at least one app name")
 
         directory = args[0]
         prepare_stdout()
