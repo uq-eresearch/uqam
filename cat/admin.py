@@ -148,6 +148,7 @@ admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
 
 
 class ArtefactTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'definition', 'see_also')
     search_fields = ['name']
     actions = [merge_selected]
 admin.site.register(ArtefactType, ArtefactTypeAdmin)
