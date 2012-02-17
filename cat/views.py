@@ -129,23 +129,29 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
 
     return response
 
+
 def place_map(request):
     kml_url = request.build_absolute_uri(reverse('place_kml'))
     return render(request, "cat/map.html",
             {"kml_url": kml_url})
+
 
 def place_mapcluster(request):
     kml_url = request.build_absolute_uri(reverse('place_kml'))
     return render(request, "cat/mapcluster.html",
             {"kml_url": kml_url})
 
+
 def place_duplicates(request):
     '''
     Used for finding duplicate places, by Geoname ID
     '''
-    places = Place.objects.values('gn_id').order_by().annotate(count=Count('gn_id')).filter(count__gt=1)
+    places = Place.objects.values(
+            'gn_id').order_by().annotate(
+                    count=Count('gn_id')).filter(count__gt=1)
     return render(request, "cat/place_dups_list.html",
             {'places': places})
+
 
 def place_geoname(request, geoname_id):
     places = Place.objects.filter(gn_id=geoname_id)
@@ -154,6 +160,8 @@ def place_geoname(request, geoname_id):
 from haystack.views import basic_search
 from haystack.forms import SearchForm
 from django.shortcuts import redirect
+
+
 def search(request):
     '''
     The public search interface.
@@ -172,12 +180,15 @@ def search(request):
 
 
 from django.views.generic import ListView
+
+
 class PeopleListView(ListView):
     template_name = "cat/person_list.html"
     counted_obj = "museumobject"
     paginate_by = 25
     view_name = 'maker_list'
     page_title = 'People'
+
     def get_queryset(self):
         return self.model.objects.filter(
                 name__istartswith=self.kwargs['letter']
