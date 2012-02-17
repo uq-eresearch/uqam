@@ -8,6 +8,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = patterns('dashboard.views',
 
+    url('', 'index'),
+
 #    url(r'^$',
 #            RedirectView.as_view(url='/collector/a/'), name='collector_list'),
 #    url(r'^collector/(?P<letter>[a-z])/$',
