@@ -158,6 +158,20 @@ Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ mus
 
 {% if user.is_staff %}
 
+{% if museumobject.reg_info %}
+  <b>Registration Information:</b></br>
+  <p>
+    {{ museumobject.reg_info|linebreaks }}
+  </p>
+{% endif %}
+
+{% if museumobject.exhibition_history %}
+  <b>Exhibition History:</b></br>
+  <p>
+    {{ museumobject.exhibition_history|linebreaks }}
+  </p>
+{% endif %}
+
 {% if museumobject.conditionreport_set.all %}
     <b>Condition Reports</b><br>
     {% for report in museumobject.conditionreport_set.all %}
