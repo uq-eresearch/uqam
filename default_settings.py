@@ -12,15 +12,27 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+RO_DATABASE = 'readonly'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'uqam',                      # Or path to database file if using sqlite3.
+        'NAME': 'uqam',         # Or path to database file if using sqlite3.
         'USER': 'uqam',                      # Not used with sqlite3.
         'PASSWORD': 'uqam',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'HOST': 'localhost',  # Set to empty string for localhost.
+        'PORT': '',
+        # Set to empty string for default. Not used with sqlite3.
+    },
+    RO_DATABASE: {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+# Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'uqam',         # Or path to database file if using sqlite3.
+        'USER': 'uqam_read',                      # Not used with sqlite3.
+        'PASSWORD': 'uqam_read',                  # Not used with sqlite3.
+        'HOST': 'localhost',  # Set to empty string for localhost.
+        'PORT': '',
+        # Set to empty string for default. Not used with sqlite3.
     },
 }
 
@@ -94,9 +106,10 @@ SECRET_KEY = ')v4z&afgu6!lzdoiez778vh4gm#h3jrpl5gpz7aj*+*f$qvj%o'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -151,6 +164,7 @@ INSTALLED_APPS = (
     'uqamcollections',
     'dataimport',
     'djkombu',
+    'reports',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -195,7 +209,9 @@ import ldap
 from django_auth_ldap.config import LDAPSearch
 AUTH_LDAP_BIND_DN = ""
 AUTH_LDAP_BIND_PASSWORD = ""
-AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=staff,ou=people,o=the university of queensland,c=au", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    "ou=staff,ou=people,o=the university of queensland,c=au",
+    ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 
 AUTH_LDAP_USER_ATTR_MAP = {
         "first_name": "givenName",
@@ -235,3 +251,4 @@ BROKER_TRANSPORT = "django"
 #BROKER_USER = "guest"
 #BROKER_PASSWORD = "guest"
 #BROKER_VHOST = "/"
+
