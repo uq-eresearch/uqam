@@ -73,6 +73,10 @@ class MuseumObject(models.Model):
     recorded_use = models.CharField(max_length=300, blank=True)
     assoc_cultural_group = models.CharField(max_length=100, blank=True)
     exhibition_history = models.TextField(blank=True)
+
+    category_illustrated = models.CharField(max_length=100, blank=True)
+    artefact_illustrated = models.CharField(max_length=100, blank=True)
+
     description = models.TextField(blank=True)
 
     is_public_comment = models.BooleanField(default=False)
@@ -313,3 +317,15 @@ class Maker(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Reference(models.Model):
+    """
+    Publications mentioning a museum object
+    """
+    museum_object = models.ForeignKey(MuseumObject)
+    author = models.CharField(max_length=150)
+    publications_details = models.CharField(max_length=500)
+
+    def __unicode__(self):
+        return self.museum_object.__unicode__() + self.publications_details
