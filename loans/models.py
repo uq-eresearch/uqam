@@ -41,6 +41,7 @@ class LoanAgreement(models.Model):
 
 class LoanPurpose(models.Model):
     purpose = models.CharField(max_length=20)
+    definition = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.purpose
