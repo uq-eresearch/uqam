@@ -15,6 +15,7 @@ class Conservator(models.Model):
 
     def __unicode__(self):
         return "%s %s %s" % (self.title, self.firstname, self.surname)
+
     class Meta:
         ordering = ['surname', 'firstname']
 
@@ -24,34 +25,49 @@ class ConditionReport(models.Model):
     condition = models.CharField(max_length=30)
     date = models.DateField()
     details = models.TextField()
-    report_author = models.ForeignKey(MuseumStaff, null=True,blank=True)
+    report_author = models.ForeignKey(MuseumStaff, null=True, blank=True)
     change_reason = models.TextField()
+
     def __unicode__(self):
         return "Condition Report: %s %s" % (self.item, self.date)
+
     class Meta:
         ordering = ['item']
+
 
 class ConservationAction(models.Model):
     item = models.ForeignKey(MuseumObject)
     date = models.DateField()
-    action = models.CharField(max_length=60)
+    action = models.ForeignKey('ConservationActionType', null=True)
     details = models.TextField()
     future_conservation = models.TextField(blank=True)
-    future_conservation_date = models.DateField(null=True,blank=True)
+    future_conservation_date = models.DateField(null=True, blank=True)
     comments = models.TextField(blank=True)
     material_used = models.TextField(blank=True)
-    conservator = models.ForeignKey(Conservator,null=True)
+    conservator = models.ForeignKey(Conservator, null=True)
+
     def __unicode__(self):
         return "%s: %s" % (self.item, self.action)
+
     class Meta:
         ordering = ['item']
+
+
+class ConservationActionType(models.Model):
+    action = models.CharField(max_length=60)
+
+    def __unicode__(self):
+        return self.action
+
 
 class Deaccession(models.Model):
     item = models.ForeignKey(MuseumObject)
     reason = models.TextField()
     date = models.DateField(blank=True, null=True)
     person = models.ForeignKey(MuseumStaff)
+
     def __unicode__(self):
         return "Deaccession: %s" % self.item
+
     class Meta:
         ordering = ['item']

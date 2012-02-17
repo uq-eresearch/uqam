@@ -8,74 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting field 'Conservator.organisationname'
-        db.delete_column('condition_conservator', 'organisationname')
-
-        # Adding field 'Conservator.organisation'
-        db.add_column('condition_conservator', 'organisation', self.gf('django.db.models.fields.CharField')(default='', max_length=100, blank=True), keep_default=False)
-
-        # Changing field 'Conservator.surname'
-        db.alter_column('condition_conservator', 'surname', self.gf('django.db.models.fields.CharField')(max_length=60))
-
-        # Changing field 'Conservator.firstname'
-        db.alter_column('condition_conservator', 'firstname', self.gf('django.db.models.fields.CharField')(max_length=60))
-
-        # Changing field 'Conservator.email'
-        db.alter_column('condition_conservator', 'email', self.gf('django.db.models.fields.EmailField')(max_length=60))
-
-        # Changing field 'ConditionReport.report_author'
-        db.alter_column('condition_conditionreport', 'report_author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['loans.MuseumStaff'], null=True))
-
-        # Changing field 'ConditionReport.change_reason'
-        db.alter_column('condition_conditionreport', 'change_reason', self.gf('django.db.models.fields.TextField')())
-
-        # Changing field 'ConservationAction.action'
-        db.alter_column('condition_conservationaction', 'action', self.gf('django.db.models.fields.CharField')(max_length=60))
-
-        # Changing field 'ConservationAction.material_used'
-        db.alter_column('condition_conservationaction', 'material_used', self.gf('django.db.models.fields.TextField')())
-
-        # Changing field 'ConservationAction.future_conservation_date'
-        db.alter_column('condition_conservationaction', 'future_conservation_date', self.gf('django.db.models.fields.DateField')(null=True))
-
-        # Changing field 'Deaccession.person'
-        db.alter_column('condition_deaccession', 'person_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['loans.MuseumStaff']))
+        # Adding field 'ConservationAction.action'
+        db.add_column('condition_conservationaction', 'action', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['condition.ConservationActionType'], null=True), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Adding field 'Conservator.organisationname'
-        db.add_column('condition_conservator', 'organisationname', self.gf('django.db.models.fields.CharField')(default='', max_length=30, blank=True), keep_default=False)
-
-        # Deleting field 'Conservator.organisation'
-        db.delete_column('condition_conservator', 'organisation')
-
-        # Changing field 'Conservator.surname'
-        db.alter_column('condition_conservator', 'surname', self.gf('django.db.models.fields.CharField')(max_length=30))
-
-        # Changing field 'Conservator.firstname'
-        db.alter_column('condition_conservator', 'firstname', self.gf('django.db.models.fields.CharField')(max_length=30))
-
-        # Changing field 'Conservator.email'
-        db.alter_column('condition_conservator', 'email', self.gf('django.db.models.fields.EmailField')(max_length=30))
-
-        # Changing field 'ConditionReport.report_author'
-        db.alter_column('condition_conditionreport', 'report_author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cat.Person'], null=True))
-
-        # Changing field 'ConditionReport.change_reason'
-        db.alter_column('condition_conditionreport', 'change_reason', self.gf('django.db.models.fields.CharField')(max_length=50))
-
-        # Changing field 'ConservationAction.action'
-        db.alter_column('condition_conservationaction', 'action', self.gf('django.db.models.fields.CharField')(max_length=30))
-
-        # Changing field 'ConservationAction.material_used'
-        db.alter_column('condition_conservationaction', 'material_used', self.gf('django.db.models.fields.CharField')(max_length=100))
-
-        # User chose to not deal with backwards NULL issues for 'ConservationAction.future_conservation_date'
-        raise RuntimeError("Cannot reverse this migration. 'ConservationAction.future_conservation_date' and its values cannot be restored.")
-
-        # Changing field 'Deaccession.person'
-        db.alter_column('condition_deaccession', 'person_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cat.Person']))
+        # Deleting field 'ConservationAction.action'
+        db.delete_column('condition_conservationaction', 'action_id')
 
 
     models = {
@@ -115,7 +55,7 @@ class Migration(SchemaMigration):
         'cat.museumobject': {
             'Meta': {'ordering': "['registration_number']", 'object_name': 'MuseumObject'},
             'access_status': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
-            'acquisition_date': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
+            'acquisition_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'acquisition_method': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'artefact_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.ArtefactType']", 'blank': 'True'}),
             'assoc_cultural_group': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
@@ -124,6 +64,7 @@ class Migration(SchemaMigration):
             'collector': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'collected_objects'", 'null': 'True', 'to': "orm['cat.Person']"}),
             'collector_2': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'collected_objects_2'", 'null': 'True', 'to': "orm['cat.Person']"}),
             'comment': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'creation_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'cultural_bloc': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.CulturalBloc']", 'null': 'True'}),
             'depth': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -143,6 +84,7 @@ class Migration(SchemaMigration):
             'loan_status': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'maker': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.Maker']", 'null': 'True', 'blank': 'True'}),
+            'manufacture_technique': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
             'old_registration_number': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'other_number': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'photographer': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -151,8 +93,10 @@ class Migration(SchemaMigration):
             'raw_material': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
             'recorded_use': ('django.db.models.fields.CharField', [], {'max_length': '300', 'blank': 'True'}),
             'reg_counter': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
+            'reg_info': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'registration_number': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'db_index': 'True'}),
             'related_documents': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'related_museumobjects'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['mediaman.Document']"}),
+            'significance': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'site_name_number': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'storage_bay': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
@@ -195,7 +139,7 @@ class Migration(SchemaMigration):
         },
         'condition.conservationaction': {
             'Meta': {'ordering': "['item']", 'object_name': 'ConservationAction'},
-            'action': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
+            'action': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['condition.ConservationActionType']", 'null': 'True'}),
             'comments': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'conservator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['condition.Conservator']", 'null': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
@@ -205,6 +149,11 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.MuseumObject']"}),
             'material_used': ('django.db.models.fields.TextField', [], {'blank': 'True'})
+        },
+        'condition.conservationactiontype': {
+            'Meta': {'object_name': 'ConservationActionType'},
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'condition.conservator': {
             'Meta': {'ordering': "['surname', 'firstname']", 'object_name': 'Conservator'},
