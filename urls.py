@@ -29,8 +29,11 @@ urlpatterns = patterns('',
         'django.contrib.auth.views.logout',
         {'next_page': '/', 'redirect_field_name': 'next'},
         name='auth_logout'),
+
+    url(r'^report/', include('reports.urls')),
 )
 
 if settings.DEBUG:
     from django.conf.urls.static import static
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+            document_root=settings.MEDIA_ROOT)
