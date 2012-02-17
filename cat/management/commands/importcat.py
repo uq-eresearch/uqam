@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory
-from cat.models import ArtefactType, CulturalBloc
+from cat.models import ArtefactType, CulturalBloc, Reference
 from cat.models import Person, Place, Region, Category, Maker
 from loans.models import LoanAgreement, LoanItem, Client, MuseumStaff
+from loans.models import LoanPurpose
 from condition.models import ConditionReport, ConservationAction
-from condition.models import  Deaccession, Conservator
+from condition.models import  Deaccession, Conservator, ConservationActionType
 from dataimport.models import ImportIssue
 from django.core import management
 from django.db import transaction
@@ -82,6 +83,9 @@ def process_artefactmore_record(r):
         except ValueError:
             pass
 
+    r.category_illustrated = r['Category_Illustrated']
+    r.artefact_illustrated = r['Artefact_Illustrated']
+
     mapint('width', 'Width(mm)')
     mapint('length', 'Length(mm)')
     mapint('height', 'Height(mm)')
@@ -108,7 +112,8 @@ def process_donorrecord(row):
 
 def process_collectorphotographer_record(r):
     """
-    Update a museumobject record with details from a row of the collectorphotog csv
+    Update a museumobject record with details from a row of the
+    collectorphotog csv
     """
     m = MuseumObject.objects.get(
             registration_number=r['Artefact_Registration'])
@@ -257,6 +262,7 @@ def set_category(m, artefact_name):
 def process_loan_record(r):
     l = LoanAgreement()
     l.id = r['LoanId']
+    l.ref = r['LoanId']
     l.date_borrowed = r['Borrowing_Date']
     l.return_date = r['Return_Date']
     l.approved_by, created = MuseumStaff.objects.get_or_create(
@@ -267,7 +273,8 @@ def process_loan_record(r):
     l.special_loan_conditions = r['Loan_Conditions']
     l.location = r['Location']
     l.loan_type = r['Loan Type']
-    l.reason = r['Loan_Reason_type']
+    l.purpose, created = LoanPurpose.objects.get_or_create(
+            purpose=r['Loan_Reason_type'])
     l.returned = r['Returned']
     l.comments = r['Comments']
     l.client = Client.objects.get(id=r['ClientNumber'])
@@ -292,9 +299,10 @@ def process_client_record(r):
 
 
 def process_loanitem_record(r):
-    l = LoanItem()
-    l.loan = LoanAgreement.objects.get(id=int(r['LoanId']))
-    l.item = MuseumObject.objects.get(id=r['Artefact_Registration'])
+    loan = LoanAgreement.objects.get(id=int(r['LoanId']))
+    item = MuseumObject.objects.get(id=r['Artefact_Registration'])
+    l, created = LoanItem.objects.get_or_create(
+            loan=loan, item=item)
     l.out_condition = r['ConditionCode']
     l.return_condition = r['Return_Condition']
     l.save()
@@ -331,7 +339,8 @@ def process_conservation(r):
     item = MuseumObject.objects.get(registration_number=r['Registration'])
     c, created = ConservationAction.objects.get_or_create(
             item=item, date=r['Action_Date'])
-    c.action = r['Conservation_action']
+    c.action, created = ConservationActionType.objects.get_or_create(
+            action=r['Conservation_action'])
     c.details = r['Action_Details']
     c.future_conservation = r['Future_Conservation']
     if r['Future_Conservation_Date']:
@@ -382,6 +391,15 @@ def process_conservator(r):
     c.phone = r['Phone1']
     c.save()
 
+
+def process_references(r):
+    ref = Reference()
+    ref.museum_object = MuseumObject.objects.get(id=r['Artefact_Registration'])
+    ref.author = r['Author']
+    ref.publications_details = r['Publication_Details']
+    ref.save()
+
+
 mappings = {
     'cat': (
         ('Region_combo.csv', process_regioncombo),
@@ -405,7 +423,10 @@ mappings = {
         ('Conservation_Details.csv', process_conservation),
         ('Deaccession.csv', process_deaccession),
         ('Artefact_Condition.csv', process_condition)
-    )
+    ),
+    'references': (
+        ('References.csv', process_references),
+    ),
 }
 
 # Defined Dictionaries
