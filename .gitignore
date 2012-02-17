@@ -1,6 +1,8 @@
 *.pyc
 *.db
+*.db.backup
 media/*
 .idea/*
 development_mode
 _build
+celerybeat-schedule
