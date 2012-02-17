@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory
 from cat.models import ArtefactType, CulturalBloc, Reference
 from cat.models import Person, Place, Region, Category, Maker
+from cat.models import Obtained, PhotoType, PhotoRecord
 from loans.models import LoanAgreement, LoanItem, Client, MuseumStaff
 from loans.models import LoanPurpose
 from condition.models import ConditionReport, ConservationAction
@@ -105,7 +106,8 @@ def process_donorrecord(row):
             registration_number=row['Artefact_Registration'])
     p = Person.objects.get(pk=int(row["Person_idnbr"]))
     m.donor_2 = p
-    m.how_donor_obtained = row['How_obtained']
+    m.how_donor_obtained, created = Obtained.objects.get_or_create(
+            how=row['How_obtained'])
     m.when_donor_obtained = row['When_obtained']
     m.save()
 
@@ -119,7 +121,8 @@ def process_collectorphotographer_record(r):
             registration_number=r['Artefact_Registration'])
     p = Person.objects.get(pk=int(r['Person_idnbr']))
     m.collector_2 = p
-    m.how_collector_obtained = r['How_Obtained1']
+    m.how_collector_obtained, created = Obtained.objects.get_or_create(
+            how=row['How_Obtained1'])
     m.when_collector_obtained = r['When_Obtained1']
     m.save()
 
@@ -176,6 +179,8 @@ category_name_map = {
     "Weighingutensil": "weighing utensil",
         }
 
+from cat.models import AcquisitionMethod, LoanStatus, AccessStatus
+
 
 def process_artefact_record(r):
     sys.stdout.write(' Id=%s' % r['Artefact_Registration'])
@@ -191,9 +196,12 @@ def process_artefact_record(r):
     m.other_number = r["Other_nmbr"]
     if r["Aquisition_Date"] != "":
         m.acquisition_date = r["Aquisition_Date"]
-    m.acquisition_method = r["Aquisition_Method"]
-    m.access_status = r["AccessStatus"]
-    m.loan_status = r["Loan_Status"]
+    m.acquisition_method, created = AcquisitionMethod.objects.get_or_create(
+            method=r['Aquisition_Method'])
+    m.access_status, created = AccessStatus.objects.get_or_create(
+            status=r['AccessStatus'])
+    m.loan_status, created = LoanStatus.objects.get_or_create(
+            status=r["Loan_Status"])
     m.description = r["Description"]
     m.comment = r["Comment"]
     m.storage_section = r['Storage_Section']
@@ -411,17 +419,46 @@ def process_registration(r):
         m.registration_date = r['Registration_Date']
     m.save()
 
+
+def process_obtained(r):
+    o = Obtained()
+    o.how = r['How_Obtained']
+    o.definition = r['Definition']
+    o.save()
+
+def process_phototype(r):
+    p = PhotoType()
+    p.phototype = r['PhotoType']
+    p.definition = r['Definition']
+    p.save()
+
+
+def process_photorecord(r):
+    p = PhotoRecord()
+    p.museum_object, created = MuseumObject.objects.get_or_create(
+            id=r['Artefact_Registration'])
+    p.phototype, created = PhotoType.objects.get_or_create(
+            phototype=r['PhotoType'])
+    p.comments = r['Comments']
+    p.save()
+
+
 mappings = {
     'cat': (
         ('Region_combo.csv', process_regioncombo),
         ('Functional_Category.csv', process_functional_category_record),
         ('Artefact_type.csv', process_artefacttype_record),
         ('Cultural_Bloc_Combo.csv', process_cultural_bloc_record),
+        ('Obtained_Combo.csv', process_obtained),
+        ('Photo_Type_Combo.csv', process_phototype),
         ('Person.csv', process_person_record),
         ('Artefact.csv', process_artefact_record),
         ('ACCESS2_Artefact_More.csv', process_artefactmore_record),
         ('Donor.csv', process_donorrecord),
         ('Collector_Photographer.csv', process_collectorphotographer_record),
+        ('Photo_Record.csv', process_photorecord),
+        ('References.csv', process_references),
+        ('Registration.csv', process_registration),
     ),
     'loans': (
         ('Client.csv', process_client_record),
@@ -434,12 +471,6 @@ mappings = {
         ('Conservation_Details.csv', process_conservation),
         ('Deaccession.csv', process_deaccession),
         ('Artefact_Condition.csv', process_condition)
-    ),
-    'references': (
-        ('References.csv', process_references),
-    ),
-    'registration': (
-        ('Registration.csv', process_registration),
     ),
 }
 

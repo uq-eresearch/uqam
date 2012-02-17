@@ -2,6 +2,34 @@ from django.db import models
 import string
 
 
+class AcquisitionMethod(models.Model):
+    method = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.method
+
+
+class LoanStatus(models.Model):
+    status = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.status
+
+
+class AccessStatus(models.Model):
+    status = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.status
+
+
+class Obtained(models.Model):
+    how = models.CharField(max_length=50)
+    definition = models.CharField(max_length=150)
+
+    def __unicode__(self):
+        return self.how
+
 class MuseumObject(models.Model):
     """
     An object held by the museum, typically a physical object or photo
@@ -23,9 +51,9 @@ class MuseumObject(models.Model):
 
     acquisition_date = models.DateField("Date acquired by museum",
             null=True, blank=True)
-    acquisition_method = models.CharField(max_length=50, blank=True)
-    loan_status = models.CharField(max_length=50, blank=True)
-    access_status = models.CharField(max_length=50, blank=True)
+    acquisition_method = models.ForeignKey(AcquisitionMethod, null=True)
+    loan_status = models.ForeignKey(LoanStatus, null=True)
+    access_status = models.ForeignKey(AccessStatus, null=True)
     reg_info = models.TextField("registration information", blank=True)
 
     registered_by = models.ForeignKey('loans.MuseumStaff', null=True)
@@ -45,8 +73,10 @@ class MuseumObject(models.Model):
             null=True,
             blank=True,
             related_name="donated_objects_2")
-    how_donor_obtained = models.CharField(max_length=50, blank=True)
+    how_donor_obtained = models.ForeignKey(Obtained, null=True,
+            related_name='donor_obtained')
     ## TODO: when_donor_obtained should be DateField
+    ### But contains some imprecise dates
     when_donor_obtained = models.CharField(max_length=50, blank=True)
 
     photographer = models.CharField(max_length=100)
@@ -61,11 +91,13 @@ class MuseumObject(models.Model):
             null=True,
             blank=True,
             related_name="collected_objects_2")
-    how_collector_obtained = models.CharField(max_length=50, blank=True)
+    how_collector_obtained = models.ForeignKey(Obtained, null=True,
+            related_name="collector_obtained")
     when_collector_obtained = models.CharField(max_length=50, blank=True)
 
     source = models.CharField(max_length=50)
-    how_source_obtained = models.CharField(max_length=50)
+    how_source_obtained = models.ForeignKey(Obtained, null=True,
+            related_name='source_obtained')
 
     maker = models.ForeignKey('Maker', null=True, blank=True)
     manufacture_technique = models.CharField(max_length=200, blank=True)
@@ -332,3 +364,23 @@ class Reference(models.Model):
 
     def __unicode__(self):
         return self.museum_object.__unicode__() + self.publications_details
+
+
+class PhotoRecord(models.Model):
+    """
+    Photographic record of a museum object
+    """
+    museum_object = models.ForeignKey(MuseumObject)
+    phototype = models.ForeignKey('PhotoType')
+    comments = models.CharField(max_length=200)
+
+
+class PhotoType(models.Model):
+    """
+    Type of photographic record
+    """
+    phototype = models.CharField(max_length=50)
+    definition = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.phototype
