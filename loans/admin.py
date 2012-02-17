@@ -7,8 +7,10 @@ class LoanItemInline(admin.TabularInline):
     model = LoanItem
     raw_id_fields = ('item',)
 
+
 class ClientInline(admin.StackedInline):
     model = Client
+
 
 class LoanAgreementAdmin(UndeleteableModelAdmin):
     inlines = [
@@ -23,6 +25,7 @@ class LoanAgreementAdmin(UndeleteableModelAdmin):
 
 admin.site.register(LoanAgreement, LoanAgreementAdmin)
 admin.site.register(Client)
+
 
 class MuseumStaffAdmin(admin.ModelAdmin):
     list_display = ('name', 'comments')
