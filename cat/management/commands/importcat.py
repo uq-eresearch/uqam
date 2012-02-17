@@ -393,12 +393,23 @@ def process_conservator(r):
 
 
 def process_references(r):
+    """
+    Import References.csv
+    """
     ref = Reference()
     ref.museum_object = MuseumObject.objects.get(id=r['Artefact_Registration'])
     ref.author = r['Author']
     ref.publications_details = r['Publication_Details']
     ref.save()
 
+
+def process_registration(r):
+    m = MuseumObject.objects.get(id=r['Artefact_Registration'])
+    m.registered_by, created = MuseumStaff.objects.get_or_create(
+            r['Museum_StaffName'])
+    if r['Registration_Date']:
+        m.registration_date = r['Registration_Date']
+    m.save()
 
 mappings = {
     'cat': (
@@ -426,6 +437,9 @@ mappings = {
     ),
     'references': (
         ('References.csv', process_references),
+    ),
+    'registration': (
+        ('Registration.csv', process_registration),
     ),
 }
 

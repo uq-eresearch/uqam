@@ -28,6 +28,9 @@ class MuseumObject(models.Model):
     access_status = models.CharField(max_length=50, blank=True)
     reg_info = models.TextField("registration information", blank=True)
 
+    registered_by = models.ForeignKey('loans.MuseumStaff', null=True)
+    registration_date = models.DateField(null=True)
+
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
     place = models.ForeignKey('Place', null=True, db_index=True)
 
