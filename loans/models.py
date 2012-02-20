@@ -40,7 +40,7 @@ class LoanAgreement(models.Model):
 
 
 class LoanPurpose(models.Model):
-    purpose = models.CharField(max_length=20)
+    purpose = models.CharField(max_length=20, unique=True)
     definition = models.CharField(max_length=100)
 
     def __unicode__(self):
@@ -81,7 +81,7 @@ class Client(models.Model):
 
 
 class MuseumStaff(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     comments = models.TextField(blank=True)
 
     class Meta:

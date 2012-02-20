@@ -3,32 +3,33 @@ import string
 
 
 class AcquisitionMethod(models.Model):
-    method = models.CharField(max_length=50)
+    method = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
         return self.method
 
 
 class LoanStatus(models.Model):
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
         return self.status
 
 
 class AccessStatus(models.Model):
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
         return self.status
 
 
 class Obtained(models.Model):
-    how = models.CharField(max_length=50)
+    how = models.CharField(max_length=50, unique=True)
     definition = models.CharField(max_length=150)
 
     def __unicode__(self):
         return self.how
+
 
 class MuseumObject(models.Model):
     """
@@ -379,7 +380,7 @@ class PhotoType(models.Model):
     """
     Type of photographic record
     """
-    phototype = models.CharField(max_length=50)
+    phototype = models.CharField(max_length=50, unique=True)
     definition = models.CharField(max_length=100)
 
     def __unicode__(self):
