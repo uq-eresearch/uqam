@@ -84,8 +84,8 @@ def process_artefactmore_record(r):
         except ValueError:
             pass
 
-    r.category_illustrated = r['Category_Illustrated']
-    r.artefact_illustrated = r['Artefact_Illustrated']
+    m.category_illustrated = r['Category_Illustrated']
+    m.artefact_illustrated = r['Artefact_Illustrated']
 
     mapint('width', 'Width(mm)')
     mapint('length', 'Length(mm)')
@@ -122,7 +122,7 @@ def process_collectorphotographer_record(r):
     p = Person.objects.get(pk=int(r['Person_idnbr']))
     m.collector_2 = p
     m.how_collector_obtained, created = Obtained.objects.get_or_create(
-            how=row['How_Obtained1'])
+            how=r['How_Obtained1'])
     m.when_collector_obtained = r['When_Obtained1']
     m.save()
 
@@ -255,7 +255,7 @@ def set_category(m, artefact_name):
         m.save()
     except Category.MultipleObjectsReturned:
         issue = ImportIssue(
-                description="Multiple matching categories '%s'" % artefact_name,
+                description="Multiple categories match '%s'" % artefact_name,
                 content_object=m)
         issue.save()
     except Category.DoesNotExist:
@@ -414,23 +414,26 @@ def process_references(r):
 def process_registration(r):
     m = MuseumObject.objects.get(id=r['Artefact_Registration'])
     m.registered_by, created = MuseumStaff.objects.get_or_create(
-            r['Museum_StaffName'])
+            name=r['Museum_StaffName'])
     if r['Registration_Date']:
         m.registration_date = r['Registration_Date']
     m.save()
 
 
 def process_obtained(r):
-    o = Obtained()
-    o.how = r['How_Obtained']
-    o.definition = r['Definition']
-    o.save()
+    o, created = Obtained.objects.get_or_create(
+            how=r['How_Obtained'])
+    if created:
+        o.definition = r['Definition']
+        o.save()
+
 
 def process_phototype(r):
-    p = PhotoType()
-    p.phototype = r['PhotoType']
-    p.definition = r['Definition']
-    p.save()
+    p, created = PhotoType.objects.get_or_create(
+            phototype=r['PhotoType'])
+    if created:
+        p.definition = r['Definition']
+        p.save()
 
 
 def process_photorecord(r):
