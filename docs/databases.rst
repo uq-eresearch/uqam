@@ -58,7 +58,7 @@ Log into the server and create the database::
 
     $ sudo -u postgres createdb --owner uqam --encoding UTF8 uqam
 
-OR
+OR::
 
     $ sudo -u postgres psql template1
     template1=# CREATE DATABASE uqam_new OWNER uqam ENCODING 'UTF8';

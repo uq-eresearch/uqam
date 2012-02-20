@@ -79,8 +79,13 @@ Check the `dev_settings.py` file that the correct postgres username,
 password, and database are configured. Then get django to generate all the
 required tables::
 
-    (uqam)$ ./manage.py syncdb --migrate
+    (uqam)$ ./manage.py syncdb --all
 
+Using `--all` creates all tables straight away, ignoring migrations::
+
+    $ ./manage.py migrate --fake
+
+Fixes up the record of migrations.
 
 Run Development Server
 ----------------------
@@ -135,7 +140,7 @@ and create a migration file::
 
     ./manage.py schemamigration cat --auto
 
-Check what changes have been found, and when ready, run the migration.
+Check what changes have been found, and when ready, run the migration::
 
     ./manage.py migrate cat
 
