@@ -56,3 +56,14 @@ Setup
 -----
 
 An application user will be created for the catalogue to run as and store files under.
+This step can be run manually, or using an automated system like Chef_.
+
+Make sure that the fabric config has the correct remote host and user name, and that
+ssh keys have been added for the remote user to allow login.
+
+Use Fabric_ to create a virtualenv with all required dependencies and the latest
+version of the UQAM code::
+
+  fab -H production bootstrap
+
+.. _Chef: http://www.opscode.com/chef/

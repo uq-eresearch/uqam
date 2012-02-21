@@ -3,11 +3,15 @@ from fabric.api import lcd, open_shell
 
 env.user = 'django'
 env.gateway = 'uqdayers@gladys'
-env.hosts = ['anthropology-uat']
+env.hosts = ['anthropology']
 env.appname = 'uqam'
 env.appdir = '/home/django/uqam'
 env.virtenv = '/home/django/env'
 env.reqfile = env.appdir + '/requirements.txt'
+
+
+def uname():
+    run('uname -a')
 
 
 def upgrade():
@@ -22,6 +26,7 @@ def upgrade():
 
 
 def bootstrap():
+    run('mkdir -p %(appdir)s' % env)
     push()
     run('virtualenv --no-site-packages %(virtenv)s' % env)
     reqs()
