@@ -16,23 +16,19 @@ RO_DATABASE = 'readonly'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-# Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'uqam',         # Or path to database file if using sqlite3.
-        'USER': 'uqam',                      # Not used with sqlite3.
-        'PASSWORD': 'uqam',                  # Not used with sqlite3.
-        'HOST': 'localhost',  # Set to empty string for localhost.
+        'NAME': 'uqam',
+        'USER': 'uqam',
+        'PASSWORD': 'uqam',
+        'HOST': 'localhost',
         'PORT': '',
-        # Set to empty string for default. Not used with sqlite3.
     },
     RO_DATABASE: {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-# Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'uqam',         # Or path to database file if using sqlite3.
-        'USER': 'uqam_read',                      # Not used with sqlite3.
-        'PASSWORD': 'uqam_read',                  # Not used with sqlite3.
-        'HOST': 'localhost',  # Set to empty string for localhost.
+        'NAME': 'uqam',
+        'USER': 'uqam_read',
+        'PASSWORD': 'uqam_read',
+        'HOST': 'localhost',
         'PORT': '',
-        # Set to empty string for default. Not used with sqlite3.
     },
 }
 
@@ -48,7 +44,7 @@ TIME_ZONE = 'Australia/Brisbane'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-GB'
+LANGUAGE_CODE = 'en-AU'
 
 SITE_ID = 1
 
@@ -135,7 +131,8 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'uqam.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like "/home/html/django_templates" 
+    #  or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     DIRNAME + '/templates',
@@ -238,7 +235,6 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/accounts/login(.*)$',
     r'/admin/logout(.*)$',
     r'/place/kml$',
-    r'/$',
 )
 
 GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
