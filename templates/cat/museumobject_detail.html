@@ -70,6 +70,20 @@ Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ mus
     <br>
 {% endif %}
 
+{% if museumobject.category_illustrated %}
+<b>Category Illustrated: </b>
+    <a href="{{ museumobject.category_illustrated.get_absolute_url }}">
+    {{ museumobject.category_illustrated }}</a>
+    <br>
+{% endif %}
+
+{% if museumobject.artefact_illustrated %}
+<b>Artefact Illustrated: </b>
+    <a href="{{ museumobject.artefact_illustrated.get_absolute_url }}">
+    {{ museumobject.artefact_illustrated }}</a>
+    <br>
+{% endif %}
+
 {% if museumobject.manufacture_technique %}
     <b>Manufacture technique: </b> {{ museumobject.manufacture_technique }}
     <br>
@@ -157,6 +171,13 @@ Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ mus
 
 
 {% if user.is_staff %}
+
+{% if museumobject.photorecord_set %}
+  <b>Photographic Record</b><br>
+  {% for pr in museumobject.photorecord_set.all %}
+    {{ pr.phototype }} {{ pr.comments}}<br>
+  {% endfor %}
+{% endif %}
 
 {% if museumobject.reg_info %}
   <b>Registration Information:</b></br>
