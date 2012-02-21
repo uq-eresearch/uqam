@@ -14,6 +14,9 @@ Contents:
    about
    development
    deployment
+   installation
+   usage
+   databases
 
 
 Indices and tables

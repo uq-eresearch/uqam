@@ -1,7 +1,7 @@
 .. _usage:
 
 Catalogue Usage
-=========
+===============
 
 Searching
 ---------

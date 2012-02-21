@@ -3,23 +3,24 @@ Installation
 ============
 
 
-Create virtualenv
+Create virtualenv::
 
-   $ virtualenv --no-site-packages uqam
+   virtualenv --no-site-packages uqam
 
-Grab the code
+Grab the code::
 
-    $ cd uqam
-    $ git clone
+   cd uqam
+   git clone
 
-Install requirements
+Install requirements::
 
-    $ pip install -r requirements.txt
+   pip install -r requirements.txt
 
-Configure database
+Configure database::
 
-Create database tables
 
-    $ ./manage.py migrate
+Create database tables::
+
+   ./manage.py migrate
 
 Import data

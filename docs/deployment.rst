@@ -47,6 +47,7 @@ Fabric
 Fabric is a simple python tool for managing remote deployments over ssh, by scripting repetitive tasks. Unfortunately the released versions don't include support for SSH gateways, which are required by our virtual machine setup. A forked version supporting gateways can be installed with:
 
   pip install -e git+https://github.com/ebolwidt/fabric.git#egg=fabric
+
 More information about this issue can be found in the `fabric issue tracking`_ site.
 
 .. _`fabric issue tracking`: https://github.com/fabric/fabric/issues/38
