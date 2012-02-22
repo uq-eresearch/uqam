@@ -3,11 +3,12 @@ from fabric.api import lcd, open_shell
 
 env.user = 'django'
 env.gateway = 'uqdayers@gladys'
-env.hosts = ['anthropology']
+#env.hosts = ['anthropology']
 env.appname = 'uqam'
 env.appdir = '/home/django/uqam'
 env.virtenv = '/home/django/env'
 env.reqfile = env.appdir + '/requirements.txt'
+sudouser = 'uqdayers'
 
 
 def uname():
@@ -26,16 +27,23 @@ def upgrade():
 
 
 def bootstrap():
+    """
+    Bootstrap a remote UQAM Catalogue installation
+
+    Copy the code into a virtualenv on the server and install all requirements
+    """
     run('mkdir -p %(appdir)s' % env)
     push()
+    installsyspackages()
     run('virtualenv --no-site-packages %(virtenv)s' % env)
     reqs()
+    init_celery()
 
 
 def init_celery():
     put('etc/init-celery.conf', '/tmp/celery.conf')
     put('etc/init-celeryd', '/tmp/celeryd')
-    with settings(user='uqdayers'):
+    with settings(user=sudouser):
         sudo('mv /tmp/celery.conf /etc/default/celeryd')
         sudo('mv /tmp/celeryd /etc/init.d/')
         sudo('chown root.root /etc/init.d/celeryd /etc/default/celeryd')
@@ -44,9 +52,22 @@ def init_celery():
         sudo('service celeryd restart')
 
 
+def init_gunicorn():
+    nginxconf = '/etc/nginx/conf.d/gunicorn.conf'
+    initconf = '/etc/init/uqam-gunicorn.conf'
+
+    put('etc/init-gunicorn.conf', '/tmp/init-gunicorn.conf')
+    put('etc/nginx-gunicorn.conf', '/tmp/nginx-gunicorn.conf')
+    with settings(user=sudouser):
+        sudo('mv /tmp/init-gunicorn.conf %s' % initconf)
+        sudo('mv /tmp/nginx-gunicorn.conf %s' % nginxconf)
+        sudo('chown root.root %s %s' % (nginxconf, initconf))
+        sudo('chmod 644 %s %s' % (nginxconf, initconf))
+
+
 def installsyspackages():
-    with settings(user='uqdayers'):
-        sudo('yum install openldap-devel openssl-devel')
+    with settings(user=sudouser):
+        sudo('yum install postgresql-devel openldap-devel openssl-devel')
 
 
 def reqs():
@@ -56,7 +77,9 @@ def reqs():
 
 
 def push():
-    """Deploy the newest source to the server"""
+    """
+    Deploy the newest source to the server
+    """
     filename = _pack()
     put(filename, filename)
     with cd(env.appdir):
@@ -74,19 +97,25 @@ def _pack():
 
 
 def _syncdb():
-    """Migrate the remote database to the latest version"""
+    """
+    Migrate the remote database to the latest version
+    """
     _venv('./manage.py syncdb')
     _venv('./manage.py migrate')
 
 
 def resetcat():
-    """DANGER: Wipe/Reset the remote catalogue"""
+    """
+    DANGER: Wipe/Reset the remote catalogue
+    """
     _venv('./manage.py reset cat loans condition')
     _venv('./manage.py migrate --fake')
 
 
 def importcat():
-    """Remotely import the catalogue and images"""
+    """
+    Remotely import the catalogue data
+    """
     classificationsfile = '/home/django/origdb/ClassificationsNov11.xlsx'
     _venv('./manage.py importcategories %s' % classificationsfile)
     _venv('./manage.py importcat /home/django/origdb cat loans condition')
@@ -94,6 +123,9 @@ def importcat():
 
 
 def importimages():
+    """
+    Remotely import images
+    """
     _venv('./manage.py importmedia /home/django/images')
 
 
@@ -117,7 +149,7 @@ def _venv(cmd):
 
 
 def reload_servers():
-    with settings(user='uqdayers'):
+    with settings(user=sudouser):
         sudo('service nginx reload')
         sudo('service celeryd reload')
         sudo('initctl stop uqam-gunicorn')
@@ -125,12 +157,16 @@ def reload_servers():
 
 
 def rebuild_index():
-    """Rebuild the entire search index"""
+    """
+    Rebuild the entire remote search index
+    """
     _venv('./manage.py rebuild_index')
 
 
 def update_index():
-    """Update search index"""
+    """
+    Update search index
+    """
     _venv('./manage.py update_index')
 
 
@@ -174,3 +210,14 @@ def setup_local_database():
 def docs():
     with lcd('docs'):
         local('make html')
+
+
+def push_local_database():
+    dumpfile = '/tmp/uqam_dump.sql.gz'
+
+    local('pg_dump --clean -h localhost -U uqam uqam | '
+            ' gzip -c > %s' % dumpfile)
+    put(dumpfile, dumpfile)
+
+    run('gunzip -c %s | psql -h localhost -U uqam -d uqam' % dumpfile)
+
