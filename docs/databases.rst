@@ -36,7 +36,7 @@ drivers to be installed into the virtual environment. It is install thus::
 
 Exporting through Django
 ------------------------
-Export all the data as a json dump. This uses a lot of memory, beware.
+Export all the data as a json dump. This uses a lot of memory, beware::
 
     ./manage.py dumpdata --exclude contenttypes > datadump.json
 
@@ -49,19 +49,11 @@ Create PostgreSQL Database
 --------------------------
 Create a new database user::
 
-    $ sudo -u postgres createuser --password uqam
-    Shall the new role be a superuser? (y/n) n
-    Shall the new role be allowed to create databases? (y/n) n
-    Shall the new role be allowed to create more new roles? (y/n) n
+    $ sudo -u postgres createuser -S -D -R -P uqam
 
-Log into the server and create the database::
+Create the database::
 
     $ sudo -u postgres createdb --owner uqam --encoding UTF8 uqam
-
-OR::
-
-    $ sudo -u postgres psql template1
-    template1=# CREATE DATABASE uqam_new OWNER uqam ENCODING 'UTF8';
 
 Use django to create the database structure, creating it directly without
 using migrations::
@@ -69,6 +61,7 @@ using migrations::
     ./manage.py syncdb --all
 
 Load the previous database dump::
+
     ./manage.py loaddata datadump.json
 
 If `loaddata` complains about duplicate contenttype keys, you can clean up
@@ -80,10 +73,14 @@ the database by::
 Create Read-Only User
 ---------------------
 
-CREATE ROLE uqam_read PASSWORD 'uqam_read' LOGIN 
-  NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+Create read only database user::
 
-GRANT CONNECT ON DATABASE uqam TO uqam_read;
+    $ sudo -u postgres createuser -S -D -R -P uqam_read
+
+Grant the new user privileges to connect to the database::
+
+    $ sudo -u postgres psql
+    GRANT CONNECT ON DATABASE uqam TO uqam_read;
 
 To be properly secure, the public permissions on the database should be 
 changed too, since the read only user can still create tables 
@@ -96,8 +93,26 @@ http://linuxhow-tos.blogspot.com.au/2010/11/read-only-user-in-postgresql.html
 
 PostgreSQL Backup and Restore
 -----------------------------
-Backup:  $ pg_dump -h {hostname} -U {user-name} {source_db} -f {dumpfilename.sql}
+Backup::
 
-Restore: $ psql -h {hostname} -U {user-name} -d {desintation_db} -f {dumpfilename.sql}
+    $ pg_dump -h {hostname} -U {user-name} {source_db} -f {dumpfilename.sql}
+
+Restore::
+
+    $ psql -h {hostname} -U {user-name} -d {desintation_db} -f {dumpfilename.sql}
 
 
+Partial Database Backup and Restore
+-----------------------------------
+Backup only the auth and mediaman apps::
+
+    pg_dump -a -t "auth_*" -t "mediaman_*" -U uqam uqam -f {partialdump.sql}
+
+Restore the same as a full dump.
+
+
+Drop Database
+-------------
+The database can be dropped with::
+
+    sudo -u postgres dropdb uqam

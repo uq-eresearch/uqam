@@ -61,6 +61,8 @@ Set a password for accessing postgresql::
     sudo -u postgres psql
     ALTER ROLE postgres WITH ENCRYPTED PASSWORD 'mypassword';
 
+With Postgresql 9+::
+
     CREATE EXTENSION adminpack;
     CREATE DATABASE 'uqam' WITH ENCODING 'UTF-8';
 
