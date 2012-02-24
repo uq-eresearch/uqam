@@ -41,8 +41,6 @@ def import_xlsx(filename):
         m.storage_bay = vals[7]
         m.storage_shelf_box_drawer = vals[8]
         if vals[9] != 'None':
-#            if vals[0] == '40357':
-#                import pdb; pdb.set_trace()
             sys.stdout.write(' Acq_date=%s' % vals[9])
             m.acquisition_date = vals[9].split(' ')[0]
         m.access_status, c = AccessStatus.objects.get_or_create(
