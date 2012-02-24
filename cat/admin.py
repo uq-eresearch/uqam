@@ -123,7 +123,7 @@ class PlaceAdmin(admin.ModelAdmin):
         pass
 
     actions = [merge_selected, geocode_place]
-    search_fields = ['country', 'region__name', 'australian_state', 'name']
+    search_fields = ['country', 'region', 'australian_state', 'name']
 admin.site.register(Place, PlaceAdmin)
 
 
