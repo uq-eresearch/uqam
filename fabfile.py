@@ -6,6 +6,7 @@ env.gateway = 'uqdayers@gladys'
 #env.hosts = ['anthropology']
 env.appname = 'uqam'
 env.appdir = '/home/django/uqam'
+env.tmpappdir = '/home/django/uqam_tmp'
 env.virtenv = '/home/django/env'
 env.reqfile = env.appdir + '/requirements.txt'
 sudouser = 'uqdayers'
@@ -82,6 +83,10 @@ def push():
     """
     filename = _pack()
     put(filename, filename)
+    run('rm -rf %(tmpappdir)s' % env)
+    run('mv %(appdir)s %(tmpappdir)s' % env)
+    run('mkdir -p %(appdir)s' % env)
+
     with cd(env.appdir):
         run('tar xjf %s' % filename)
 
@@ -130,7 +135,7 @@ def importimages():
 
 
 def copyimages():
-    local('rsync -rv %s(imagesdir) django@anthropology-uat:images')
+    local('rsync -rv %s(imagesdir) %(host_string)s:images' % env)
 
 #def importdata(db):
     # Either:
@@ -220,4 +225,17 @@ def push_local_database():
     put(dumpfile, dumpfile)
 
     run('gunzip -c %s | psql -h localhost -U uqam -d uqam' % dumpfile)
+
+
+def dumpdata(app):
+    filename = '/tmp/%s.json' % app
+    _venv('./manage.py dumpdata %s > %s' % (app, filename))
+    get(filename, filename)
+
+
+def loaddata(app):
+    filename = '/tmp/%s.json' % app
+    put(filename, filename)
+    _venv('./manage.py loaddata %s' % filename)
+
 
