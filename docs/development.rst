@@ -125,6 +125,9 @@ Import the new categories used by the museum::
 
     ./manage.py importcategories ~/temp/Classifications\ Nov11.xlsx
 
+Please note, Open/Libre Office cannot be used to edit dates in .xlsx files
+since it uses a different format. Excel must be used.
+
 Export the Access MDB file to CSV files::
 
 Import the CSV files into the new museum catalogue::

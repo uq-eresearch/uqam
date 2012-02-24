@@ -280,7 +280,7 @@ class Person(models.Model):
     """
     A collector or photographer who has contributed to the museum
     """
-    name = models.CharField(max_length=150)
+    name = models.CharField(unique=True, max_length=150)
     comments = models.TextField(blank=True)
     related_documents = models.ManyToManyField('mediaman.Document',
             related_name='related_people', blank=True)
