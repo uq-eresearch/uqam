@@ -3,3 +3,7 @@ select max(id) from cat_person;
 
 
 alter sequence cat_person_id_seq restart with 1059;
+
+
+SELECT pg_catalog.setval(pg_get_serial_sequence('cat_person', 'id'),
+(SELECT MAX(id) FROM cat_person)+1);
