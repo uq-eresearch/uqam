@@ -32,7 +32,7 @@ def clean_row(row):
 
 @transaction.commit_manually
 def process_csv(filename, row_handler):
-    '''Read each line of a csv and process with the supplied function'''
+    """Read each line of a csv and process with the supplied function"""
     db.reset_queries()  # Don't leak memory by forever storing SQL queries
     try:
         with open(filename) as f:
@@ -55,7 +55,7 @@ def process_csv(filename, row_handler):
 
 
 def process_person_record(r):
-    '''Read person records from a row of the csv and create DB records'''
+    """Read person records from a row of the csv and create DB records"""
     if r['Name'] == '':
         return
     p = Person()
@@ -101,7 +101,7 @@ def process_artefactmore_record(r):
 
 
 def process_donorrecord(row):
-    '''Update a museumobject record with details from a row of the donor csv'''
+    """Update a museumobject record with details from a row of the donor csv"""
     m = MuseumObject.objects.get(
             registration_number=row['Artefact_Registration'])
     p = Person.objects.get(pk=int(row["Person_idnbr"]))
