@@ -12,8 +12,10 @@ class StricterLDAPBackend(LDAPBackend):
     """
 
     def authenticate(self, username=None, password=None):
-        if User.objects.get(username=username):
-            return super(StricterLDAPBackend, self).authenticate(username, password)
-        else:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
             return None
+        return super(StricterLDAPBackend, self
+                ).authenticate(username, password)
 
