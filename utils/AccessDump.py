@@ -5,13 +5,18 @@
 # It depends upon the mdbtools suite:
 #   http://sourceforge.net/projects/mdbtools/
 
-import string, sys, subprocess # the subprocess module is new in python v 2.4
+import os
+import string
+import sys
+import subprocess  # the subprocess module is new in python v 2.4
 
 DATABASE = sys.argv[1]
 DIR = sys.argv[2]
 
 
-def export_access(mdbfile, folder):
+def export_access(mdbfile, directory):
+    if directory:
+        os.chdir(directory)
     # Get the list of table names with "mdb-tables"
     table_names = subprocess.Popen(["mdb-tables", "-1", DATABASE],
                                 stdout=subprocess.PIPE).communicate()[0]
@@ -21,11 +26,11 @@ def export_access(mdbfile, folder):
     # converting " " in table names to "_" for the CSV filenames.
     for table in tables:
         if table != '':
-            filename = table.replace(" ","_") + ".csv"
+            filename = table.replace(" ", "_") + ".csv"
             file = open(filename, 'w')
             print("Dumping " + table)
-            contents = subprocess.Popen(["mdb-export", "-D", "%F", DATABASE, table],
-                                        stdout=subprocess.PIPE).communicate()[0]
+            contents = subprocess.Popen(["mdb-export", "-D", "%F",
+                DATABASE, table], stdout=subprocess.PIPE).communicate()[0]
             file.write(string.replace(contents, '\r', ''))
             file.close()
 
