@@ -53,7 +53,7 @@ Install PostgreSQL database server::
 
     sudo apt-get install postgresql pgadmin3 postgresql-contrib
 
-
+----------------------
 Database Configuration
 ----------------------
 Set a password for accessing postgresql::
@@ -93,46 +93,6 @@ Run Development Server
 Once everything is setup, the development server can be run::
 
     ./manage.py runserver
-
-
-
-Import Geonames Data
----------------------
-
-Install the django-geonames app::
-
-    pip install https://github.com/ramusus/django-geonames/tarball/master
-
-Modify to remove GeoDjango requirements. Remote point and add latitude and
-longitude fields, customising the import scripts also.
-
-Download the geonames data::
-
-    ./manage.py download_geonames
-
-Compress ready for insertion into database::
-
-    ./manage.py compress_geonames
-
-Load into PostgreSQL::
-
-    ./manage.py load_geonames
-
-
-Import UQAM Data
-----------------
-Import the new categories used by the museum::
-
-    ./manage.py importcategories ~/temp/Classifications\ Nov11.xlsx
-
-Please note, Open/Libre Office cannot be used to edit dates in .xlsx files
-since it uses a different format. Excel must be used.
-
-Export the Access MDB file to CSV files::
-
-Import the CSV files into the new museum catalogue::
-
-    ./manage.py importcat ~/temp/ cat loans condition
 
 
 

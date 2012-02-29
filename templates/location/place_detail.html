@@ -3,7 +3,7 @@
 {% block content %}
 <div style="float:right;font-size: 80%;">
     {% if user.is_staff %}
-        <a href="{% url admin:cat_place_change place.id %}">Admin</a>
+        <a href="{% url admin:location_place_change place.id %}">Admin</a>
     {% endif %}
 </div>
 <h1>{{ place.name }}</h1>

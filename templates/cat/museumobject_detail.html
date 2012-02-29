@@ -46,7 +46,9 @@ Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ mus
 <h2>{{ museumobject }}</h2>
     <b>Registration Number:</b> {{ museumobject.registration_number}}
 <br>
+{% if user.is_staff %}
 <b>Functional Category:</b> {{ museumobject.functional_category }}
+{% endif %}
 <br>
 <b>Artefact Type:</b> {{ museumobject.artefact_type }}
 <br>

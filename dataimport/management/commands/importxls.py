@@ -3,7 +3,9 @@ from cat.models import MuseumObject, FunctionalCategory
 from cat.models import ArtefactType, CulturalBloc
 from cat.models import AccessStatus, LoanStatus
 from cat.models import AcquisitionMethod, PhotoType, PhotoRecord
-from cat.models import Person, Place, Maker, Obtained
+from cat.models import Obtained
+from parties.models import Person, Maker
+from location.models import Place
 from importcat import set_category
 import os
 import sys

@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'grappelli.dashboard',
     'grappelli',
     'filebrowser',
     'django.contrib.admin',
@@ -162,6 +163,9 @@ INSTALLED_APPS = (
     'dataimport',
     'djkombu',
     'reports',
+    'parties',
+    'common',
+    'location'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -248,3 +252,4 @@ BROKER_TRANSPORT = "django"
 #BROKER_PASSWORD = "guest"
 #BROKER_VHOST = "/"
 
+GRAPPELLI_INDEX_DASHBOARD = 'uqam.grapdashboard.UQAMDashboard'

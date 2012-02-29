@@ -41,9 +41,14 @@ class MuseumObject(models.Model):
     other_number = models.CharField(max_length=50, blank=True)
     reg_counter = models.CharField(max_length=50, blank=True)
 
-    functional_category = models.ForeignKey('FunctionalCategory')
-    artefact_type = models.ForeignKey('ArtefactType', blank=True)
-    category = models.ManyToManyField('Category', blank=True)
+    functional_category = models.ForeignKey('FunctionalCategory',
+            verbose_name='previous category name',
+            help_text='Functional Category from the old database')
+    artefact_type = models.ForeignKey('ArtefactType', blank=True,
+            verbose_name='previous object type',
+            help_text='Artefact Type from the old database')
+    category = models.ManyToManyField('Category', blank=True,
+            help_text='New style categories')
 
     storage_section = models.CharField(max_length=4, blank=True)
     storage_unit = models.CharField(max_length=4, blank=True)
@@ -53,27 +58,32 @@ class MuseumObject(models.Model):
     acquisition_date = models.DateField("Date acquired by museum",
             null=True, blank=True)
     acquisition_method = models.ForeignKey(AcquisitionMethod, null=True)
-    loan_status = models.ForeignKey(LoanStatus, null=True)
+    loan_status = models.ForeignKey(LoanStatus, null=True,
+            help_text='Is object on outwards/inwards loan')
     access_status = models.ForeignKey(AccessStatus, null=True)
     reg_info = models.TextField("registration information", blank=True)
 
-    registered_by = models.ForeignKey('loans.MuseumStaff', null=True)
+    registered_by = models.ForeignKey('parties.MuseumStaff', null=True)
     registration_date = models.DateField(null=True)
 
-    cultural_bloc = models.ForeignKey('CulturalBloc', null=True)
-    place = models.ForeignKey('Place', null=True, db_index=True)
+    cultural_bloc = models.ForeignKey('CulturalBloc', null=True,
+            help_text='Old region classification')
+    place = models.ForeignKey('location.Place', null=True, db_index=True,
+            help_text='Where the object is from')
 
     donor = models.ForeignKey(
-            'Person',
+            'parties.Person',
             null=True,
             blank=True,
             db_index=True,
-            related_name="donated_objects")
+            related_name="donated_objects",
+            help_text='Main donor record')
     donor_2 = models.ForeignKey(
-            'Person',
+            'parties.Person',
             null=True,
             blank=True,
-            related_name="donated_objects_2")
+            related_name="donated_objects_2",
+            help_text='2nd Imported donor record, possibly historic')
     how_donor_obtained = models.ForeignKey(Obtained, null=True,
             related_name='donor_obtained')
     ## TODO: when_donor_obtained should be DateField
@@ -82,25 +92,26 @@ class MuseumObject(models.Model):
 
     photographer = models.CharField(max_length=100)
     collector = models.ForeignKey(
-            'Person',
+            'parties.Person',
             null=True,
             blank=True,
             db_index=True,
             related_name="collected_objects")
     collector_2 = models.ForeignKey(
-            'Person',
+            'parties.Person',
             null=True,
             blank=True,
             related_name="collected_objects_2")
     how_collector_obtained = models.ForeignKey(Obtained, null=True,
             related_name="collector_obtained")
-    when_collector_obtained = models.CharField(max_length=50, blank=True)
+    when_collector_obtained = models.CharField(max_length=50, blank=True,
+            help_text="Please use the following format: <em>YYYY-MM-DD</em>.")
 
     source = models.CharField(max_length=50)
     how_source_obtained = models.ForeignKey(Obtained, null=True,
             related_name='source_obtained')
 
-    maker = models.ForeignKey('Maker', null=True, blank=True)
+    maker = models.ForeignKey('parties.Maker', null=True, blank=True)
     manufacture_technique = models.CharField(max_length=200, blank=True)
     creation_date = models.DateField(null=True, blank=True)
     site_name_number = models.CharField(max_length=150, blank=True)
@@ -115,7 +126,8 @@ class MuseumObject(models.Model):
 
     description = models.TextField(blank=True)
 
-    is_public_comment = models.BooleanField(default=False)
+    is_public_comment = models.BooleanField(default=False,
+            help_text='Is comment allowed to be shown publicly')
     comment = models.TextField(blank=True)
     private_comment = models.TextField(
             blank=True,
@@ -193,8 +205,6 @@ class CulturalBloc(models.Model):
 class ArtefactType(models.Model):
     """
     The type or intended use of an object
-
-    Soon to be superseded by `Category`
     """
     name = models.CharField(max_length=150, unique=True)
     definition = models.TextField(blank=True)
@@ -207,108 +217,6 @@ class ArtefactType(models.Model):
         ordering = ['name']
 
 
-class Place(models.Model):
-    country = models.CharField(max_length=30, blank=True)
-    region = models.CharField(max_length=40, blank=True)
-    australian_state = models.CharField(max_length=20, blank=True)
-    name = models.CharField(max_length=150)
-
-    is_corrected = models.BooleanField(default=False,
-            help_text="Has someone manually"
-            "moved the marker to it's correct location.")
-    gn_name = models.CharField(max_length=100,
-            help_text="GeoNames Name", blank=True)
-    gn_id = models.CharField(max_length=20,
-            help_text="GeoNames ID", blank=True)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
-
-    class Meta:
-        ordering = ["id"]
-
-    def __unicode__(self):
-        return ' > '.join([self.country, self.region, self.name])
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('place_detail', [str(self.id)])
-
-    def get_geonames_url(self):
-        if self.gn_id:
-            return "http://www.geonames.org/%s" % self.gn_id
-        else:
-            return False
-
-    def get_kml_coordinates(self):
-        return "%s,%s,0" % (self.longitude, self.latitude)
-
-    def geocode_net(self, force=False):
-        """
-        Lookup the latitude and longitude of this place with GeoNames
-
-        Place must be saved after use. Set `force` to re-lookup the location.
-
-        Can take a few seconds to return, since this uses a network request.
-        """
-        if self.gn_id and not force:
-            return
-        from utils import geocoders
-        geonames = geocoders.GeoNamesWithId()
-        place, geonameId, (lat, lng) = geonames.geocode('%s, %s' %
-                                                (self.name, self.country,),
-                                                exactly_one=False)[0]
-        self.gn_name = place
-        self.gn_id = geonameId
-        self.latitude = lat
-        self.longitude = lng
-
-    def geocode(self, force=False):
-        from geonames.models import Geoname
-        country = Geoname.objects.countries(name__contains=self.country)[0]
-        geonames = Geoname.objects.filter(name__icontains=self.name,
-                country=country.country)
-        if geonames:
-            g = geonames[0]
-            self.gn_name = g.name
-            self.gn_id = g.geonameid
-            p = g.point.split(',')
-            self.longitude = float(p[0])
-            self.latitude = float(p[1])
-
-
-class Person(models.Model):
-    """
-    A collector or photographer who has contributed to the museum
-    """
-    name = models.CharField(unique=True, max_length=150)
-    comments = models.TextField(blank=True)
-    related_documents = models.ManyToManyField('mediaman.Document',
-            related_name='related_people', blank=True)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('person_detail', [str(self.id)])
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['name']
-        verbose_name_plural = "People"
-
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("name__iexact",)
-
-
-class Region(models.Model):
-    name = models.CharField(max_length=60, unique=True)
-    description = models.CharField(max_length=200)
-
-    def __unicode__(self):
-        return self.name
-
-
 class Category(models.Model):
     """
     A hierarchical set of categories for classifying Museum Objects
@@ -318,6 +226,8 @@ class Category(models.Model):
     parent = models.ForeignKey('self', blank=True,
             null=True, related_name="children")
     slug = models.SlugField(help_text="Used in URLs")
+    suggested_artefact_types = models.ManyToManyField(ArtefactType,
+            related_name='categories', null=True)
 
     def __unicode__(self):
         if self.parent:
@@ -337,22 +247,6 @@ class Category(models.Model):
             category = category.parent
         url = "/categories" + url
         return url
-
-
-class Maker(models.Model):
-    """A person or entity who created an item in the collection"""
-    name = models.CharField(max_length=200, unique=True)
-    comment = models.TextField(blank=True)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('maker_detail', [str(self.id)])
-
-    class Meta:
-        ordering = ['name']
-
-    def __unicode__(self):
-        return self.name
 
 
 class Reference(models.Model):

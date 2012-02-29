@@ -15,12 +15,12 @@ LOAN_TYPES = [
 
 class LoanAgreement(models.Model):
     ref = models.CharField(max_length=10)
-    client = models.ForeignKey('Client')
+    client = models.ForeignKey('parties.Client')
     date_borrowed = models.DateField()
     return_date = models.DateField()
-    approved_by = models.ForeignKey('MuseumStaff',
+    approved_by = models.ForeignKey('parties.MuseumStaff',
             related_name="approved_by")
-    prepared_by = models.ForeignKey('MuseumStaff',
+    prepared_by = models.ForeignKey('parties.MuseumStaff',
             related_name="prepared_by")
     loan_type = models.CharField(blank=True, max_length=20,
             choices=LOAN_TYPES)
@@ -60,33 +60,3 @@ class LoanItem(models.Model):
         return self.item.__unicode__()
 
 
-class Client(models.Model):
-    name = models.CharField(max_length=200)
-    organisation = models.CharField(blank=True, max_length=80)
-    position = models.CharField(blank=True, max_length=80)
-    address = models.TextField(blank=True)
-    town_suburb = models.CharField(blank=True, max_length=80)
-    state = models.CharField(blank=True, max_length=30)
-    postcode = models.CharField(blank=True, max_length=10)
-    country = models.CharField(blank=True, max_length=50)
-
-    phone1 = models.CharField(blank=True, max_length=20)
-    phone2 = models.CharField(blank=True, max_length=20)
-
-    class Meta:
-        ordering = ['name']
-
-    def __unicode__(self):
-        return self.name
-
-
-class MuseumStaff(models.Model):
-    name = models.CharField(max_length=200, unique=True)
-    comments = models.TextField(blank=True)
-
-    class Meta:
-        verbose_name_plural = "Museum staff"
-        ordering = ['name']
-
-    def __unicode__(self):
-        return self.name

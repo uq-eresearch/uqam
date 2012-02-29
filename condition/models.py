@@ -1,7 +1,7 @@
 from django.db import models
 
 from cat.models import MuseumObject
-from loans.models import MuseumStaff
+from parties.models import MuseumStaff
 
 
 class Conservator(models.Model):

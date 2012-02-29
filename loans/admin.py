@@ -1,5 +1,6 @@
 from django.contrib import admin
-from models import LoanAgreement, LoanItem, Client, MuseumStaff
+from models import LoanAgreement, LoanItem
+from parties.models import Client
 from common.admin import UndeleteableModelAdmin
 
 
@@ -24,12 +25,4 @@ class LoanAgreementAdmin(UndeleteableModelAdmin):
 
 
 admin.site.register(LoanAgreement, LoanAgreementAdmin)
-admin.site.register(Client)
-
-
-class MuseumStaffAdmin(admin.ModelAdmin):
-    list_display = ('name', 'comments')
-    search_fields = ('name', 'comments')
-    model = MuseumStaff
-admin.site.register(MuseumStaff, MuseumStaffAdmin)
 

@@ -1,9 +1,11 @@
 from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory
 from cat.models import ArtefactType, CulturalBloc, Reference
-from cat.models import Person, Place, Region, Category, Maker
+from location.models import Place, Region
+from cat.models import Category
 from cat.models import Obtained, PhotoType, PhotoRecord
-from loans.models import LoanAgreement, LoanItem, Client, MuseumStaff
+from parties.models import Person, Maker, Client, MuseumStaff
+from loans.models import LoanAgreement, LoanItem
 from loans.models import LoanPurpose
 from condition.models import ConditionReport, ConservationAction
 from condition.models import  Deaccession, Conservator, ConservationActionType
@@ -228,42 +230,30 @@ def process_artefact_record(r):
             name=r['CulturalBloc'])
     m.cultural_bloc = cb
 
-    try:
-        p = Person.objects.get(pk=int(r["Collector_photographerID"]))
-        m.collector = p
-    except:
-        print "\nCould not find collector: ", r["Collector_photographerID"]
-#        print(sys.exc_info())
-    try:
-        p = Person.objects.get(pk=int(r["DonorID"]))
-        m.donor = p
-    except:
-        print "\nCould not find donor: ", r["DonorID"]
-#        print(sys.exc_info())
+    collector_id = r["Collector_photographerID"]
+    if collector_id:
+        try:
+            p = Person.objects.get(pk=int(collector_id))
+            m.collector = p
+        except:
+            sys.stdout.write('\rMO: %s Unknown collector: %s\n' % (m.id,
+                collector_id))
+
+    donor_id = r["DonorID"]
+    if donor_id:
+        try:
+            p = Person.objects.get(pk=int(donor_id))
+            m.donor = p
+        except:
+            sys.stdout.write('\rMO: %s Unknown donor: %s\n' % (m.id, donor_id))
 
     m.save()
-    set_category(m, r['Artefact_TypeName'])
+    set_categories(m)
 
 
-def set_category(m, artefact_name):
-    # Set Category
-    if artefact_name in category_name_map:
-        artefact_name = category_name_map[artefact_name]
-    try:
-        categories = Category.objects.filter(name__iexact=artefact_name)
-        m.category.add(*categories)
-        m.save()
-    except Category.MultipleObjectsReturned:
-        issue = ImportIssue(
-                description="Multiple categories match '%s'" % artefact_name,
-                content_object=m)
-        issue.save()
-    except Category.DoesNotExist:
-        issue = ImportIssue(
-                description="Could not find category '%s'" % artefact_name,
-                content_object=m)
-        issue.save()
-
+def set_categories(m):
+    categories = m.artefact_type.categories.all()
+    m.category.add(*categories)
     m.save()
 
 

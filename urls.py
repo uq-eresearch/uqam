@@ -31,6 +31,8 @@ urlpatterns = patterns('',
         name='auth_logout'),
 
     url(r'^report/', include('reports.urls')),
+
+    url(r'^place/', include('location.urls')),
 )
 
 if settings.DEBUG:

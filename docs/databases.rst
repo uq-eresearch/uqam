@@ -75,11 +75,11 @@ Create Read-Only User
 
 Create read only database user::
 
-    $ sudo -u postgres createuser -S -D -R -P uqam_read
+    sudo -u postgres createuser -S -D -R -P uqam_read
 
 Grant the new user privileges to connect to the database::
 
-    $ sudo -u postgres psql
+    sudo -u postgres psql
     GRANT CONNECT ON DATABASE uqam TO uqam_read;
 
 To be properly secure, the public permissions on the database should be 
@@ -87,6 +87,33 @@ changed too, since the read only user can still create tables
 
 http://stackoverflow.com/questions/760210/how-do-you-create-a-read-only-user-in-postgresql
 http://linuxhow-tos.blogspot.com.au/2010/11/read-only-user-in-postgresql.html
+
+
+Import UQAM Data
+----------------
+Import the new categories used by the museum::
+
+    ./manage.py importcategories ~/temp/Classifications\ Nov11.xlsx
+
+Please note, Open/Libre Office cannot be used to edit dates in .xlsx files
+since it uses a different format. Excel must be used.
+
+The existing Access database tables must be exported into individual CSV files
+to be imported into the new catalogue.
+
+Install the required MDB Tools::
+
+    sudo apt-get install mdbtools
+
+Export the Access MDB file to CSV files::
+
+    python utils/AccessDump.py \
+      ~/FinalMuseumData/Anth\ Mus\ Collection\ Database.MDB ~/FinalMuseumData/
+
+Import the CSV files into the new museum catalogue::
+
+    ./manage.py importcat ~/FinalMuseumData/ cat loans condition
+
 
 
 

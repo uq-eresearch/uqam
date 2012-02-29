@@ -1,9 +1,9 @@
 from django.contrib import admin
-from models import MuseumObject, FunctionalCategory, Person, Place
-from models import CulturalBloc, ArtefactType, Region, Category, Maker
+from models import MuseumObject, FunctionalCategory
+from models import CulturalBloc, ArtefactType, Category
 from mediaman.models import ArtefactRepresentation
 from common.admin import UndeleteableModelAdmin
-from cat.adminactions import merge_selected, add_to_collection
+from common.adminactions import merge_selected, add_to_collection
 
 
 class ArtefactRepInline(admin.TabularInline):
@@ -13,7 +13,7 @@ class ArtefactRepInline(admin.TabularInline):
 
 
 class MOAdmin(UndeleteableModelAdmin):
-    list_display = ('registration_number', 'cultural_bloc',
+    list_display = ('registration_number',
                     'description', 'comment',)
     actions = [add_to_collection]
 
@@ -73,7 +73,7 @@ class MOAdmin(UndeleteableModelAdmin):
         ('Details', {
             'classes': ('collapse',),
             'fields': ('description', 'is_public_comment',
-                'comment', 'significance')
+                'comment', 'private_comment', 'significance')
         }),
         ('Extra details', {
             'fields': ('maker', 'manufacture_technique', 'creation_date',
@@ -98,33 +98,6 @@ class MOAdmin(UndeleteableModelAdmin):
 
 
 admin.site.register(MuseumObject, MOAdmin)
-
-
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'comments',)
-    search_fields = ['name', 'comments']
-    filter_horizontal = ['related_documents']
-    actions = [merge_selected]
-admin.site.register(Person, PersonAdmin)
-
-
-class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'country', 'region', 'australian_state',
-            'name', 'gn_name')
-    list_filter = ('country', 'australian_state', 'region',)
-
-    def geocode_place(modeladmin, request, queryset):
-        from cat.tasks import GeocodePlace
-        for place in queryset:
-            GeocodePlace.delay(place.id)
-    geocode_place.short_description = "Lookup latitude/longitude"
-
-    def geocode_local(modeladmin, request, queryset):
-        pass
-
-    actions = [merge_selected, geocode_place]
-    search_fields = ['country', 'region', 'australian_state', 'name']
-admin.site.register(Place, PlaceAdmin)
 
 
 class FunctionCategoryAdmin(admin.ModelAdmin):
@@ -154,19 +127,9 @@ class ArtefactTypeAdmin(admin.ModelAdmin):
 admin.site.register(ArtefactType, ArtefactTypeAdmin)
 
 
-class RegionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
-    search_fields = ['name', 'description']
-admin.site.register(Region, RegionAdmin)
-
-
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ('name', 'slug')
 admin.site.register(Category, CategoryAdmin)
 
 
-class MakerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'comment')
-    search_fields = ('name', 'comment')
-admin.site.register(Maker, MakerAdmin)
