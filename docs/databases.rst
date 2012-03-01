@@ -124,6 +124,21 @@ Restore::
 
     $ psql -h {hostname} -U {user-name} -d {desintation_db} -f {dumpfilename.sql}
 
+A `backup-postgres-app` script is provided in `util` that can be run
+periodically with cron to backup the database and deployment.
+
+Example crontab::
+
+    # +--------------minute (0 - 59)
+    # |  +-----------hour (0 - 23)
+    # |  |  +--------day of month (1 - 31)
+    # |  |  |  +-----month (1 - 12)
+    # |  |  |  |  +--day of week (0 - 6) (Sunday=0 or 7)
+    # |  |  |  |  |
+    # Daily
+     30  3  *  *  *  /usr/local/bin/backup-postgres-app /var/backup  7 uqam "/usr/local/bin/backup-postgres-app /var/spool/cron/root"
+
+
 
 Partial Database Backup and Restore
 -----------------------------------
