@@ -208,10 +208,6 @@ def shell():
     open_shell()
 
 
-def setup_local_database():
-    local()
-
-
 def docs():
     with lcd('docs'):
         local('make html')
