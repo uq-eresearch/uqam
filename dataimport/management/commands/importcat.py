@@ -298,7 +298,8 @@ def process_client_record(r):
 
 def process_loanitem_record(r):
     loan = LoanAgreement.objects.get(id=int(r['LoanId']))
-    item = MuseumObject.objects.get(id=r['Artefact_Registration'])
+    item = MuseumObject.objects.get(
+            registration_number=r['Artefact_Registration'])
     l, created = LoanItem.objects.get_or_create(
             loan=loan, item=item)
     l.out_condition = r['ConditionCode']
@@ -395,14 +396,16 @@ def process_references(r):
     Import References.csv
     """
     ref = Reference()
-    ref.museum_object = MuseumObject.objects.get(id=r['Artefact_Registration'])
+    ref.museum_object = MuseumObject.objects.get(
+            registration_number=r['Artefact_Registration'])
     ref.author = r['Author']
     ref.publications_details = r['Publication_Details']
     ref.save()
 
 
 def process_registration(r):
-    m = MuseumObject.objects.get(id=r['Artefact_Registration'])
+    m = MuseumObject.objects.get(
+            registration_number=r['Artefact_Registration'])
     m.registered_by, created = MuseumStaff.objects.get_or_create(
             name=r['Museum_StaffName'])
     if r['Registration_Date']:
@@ -429,7 +432,7 @@ def process_phototype(r):
 def process_photorecord(r):
     p = PhotoRecord()
     p.museum_object, created = MuseumObject.objects.get_or_create(
-            id=r['Artefact_Registration'])
+            registration_number=r['Artefact_Registration'])
     p.phototype, created = PhotoType.objects.get_or_create(
             phototype=r['PhotoType'])
     p.comments = r['Comments']

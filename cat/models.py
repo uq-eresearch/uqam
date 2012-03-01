@@ -35,7 +35,6 @@ class MuseumObject(models.Model):
     """
     An object held by the museum, typically a physical object or photo
     """
-    id = models.IntegerField(primary_key=True)
     registration_number = models.IntegerField(db_index=True, unique=True)
     old_registration_number = models.CharField(max_length=50, blank=True)
     other_number = models.CharField(max_length=50, blank=True)
@@ -160,7 +159,7 @@ class MuseumObject(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('artefact_view', [str(self.id)])
+        return ('artefact_view', [str(self.registration_number)])
 
     class Meta:
         ordering = ['registration_number']

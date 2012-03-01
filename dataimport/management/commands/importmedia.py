@@ -31,7 +31,7 @@ def add_rep(id, root, name):
             ar = ArtefactRepresentation()
             ar.name = name
             ar.image = File(f)
-            ar.artefact = MuseumObject.objects.get(id=int(id))
+            ar.artefact = MuseumObject.objects.get(registration_number=int(id))
             ar.save()
         except:
             print('Error importing %s' % name)

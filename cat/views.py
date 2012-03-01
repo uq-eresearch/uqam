@@ -23,7 +23,7 @@ def home_page(request):
 
 
 def detail(request, artefact_id):
-    a = get_object_or_404(MuseumObject, pk=artefact_id)
+    a = get_object_or_404(MuseumObject, registration_number=artefact_id)
     return render(request, 'detail.html', {'artefact': a})
 
 
@@ -85,7 +85,7 @@ def search(request):
     try:
         if form.is_valid():
             id = int(form.cleaned_data['q'])
-            mo = MuseumObject.objects.get(pk=id)
+            mo = MuseumObject.objects.get(registration_number=id)
             return redirect(mo)
     except:
         pass
