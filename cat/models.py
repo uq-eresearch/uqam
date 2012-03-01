@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 import string
 
@@ -228,7 +229,7 @@ class Category(models.Model):
 
     def __unicode__(self):
         if self.parent:
-            return self.parent.__unicode__() + " :: " + self.name
+            return self.parent.__unicode__() + u" » " + self.name
         return self.name
 
     class Meta:
