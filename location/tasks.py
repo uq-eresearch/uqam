@@ -7,5 +7,5 @@ def GeocodePlace(place_id):
     Add geocoded location data to a `Place`
     """
     p = Place.objects.get(id=place_id)
-    p.geocode()
+    p.geocode_net()
     p.save()
