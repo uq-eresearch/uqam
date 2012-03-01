@@ -6,3 +6,4 @@ media/*
 development_mode
 _build
 celerybeat-schedule
+*.swp
