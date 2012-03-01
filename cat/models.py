@@ -42,6 +42,7 @@ class MuseumObject(models.Model):
     reg_counter = models.CharField(max_length=50, blank=True)
 
     functional_category = models.ForeignKey('FunctionalCategory',
+            null=True, blank=True,
             verbose_name='previous category name',
             help_text='Functional Category from the old database')
     artefact_type = models.ForeignKey('ArtefactType')
@@ -65,6 +66,7 @@ class MuseumObject(models.Model):
     registration_date = models.DateField(null=True)
 
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True,
+            blank=True,
             help_text='Old region classification')
     place = models.ForeignKey('location.Place', null=True, db_index=True,
             help_text='Where the object is from')
