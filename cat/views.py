@@ -75,7 +75,6 @@ def categories_list(request, full_slug=None):
              "breadcrumbs": breadcrumbs})
 
 
-
 def search(request):
     '''
     The public search interface.
