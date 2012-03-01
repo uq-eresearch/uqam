@@ -114,8 +114,11 @@ Import the CSV files into the new museum catalogue::
 
     ./manage.py importcat ~/FinalMuseumData/ cat loans condition
 
+This import leaves some of the PostgreSQL sequences in an incorrect state.
 
+Fix this by running::
 
+    utils/fixsequences.sh
 
 
 PostgreSQL Backup and Restore
