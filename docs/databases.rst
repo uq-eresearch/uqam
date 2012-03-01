@@ -91,19 +91,19 @@ http://linuxhow-tos.blogspot.com.au/2010/11/read-only-user-in-postgresql.html
 
 Import UQAM Data
 ----------------
-Import the new categories used by the museum::
-
-    ./manage.py importcategories ~/temp/Classifications\ Nov11.xlsx
-
-Please note, Open/Libre Office cannot be used to edit dates in .xlsx files
-since it uses a different format. Excel must be used.
-
 The existing Access database tables must be exported into individual CSV files
 to be imported into the new catalogue.
 
 Install the required MDB Tools::
 
     sudo apt-get install mdbtools
+
+Import the new categories used by the museum::
+
+    ./manage.py importcategories ~/temp/Classifications\ Nov11.xlsx
+
+Note, Open/Libre Office cannot be used to edit dates in .xlsx files
+since it uses a different format. Excel must be used.
 
 Export the Access MDB file to CSV files::
 
@@ -120,12 +120,20 @@ Fix this by running::
 
     utils/fixsequences.sh
 
+Import extra records from the XLS Spreadsheet::
+
+    ./manage.py importxls ~/FinalMuseumData/New\ Artefact\ Record.xls
+
+Import user accounts::
+
 
 PostgreSQL Backup and Restore
 -----------------------------
 Backup::
 
     $ pg_dump -h {hostname} -U {user-name} {source_db} -f {dumpfilename.sql}
+
+    pg_dump -h localhost -U uqam uqam -f uqam-dbdump-`date +%F.%H%M`.sql
 
 Restore::
 
