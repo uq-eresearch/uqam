@@ -129,7 +129,7 @@ Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ mus
 {% if museumobject.category.all %}
     <b>Categories: </b>
     {% for category in museumobject.category.all %}
-    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>; 
+    <a href="{{ category.get_absolute_url }}">{{ category }}</a>; 
     {% endfor %}
     <br>
 
