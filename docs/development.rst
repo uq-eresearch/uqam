@@ -108,26 +108,7 @@ Check what changes have been found, and when ready, run the migration::
 
     ./manage.py migrate cat
 
-Deployment
-----------
-Deployment tasks are automated using Fabric. The first step when deploying
-is to try a test deployment, which copies down the live code and database,
-and attempts to perform the upgrade locally, including code replacement
-and database migration. This is performed by running::
-    
-    fab test_upgrade
 
-The last part of this runs a local dev server so that you can test the
-site locally.
-
-If this runs successfully, the live site can be upgraded by running::
-
-    fab upgrade
-
-This exports the current code from the local git repository, so any code
-that isn't checked in will not be deployed. This is copied up to the
-server, extracted over the existing code, and any database migrations are
-run. The live servers are then restarted.
 .. _docs:
 
 -------------

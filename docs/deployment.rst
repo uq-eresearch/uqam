@@ -8,9 +8,9 @@ Software
 
 `Scientific Linux 6.1 <http://www.scientificlinux.org/>`_ will be the 
 operating system. The machine will be 
-configured using Chef_ to setup the system software.
+configured using VMChef_ to setup the system software.
 
-.. _Chef: https://wiki.metadata.net/Virtual_machines_with_Chef 
+.. _VMChef: https://wiki.metadata.net/Virtual_machines_with_Chef 
 
 nginx_ as the front web server, serving any static content and forwarding 
 everything else to the application server.
@@ -67,3 +67,37 @@ version of the UQAM code::
   fab -H production bootstrap
 
 .. _Chef: http://www.opscode.com/chef/
+
+
+Deployment
+----------
+The :ref:`databases` should be set up on the server.
+
+The local data can be moved to the server using::
+
+    fab push_local_database
+
+Deployment tasks are automated using Fabric. The first step when deploying
+is to try a test deployment, which copies down the live code and database,
+and attempts to perform the upgrade locally, including code replacement
+and database migration. This is performed by running::
+
+    fab test_upgrade
+
+The last part of this runs a local dev server so that you can test the
+site locally.
+
+If this runs successfully, the live site can be upgraded by running::
+
+    fab upgrade
+
+This exports the current code from the local git repository, so any code
+that isn't checked in will not be deployed. This is copied up to the
+server, extracted over the existing code, and any database migrations are
+run. The live servers are then restarted.
+
+Images should then be imported with::
+
+    fab importimages
+
+

@@ -34,17 +34,6 @@ drivers to be installed into the virtual environment. It is install thus::
     yum install postgresql-devel
 
 
-Exporting through Django
-------------------------
-Export all the data as a json dump. This uses a lot of memory, beware::
-
-    ./manage.py dumpdata --exclude contenttypes > datadump.json
-
-Possibly this is better, use natural keys, instead of ignoring some data::
-
-    ./manage.py dumpdata --natural > datadump.json
-
-
 Create PostgreSQL Database
 --------------------------
 Create a new database user::
@@ -126,6 +115,8 @@ Import extra records from the XLS Spreadsheet::
 
 Import user accounts::
 
+    fab -H anthropology-uat dumpdata:auth.User
+    ./manage.py loaddata /tmp/auth.User.json
 
 PostgreSQL Backup and Restore
 -----------------------------
