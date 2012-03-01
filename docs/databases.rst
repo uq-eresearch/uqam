@@ -38,11 +38,19 @@ Create PostgreSQL Database
 --------------------------
 Create a new database user::
 
-    $ sudo -u postgres createuser -S -D -R -P uqam
+    sudo -u postgres createuser -S -D -R -P uqam
+
+Create read only database user::
+
+    sudo -u postgres createuser -S -D -R -P uqam_read
 
 Create the database::
 
-    $ sudo -u postgres createdb --owner uqam --encoding UTF8 uqam
+    sudo -u postgres createdb --owner uqam --encoding UTF8 uqam
+
+Grant the read only user privileges to connect to the database::
+
+    echo "GRANT CONNECT ON DATABASE uqam TO uqam_read;" | sudo -u postgres psql
 
 Use django to create the database structure, creating it directly without
 using migrations::
@@ -53,27 +61,9 @@ Fix up the migration history::
 
     ./manage.py migrate --fake
 
-Load the previous database dump::
 
-    ./manage.py loaddata datadump.json
-
-If `loaddata` complains about duplicate contenttype keys, you can clean up
-the database by::
-
-    ./manage.py dbshell
-    trunctate django_content_type cascade;
-
-Create Read-Only User
----------------------
-
-Create read only database user::
-
-    sudo -u postgres createuser -S -D -R -P uqam_read
-
-Grant the new user privileges to connect to the database::
-
-    sudo -u postgres psql
-    GRANT CONNECT ON DATABASE uqam TO uqam_read;
+Read-Only User Notes
+--------------------
 
 To be properly secure, the public permissions on the database should be 
 changed too, since the read only user can still create tables 
