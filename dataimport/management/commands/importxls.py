@@ -6,7 +6,7 @@ from cat.models import AcquisitionMethod, PhotoType, PhotoRecord
 from cat.models import Obtained
 from parties.models import Person, Maker
 from location.models import Place
-from importcat import set_category
+from importcat import set_categories
 import os
 import sys
 
@@ -92,7 +92,7 @@ def import_xlsx(filename):
         mapint('circumference', vals[37])
         mapint('weight', vals[38])
         m.save()
-        set_category(m, vals[4])
+        set_categories(m)
         set_photographic_record(m, photographic_record)
 
 
