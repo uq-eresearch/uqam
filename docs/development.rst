@@ -61,10 +61,13 @@ Set a password for accessing postgresql::
     sudo -u postgres psql
     ALTER ROLE postgres WITH ENCRYPTED PASSWORD 'mypassword';
 
+Create a `~/.pgpass` file to aid local database access::
+
+    hostname:port:database:username:password
+
 With Postgresql 9+::
 
     CREATE EXTENSION adminpack;
-    CREATE DATABASE 'uqam' WITH ENCODING 'UTF-8';
 
 Python PosgreSQL drivers
 ------------------------
@@ -77,23 +80,14 @@ First install the ubuntu development packages::
 Django Database Setup
 ---------------------
 Check the `dev_settings.py` file that the correct postgres username,
-password, and database are configured. Then get django to generate all the
-required tables::
-
-    ./manage.py syncdb --all
-
-Using `--all` creates all tables straight away, ignoring migrations::
-
-    ./manage.py migrate --fake
-
-Fixes up the record of migrations.
+password, and database are configured.  Then follow the instructions
+in :ref:`databases` to create the database structure and load data.
 
 Run Development Server
 ----------------------
 Once everything is setup, the development server can be run::
 
     ./manage.py runserver
-
 
 
 

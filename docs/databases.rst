@@ -49,6 +49,10 @@ using migrations::
 
     ./manage.py syncdb --all
 
+Fix up the migration history::
+
+    ./manage.py migrate --fake
+
 Load the previous database dump::
 
     ./manage.py loaddata datadump.json
