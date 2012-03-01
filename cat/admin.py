@@ -43,8 +43,8 @@ class MOAdmin(UndeleteableModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('registration_number', 'old_registration_number',
-                       'other_number', 'functional_category', 'artefact_type',
-                       'category', 'cultural_bloc', 'place')
+                       'other_number', 'functional_category', 'category',
+                       'artefact_type', 'cultural_bloc', 'place')
         }),
         ('Status', {
             'classes': ('collapse',),
