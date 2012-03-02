@@ -77,6 +77,9 @@ The local data can be moved to the server using::
 
     fab push_local_database
 
+After copying a database to a different server, update the `sites` record
+to contain the correct host name.
+
 Deployment tasks are automated using Fabric. The first step when deploying
 is to try a test deployment, which copies down the live code and database,
 and attempts to perform the upgrade locally, including code replacement
@@ -99,5 +102,27 @@ run. The live servers are then restarted.
 Images should then be imported with::
 
     fab importimages
+
+
+Celery (background tasks)
+-------------------------
+Celery is used for running background tasks, things like geocoding place names
+and importing and resizing images.
+
+Celeryd runs as a system service, it is installed within the virtualenv the
+django deployment uses. It is configured in /etc/default/celeryd with an
+init script in /etc/init.d/celeryd
+
+It can be started with::
+
+    sudo service celery start
+
+
+Haystack (search)
+-----------------
+Fabric tasks exist to rebuild and update the search index::
+
+    fab -H anthropology rebuild_index
+
 
 
