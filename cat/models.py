@@ -135,11 +135,16 @@ class MuseumObject(models.Model):
     significance = models.TextField("statement of significance",
             blank=True)
 
-    width = models.IntegerField(null=True, blank=True)
-    length = models.IntegerField(null=True, blank=True)
-    height = models.IntegerField(null=True, blank=True)
-    depth = models.IntegerField(null=True, blank=True)
-    circumference = models.IntegerField(null=True, blank=True)
+    width = models.IntegerField(null=True, blank=True,
+            help_text="millimeters")
+    length = models.IntegerField(null=True, blank=True,
+            help_text="millimeters")
+    height = models.IntegerField(null=True, blank=True,
+            help_text="millimeters")
+    depth = models.IntegerField(null=True, blank=True,
+            help_text="millimeters")
+    circumference = models.IntegerField(null=True, blank=True,
+            help_text="millimeters")
 
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
