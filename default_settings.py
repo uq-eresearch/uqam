@@ -168,6 +168,8 @@ INSTALLED_APPS = (
     'common',
     'location',
     'django.contrib.flatpages',
+    'tinymce',
+    'flatpages_tinymce'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -255,3 +257,8 @@ BROKER_TRANSPORT = "django"
 #BROKER_VHOST = "/"
 
 GRAPPELLI_INDEX_DASHBOARD = 'uqam.grapdashboard.UQAMDashboard'
+
+TINYMCE_DEFAULT_CONFIG = {
+        'theme': 'advanced',
+        'relative_urls': False,
+        }

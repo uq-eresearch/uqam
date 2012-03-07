@@ -42,7 +42,7 @@ class WithImagesListView(ListView):
 
 
 urlpatterns = patterns('cat.views',
-    url(r'^$', 'home_page', name='index'),
+#    url(r'^$', 'home_page', name='index'),
     url(r'^artefact/$',
         ListView.as_view(
             model=MuseumObject, paginate_by=20), name='artefact_list'),

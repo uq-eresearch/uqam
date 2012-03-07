@@ -34,6 +34,8 @@ urlpatterns = patterns('',
     url(r'^report/', include('reports.urls')),
 
     url(r'^place/', include('location.urls')),
+
+    (r'^tinymce/', include('tinymce.urls')),
 )
 
 if settings.DEBUG:
