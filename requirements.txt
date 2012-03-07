@@ -5,7 +5,7 @@ Whoosh==2.3.0
 distribute==0.6.19
 django-auth-ldap==1.0.11
 django-extensions==0.7.1
-django-filebrowser==3.3.0
+django-filebrowser==3.4.0
 django-grappelli==2.3.5
 django-haystack==1.2.5
 python-ldap==2.3.13
