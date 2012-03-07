@@ -1,6 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<style>
+/* Fix issue with twitter bootstrap. will be fixed in 2.0.2 */
+    #map_canvas img {
+        max-width: none;
+    }
+</style>
 <div>
 <div style="float:right;font-size: 80%;">
     <a href="{% url place_kml %}">View in Google Earth</a>

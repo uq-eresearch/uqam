@@ -2,10 +2,17 @@
 
 {% block content %}
 <h1>Categories</h1>
-<a href="{% url categories_list %}">Artefacts</a> 
-{% for level in breadcrumbs %}
-» <a href="{{ level.get_absolute_url }}">{{ level.name }}</a>
-{% endfor %}
+
+    <ul class="breadcrumb">
+        <li><a href="{% url categories_list %}">Categories</a></li>
+    {% for level in breadcrumbs %}
+    <span class="divider">»</span>
+    <li{% if forloop.last %} class="active"{% endif %}><a href="{{ level.get_absolute_url }}">{{ level.name }}</a>
+    </li>
+    {% endfor %}
+    </ul>
+
+
 
 {% if categories %}
 <table>

@@ -9,19 +9,20 @@
 {% endfor %}
 </table>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if objects.has_previous %}
-            <a href="?page={{ objects.previous_page_number }}">previous</a>
-        {% endif %}
+<ul class="pager">
+  <li>
+    {% if objects.has_previous %}
+       <a href="?page={{ objects.previous_page_number }}">&larr; Previous</a>
+    {% endif %}
+  </li>
+  <li>
+        Page {{ objects.number }} of {{ objects.paginator.num_pages }}
+  </li>
+  <li>
+    {% if objects.has_next %}
+        <a href="?page={{ objects.next_page_number }}">Next &rarr;</a>
+    {% endif %}
+  </li>
+</ul>
 
-        <span class="current">
-            Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
-        </span>
-
-        {% if objects.has_next %}
-            <a href="?page={{ objects.next_page_number }}">next</a>
-        {% endif %}
-    </span>
-</div>
 {% endif %}
