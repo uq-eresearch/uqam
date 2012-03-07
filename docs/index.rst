@@ -16,6 +16,7 @@ Contents:
    deployment
    installation
    usage
+   admin
    databases
 
 
