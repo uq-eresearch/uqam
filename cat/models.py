@@ -221,6 +221,10 @@ class ArtefactType(models.Model):
     class Meta:
         ordering = ['name']
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__icontains",)
+
 
 class Category(models.Model):
     """
