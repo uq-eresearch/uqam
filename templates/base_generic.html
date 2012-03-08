@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="{{STATIC}}nivo-slider/themes/orman/orman.css" type="text/css" media="screen"> 
     <link rel="stylesheet" href="{{STATIC}}nivo-slider/themes/pascal/pascal.css" type="text/css" media="screen"> 
     <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
-    <script type="text/javascript" src="{{STATIC}}jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{STATIC}}bootstrap/js/bootstrap.js"></script>
-    <script type="text/javascript" src="{{STATIC}}nivo-slider/jquery.nivo.slider.pack.js"></script>
 </head>
 <body>
 <div class="container">
@@ -35,8 +32,7 @@
                 <li class="dropdown">
                   <a class="dropdown-toggle"
                     data-toggle="dropdown"
-                    href="#">Browse<b class="caret"></b>
-                  </a>
+                    href="#">Browse<b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="{% url categories_list %}">Categories</a></li>
                     <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
@@ -46,6 +42,13 @@
                   </ul>
                 </li>
                 <li><a href="/contact/">Contact</a></li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown"
+                    href="{% url search %}">Search<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url search %}">Search</a></li>
+                  </ul>
+                </li>
                 {% if user.is_staff %}
                 <li><a href="/admin/">Admin</a></li>
                 <li><a href="/dashboard/">Dashboard</a></li>
@@ -86,5 +89,8 @@
 
 </div><!-- /container -->
 
+    <script type="text/javascript" src="{{STATIC}}jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="{{STATIC}}bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="{{STATIC}}nivo-slider/jquery.nivo.slider.pack.js"></script>
 </body>
 </html>

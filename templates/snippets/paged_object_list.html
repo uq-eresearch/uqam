@@ -1,14 +1,36 @@
 
 {% if objects.object_list %}
+
+<div class="row">
+<ul class="thumbnails">
+{% for object in objects.object_list %}
+  <li class="span3">
+  <a href="{{ object.get_absolute_url }}">
+    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "http://placehold.it/48" %}" width="48px" height="48px" alt="">
+    <strong>{{object}}</strong>
+  </a>
+  </li>
+
+{% endfor %}
+</ul>
+</div>
+
+{% endif %}
+{% if objects.object_list %}
+{% comment %}
 <table>
 {% for object in objects.object_list %}
     <tr><td>
-    <img src="{{ object.artefactrepresentation_set.all.0.image.url_64x64 }}" width="64px" height="64px" alt="">
-        <a href="{{ object.get_absolute_url }}">{{object}}</a>
+      <a href="{{ object.get_absolute_url }}">
+        <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "/static/thumbnail_placeholder.png" %}" width="64px" height="64px" alt="">
+        {{object}}
+      </a>
     </td></tr>
 {% endfor %}
 </table>
+{% endcomment %}
 
+<div class="row">
 <ul class="pager">
   <li>
     {% if objects.has_previous %}
@@ -24,5 +46,6 @@
     {% endif %}
   </li>
 </ul>
+</div>
 
 {% endif %}
