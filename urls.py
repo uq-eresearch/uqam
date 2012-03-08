@@ -32,10 +32,11 @@ urlpatterns = patterns('',
         name='auth_logout'),
 
     url(r'^report/', include('reports.urls')),
+    url(r'^', include('common.urls')),
 
     url(r'^place/', include('location.urls')),
 
-    (r'^tinymce/', include('tinymce.urls')),
+    url(r'^tinymce/', include('tinymce.urls')),
 )
 
 if settings.DEBUG:
