@@ -1,96 +1,85 @@
 {% load static %}
-{% get_static_prefix  as STATIC %}
+{% get_static_prefix as STATIC %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{% block title %}UQ Anthropology Museum{% endblock %}</title>
     <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap-responsive.css" type="text/css" media="screen, projection">
+{% comment %}
     <link rel="stylesheet" href="{{STATIC}}nivo-slider/nivo-slider.css" type="text/css" media="screen"> 
     <link rel="stylesheet" href="{{STATIC}}nivo-slider/themes/default/default.css" type="text/css" media="screen"> 
     <link rel="stylesheet" href="{{STATIC}}nivo-slider/themes/orman/orman.css" type="text/css" media="screen"> 
     <link rel="stylesheet" href="{{STATIC}}nivo-slider/themes/pascal/pascal.css" type="text/css" media="screen"> 
     <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
+{% endcomment %}
 </head>
 <body>
 <div class="container">
-      <div class="row">
-        <h1 style="float: left;">UQ Anthropology Museum</h1>
-        <div style="float: right; text-align: right;">
-            {% if user.is_authenticated %}
-            Logged in as: {{ user }}<br>
-            <a href="{% url auth_logout %}">Log out</a>
-            {% else %}
-            <a href="{% url auth_login %}?next={{request.path}}">Log in</a>
-            {% endif %}
-        </div>
-      </div>
-      <div class="row">
-        <div class="span8 subnav">
-            <ul class="nav nav-pills">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about/">About</a></li>
-                <li class="dropdown">
-                  <a class="dropdown-toggle"
-                    data-toggle="dropdown"
-                    href="#">Browse<b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="{% url categories_list %}">Categories</a></li>
-                    <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
-                    <li><a href="{% url person_list %}">People</a></li>
-                    <li><a href="{% url place_map %}">Place</a></li>
-                    <li><a href="{% url collections_home %}">Collections</a></li>
-                  </ul>
-                </li>
-                <li><a href="/contact/">Contact</a></li>
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown"
-                    href="{% url search %}">Search<b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="{% url search %}">Search</a></li>
-                  </ul>
-                </li>
-                {% if user.is_staff %}
-                <li><a href="/admin/">Admin</a></li>
-                <li><a href="/dashboard/">Dashboard</a></li>
-                {% endif %}
-            </ul>
-        </div>
-        <form method="get" action="/search/" class="form-search pull-right">
-            <input type="hidden" name="models" value="cat.museumobject">
-            <input type="text" name="q" value="{{query}}" class="input-medium search-query">
-            <input type="submit" value="Search" class="btn">
-        </form>
-      </div><!-- /row -->
-
-        {% block content %}
-        {% endblock %}
-
-        {% if page_obj %}
-{% spaceless %}
-{% comment %}
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
-
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-            {% endif %}
-        </span>
+  <div>
+    <h1 style="float: left;">UQ Anthropology Museum</h1>
+    <div style="float: right; text-align: right;">
+        {% if user.is_authenticated %}
+        Logged in as: {{ user }}<br>
+        <a href="{% url auth_logout %}">Log out</a>
+        {% else %}
+        <a href="{% url auth_login %}?next={{request.path}}">Log in</a>
+        {% endif %}
     </div>
-    {% endcomment %}
-{% endspaceless %}
-{% endif %}
+  </div>
+  <div class="row">
+    <div class="span8 subnav">
+      <ul class="nav nav-pills">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle"
+            data-toggle="dropdown"
+            href="#">Browse<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url categories_list %}">Categories</a></li>
+            <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
+            <li><a href="{% url person_list %}">People</a></li>
+            <li><a href="{% url place_map %}">Place</a></li>
+            <li><a href="{% url collections_home %}">Collections</a></li>
+          </ul>
+        </li>
+        <li><a href="/contact/">Contact</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown"
+            href="{% url search %}">Search<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url search %}">Search</a></li>
+          </ul>
+        </li>
+        {% if user.is_staff %}
+        <li><a href="/admin/">Admin</a></li>
+        <li><a href="/dashboard/">Dashboard</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    <form method="get" action="/search/" class="form-search pull-right">
+      <input type="hidden" name="models" value="cat.museumobject">
+      <input type="text" name="q" value="{{query}}" class="input-medium search-query">
+      <input type="submit" value="Search" class="btn">
+    </form>
+  </div><!-- /row -->
 
+  {% block content %}
+  {% endblock %}
+
+
+  <hr>
+  <footer>
+    <p>&copy; University of Queensland 2012</p>
+  </footer>
 </div><!-- /container -->
+
 
     <script type="text/javascript" src="{{STATIC}}jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{{STATIC}}bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="{{STATIC}}nivo-slider/jquery.nivo.slider.pack.js"></script>
+    {% block javascript %}
+    {% endblock %}
 </body>
 </html>
