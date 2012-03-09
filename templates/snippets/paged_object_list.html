@@ -1,19 +1,17 @@
 
 {% if objects.object_list %}
 
-<div class="row">
 <ul class="thumbnails">
 {% for object in objects.object_list %}
   <li class="span3">
   <a href="{{ object.get_absolute_url }}">
-    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "http://placehold.it/48" %}" width="48px" height="48px" alt="">
+    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "http://placehold.it/48" %}" width="48" height="48" alt="">
     <strong>{{object}}</strong>
   </a>
   </li>
 
 {% endfor %}
 </ul>
-</div>
 
 {% endif %}
 {% if objects.object_list %}
