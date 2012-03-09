@@ -219,6 +219,43 @@
 
 
 
+
+
+
+
+{% if user.is_staff %}
+<style type="text/css">
+    #printableLabel {
+        background-color: white;
+        display:none;
+        padding: 15px;
+    }
+</style>
+
+<div id="printableLabel">
+  <b>Printable label</b>
+  <pre id="printLabelText">
+  {% firstof museumobject.maker "Maker unknown" %}, {% firstof museumobject.creation_date|date:"Y" "creation date unknown" %}
+  {{ museumobject.artefact_type }}{% if museumobject.raw_material or museumobject.dimensions %}
+  {{ museumobject.dimensions }}{% if museumobject.raw_material %}, {{ museumobject.raw_material }}{%endif%}{% endif %}
+  {% firstof museumobject.assoc_cultural_group museumobject.place.country %}
+  Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ museumobject.acquisition_date|date:"Y" }}{% endif %}
+  </pre>
+</div><!-- /printableLable -->
+
+{% endif %}
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="/static/jquery.bpopup-0.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#printLabelLink").bind("click", function() {
+            $("#printableLabel").bPopup();
+            return false;
+        });
+    });
+</script>
+
 {% if museumobject.artefactrepresentation_set.exists %}
 <script type="text/javascript">
 $(window).load(function() {
@@ -261,40 +298,4 @@ directionNav: false
     });
 </script>
 {% endwith %}{% endif %}
-
-
-
-
-{% if user.is_staff %}
-<style type="text/css">
-    #printableLabel {
-        background-color: white;
-        display:none;
-        padding: 15px;
-    }
-</style>
-
-<div id="printableLabel">
-  <b>Printable label</b>
-  <pre id="printLabelText">
-  {% firstof museumobject.maker "Maker unknown" %}, {% firstof museumobject.creation_date|date:"Y" "creation date unknown" %}
-  {{ museumobject.artefact_type }}{% if museumobject.raw_material or museumobject.dimensions %}
-  {{ museumobject.dimensions }}{% if museumobject.raw_material %}, {{ museumobject.raw_material }}{%endif%}{% endif %}
-  {% firstof museumobject.assoc_cultural_group museumobject.place.country %}
-  Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ museumobject.acquisition_date|date:"Y" }}{% endif %}
-  </pre>
-</div><!-- /printableLable -->
-
-{% endif %}
-{% endblock %}
-{% block javascript %}
-<script type="text/javascript" src="/static/jquery.bpopup-0.6.0.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#printLabelLink").bind("click", function() {
-            $("#printableLabel").bPopup();
-            return false;
-        });
-    });
-</script>
 {% endblock %}
