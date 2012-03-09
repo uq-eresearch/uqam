@@ -30,6 +30,7 @@
 </table>
 {% endcomment %}
 
+{% if objects.paginator.num_pages > 1 %}
 <div class="row">
 <ul class="pager">
   <li>
@@ -47,5 +48,6 @@
   </li>
 </ul>
 </div>
+{% endif %}
 
 {% endif %}
