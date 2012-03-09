@@ -1,6 +1,8 @@
 {% extends "base_generic.html" %}
 
+{% load uqam %}
 {% block content %}
+
 
 {% if user.is_staff %}
 <div style="float:right;font-size: 80%;">
@@ -8,37 +10,99 @@
     <a href="{% url admin:cat_museumobject_change museumobject.id %}">Admin</a>
 </div>
 {% endif %}
+
+
+<div class="row">
+  <div class="span8">
 <h1>{{ museumobject.artefact_type }}</h1>
 
-<div>
-<h2>{{ museumobject }}</h2>
-    <b>Registration Number:</b> {{ museumobject.registration_number}}
-<br>
+<div class="tabbable tabs-below">
+  <div class="tab-content">
+    <div class="tab-pane active" id="public">
+<dl>
+<dt>Item Type</dt>
+<dd> {{ museumobject.artefact_type }}</dd>
+
+<dt>Category</dt>
+<dd>
+  {% for category in museumobject.category.all %}
+  <a href="{{ category.get_absolute_url }}">{{ category }}</a><br>
+  {% endfor %}
+</dd>
+
+<dt>Indigenous name</dt>
+<dd>{{ museumobject.indigenous_name }}&nbsp;
+</dd>
+
+<dt>Maker</dt>
+<dd>
+{% if museumobject.maker %}
+<a href="{{ museumobject.maker.get_absolute_url }}">
+  {{ museumobject.maker }}</a>
+{% endif %}&nbsp;
+</dd>
+
+<dt>Associated cultural group</dt>
+<dd>
+ {{ museumobject.assoc_cultural_group }}&nbsp;
+</dd>
+
+<dt>Region</dt>
+<dd>
+<a href="{{museumobject.cultural_bloc.get_absolute_url}}">
+  {{ museumobject.cultural_bloc }}</a>
+</dd>
+
+<dt>Place</dt>
+<dd>
+<a href="{{museumobject.place.get_absolute_url}}">
+  {{ museumobject.place }}</a>
+</dd>
+
+<dt>Collector</dt>
+<dd>
+<a href="{{museumobject.collector.get_absolute_url}}">
+  {{ museumobject.collector }}</a>
+</dd>
+
+<dt>Acquisition Date</dt>
+<dd>
+  {{ museumobject.acquisition_date|date:"F d, Y" }}
+</dd>
+
+<dt>Acquisition Method</dt>
+<dd>
+{{ museumobject.acquisition_method }} <b>by</b>
+ <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
+</dd>
+
+<dt>Registration Number</dt>
+<dd>{{ museumobject.registration_number}}</dd>
+
+<dt>Dimensions</dt>
+  <dd>
+    <b>Height: </b> {{ museumobject.height|dimension:"mm" }}
+    <b>Length: </b> {{ museumobject.length|dimension:"mm" }}
+    <b>Width: </b> {{ museumobject.width|dimension:"mm" }}
+    <b>Depth: </b> {{ museumobject.depth|dimension:"mm" }}
+    <b>Circumference: </b> {{ museumobject.circumference|dimension:"mm" }}
+  </dd>
+
+</dl>
+
+<dt>Physical description</dt>
+<dd>{{ museumobject.description|linebreaks }} </dd>
+<dt>Research notes (comment)</dt>
+<dd>{{ museumobject.comment|linebreaks }}</dd>
+
+    </div><!-- /tab-pane -->
+    <div class="tab-pane" id="staff">
+
 {% if user.is_staff %}
 <b>Functional Category:</b> {{ museumobject.functional_category }}
 {% endif %}
 <br>
-<b>Artefact Type:</b> {{ museumobject.artefact_type }}
-<br>
-<b>Acquisition Date:</b> {{ museumobject.acquisition_date }}
-<br>
-<b>Acquisition Method:</b> {{ museumobject.acquisition_method }}
-<br>
-<b>Cultural Bloc:</b> <a href="{{museumobject.cultural_bloc.get_absolute_url}}">{{ museumobject.cultural_bloc }}</a>
-<br>
-<b>Collector:</b> <a href="{{museumobject.collector.get_absolute_url}}">{{ museumobject.collector }}</a>
-<br>
-<b>Donor:</b> <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
-<br>
-<b>Place:</b> <a href="{{museumobject.place.get_absolute_url}}">{{ museumobject.place }}</a>
-<br>
 
-{% if museumobject.maker %}
-<b>Maker (or artist): </b>
-    <a href="{{ museumobject.maker.get_absolute_url }}">
-    {{ museumobject.maker }}</a>
-    <br>
-{% endif %}
 
 {% if museumobject.category_illustrated %}
 <b>Category Illustrated: </b>
@@ -64,20 +128,11 @@
     <br>
 {% endif %}
 
-{% if museumobject.assoc_cultural_group %}
-    <b>Associated cultural group: </b> {{ museumobject.assoc_cultural_group }}
-    <br>
-{% endif %}
-
 {% if museumobject.raw_material %}
     <b>Raw material: </b> {{ museumobject.raw_material }}
     <br>
 {% endif %}
 
-{% if museumobject.indigenous_name %}
-    <b>Indigenous name: </b> {{ museumobject.indigenous_name }}
-    <br>
-{% endif %}
 
 {% if museumobject.recorded_use %}
     <b>Recorded use: </b> {{ museumobject.recorded_use }}
@@ -94,42 +149,14 @@
     <br>
 
 {% endif %}
-{% if museumobject.category.all %}
-    <b>Categories: </b>
-    {% for category in museumobject.category.all %}
-    <a href="{{ category.get_absolute_url }}">{{ category }}</a>; 
-    {% endfor %}
-    <br>
 
-{% endif %}
 
-<b>Description:</b> {{ museumobject.description|linebreaks }}
-<br>
-<b>Comment:</b> {{ museumobject.comment|linebreaks }}
-<br>
 
 {% if museumobject.significance %}
     <b>Statement of significance: </b> {{ museumobject.significance }}
     <br>
 {% endif %}
 
-{% if museumobject.length %}
-    <b>Length: </b> {{ museumobject.length }}mm
-    <br>
-{% endif %}
-{% if museumobject.width %}
-    <b>Width: </b> {{ museumobject.width }}mm
-    <br>
-{% endif %}
-{% if museumobject.height %}
-    <b>Height: </b> {{ museumobject.height }}mm
-    <br>
-{% endif %}
-
-{% if museumobject.depth %}
-    <b>Depth: </b> {{ museumobject.depth }}mm
-    <br>
-{% endif %}
 
 
 {% if museumobject.related_documents.all %}
@@ -190,32 +217,46 @@
 
 {% endif %}
 
-</div>
+    </div><!-- /tab-pane -->
+  </div><!-- /tab-content -->
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a href="#public" data-toggle="tab">Public</a></li>
+    <li>
+      <a href="#staff" data-toggle="tab">Staff</a></li>
+  </ul>
+</div><!-- /tabbable -->
+
+</div><!-- /span8 -->
 
 
-
-<div class="span-10 last">
+<div class="span4">
 {% if museumobject.artefactrepresentation_set.exists %}
-    <div class="slider-wrapper theme-default">
-        <div class="ribbon"></div>
-        <div id="slider" class="nivoSlider">
-    {% for pic in museumobject.artefactrepresentation_set.all %}
+  <div id="myCarousel" class="carousel">
+    <div class="carousel-inner">
+  {% for pic in museumobject.artefactrepresentation_set.all %}
+    <div class="item{% if forloop.first%}active{%endif%}">
     {% if pic.url %}
-            <a href="{{ pic.url }}" >
+      <a href="{{ pic.url }}" >
     {% else %}
-            <a href="{{ pic.image.url}}">
+      <a href="{{ pic.image.url}}">
     {% endif %}
-            <img src="{{ pic.image.url_400x350 }}" width="400px" height="350px" alt="">
-            </a>
-    {% endfor %}
-        </div>
+    <img src="{{ pic.image.url_400x350 }}" width="400" height="350" alt=""></a>
     </div>
+  {% endfor %}
+    </div><!-- /carousel-inner -->
+    <!-- Carousel nav -->
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+  </div><!-- /carousel -->
 {% endif %}
-{% if museumobject.place.gn_id %}
+{% if museumobject.place.latitude %}
     <hr>
     <div id="map_canvas" style="margin-top: 60px; width:400px; height:150px"></div>
 {% endif %}
-</div>
+</div><!-- /span4 -->
+
+</div><!-- /row -->
 
 
 
@@ -245,6 +286,8 @@
 
 {% endif %}
 {% endblock %}
+
+
 {% block javascript %}
 <script type="text/javascript" src="/static/jquery.bpopup-0.6.0.min.js"></script>
 <script type="text/javascript">
@@ -269,7 +312,7 @@ directionNav: false
 </script>
 {% endif %}
 
-{% if museumobject.place.gn_id %}{% with p=museumobject.place %}
+{% if museumobject.place.latitude %}{% with p=museumobject.place %}
 <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
