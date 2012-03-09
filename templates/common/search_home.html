@@ -11,25 +11,25 @@
 
 
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#keyword-search" data-toggle="tab">Keyword Search</a></li>
-  <li><a href="#advanced-search" data-toggle="tab">Advanced Search</a></li>
+  <li class="active">
+    <a href="#keyword-search" data-toggle="tab">Keyword Search</a></li>
+  <li>
+    <a href="#advanced-search" data-toggle="tab">Advanced Search</a></li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane active" id="keyword-search">
     <div class="row">
-        <form method="get" action="/search/" class="span6 well">
-            <label>Keyword Search
-            <input type="hidden" name="models" value="cat.museumobject">
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-search"></i></span>
-              <input type="text" name="q" value="{{query}}" class="span3">
-            </div>
-            <input type="submit" value="Search" class="btn">
-        </form>
-      </div>
-      <div class="row">
-          <h2>Examples</h2>
-      </div>
+      <form method="get" action="/search/" class="span6 well">
+          <label>Keyword Search</label>
+          <input type="hidden" name="models" value="cat.museumobject">
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-search"></i></span>
+            <input type="text" name="q" value="{{query}}" class="span3">
+          </div>
+          <input type="submit" value="Search" class="btn">
+      </form>
+    </div>
+      <h2>Examples</h2>
   </div>
   <div class="tab-pane" id="advanced-search">
     <form method="post">{% csrf_token %}
@@ -38,9 +38,5 @@
     </form>
   </div>
 </div>
-<script>
-  $(function () {
-    $('.tabs a:last').tab('show')
-  })
-</script>
+
 {% endblock %}
