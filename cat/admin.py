@@ -1,6 +1,9 @@
 from django.contrib import admin
 from models import MuseumObject, FunctionalCategory
 from models import CulturalBloc, ArtefactType, Category
+from models import AcquisitionMethod, LoanStatus
+from models import AccessStatus, Obtained
+from models import PhotoType
 from mediaman.models import ArtefactRepresentation
 from common.admin import UndeleteableModelAdmin
 from common.adminactions import merge_selected, add_to_collection
@@ -130,6 +133,31 @@ admin.site.register(ArtefactType, ArtefactTypeAdmin)
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ('name', 'slug')
+    actions = [merge_selected]
 admin.site.register(Category, CategoryAdmin)
 
+
+class AcquisitionMethodAdmin(admin.ModelAdmin):
+    actions = [merge_selected]
+admin.site.register(AcquisitionMethod, AcquisitionMethodAdmin)
+
+
+class LoanStatusAdmin(admin.ModelAdmin):
+    actions = [merge_selected]
+admin.site.register(LoanStatus, LoanStatusAdmin)
+
+
+class AccessStatusAdmin(admin.ModelAdmin):
+    actions = [merge_selected]
+admin.site.register(AccessStatus, AccessStatusAdmin)
+
+
+class ObtainedAdmin(admin.ModelAdmin):
+    actions = [merge_selected]
+admin.site.register(Obtained, ObtainedAdmin)
+
+
+class PhotoTypeAdmin(admin.ModelAdmin):
+    actions = [merge_selected]
+admin.site.register(PhotoType, PhotoTypeAdmin)
 

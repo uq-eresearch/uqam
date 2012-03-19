@@ -16,12 +16,18 @@ class LoanStatus(models.Model):
     def __unicode__(self):
         return self.status
 
+    class Meta:
+        verbose_name_plural = "Loan statuses"
+
 
 class AccessStatus(models.Model):
     status = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
         return self.status
+
+    class Meta:
+        verbose_name_plural = "Access statuses"
 
 
 class Obtained(models.Model):
@@ -30,6 +36,9 @@ class Obtained(models.Model):
 
     def __unicode__(self):
         return self.how
+
+    class Meta:
+        verbose_name_plural = "Source acquisition methods"
 
 
 class MuseumObject(models.Model):
