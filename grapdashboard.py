@@ -10,7 +10,17 @@ class UQAMDashboard(Dashboard):
             title=_('Catalogue'),
             column=1,
             collapsible=False,
+            models=('cat.models.MuseumObject', 'parties.*', 'location.*',
+                'loans.models.LoanAgreement', 'condition.*',
+                'uqamcollections.*'),
             exclude=('django.contrib.*', 'djcelery.*', 'reports.*'),
+        ))
+
+        self.children.append(modules.AppList(
+            title='Data dictionary',
+            column=1,
+            models=('cat.models.*', 'loans.models.LoanPurpose'),
+            exclude=('cat.models.MuseumObject',)
         ))
 
         # append an app list module for "Administration"
@@ -18,13 +28,14 @@ class UQAMDashboard(Dashboard):
             title=_('Administration'),
             column=1,
             collapsible=True,
-            models=('django.contrib.*', 'djcelergy.*', 'reports.*'),
+            models=('django.contrib.*', 'djcelergy.*', 'reports.*',
+                'dataimport.*', 'mediaman.*'),
         ))
 
         # append a recent actions module
         self.children.append(modules.RecentActions(
             title=_('Recent Actions'),
-            column=2,
+            column=3,
             collapsible=False,
             limit=5,
         ))
