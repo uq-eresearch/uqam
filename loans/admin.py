@@ -1,7 +1,8 @@
 from django.contrib import admin
-from models import LoanAgreement, LoanItem
+from models import LoanAgreement, LoanItem, LoanPurpose
 from parties.models import Client
 from common.admin import UndeleteableModelAdmin
+from common.adminactions import merge_selected
 
 
 class LoanItemInline(admin.TabularInline):
@@ -26,3 +27,8 @@ class LoanAgreementAdmin(UndeleteableModelAdmin):
 
 admin.site.register(LoanAgreement, LoanAgreementAdmin)
 
+
+class LoanPurposeAdmin(admin.ModelAdmin):
+    actions = [merge_selected]
+
+admin.site.register(LoanPurpose, LoanPurposeAdmin)
