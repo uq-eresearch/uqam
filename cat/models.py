@@ -63,7 +63,7 @@ class MuseumObject(models.Model):
     storage_bay = models.CharField(max_length=4, blank=True)
     storage_shelf_box_drawer = models.CharField(max_length=4, blank=True)
 
-    acquisition_date = models.DateField("Date acquired by museum",
+    acquisition_date = models.DateField("date acquired by museum",
             null=True, blank=True)
     acquisition_method = models.ForeignKey(AcquisitionMethod, null=True)
     loan_status = models.ForeignKey(LoanStatus, null=True,
