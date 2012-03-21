@@ -6,9 +6,7 @@
         <title>{% block title %}UQ Anthropology Museum{% endblock %}</title>
     <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap-responsive.css" type="text/css" media="screen, projection">
-{% comment %}
     <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
-{% endcomment %}
 </head>
 <body>
 <div class="container">
@@ -31,8 +29,9 @@
         <li class="dropdown">
           <a class="dropdown-toggle"
             data-toggle="dropdown"
-            href="#">Browse<b class="caret"></b></a>
+            href="#">Collection<b class="caret"></b></a>
           <ul class="dropdown-menu">
+            <li><a href="{% url search %}">Search</a></li>
             <li><a href="{% url categories_list %}">Categories</a></li>
             <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
             <li><a href="{% url person_list %}">People</a></li>
@@ -40,17 +39,19 @@
             <li><a href="{% url collections_home %}">Collections</a></li>
           </ul>
         </li>
-        <li><a href="/contact/">Contact</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown"
-            href="{% url search %}">Search<b class="caret"></b></a>
+            href="#">Search<b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="{% url search %}">Search</a></li>
+            <li><a href="/filter/">Filter</a></li>
           </ul>
         </li>
+        <li><a href="/events/">Exhibitions and Events</a></li>
+        <li><a href="/other_activities/">Other Activities</a></li>
+        <li><a href="/contact/">Contact</a></li>
         {% if user.is_staff %}
         <li><a href="/admin/">Admin</a></li>
-        <li><a href="/dashboard/">Dashboard</a></li>
         {% endif %}
       </ul>
     </div>
