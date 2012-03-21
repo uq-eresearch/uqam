@@ -169,7 +169,9 @@ INSTALLED_APPS = (
     'location',
     'django.contrib.flatpages',
     'tinymce',
-    'flatpages_tinymce'
+    'flatpages_tinymce',
+    'django_tables2',
+    'django_filters',
 )
 
 # A sample logging configuration. The only tangible logging

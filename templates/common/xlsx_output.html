@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Test</title>
+<body>
+
+<table>
+    <tr>
+    {% for fields in meta.fields %}
+    <th>{{field.name}}</th>
+    {% endfor %}
+    </tr>
+{% for item in queryset %}
+    <tr>
+
+    {% for fields in meta.fields %}
+    <td>{{item}}</td>
+    {% endfor %}
+
+    </tr>
+{% endfor %}
+    <tr><td>Photo</td><td>ID</td><td>Type</td></tr>
+    <tr><td width="200" height="140">
+       <img src="http://placekitten.com.s3.amazonaws.com/homepage-samples/200/140.jpg"></td><td><b>139</b></td><td>Cat Photo</td></tr>
+    <tr><td width="200" height="140">
+       <img src="http://placekitten.com.s3.amazonaws.com/homepage-samples/200/139.jpg"></td><td><b>139</b></td><td>Cat Photo</td></tr>
+</table>
+
+</body>
+</html>

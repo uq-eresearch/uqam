@@ -1,0 +1,13 @@
+{% load render_table from django_tables2 %}
+
+<html>
+    <head>
+        <title>Search Results</title>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
+    </head>
+    <body>
+        <a href="{% url search_xls %}?{{ request.META.QUERY_STRING }}">Download as
+            Excel</a>
+{% render_table table %}
+</body>
+</html>

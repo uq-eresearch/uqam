@@ -2,16 +2,18 @@ from django.shortcuts import render
 from cat.models import MuseumObject, ArtefactType, Category
 from django import forms
 from django.db.models import Q
+from django.http import HttpResponse
 
 
-# Based on code from http://www.slideshare.net/tpherndon/django-search-presentation
+# Based on code from:
+# http://www.slideshare.net/tpherndon/django-search-presentation
 
 class SearchForm(forms.Form):
     """
     Advanced search form for Museum Objects
     """
     keywords = forms.CharField(
-        help_text='Keyword search of issue title and description',
+        help_text='Keyword search of item comments and description',
         required=False)
     item_type = forms.ModelChoiceField(queryset=ArtefactType.objects.all(),
             required=False)
@@ -24,7 +26,7 @@ class SearchForm(forms.Form):
     # maybe dates
 
 
-def search_home(request, form_class=SearchForm,
+def search_home2(request, form_class=SearchForm,
         template_name='common/search_home.html'):
     """
     Advanced search view
@@ -44,7 +46,8 @@ def search_home(request, form_class=SearchForm,
 
 def search(search_data):
     """
-    Iterates over all the search_* methods of the Searcher
+    Iterates over all submitted data. For each field, calls
+    a method search_'fieldname' on the Searcher.
     """
     q = Q()
     results = None
@@ -82,13 +85,22 @@ class ItemSearch(object):
             q = q & keyword_q
         return q
 
+    def search_region(self, q):
+        return q
+
+    def search_material(self, q):
+        return q
+
+    def search_people(self, q):
+        return q
+
     def search_date_added(self, q):
         if self.date_added:
             q = q & Q(date_added__exact=self.date_added)
         return q
 
-    def search_artefact_type(self, q):
-        if self.artefact_type:
+    def search_item_type(self, q):
+        if self.item_type:
             q = q & Q(artefact_type__icontains=self.artefact_type)
         return q
 
@@ -103,4 +115,179 @@ class ItemSearch(object):
                 q = q & Q(category__icontains=self.category)
         return q
 
+
+import django_filters
+import django_tables2 as tables
+from django_tables2 import RequestConfig
+from django_tables2.utils import AttributeDict
+
+
+class ItemTable(tables.Table):
+    class Meta:
+        model = MuseumObject
+
+
+class ItemFilterSet(django_filters.FilterSet):
+    class Meta:
+        model = MuseumObject
+        fields = ['artefact_type', 'raw_material', 'description', 'category']
+
+
+class ColumnForm(forms.Form):
+    """For selecting which columns are included in search results"""
+    columns = forms.MultipleChoiceField()
+
+    def __init__(self, model, *args, **kwargs):
+        self.model = model
+        super(ColumnForm, self).__init__(*args, **kwargs)
+        self.fields['columns'].choices = [(f.name, f.verbose_name.title())
+            for f in self.model._meta.fields]
+
+    def get_excluded_names(self):
+        """Return list of field names to exclude"""
+        desired_fields = self.get_desired_field_names()
+        all_fields = [f for f in self.model._meta.fields]
+
+        return [field.name
+                for field in all_fields if field.name not in desired_fields]
+
+    def get_desired_fields(self):
+        """Return list of fields (not just field name)"""
+        desired_fields = self.get_desired_field_names()
+        all_fields = [f for f in MuseumObject._meta.fields]
+
+        return [field for field in all_fields if field.name in
+                desired_fields]
+
+    def get_desired_field_names(self):
+        desired_fields = []
+        if self.is_valid():
+            desired_fields = self.cleaned_data['columns']
+        return desired_fields
+
+
+def search_home(request,
+        template_name='common/search_home.html'):
+    is_filtered = bool(request.GET)
+    filter = ItemFilterSet(request.GET or None)
+
+    columns = ColumnForm(MuseumObject)
+    if request.method == 'GET' and \
+            'columns' in request.GET:
+        columns = ColumnForm(MuseumObject, request.GET)
+
+    exclude = columns.get_excluded_names()
+
+    table = None
+    if is_filtered:
+        table = ItemTable(filter.qs,
+                attrs=AttributeDict({'class': 'paleblue'}),
+                exclude=exclude
+            )
+        RequestConfig(request, paginate={"per_page": 30}).configure(table)
+
+    return render(request, template_name,
+            {'filter': filter, 'is_filtered': is_filtered,
+                'table': table, 'columns': columns})
+
+
+from openpyxl.workbook import Workbook
+from openpyxl.style import Color, Font, Alignment, Border, Fill
+from openpyxl.cell import get_column_letter
+
+
+def search_xls(request):
+    """Generate xlsx file from search filter"""
+    is_filtered = bool(request.GET)
+    filter = ItemFilterSet(request.GET or None)
+
+    columns = ColumnForm(MuseumObject, request.GET)
+
+    desired_fields = columns.get_desired_fields()
+
+    wb = create_xlsx_workbook(filter.qs, desired_fields)
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'inline; filename=search-results.xlsx'
+    wb.save(response)
+
+    return response
+
+
+def get_col_range(worksheet, fields, fieldname):
+    column = get_col_by_fieldname(fields, fieldname)
+    return "%s%d:%s%d" % (column, 2, letter, ws.get_highest_row())
+
+
+def get_col_by_fieldname(fields, fieldname):
+    names = [f.name for f in fields]
+    try:
+        idx = names.index(fieldname) + 1
+        column = get_column_letter(idx)
+        return column
+    except ValueError:
+        return None
+
+
+def create_xlsx_workbook(queryset, fields):
+    wb = Workbook()
+    ws = wb.get_active_sheet()
+    ws.title = "Search Results"
+
+    if queryset.count:
+        populate_headers(ws, queryset, fields)
+        populate_data(ws, queryset, fields)
+
+        setup_header_cells(ws)
+        set_column_widths(ws, fields)
+
+    return wb
+
+
+def populate_headers(worksheet, queryset, fields):
+    worksheet.append([f.verbose_name.title() for f in fields])
+    worksheet.append([f.name for f in fields])
+
+
+def populate_data(worksheet, queryset, fields):
+    for row, item in enumerate(queryset):
+        row += 1
+        for col, field in enumerate(fields):
+            cell = worksheet.cell(row=row, column=col)
+            cell.value = unicode(getattr(item, field.name))
+            cell.style.alignment.wrap_text = True
+
+
+def setup_header_cells(worksheet):
+    header_cells = worksheet.range('A1:%s1' %
+            get_column_letter(worksheet.get_highest_column()))
+    for row in header_cells:
+        for cell in row:
+            cell.style.font.name = 'Arial'
+            cell.style.font.bold = True
+#    cell.style.fill.fill_type = Fill.FILL_SOLID
+#    cell.style.fill.start_color.index = Color.DARKRED
+#    cell.style.font.color.index = Color.GREEN
+
+    worksheet.freeze_panes = 'A2'
+    worksheet.auto_filter = 'A1:%s1' % (
+        get_column_letter(worksheet.get_highest_column()),)
+
+
+def set_column_widths(worksheet, fields, default_width=15):
+    all_columns = [get_column_letter(col + 1) for col in
+            range(worksheet.get_highest_column())]
+    for column in all_columns:
+        worksheet.column_dimensions[column].width = default_width
+
+    field_widths = {
+            'acquisition_method': 20,
+            'comment': 30,
+            'description': 30,
+            'donor': 20,
+            'collector': 20}
+    for name, width in field_widths.iteritems():
+        column = get_col_by_fieldname(fields, name)
+        if column:
+            worksheet.column_dimensions[column].width = width
 

@@ -11,13 +11,13 @@
 
 
 <ul class="nav nav-tabs">
-  <li class="active">
+    <li {% if not is_filtered %} class="active" {% endif %}>
     <a href="#keyword-search" data-toggle="tab">Keyword Search</a></li>
-  <li>
+  <li {% if is_filtered %} class="active" {% endif %}>
     <a href="#advanced-search" data-toggle="tab">Advanced Search</a></li>
 </ul>
 <div class="tab-content">
-  <div class="tab-pane active" id="keyword-search">
+    <div class="tab-pane {% if not is_filtered %}active{% endif %}" id="keyword-search">
     <div class="row">
       <form method="get" action="/search/" class="span6 well">
           <label>Keyword Search</label>
@@ -31,12 +31,40 @@
     </div>
       <h2>Examples</h2>
   </div>
-  <div class="tab-pane" id="advanced-search">
-    <form method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Search" class="btn btn-main">
-    </form>
+  <div class="tab-pane {% if is_filtered %}active{% endif %}" id="advanced-search">
+      <form action="/search_results" method="get">
+          {{ filter.form.as_p }}
+          <br>
+          <h2>Fields</h2>
+          {{ columns.as_p }}
+          <input type="submit" />
+      </form>
+    {% if is_filtered %}
+    {% comment %}
+      {% for obj in filter %}
+        {{ obj.registration_number }}<br />
+      {% endfor %}
+      {% endcomment %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
+      {% load render_table from django_tables2 %}
+{% render_table table %}
+    {% endif %}
   </div>
 </div>
+
+{% if items %}
+<table>
+    <tr>
+        <th>Reg Num</th><th>Photo</th><th>Type</th><th>Region</th><th>Material</th>
+    </tr>
+{% for item in items %}
+    <tr>
+        <td><a href="{{item.get_absolute_url}}">{{item.registration_number}}</a></td>
+        <td>
+        <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "/static/thumbnail_placeholder.png" %}" width="64px" height="64px" alt="">
+        
+{% endfor %}
+</table>
+{% endif %}
 
 {% endblock %}
