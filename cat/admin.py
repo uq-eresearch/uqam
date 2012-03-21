@@ -22,7 +22,7 @@ class MOAdmin(UndeleteableModelAdmin):
 
     list_filter = ('place__country', 'functional_category__name',
                     'access_status', 'loan_status', 'cultural_bloc',
-                    'artefact_type', 'collector__name', 'donor__name')
+                    'artefact_type', 'collector', 'donor')
 
     search_fields = ['registration_number', 'description', 'comment',
                      'donor__name', 'collector__name', 'maker__name']
