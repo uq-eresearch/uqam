@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap-responsive.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
+    <link rel="shortcut icon" href="{{STATIC}}favicon.ico" />
 </head>
 <body>
 <div class="container">
@@ -14,10 +15,13 @@
     <h1 style="float: left;">UQ Anthropology Museum</h1>
     <div style="float: right; text-align: right;">
         {% if user.is_authenticated %}
-        Logged in as: {{ user }}<br>
+        Logged in as: {{ user }}
+        <a href="/admin/">Admin</a><br>
         <a href="{% url auth_logout %}">Log out</a>
         {% else %}
         <a href="{% url auth_login %}?next={{request.path}}">Log in</a>
+        {% endif %}
+        {% if user.is_staff %}
         {% endif %}
     </div>
   </div>
@@ -50,9 +54,6 @@
         <li><a href="/events/">Exhibitions and Events</a></li>
         <li><a href="/other_activities/">Other Activities</a></li>
         <li><a href="/contact/">Contact</a></li>
-        {% if user.is_staff %}
-        <li><a href="/admin/">Admin</a></li>
-        {% endif %}
       </ul>
     </div>
     <form method="get" action="/search/" class="form-search pull-right">
