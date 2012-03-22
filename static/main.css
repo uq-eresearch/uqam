@@ -48,12 +48,8 @@ body {
 
 
 .item-detail dt {
-    float: left;
-    width: 200px;
-    padding: 5px;
-    clear: left;
 }
 .item-detail dd {
-    float: left;
-    padding: 5px;
+  padding-left: 10px;
+  padding-bottom: 5px;
 }
