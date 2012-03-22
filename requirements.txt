@@ -22,3 +22,4 @@ docutils==0.8.1
 psycopg2==2.4.4
 django-tinymce
 django-flatpages-tinymce
+django-filters
