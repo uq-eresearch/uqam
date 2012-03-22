@@ -12,6 +12,19 @@
     <a href="{% url place_kml %}">View in Google Earth</a>
 </div>
 <h1>Places</h1>
+
+<div id="map_canvas" style="width:100%; height:600px"></div>
+
+</div>
+<div>
+    <ul><li>
+        <img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF9999'> less than 10</li>
+        <li><img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF4c4c'> less than 100</li>
+        <li><img src='https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.7|0|FF0000|1|_|'FF0000> 100 or more</li>
+    </ul>
+</div>
+{% endblock %}
+{% block javascript %}
 <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
@@ -62,15 +75,4 @@
         });
     });
 </script>
-
-<div id="map_canvas" style="width:940px; height:600px"></div>
-
-</div>
-<div>
-    <ul><li>
-        <img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF9999'> less than 10</li>
-        <li><img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF4c4c'> less than 100</li>
-        <li><img src='https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.7|0|FF0000|1|_|'FF0000> 100 or more</li>
-    </ul>
-</div>
-{% endblock %}
+{% endblock javascript %}
