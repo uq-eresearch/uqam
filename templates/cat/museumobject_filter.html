@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <form action="">
+      {{ filter.form.as_p }}
+      <input type="submit" />
+  </form>
+
+{% if is_filtered %}
+  {% for obj in filter %}
+    {{ obj.registration_number }}<br />
+  {% endfor %}
+{% endif %}
+
+
+{% endblock %}

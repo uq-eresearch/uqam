@@ -40,9 +40,14 @@ class WithImagesListView(ListView):
         return MuseumObject.objects.exclude(
                 artefactrepresentation__isnull=True)
 
+import django_filters
 
 urlpatterns = patterns('cat.views',
 #    url(r'^$', 'home_page', name='index'),
+    url(r'^filter/$',
+        django_filters.views.object_filter,
+        {'model': MuseumObject}),
+
     url(r'^item/$',
         ListView.as_view(
             model=MuseumObject, paginate_by=20), name='artefact_list'),
