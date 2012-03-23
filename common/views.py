@@ -213,7 +213,8 @@ def search_xls(request):
 
     wb = create_xlsx_workbook(filter.qs, desired_fields)
 
-    response = HttpResponse(mimetype='application/vnd.ms-excel')
+#    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response = HttpResponse(mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'inline; filename=search-results.xlsx'
     wb.save(response)
 
