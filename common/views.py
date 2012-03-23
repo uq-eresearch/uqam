@@ -130,12 +130,18 @@ class ItemTable(tables.Table):
 class ItemFilterSet(django_filters.FilterSet):
     class Meta:
         model = MuseumObject
-        fields = ['artefact_type', 'raw_material', 'description', 'category']
+        fields = ['registration_number', 'functional_category',
+                'artefact_type', 'raw_material', 'description', 'category',
+                'storage_section', 'storage_unit', 'storage_bay',
+                'storage_shelf_box_drawer', 'acquisition_date',
+                'acquisition_method', 'cultural_bloc', 'donor', 'collector',
+                ]
 
 
 class ColumnForm(forms.Form):
     """For selecting which columns are included in search results"""
     columns = forms.MultipleChoiceField()
+    #widget=forms.CheckboxSelectMultiple)
 
     def __init__(self, model, *args, **kwargs):
         self.model = model
