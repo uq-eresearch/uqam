@@ -76,13 +76,13 @@
 						<li><a href="/events/">Exhibitions and Events</a></li>
 						<li><a href="/other_activities/">Other activities</a></li>
 						<li><a href="/contact/">Contact us</a></li>
-                     {% if user.is_authenticated %}
-                        <li style="float: right;"><a href="{% url auth_logout %}">Logout</a></li>
-                     {% else %}
-                        <li style="float: right;"><a href="{% url auth_login %}?next={{request.path}}">Log in</a></li>
-                     {% endif %}
                      {% if user.is_staff %}
-                        <li style="float:right;"><a href="/admin/">Admin</a></li>
+                        <li style=""><a href="/admin/">Admin</a></li>
+                     {% endif %}
+                     {% if user.is_authenticated %}
+                        <li style=""><a href="{% url auth_logout %}">Logout</a></li>
+                     {% else %}
+                        <li style="padding-left: 50px"><a href="{% url auth_login %}?next={{request.path}}">Log in</a></li>
                      {% endif %}
 				</ul>
 		</div>
