@@ -1,0 +1,187 @@
+{% load static %}
+{% get_static_prefix as STATIC %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}UQ Anthropology Museum{% endblock %}</title>
+
+    <link rel="stylesheet" href="http://uq.edu.au/templates/web/css/default.css" media="screen" type="text/css" />
+{#    <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap.css" type="text/css" media="screen, projection"> #}
+{#    <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap-responsive.css" type="text/css" media="screen, projection"> #}
+    <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC}}fancydropdown.css" type="text/css">
+    <link rel="shortcut icon" href="{{STATIC}}favicon.ico" />
+    {% block headextra %}
+    {% endblock headextra %}
+</head>
+<body>
+<!--START: For Accessibility -->
+<p id="top"><a href="#title" class="skip" accesskey="2">skip nav</a></p>
+<!--END: For Accessibility -->
+
+<!--START: Header & Menu -->
+	<div id="header"><!--START: Header -->
+		<div id="header-inner">
+			<h1><a href="http://www.uq.edu.au/" title="Home">The University of Queensland</a></h1>
+			<h2><a href="http://anthropology.metadata.net" title="UQ Anthropology Museum">UQ Anthropology Museum</a></h2> <!--Change Link and title -->
+			<div id="mininav">
+				<ul>
+				 <li><a href="http://www.uq.edu.au/" accesskey="1">UQ Home</a></li>
+				 <li><a href="http://www.uq.edu.au/contacts" accesskey="3">Contacts</a></li>
+				 <li><a href="http://www.uq.edu.au/study" accesskey="4">Study</a></li>
+				 <li><a href="http://www.uq.edu.au/maps/" accesskey="5">Maps</a></li>
+				 <li><a href="http://www.uq.edu.au/news" accesskey="6">News</a></li>
+				 <li><a href="http://www.uq.edu.au/events/" accesskey="7">Events</a></li>
+				 <li><a href="http://www.library.uq.edu.au/" accesskey="8">Library</a></li>
+				 <li><a href="http://my.uq.edu.au" accesskey="9">my.UQ</a></li>
+				</ul>
+				<div class="clear">&nbsp;</div>
+			</div>
+
+			<div id="search">
+				<form id="searchbox" method="get" action="/search/">
+				<fieldset>
+				<label for="search-entry">Search Entry</label>
+				<input id="search-entry" size="15" type="text" value="Search this site..." name="q" class="s" onfocus="if (this.value == 'Search this site...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search this site...';}" tabindex="1" />
+				<input name="submit" value="" class="submit" title="Search this site" type="submit" />
+        <input type="hidden" name="models" value="cat.museumobject">
+	
+				</fieldset>
+				</form>
+			</div>
+
+			<div class="clear">&nbsp;</div>
+		</div>
+	</div><!-- QC: 1 -->
+  <div id="topnav">
+		<div id="topnav-inner">
+				<ul class="tabs">
+						<li><a href="/">Home</a></li>
+						<li><a href="/about/">About Us</a></li>
+						<li class="hasmore"><a href="#">Collection</a>
+								<ul class="dropdown">
+										<li><a href="/about-collection/">About the Collection</a></li>
+										<li><a href="{% url search %}">Search</a></li>
+										<li><a href="{% url categories_list %}">Categories</a></li>
+										<li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
+										<li><a href="{% url person_list %}">People</a></li>
+										<li><a href="{% url place_map %}">Places</a></li>
+										<li><a href="{% url collections_home %}">Collections</a></li>
+								</ul>
+						</li>
+						<li><a href="/events/">Exhibitions and Events</a></li>
+						<li><a href="/other_activities/">Other activities</a></li>
+						<li><a href="/contact/">Contact us</a></li>
+                     {% if user.is_authenticated %}
+                        <li style="float: right;"><a href="{% url auth_logout %}">Logout</a></li>
+                     {% else %}
+                        <li style="float: right;"><a href="{% url auth_login %}?next={{request.path}}">Log in</a></li>
+                     {% endif %}
+                     {% if user.is_staff %}
+                        <li style="float:right;"><a href="/admin/">Admin</a></li>
+                     {% endif %}
+				</ul>
+		</div>
+</div><!--END: Header & Menu -->
+<div class="wrapper">
+  <!-- START: Content -->
+  <div id="content">
+    {% block body %}
+
+    {% endblock body %}
+  </div><!-- /content -->
+
+</div><!-- /wrapper -->
+
+
+<!--START: Footer -->
+<div id="footer">
+
+	<div class="wrapper">
+		<div id="siteinfo" class="vcard">
+			<div class="org fn"><a href="http://www.uq.edu.au/">The University of Queensland</a></div>
+			<address id="uq-address" class="adr"><span class="street-address">Brisbane</span>
+			<span class="locality">St Lucia</span>, <span class="region">QLD</span> <span class="postal-code">4072</span></address>
+
+			<div class="tel">+61 7 3365 1111</div>
+			<div class="campus">Other Campuses: <a href="http://www.uq.edu.au/ipswich/">UQ Ipswich</a>, <br /><a href="http://www.uq.edu.au/gatton/">UQ Gatton</a>, <a href="http://www.uq.edu.au/about/herston-campus">UQ Herston</a></div>
+			<div class="directions"><a href="http://www.uq.edu.au/maps/">Maps and Directions</a></div>
+			<div id="copyright">&copy; 2011 The University of Queensland</div>
+		</div>
+
+		<div id="footer-resources">
+			<h2>Supplemental Resources</h2>
+	
+			<div id="navResources">
+			<h3>A Member of</h3>
+	
+			<div class="member-logo">
+		    <a href="http://www.universitas21.com/"><img src="http://uq.edu.au/templates/web/images/logo-universitas.gif" width="25" height="25" alt="Universitas 21" /></a> &nbsp;&nbsp;
+
+				<a href="http://www.go8.edu.au/"><img src="http://uq.edu.au/templates/web/images/logo-go8.gif" width="123" height="18" alt="Group of 8" /></a>
+		  </div>
+	
+			<p><a href="http://www.uq.edu.au/terms-of-use/">Terms of use</a> | <a target="_blank" href="https://www.uq.edu.au/feedback">Feedback</a></p><br />
+
+			<p>Authorised by: </p>
+
+	    <p>ABN 63 942 912 684</p>
+	    <p>CRICOS Provider No:<a class="footerlinks"  href="http://www.uq.edu.au/about/cricos-link">00025B</a></p>
+			</div>
+	
+			<div id="navQuick">
+			<h3>Quick Links</h3>
+			<ul>
+			<li><a href="http://www.uq.edu.au/news/">For Media</a></li>
+
+			<li><a href="http://www.uq.edu.au/contacts/">Emergency Contact</a></li>
+			</ul>
+			</div>
+	
+			<div id="navSocial">
+			<h3>Social Media</h3>
+			<ul>
+			<li><a href="http://www.uq.edu.au/itunes/">iTunes U</a></li>
+			<li><a href="http://www.flickr.com/photos/uqnews/sets/">Flickr</a></li>
+			<li><a href="http://twitter.com/uqnewsonline">Twitter</a></li>
+			<li><a href="http://www.youtube.com/universityqueensland">YouTube Channel</a></li>
+			</ul>
+			</div>
+		</div>
+
+		<div id="footer-right">
+			<div id="navExplore">
+
+			<h3>Explore</h3>
+			<ul>
+		  <li><a href="http://www.alumni.uq.edu.au/giving">Giving to UQ</a></li>
+			<li><a href="http://www.uq.edu.au/departments/">Faculties &amp; Divisions</a></li>
+			<li><a href="http://www.uq.edu.au/uqjobs/">UQ Jobs</a></li>		
+			<li><a href="http://www.uq.edu.au/contacts/">Contact UQ</a></li>
+
+			<li><a href="http://www.uq.edu.au/services/">Services &amp; Facilities</a></li>												
+			</ul>
+			</div>	
+			
+			<div id="navLogos">
+			<h3>Need Help?</h3>
+			<p><a href="http://www.uq.edu.au/uqanswers/" class="opacity-toggle"><img src="http://uq.edu.au/templates/web/images/button-uqanswers.png" width="102" height="28" alt="UQ Answers" /></a></p>			
+			
+
+			<p class="centenary"><a href="http://www.uq.edu.au/centenary/" class="opacity-toggle"><img src="http://uq.edu.au/templates/web/images/logo-centenary.png" width="102" height="69" alt="UQ Centenary" /></a></p>
+			</div>				
+
+		</div>
+	</div>
+<div class="clearboth"></div>
+</div>
+<!-- END: Footer  --><!-- This page loaded in 0.00619 seconds. --><!-- QC: 1 --><!--END: Footer -->
+
+
+    <script type="text/javascript" src="{{STATIC}}jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="{{STATIC}}bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="{{STATIC}}fancydropdown.js"></script>
+    {% block javascript %}
+    {% endblock %}
+</body>
+</html>

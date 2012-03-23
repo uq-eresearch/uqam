@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
-{# {% include "snippets/paged_object_list.html" %} #}
+{% block headextra %}
+<style type="text/css">
+#content-primary {
+    width: 919px;
+}
+</style>
+
+{% endblock headextra %}
 {% block body %}
 
   <!-- START: Breadcrumb Trails -->
@@ -21,11 +28,6 @@
   <div id="content-primary">
     {% block content %}
     {% endblock %}
-  </div>
-
-  <div id="content-secondary">
-    {% block content-secondary %}
-    {% endblock content-secondary %}
   </div>
 
   <!-- START: Breadcrumb Trails -->
