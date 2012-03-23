@@ -1,0 +1,55 @@
+/* IE 7 Bug Fixes
+-----------------------------------------------------------------------------*/
+
+
+/* Top menu fix
+#topnav ul li { margin: 0 28px 5px 0; padding: 0 0 0 0; float: left; display: inline; }
+#topnav li a:hover { color: rgb(245, 225, 255); text-decoration: underline;  background: rgb(0, 0, 0); }
+-----------------------------------------------------------------------------*/
+
+#content { z-index: 50; position: relative;}
+#topnav #topnav-inner ul.tabs {z-index: 60; position: absolute;}
+#topnav ul.dropdown, ul.dropdown { position: absolute; z-index: 60; }
+#content-primary { z-index: 50; }
+
+
+#topnav { height: 32px; padding: 0px; }
+#topnav ul{ padding: 0 0 0 20px; }
+#topnav ul li { height: 22px; padding-top: 10px; padding-left: 8px; margin: 0 30px 0 0; }
+
+#topnav ul li.active { background: transparent url('http://uq.edu.au/templates/web/images/top_nav_bg_active_IE.gif') repeat-x scroll right top; }
+#topnav ul li:hover { background: transparent url('http://uq.edu.au/templates/web/images/top_nav_bg_active_IE.gif') repeat-x scroll right top; }
+#topnav li a:hover { color: rgb(245, 225, 255); text-decoration: none; }
+
+#topnav ul.dropdown {
+	margin:0 0 0 -3px;
+	padding:0 0 0 0;
+}
+#topnav ul.dropdown li {
+	height:auto;
+	padding:0;
+}
+
+
+/* Slide fix - remove arrows
+-----------------------------------------------------------------------------*/
+.stripNavL, .stripNavR, .stripNav {display: none;} 
+
+
+/* Accodian menu fix
+-----------------------------------------------------------------------------*/
+
+ul.favsection span.rank { margin: 8px 2px 0pt 0pt; font-family: georgia; font-style: normal; font-variant: normal; font-weight: normal; font-size: 20px; line-height: normal; font-size-adjust: none; font-stretch: normal; -x-system-font: none; color: rgb(150, 216, 1); float: left; width: 30px; text-align: center; }
+ul.favsection div.link { padding: 0 0 8px 0; margin: 0; line-height: normal; font-size-adjust: none; font-stretch: normal; -x-system-font: none;  }
+
+ul.section span.rank { margin: 8px 2px 0pt 0pt; font-family: georgia; font-style: normal; font-variant: normal; font-weight: normal; font-size: 20px; line-height: normal; font-size-adjust: none; font-stretch: normal; -x-system-font: none; color: rgb(150, 216, 1); float: left; width: 30px; text-align: center; }
+ul.section div.link { padding: 0 0 8px 0; margin: 0; line-height: normal; font-size-adjust: none; font-stretch: normal; -x-system-font: none;  }
+
+/* Footer fix
+-----------------------------------------------------------------------------*/
+#siteinfo .campus { clear:both; }
+#siteinfo .directions { clear:both; }
+
+#footer-resources li { margin: 0px; padding: 0 0 0 12px; background: transparent url('../images/arrow.png') no-repeat scroll  0px 2px; }
+#faq { padding-bottom: 10px; }
+
