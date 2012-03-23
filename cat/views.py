@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from models import MuseumObject, Category
 from location.models import Place, Region
 from django.db.models import Count
-from django.utils.xmlutils import SimplerXMLGenerator
 from utils.utils import do_paging
 from haystack.views import basic_search
 from haystack.forms import SearchForm

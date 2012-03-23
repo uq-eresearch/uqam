@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.utils.xmlutils import SimplerXMLGenerator
 from models import Place, Region
 from utils.utils import do_paging
 from django.db.models import Count
