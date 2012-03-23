@@ -140,7 +140,8 @@ class ItemFilterSet(django_filters.FilterSet):
 
 class ColumnForm(forms.Form):
     """For selecting which columns are included in search results"""
-    columns = forms.MultipleChoiceField()
+    columns = forms.MultipleChoiceField(
+            widget=forms.SelectMultiple(attrs={'size': '15'}))
     #widget=forms.CheckboxSelectMultiple)
 
     def __init__(self, model, *args, **kwargs):
