@@ -266,6 +266,10 @@ class Category(models.Model):
         url = "/categories" + url
         return url
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__icontains", "parent__name__icontains")
+
 
 class Reference(models.Model):
     """
