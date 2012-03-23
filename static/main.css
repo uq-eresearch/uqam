@@ -48,6 +48,7 @@ body {
 
 
 .item-detail dt {
+    font-weight: bold;
 }
 .item-detail dd {
   padding-left: 10px;
@@ -72,3 +73,17 @@ body{background:transparent url('http://socialscience.uq.edu.au/images/custom/bo
 #content-image-table{margin-top:16px}
 #content-image-table td{padding:0px !important}
 #content-image-table #caption{background:#E1EAF6;border:none;padding:3px 7px !important}
+
+
+/* UQAM Customisation */
+#content-primary.fullwidth {
+    width: 919px;
+}
+#content-primary.wide {
+    width: 500px;
+}
+
+#content-secondary.wide {
+    width: 400px;
+    float: left;
+}

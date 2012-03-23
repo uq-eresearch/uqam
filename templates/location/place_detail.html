@@ -27,7 +27,16 @@
 </div>
 
 <div class="span-12 last">
+
 <h2>Map</h2>
+<div id="map_canvas" style="width:450px; height:300px"></div>
+
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
 <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
@@ -40,7 +49,7 @@
             mapTypeId: google.maps.MapTypeId.SATELLITE
         };
 
-        {% if place.gn_id %}
+        {% if place.latitude %}
             var latlng = new google.maps.LatLng({{place.latitude}}, {{place.longitude}})
             myOptions.center = latlng;
             map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
@@ -54,10 +63,4 @@
         {% endif %}
     });
 </script>
-
-<div id="map_canvas" style="width:450px; height:300px"></div>
-
-</div>
-
-
-{% endblock %}
+{% endblock javascript %}

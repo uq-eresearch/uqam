@@ -1,24 +1,13 @@
-{% extends "base_generic.html" %}
+{% extends "base_wide.html" %}
 
 {% load uqam %}
-{% block content %}
+{% block body %}
 
 
-{% if user.is_staff %}
-<div style="float:right;font-size: 80%;">
-    <a href="#" id="printLabelLink">Printable Label</a>
-    <a href="{% url admin:cat_museumobject_change museumobject.id %}">Admin</a>
-</div>
-{% endif %}
-
-
-<div class="row">
-  <div class="span8">
+<div id="content-primary" class="wide">
 <h1>{{ museumobject.artefact_type }}</h1>
+<h3>Item Information</h3>
 
-<div class="tabbable tabs-below">
-  <div class="tab-content">
-    <div class="tab-pane active" id="public">
 <dl class="item-detail">
 <dt>Item Type</dt>
 <dd> {{ museumobject.artefact_type }}</dd>
@@ -96,12 +85,10 @@
 
 </dl>
 
-    </div><!-- /tab-pane -->
-    <div class="tab-pane" id="staff">
 
 {% if user.is_staff %}
+<h3>Staff Information</h3>
 <dl class="item-detail">
-
 <dt>Functional Category (old)</dt>
 <dd>{{ museumobject.functional_category }}</dd>
 
@@ -239,20 +226,37 @@
 
 {% endif %} {# is_staff #}
 
-    </div><!-- /tab-pane -->
-  </div><!-- /tab-content -->
-  <ul class="nav nav-tabs">
-    <li class="active">
-      <a href="#public" data-toggle="tab">Public</a></li>
-    <li>
-      <a href="#staff" data-toggle="tab">Staff</a></li>
-  </ul>
-</div><!-- /tabbable -->
-
-</div><!-- /span8 -->
+</div><!-- /content-primary -->
 
 
-<div class="span4">
+<div id="content-secondary" class="wide">
+{% if user.is_staff %}
+<div style="float:right;font-size: 80%;">
+    <a href="#" id="printLabelLink">Printable Label</a>
+    <a href="{% url admin:cat_museumobject_change museumobject.id %}">Admin</a>
+</div>
+
+
+<style type="text/css">
+    #printableLabel {
+        background-color: white;
+        display:none;
+        padding: 15px;
+    }
+</style>
+
+<div id="printableLabel">
+  <b>Printable label</b>
+  <pre id="printLabelText">
+  {% firstof museumobject.maker "Maker unknown" %}, {% firstof museumobject.creation_date|date:"Y" "creation date unknown" %}
+  {{ museumobject.artefact_type }}{% if museumobject.raw_material or museumobject.dimensions %}
+  {{ museumobject.dimensions }}{% if museumobject.raw_material %}, {{ museumobject.raw_material }}{%endif%}{% endif %}
+  {% firstof museumobject.assoc_cultural_group museumobject.place.country %}
+  Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ museumobject.acquisition_date|date:"Y" }}{% endif %}
+  </pre>
+</div><!-- /printableLable -->
+
+{% endif %}
 {% if museumobject.artefactrepresentation_set.exists %}
   <div id="myCarousel" class="carousel">
     <div class="carousel-inner">
@@ -276,38 +280,12 @@
     <hr>
     <div id="map_canvas" style="margin-top: 50px; width:100%; height:150px"></div>
 {% endif %}
-</div><!-- /span4 -->
-
-</div><!-- /row -->
 
 
 
 
-
-
-
-{% if user.is_staff %}
-<style type="text/css">
-    #printableLabel {
-        background-color: white;
-        display:none;
-        padding: 15px;
-    }
-</style>
-
-<div id="printableLabel">
-  <b>Printable label</b>
-  <pre id="printLabelText">
-  {% firstof museumobject.maker "Maker unknown" %}, {% firstof museumobject.creation_date|date:"Y" "creation date unknown" %}
-  {{ museumobject.artefact_type }}{% if museumobject.raw_material or museumobject.dimensions %}
-  {{ museumobject.dimensions }}{% if museumobject.raw_material %}, {{ museumobject.raw_material }}{%endif%}{% endif %}
-  {% firstof museumobject.assoc_cultural_group museumobject.place.country %}
-  Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ museumobject.acquisition_date|date:"Y" }}{% endif %}
-  </pre>
-</div><!-- /printableLable -->
-
-{% endif %}
-{% endblock %}
+</div> <!-- /content-secondary -->
+{% endblock body %}
 
 
 {% block javascript %}
