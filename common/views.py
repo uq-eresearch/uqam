@@ -120,14 +120,27 @@ import django_filters
 import django_tables2 as tables
 from django_tables2 import RequestConfig
 from django_tables2.utils import AttributeDict
+from django_tables2.utils import A
 
 
 class ItemTable(tables.Table):
+    photo = tables.TemplateColumn('<img src="{% firstof '
+    'record.artefactrepresentation_set.all.0.image.url_64x64 '
+    '"http://placehold.it/48" %}" width="64px" height="64px" '
+    'alt="">')
+    registration_number = tables.LinkColumn(
+            'artefact_view', args=[A('registration_number')])
     class Meta:
         model = MuseumObject
+        sequence = ("photo", "registration_number", "...")
 
 
 class ItemFilterSet(django_filters.FilterSet):
+#    collections = django_filters.ModelChoiceFilter(name='Collection',
+#            extra = lambda f: {'queryset':
+#              f.rel.to._default_manager.complex_filter(f.rel.limit_choices_to),
+#              'to_field_name': f.rel.field_name})
+
     class Meta:
         model = MuseumObject
         fields = ['registration_number', 'functional_category',
@@ -135,6 +148,7 @@ class ItemFilterSet(django_filters.FilterSet):
                 'storage_section', 'storage_unit', 'storage_bay',
                 'storage_shelf_box_drawer', 'acquisition_date',
                 'acquisition_method', 'cultural_bloc', 'donor', 'collector',
+#                'collections__title'
                 ]
 
 
