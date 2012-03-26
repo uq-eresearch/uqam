@@ -20,7 +20,7 @@
 {% for object in objects.object_list %}
     <tr><td>
       <a href="{{ object.get_absolute_url }}">
-        <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "/static/thumbnail_placeholder.png" %}" width="64px" height="64px" alt="">
+        <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "http://placehold.it/64" %}" width="64px" height="64px" alt="">
         {{object}}
       </a>
     </td></tr>
