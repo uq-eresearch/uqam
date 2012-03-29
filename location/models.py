@@ -69,6 +69,11 @@ class Place(models.Model):
             self.longitude = float(p[0])
             self.latitude = float(p[1])
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("country__icontains", "region__icontains",
+                "australian_state__icontains", "name__icontains")
+
 
 class Region(models.Model):
     name = models.CharField(max_length=60, unique=True)
