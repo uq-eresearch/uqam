@@ -125,4 +125,26 @@ Fabric tasks exist to rebuild and update the search index::
     fab -H anthropology rebuild_index
 
 
+Migrate live to UAT
+-------------------
+
+ssh anthropology pg_dump --clean -h localhost -U uqam uqam | gzip -c >
+dumpfile.sql.gz
+
+gunzip -c dumpfile.sql.gz | ssh anthropology-uat psql -h localhost -U uqam -d
+uqam
+
+
+Search Indexing
+---------------
+To update the search index every day, add the following to the crontab::
+
+    # +--------------minute (0 - 59)
+    # |  +-----------hour (0 - 23)
+    # |  |  +--------day of month (1 - 31)
+    # |  |  |  +-----month (1 - 12)
+    # |  |  |  |  +--day of week (0 - 6) (Sunday=0 or 7)
+    # |  |  |  |  |
+
+      0  1  *  *  *   /home/django/env/bin/python /home/django/uqam/manage.py update_index --verbosity=1
 

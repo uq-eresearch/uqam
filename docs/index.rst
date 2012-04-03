@@ -18,6 +18,7 @@ Contents:
    usage
    admin
    databases
+   testing
 
 
 Indices and tables
