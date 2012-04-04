@@ -28,11 +28,6 @@
   <input type="submit" />
 </form>
 {% if is_filtered %}
-{% comment %}
-{% for obj in filter %}
-{{ obj.registration_number }}<br />
-{% endfor %}
-{% endcomment %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
 {% load render_table from django_tables2 %}
 {% render_table table %}
