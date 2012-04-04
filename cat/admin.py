@@ -12,6 +12,8 @@ from common.adminactions import merge_selected, add_to_collection
 class ArtefactRepInline(admin.TabularInline):
     model = ArtefactRepresentation
     search_fields = ['name', ]
+    fields = ('name', 'image', 'position')
+    sortable_field_name = "position"
 #    classes = ('collapse closed',)
 
 

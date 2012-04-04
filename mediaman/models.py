@@ -29,6 +29,10 @@ class ArtefactRepresentation(models.Model):
                 sizes=((64, 64), (400, 350)))
     url = models.URLField(blank=True)
     artefact = models.ForeignKey(MuseumObject)
+    position = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ['position']
 
     def __unicode__(self):
         return self.name
@@ -36,8 +40,8 @@ class ArtefactRepresentation(models.Model):
 
 class Document(models.Model):
     name = models.CharField(max_length=30, blank=True)
-#    document = models.FileField(upload_to='docs/')
-    document = FileBrowseField('Document', max_length=200, directory='docs/')
+    document = models.FileField(upload_to='docs/')
+#    document = FileBrowseField('Document', max_length=200, directory='docs/')
 
     def __unicode__(self):
         return self.name
