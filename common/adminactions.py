@@ -1,8 +1,9 @@
 import copy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.template import Context, loader
 from django.utils.safestring import mark_safe
 from django.contrib import messages
-from cat.modelmerge import merge_model_objects
+from modelmerge import merge_model_objects
 from django.shortcuts import render
 from django.contrib import admin
 
@@ -100,3 +101,41 @@ def merge_selected(modeladmin, request, queryset):
         'display_table': display_table, 'ids': ids})
 
 merge_selected.short_description = "Merge selected records"
+
+
+
+
+def generate_xls(modeladmin, request, queryset):
+    model = queryset.model
+#    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+    return render(request, 'common/xlsx_output.html',
+            {'queryset': queryset, 'model': model,
+             'meta': model._meta})
+#    t = loader.get_template('common/xslx_output.html')
+#    c = RequestContext(request,
+#            {'queryset': queryset, 'model': model})
+    # response = HttpResponse(t.render(c), mimetype='application/vnd.ms-excel')
+    # response['Content-Disposition'] = 'attachment; filename=foo.xls'
+
+
+def output_xls(queryset):
+    from xlwt import Workbook
+    w = Workbook()
+    ws = w.add_sheet('Image')
+    ws.insert_bitmap('python.bmp', 2, 2)
+    w.save('image.xls')
+
+import django_tables2 as tables
+from django.views.generic.list import ListView
+from cat.models import MuseumObject
+
+class SimpleTable(tables.Table):
+    pass
+
+class ItemTable(tables.Table):
+    model = MuseumObject
+    table_class = SimpleTable
+
+
+def display_table(modeladmin, request, queryset):
+    pass
