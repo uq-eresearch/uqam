@@ -4,7 +4,9 @@
   {{ block.super }}
   {% if original.artefactrepresentation_set.exists %}
   <!-- MARKER -->
-    <img src="{{ original.artefactrepresentation_set.all.0.image.url_400x350 }}">
+    <div style="position: fixed; top: 130px; right:0; z-index: 10000; width:150px">
+      <img style="width:150px" src="{{ original.artefactrepresentation_set.all.0.image.url_400x350 }}">
+    </div>
 
   {% endif %}
   <h2>{{ adminform.form.instance }}</h2>
