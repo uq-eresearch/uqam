@@ -35,7 +35,17 @@ class UQAMDashboard(Dashboard):
         # append a recent actions module
         self.children.append(modules.RecentActions(
             title=_('Recent Actions'),
-            column=3,
+            column=2,
             collapsible=False,
             limit=5,
+        ))
+
+        self.children.append(modules.LinkList(
+            layout='inline',
+            title=_('Admin tools'),
+            column=2,
+            children=(
+                ['Upload media', '/mediaman/bulk_upload/'],
+                ['Filter/query items', '/admin/cat/museumobject/search'],
+            )
         ))
