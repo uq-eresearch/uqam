@@ -35,15 +35,12 @@ class MOAdmin(UndeleteableModelAdmin):
 
     raw_id_fields = ('category', 'place', 'collector', 'collector_2',
             'donor', 'donor_2', 'artefact_type', 'maker')
-#    related_lookup_fields = {
-#            'fk': ['collector'],
-#    }
     autocomplete_lookup_fields = {
             'fk': ['place', 'collector', 'donor', 'artefact_type',
                    'maker'],
             'm2m': ['category']
     }
-    filter_horizontal = ['related_documents']
+#    readonly_fields = ('loan_status',)
 
     fieldsets = (
         (None, {
@@ -53,7 +50,7 @@ class MOAdmin(UndeleteableModelAdmin):
         }),
         ('Status', {
             'classes': ('collapse',),
-            'fields': (('loan_status', 'access_status'),)
+            'fields': ('loan_status', 'access_status', 'record_status',)
         }),
         ('Storage location', {
             'classes': ('collapse',),
@@ -162,4 +159,8 @@ admin.site.register(Obtained, ObtainedAdmin)
 class PhotoTypeAdmin(admin.ModelAdmin):
     actions = [merge_selected]
 admin.site.register(PhotoType, PhotoTypeAdmin)
+
+class RecordStatusAdmin(admin.ModelAdmin):
+    actions = [merge_selected]
+admin.site.register(RecordStatus, RecordStatusAdmin)
 

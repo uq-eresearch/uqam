@@ -158,9 +158,12 @@ class MuseumObject(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
 
+    record_status = models.ForeignKey('RecordStatus', null=True, blank=True,
+            help_text='Record status (eg, "Fix public data", "Check '
+            'copyright", etc)')
+
     related_documents = models.ManyToManyField(
             'mediaman.Document',
-            related_name='related_museumobjects',
             null=True, blank=True)
 
     def dimensions(self):
@@ -301,3 +304,15 @@ class PhotoType(models.Model):
 
     def __unicode__(self):
         return self.phototype
+
+
+class RecordStatus(models.Model):
+    """
+    Different statuses for database records, whether they need
+    cleaning for public display, or checking of copyright, or something else
+    """
+    status = models.CharField(max_length=50, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.status
