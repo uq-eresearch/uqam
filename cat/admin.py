@@ -1,12 +1,15 @@
 from django.contrib import admin
+from django.conf.urls.defaults import patterns, url
 from models import MuseumObject, FunctionalCategory
 from models import CulturalBloc, ArtefactType, Category
 from models import AcquisitionMethod, LoanStatus
 from models import AccessStatus, Obtained
-from models import PhotoType
-from mediaman.models import ArtefactRepresentation
+from models import PhotoType, RecordStatus
+from mediaman.models import ArtefactRepresentation, Document
 from common.admin import UndeleteableModelAdmin
 from common.adminactions import merge_selected, add_to_collection
+from common.adminactions import generate_xls
+from admin_views import search_home, search_xls
 
 
 class ArtefactRepInline(admin.TabularInline):
@@ -17,10 +20,19 @@ class ArtefactRepInline(admin.TabularInline):
 #    classes = ('collapse closed',)
 
 
+class DocumentInline(admin.TabularInline):
+    model = MuseumObject.related_documents.through
+    search_fields = ['name', ]
+    raw_id_fields = ('document',)
+    autocomplete_lookup_fields = {
+            'm2m': ['document']
+    }
+
+
 class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
                     'description', 'comment',)
-    actions = [add_to_collection]
+    actions = [add_to_collection, generate_xls]
 
     list_filter = ('place__country', 'functional_category__name',
                     'access_status', 'loan_status', 'cultural_bloc',
@@ -30,7 +42,7 @@ class MOAdmin(UndeleteableModelAdmin):
                      'donor__name', 'collector__name', 'maker__name']
 
     inlines = [
-            ArtefactRepInline,
+            DocumentInline, ArtefactRepInline
     ]
 
     raw_id_fields = ('category', 'place', 'collector', 'collector_2',
@@ -81,7 +93,8 @@ class MOAdmin(UndeleteableModelAdmin):
             'fields': ('maker', 'manufacture_technique', 'creation_date',
                 'site_name_number', 'raw_material', 'indigenous_name',
                 'recorded_use', 'assoc_cultural_group',
-                'exhibition_history')
+                'exhibition_history', 'category_illustrated',
+                'artefact_illustrated')
         }),
         ('Location', {
             'classes': ('collapse',),
@@ -92,11 +105,24 @@ class MOAdmin(UndeleteableModelAdmin):
             'fields': (('length', 'width', 'height'),
                 ('depth', 'circumference'))
         }),
-        ('Related documents', {
-            'classes': ('collapse',),
-            'fields': ('related_documents',)
-        }),
     )
+
+    def get_urls(self):
+        urls = super(MOAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(r'^search/$', self.admin_site.admin_view(search_home),
+                name='search'),
+            url(r'^search_results/$', self.admin_site.admin_view(search_home),
+                {'template_name': 'common/search_results.html'},
+                name='search_results'),
+            url(r'^search_xls/$',  self.admin_site.admin_view(search_xls),
+                name='search_xls'),
+#            (r'^filter/$', self.admin_site.admin_view(self.my_view))
+        )
+        return my_urls + urls
+
+    def my_view(self, request):
+        pass
 
 
 admin.site.register(MuseumObject, MOAdmin)
