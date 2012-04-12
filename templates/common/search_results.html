@@ -5,9 +5,21 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
 {% endblock extrastyle %}
 
+<!-- OBJECT TOOLS -->
+{% block object-tools %}
+  <ul class="tools">
+      {% block object-tools-items %}
+      <li>
+<a href="{% url admin:search_xls %}?{{ request.META.QUERY_STRING }}">Download as Excel</a>
+        </li>
+      {% endblock object-tools-items %}
+  </ul>
+{% endblock object-tools %}
+
 {% block content %}
-<a href="{% url admin:search_xls %}?{{ request.META.QUERY_STRING }}">Download as
-            Excel</a>
+<div class="container-flexible">
 {% render_table table %}
+
+</div>
 
 {% endblock content %}

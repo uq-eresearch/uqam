@@ -30,9 +30,9 @@ class ItemFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = MuseumObject
-        fields = ['registration_number', 'functional_category',
+        fields = ['registration_number', 'functional_category', 'category',
                 'artefact_type', 'loan_status', 'access_status',
-                'record_status', 'raw_material', 'description', 'category',
+                'record_status', 'raw_material', 'description',
                 'storage_section', 'storage_unit', 'storage_bay',
                 'storage_shelf_box_drawer', 'acquisition_date',
                 'acquisition_method', 'cultural_bloc', 'donor', 'collector',
@@ -76,7 +76,6 @@ class ColumnForm(forms.Form):
 
 
 def search_home(request,
-#        template_name='common/search_home.html'):
         template_name='advanced_search.html'):
     is_filtered = bool(request.GET)
     filter = ItemFilterSet(request.GET or None)
@@ -88,8 +87,11 @@ def search_home(request,
 
     exclude = columns.get_excluded_names()
 
+    title = "Advanced Search/Filter"
+
     table = None
     if is_filtered:
+        title = "Search results"
         table = ItemTable(filter.qs,
                 attrs=AttributeDict({'class': 'paleblue'}),
                 exclude=exclude,
@@ -99,7 +101,8 @@ def search_home(request,
 
     return render(request, template_name,
             {'filter': filter, 'is_filtered': is_filtered,
-                'table': table, 'columns': columns})
+                'table': table, 'columns': columns,
+                'title': title})
 
 
 from openpyxl.workbook import Workbook

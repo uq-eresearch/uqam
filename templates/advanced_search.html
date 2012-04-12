@@ -1,22 +1,17 @@
 {% extends "admin/base_site.html" %}
 
 {% block extrastyle %}
-<!-- CHOSEN -->
-<link rel="stylesheet" href="{{STATIC_URL}}chosen/chosen.css" />
 {% endblock extrastyle %}
 
 
 <!-- LOADING -->
 {% load i18n %}
 
-<!-- BREADCRUMBS -->
-{% block breadcrumbs %}
-{% endblock breadcrumbs %}
 
 <!-- CONTENT -->
 {% block content %}
-    <div class="">
-<h2>Advanced (Filter)</h2>
+<div class="container-flexible">
+    <div class="form-container">
 <form action="{% url admin:search_results %}" method="get">
   <fieldset class="module">
     <h2 class="collapse-handler">Query</h2>
@@ -32,27 +27,49 @@
     </div>
   {% endfor %}
   </fieldset>
-  <br>
-  <h3>Fields</h3>
-  {{ columns.as_p }}
 
-  <br>
-  <h3>Per Page</h3>
-  <select name="per_page">
-      <option value="30" selected="selected">30</option>
-      <option value="100">100</option>
-      <option value="500">500</option>
-  </select>
-<br>
+  <fieldset class="module">
+  <h2>Fields</h2>
+  {% for field in columns %}
+    <div class="row cells-1">
+      <div>
+        <div class="column span-4"><label for="{{field.html_name}}">
+                {{ field.label_tag }}</label></div>
+        <div class="column span-flexible">
+            {{ field }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </fieldset>
+
+  <fieldset class="module">
+  <h2>Per Page</h2>
+    <div class="row cells-1">
+      <div>
+        <div class="column span-4"><label for="per_page">
+                Per page</label></div>
+        <div class="column span-flexible">
+          <select name="per_page">
+              <option value="30" selected="selected">30</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </fieldset>
   <input type="submit" />
 </form>
+
+    </div>
+</div>
+
 {% if is_filtered %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
 {% load render_table from django_tables2 %}
 {% render_table table %}
 {% endif %}
-
-    </div>
 {% endblock content %}
 
 {% block footer %}
