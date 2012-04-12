@@ -1,14 +1,15 @@
 from django.db import models
 from datetime import datetime
+from django.db.models.signals import post_save
 import requests
 
-# Create your models here.
 
 class Collection(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField()
-    author = models.ForeignKey('auth.User')
-    items = models.ManyToManyField('cat.MuseumObject', related_name='collections', blank=True)
+    author = models.ForeignKey('auth.User', null=True, blank=True)
+    items = models.ManyToManyField('cat.MuseumObject',
+            related_name='collections', blank=True)
 
     is_public = models.BooleanField(
             help_text="Should collection be visible to the public")
@@ -18,7 +19,9 @@ class Collection(models.Model):
     rights = models.CharField(max_length=200,
             help_text="Information about rights held in and over the entity")
     access_rights = models.CharField(max_length=200,
-            help_text="Information about who can access the entity, including access restrictions based on privacy, security, or other policies.")
+            help_text="Information about who can access the entity, "
+            "including access restrictions based on privacy, security, "
+            "or other policies.")
 
     updated = models.DateTimeField(auto_now=True, editable=False,
             help_text="Date the collection was last edited")
@@ -27,12 +30,15 @@ class Collection(models.Model):
 
     edit_url = models.URLField(verify_exists=False, blank=True, editable=False,
             help_text="Remotely assigned URL for updating syndicated data")
-    last_published = models.DateTimeField(blank=True, null=True, editable=False,
-            help_text="Date the collection was last published, or edited while published")
-    date_published = models.DateTimeField(blank=True, null=True, editable=False,
+    last_published = models.DateTimeField(blank=True, null=True,
+            editable=False, help_text="Date the collection was last published,"
+            " or edited while published")
+    date_published = models.DateTimeField(blank=True, null=True,
+            editable=False,
             help_text="Date the collection was first published")
 
-    last_syndicated = models.DateTimeField(blank=True, null=True, editable=False,
+    last_syndicated = models.DateTimeField(blank=True, null=True,
+            editable=False,
             help_text="Date the collection was first sent for syndication")
 
     def __unicode__(self):
@@ -54,23 +60,19 @@ class Collection(models.Model):
                 u"xmlns:rdfa": u"http://www.w3.org/ns/rdfa#"}
 
 
-#class Exhibition(Collection):
-#    start_date = models.DateField()
-#    end_date = models.DateField()
-
 class Syndication(models.Model):
-    remote_url = models.CharField(max_length=300) 
+    remote_url = models.CharField(max_length=300)
     username = models.CharField(max_length=100, blank=True)
     password = models.CharField(max_length=100, blank=True)
 
     def syndicate_collection(collection):
         return "do something"
-    
+
     def __unicode__(self):
-       return self.remote_url
+        return self.remote_url
 
+from tasks import send_collection
 
-from django.db.models.signals import post_save
 
 def queue_for_syndication(sender, **kwargs):
     collection = kwargs['instance']
