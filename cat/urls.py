@@ -2,7 +2,6 @@
 from django.conf.urls.defaults import patterns, url
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic import RedirectView
-#from django.views.generic.list import BaseListView
 from cat.models import MuseumObject, CulturalBloc
 from parties.models import Person, Maker
 from cat.views import PeopleListView
