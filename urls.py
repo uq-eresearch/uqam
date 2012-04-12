@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     url(r'^place/', include('location.urls')),
 
     url(r'^tinymce/', include('tinymce.urls')),
+
+    url(r'^mediaman/', include('mediaman.urls')),
 )
 
 if settings.DEBUG:
