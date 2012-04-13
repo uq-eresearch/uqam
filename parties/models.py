@@ -5,7 +5,10 @@ class Person(models.Model):
     """
     A collector or photographer who has contributed to the museum
     """
-    name = models.CharField(unique=True, max_length=150)
+    name = models.CharField(help_text="Used internally and for sorting",
+        unique=True, max_length=150)
+    display_name = models.CharField(help_text="For display purposes",
+        max_length=150)
     comments = models.TextField(blank=True)
     related_documents = models.ManyToManyField('mediaman.Document',
             related_name='related_people', blank=True)
@@ -15,7 +18,7 @@ class Person(models.Model):
         return ('person_detail', [str(self.id)])
 
     def __unicode__(self):
-        return self.name
+        return self.display_name
 
     class Meta:
         ordering = ['name']
