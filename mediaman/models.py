@@ -51,9 +51,9 @@ class ArtefactRepresentation(MediaFile):
         return self.name
 
 
-class ExternalArtefactRepresentation(models.Model):
-    url = models.URLField()
-    artefact = models.ForeignKey(MuseumObject)
+#class ExternalArtefactRepresentation(models.Model):
+#    url = models.URLField()
+#    artefact = models.ForeignKey(MuseumObject)
 
 
 class Document(MediaFile):

@@ -8,14 +8,6 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'ExternalArtefactRepresentation'
-        db.create_table('mediaman_externalartefactrepresentation', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('artefact', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cat.MuseumObject'])),
-        ))
-        db.send_create_signal('mediaman', ['ExternalArtefactRepresentation'])
-
         # Adding field 'Document.md5sum'
         db.add_column('mediaman_document', 'md5sum', self.gf('django.db.models.fields.CharField')(default='', max_length=32, blank=True), keep_default=False)
 
@@ -23,13 +15,16 @@ class Migration(SchemaMigration):
         db.add_column('mediaman_document', 'filesize', self.gf('django.db.models.fields.IntegerField')(default=0), keep_default=False)
 
         # Adding field 'Document.creation_date'
-        db.add_column('mediaman_document', 'creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.date(2012, 4, 12), blank=True), keep_default=False)
+        db.add_column('mediaman_document', 'creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.date(2012, 4, 13), blank=True), keep_default=False)
 
         # Adding field 'Document.mime_type'
         db.add_column('mediaman_document', 'mime_type', self.gf('django.db.models.fields.CharField')(default='', max_length=80), keep_default=False)
 
         # Adding field 'Document.original_filename'
         db.add_column('mediaman_document', 'original_filename', self.gf('django.db.models.fields.CharField')(default='', max_length=30), keep_default=False)
+
+        # Changing field 'Document.document'
+        db.alter_column('mediaman_document', 'document', self.gf('django.db.models.fields.files.FileField')(max_length=100))
 
         # Deleting field 'ArtefactRepresentation.url'
         db.delete_column('mediaman_artefactrepresentation', 'url')
@@ -41,7 +36,7 @@ class Migration(SchemaMigration):
         db.add_column('mediaman_artefactrepresentation', 'filesize', self.gf('django.db.models.fields.IntegerField')(default=0), keep_default=False)
 
         # Adding field 'ArtefactRepresentation.creation_date'
-        db.add_column('mediaman_artefactrepresentation', 'creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.date(2012, 4, 12), blank=True), keep_default=False)
+        db.add_column('mediaman_artefactrepresentation', 'creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.date(2012, 4, 13), blank=True), keep_default=False)
 
         # Adding field 'ArtefactRepresentation.mime_type'
         db.add_column('mediaman_artefactrepresentation', 'mime_type', self.gf('django.db.models.fields.CharField')(default='', max_length=80), keep_default=False)
@@ -49,12 +44,12 @@ class Migration(SchemaMigration):
         # Adding field 'ArtefactRepresentation.original_filename'
         db.add_column('mediaman_artefactrepresentation', 'original_filename', self.gf('django.db.models.fields.CharField')(default='', max_length=30), keep_default=False)
 
+        # Adding field 'ArtefactRepresentation.position'
+        db.add_column('mediaman_artefactrepresentation', 'position', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=1), keep_default=False)
+
 
     def backwards(self, orm):
         
-        # Deleting model 'ExternalArtefactRepresentation'
-        db.delete_table('mediaman_externalartefactrepresentation')
-
         # Deleting field 'Document.md5sum'
         db.delete_column('mediaman_document', 'md5sum')
 
@@ -69,6 +64,9 @@ class Migration(SchemaMigration):
 
         # Deleting field 'Document.original_filename'
         db.delete_column('mediaman_document', 'original_filename')
+
+        # Changing field 'Document.document'
+        db.alter_column('mediaman_document', 'document', self.gf('filebrowser.fields.FileBrowseField')(max_length=200))
 
         # Adding field 'ArtefactRepresentation.url'
         db.add_column('mediaman_artefactrepresentation', 'url', self.gf('django.db.models.fields.URLField')(default='', max_length=200, blank=True), keep_default=False)
@@ -88,15 +86,20 @@ class Migration(SchemaMigration):
         # Deleting field 'ArtefactRepresentation.original_filename'
         db.delete_column('mediaman_artefactrepresentation', 'original_filename')
 
+        # Deleting field 'ArtefactRepresentation.position'
+        db.delete_column('mediaman_artefactrepresentation', 'position')
+
 
     models = {
         'cat.accessstatus': {
             'Meta': {'object_name': 'AccessStatus'},
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
         'cat.acquisitionmethod': {
             'Meta': {'object_name': 'AcquisitionMethod'},
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'method': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
@@ -130,6 +133,7 @@ class Migration(SchemaMigration):
         },
         'cat.loanstatus': {
             'Meta': {'object_name': 'LoanStatus'},
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
@@ -174,6 +178,7 @@ class Migration(SchemaMigration):
             'place': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['location.Place']", 'null': 'True'}),
             'private_comment': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'raw_material': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
+            'record_status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.RecordStatus']", 'null': 'True', 'blank': 'True'}),
             'recorded_use': ('django.db.models.fields.CharField', [], {'max_length': '300', 'blank': 'True'}),
             'reg_counter': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'reg_info': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -184,7 +189,6 @@ class Migration(SchemaMigration):
             'significance': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'site_name_number': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.RecordStatus']", 'null': 'True', 'blank': 'True'}),
             'storage_bay': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
             'storage_section': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
             'storage_shelf_box_drawer': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
@@ -195,13 +199,13 @@ class Migration(SchemaMigration):
         },
         'cat.obtained': {
             'Meta': {'object_name': 'Obtained'},
-            'definition': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'how': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'cat.recordstatus': {
             'Meta': {'object_name': 'RecordStatus'},
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
@@ -242,12 +246,6 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
-        'mediaman.externalartefactrepresentation': {
-            'Meta': {'object_name': 'ExternalArtefactRepresentation'},
-            'artefact': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.MuseumObject']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
-        },
         'parties.maker': {
             'Meta': {'ordering': "['name']", 'object_name': 'Maker'},
             'comment': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -263,6 +261,7 @@ class Migration(SchemaMigration):
         'parties.person': {
             'Meta': {'ordering': "['name']", 'object_name': 'Person'},
             'comments': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'display_name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '150'}),
             'related_documents': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'related_people'", 'blank': 'True', 'to': "orm['mediaman.Document']"})

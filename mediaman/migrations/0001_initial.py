@@ -22,7 +22,7 @@ class Migration(SchemaMigration):
         db.create_table('mediaman_document', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('document', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+            ('document', self.gf('filebrowser.fields.FileBrowseField')(max_length=200)),
         ))
         db.send_create_signal('mediaman', ['Document'])
 
@@ -39,11 +39,13 @@ class Migration(SchemaMigration):
     models = {
         'cat.accessstatus': {
             'Meta': {'object_name': 'AccessStatus'},
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
         'cat.acquisitionmethod': {
             'Meta': {'object_name': 'AcquisitionMethod'},
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'method': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
@@ -77,6 +79,7 @@ class Migration(SchemaMigration):
         },
         'cat.loanstatus': {
             'Meta': {'object_name': 'LoanStatus'},
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
@@ -121,13 +124,14 @@ class Migration(SchemaMigration):
             'place': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['location.Place']", 'null': 'True'}),
             'private_comment': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'raw_material': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
+            'record_status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cat.RecordStatus']", 'null': 'True', 'blank': 'True'}),
             'recorded_use': ('django.db.models.fields.CharField', [], {'max_length': '300', 'blank': 'True'}),
             'reg_counter': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'reg_info': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'registered_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parties.MuseumStaff']", 'null': 'True'}),
             'registration_date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'registration_number': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'db_index': 'True'}),
-            'related_documents': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'related_museumobjects'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['mediaman.Document']"}),
+            'related_documents': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['mediaman.Document']", 'null': 'True', 'blank': 'True'}),
             'significance': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'site_name_number': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
@@ -141,9 +145,15 @@ class Migration(SchemaMigration):
         },
         'cat.obtained': {
             'Meta': {'object_name': 'Obtained'},
-            'definition': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'how': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        'cat.recordstatus': {
+            'Meta': {'object_name': 'RecordStatus'},
+            'definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
         'location.place': {
             'Meta': {'ordering': "['id']", 'object_name': 'Place'},
@@ -168,7 +178,7 @@ class Migration(SchemaMigration):
         },
         'mediaman.document': {
             'Meta': {'object_name': 'Document'},
-            'document': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'document': ('filebrowser.fields.FileBrowseField', [], {'max_length': '200'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'})
         },
@@ -187,6 +197,7 @@ class Migration(SchemaMigration):
         'parties.person': {
             'Meta': {'ordering': "['name']", 'object_name': 'Person'},
             'comments': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'display_name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '150'}),
             'related_documents': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'related_people'", 'blank': 'True', 'to': "orm['mediaman.Document']"})
