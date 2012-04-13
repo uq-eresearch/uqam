@@ -3,14 +3,21 @@ from django.db import models
 import string
 
 
-class AcquisitionMethod(models.Model):
+class DataDictionary(models.Model):
+    definition = models.TextField(blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class AcquisitionMethod(DataDictionary):
     method = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
         return self.method
 
 
-class LoanStatus(models.Model):
+class LoanStatus(DataDictionary):
     status = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
@@ -20,7 +27,7 @@ class LoanStatus(models.Model):
         verbose_name_plural = "Loan statuses"
 
 
-class AccessStatus(models.Model):
+class AccessStatus(DataDictionary):
     status = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
@@ -30,9 +37,8 @@ class AccessStatus(models.Model):
         verbose_name_plural = "Access statuses"
 
 
-class Obtained(models.Model):
+class Obtained(DataDictionary):
     how = models.CharField(max_length=50, unique=True)
-    definition = models.CharField(max_length=150)
 
     def __unicode__(self):
         return self.how
@@ -177,6 +183,9 @@ class MuseumObject(models.Model):
         s = string.join(dims, " x ")
         return s + " cm" if s else ''
 
+    def categories(self):
+        return ', '.join(str(c) for c in self.category.all())
+
     @models.permalink
     def get_absolute_url(self):
         return ('artefact_view', [str(self.registration_number)])
@@ -192,9 +201,8 @@ class MuseumObject(models.Model):
         return ("id__iexact",)
 
 
-class FunctionalCategory(models.Model):
+class FunctionalCategory(DataDictionary):
     name = models.CharField('function category', max_length=30, unique=True)
-    definition = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
@@ -219,12 +227,11 @@ class CulturalBloc(models.Model):
         ordering = ['name']
 
 
-class ArtefactType(models.Model):
+class ArtefactType(DataDictionary):
     """
     The type or intended use of an object
     """
     name = models.CharField(max_length=150, unique=True)
-    definition = models.TextField(blank=True)
     see_also = models.CharField(max_length=150, blank=True)
 
     def __unicode__(self):
@@ -306,13 +313,16 @@ class PhotoType(models.Model):
         return self.phototype
 
 
-class RecordStatus(models.Model):
+class RecordStatus(DataDictionary):
     """
-    Different statuses for database records, whether they need
-    cleaning for public display, or checking of copyright, or something else
+    Different status tags for database records
+
+    eg, cleaning for public display, or checking of copyright
     """
     status = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.status
+
+    class Meta:
+        verbose_name_plural = "Record statuses"

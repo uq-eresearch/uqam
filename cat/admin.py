@@ -158,35 +158,50 @@ admin.site.register(ArtefactType, ArtefactTypeAdmin)
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ('name', 'slug')
+    list_display = ('__unicode__', 'description')
     actions = [merge_selected]
 admin.site.register(Category, CategoryAdmin)
 
 
 class AcquisitionMethodAdmin(admin.ModelAdmin):
+    list_display = ('method', 'definition')
+    search_fields = ('method', 'definition')
     actions = [merge_selected]
 admin.site.register(AcquisitionMethod, AcquisitionMethodAdmin)
 
 
 class LoanStatusAdmin(admin.ModelAdmin):
+    list_display = ('status', 'definition')
+    search_fields = ('status', 'definition')
     actions = [merge_selected]
 admin.site.register(LoanStatus, LoanStatusAdmin)
 
 
 class AccessStatusAdmin(admin.ModelAdmin):
+    list_display = ('status', 'definition')
+    search_fields = ('status', 'definition')
     actions = [merge_selected]
 admin.site.register(AccessStatus, AccessStatusAdmin)
 
 
 class ObtainedAdmin(admin.ModelAdmin):
+    list_display = ('how', 'definition')
+    search_fields = ('how', 'definition')
     actions = [merge_selected]
 admin.site.register(Obtained, ObtainedAdmin)
 
 
 class PhotoTypeAdmin(admin.ModelAdmin):
+    list_display = ('phototype', 'definition')
+    search_fields = ('phototype', 'definition')
     actions = [merge_selected]
-admin.site.register(PhotoType, PhotoTypeAdmin)
+#TODO: Show this properly with photorecords linked to items
+#admin.site.register(PhotoType, PhotoTypeAdmin)
+
 
 class RecordStatusAdmin(admin.ModelAdmin):
+    list_display = ('status', 'definition')
+    search_fields = ('status', 'definition')
     actions = [merge_selected]
 admin.site.register(RecordStatus, RecordStatusAdmin)
 

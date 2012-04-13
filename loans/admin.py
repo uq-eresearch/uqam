@@ -29,6 +29,7 @@ admin.site.register(LoanAgreement, LoanAgreementAdmin)
 
 
 class LoanPurposeAdmin(admin.ModelAdmin):
+    list_display = ('purpose', 'definition')
     actions = [merge_selected]
 
 admin.site.register(LoanPurpose, LoanPurposeAdmin)
