@@ -22,11 +22,21 @@ class ItemTable(tables.Table):
         sequence = ("photo", "registration_number", "...")
 
 
+def registration_number_filter(queryset, values):
+    if values:
+        values = [int(v) for v in values.split(' ')]
+        return queryset.filter(registration_number__in=values)
+    else:
+        return queryset
+
+
 class ItemFilterSet(django_filters.FilterSet):
 #    collections = django_filters.ModelChoiceFilter(name='Collection',
 #            extra = lambda f: {'queryset':
 #             f.rel.to._default_manager.complex_filter(f.rel.limit_choices_to),
 #              'to_field_name': f.rel.field_name})
+    registration_number = django_filters.CharFilter(
+            action=registration_number_filter)
 
     class Meta:
         model = MuseumObject
@@ -50,7 +60,7 @@ class ColumnForm(forms.Form):
         self.model = model
         super(ColumnForm, self).__init__(*args, **kwargs)
         self.fields['columns'].choices = [(f.name, f.verbose_name.title())
-            for f in self.model._meta.fields]
+            for f in model._meta.fields]
 
     def get_excluded_names(self):
         """Return list of field names to exclude"""
