@@ -130,6 +130,7 @@ admin.site.register(MuseumObject, MOAdmin)
 
 class FunctionCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'definition')
+    fields = ('name', 'definition')
     search_fields = ['name']
     actions = [merge_selected]
 admin.site.register(FunctionalCategory, FunctionCategoryAdmin)
@@ -150,6 +151,7 @@ admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
 
 class ArtefactTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'definition', 'see_also')
+    fields = ('name', 'definition', 'see_also')
     search_fields = ['name']
     actions = [merge_selected]
 admin.site.register(ArtefactType, ArtefactTypeAdmin)
@@ -165,6 +167,7 @@ admin.site.register(Category, CategoryAdmin)
 
 class AcquisitionMethodAdmin(admin.ModelAdmin):
     list_display = ('method', 'definition')
+    fields = ('method', 'definition')
     search_fields = ('method', 'definition')
     actions = [merge_selected]
 admin.site.register(AcquisitionMethod, AcquisitionMethodAdmin)
@@ -172,6 +175,7 @@ admin.site.register(AcquisitionMethod, AcquisitionMethodAdmin)
 
 class LoanStatusAdmin(admin.ModelAdmin):
     list_display = ('status', 'definition')
+    fields = ('status', 'definition')
     search_fields = ('status', 'definition')
     actions = [merge_selected]
 admin.site.register(LoanStatus, LoanStatusAdmin)
@@ -179,6 +183,7 @@ admin.site.register(LoanStatus, LoanStatusAdmin)
 
 class AccessStatusAdmin(admin.ModelAdmin):
     list_display = ('status', 'definition')
+    fields = ('status', 'definition')
     search_fields = ('status', 'definition')
     actions = [merge_selected]
 admin.site.register(AccessStatus, AccessStatusAdmin)
@@ -186,6 +191,7 @@ admin.site.register(AccessStatus, AccessStatusAdmin)
 
 class ObtainedAdmin(admin.ModelAdmin):
     list_display = ('how', 'definition')
+    fields = ('how', 'definition')
     search_fields = ('how', 'definition')
     actions = [merge_selected]
 admin.site.register(Obtained, ObtainedAdmin)
@@ -193,6 +199,7 @@ admin.site.register(Obtained, ObtainedAdmin)
 
 class PhotoTypeAdmin(admin.ModelAdmin):
     list_display = ('phototype', 'definition')
+    fields = ('phototype', 'definition')
     search_fields = ('phototype', 'definition')
     actions = [merge_selected]
 #TODO: Show this properly with photorecords linked to items
@@ -201,6 +208,7 @@ class PhotoTypeAdmin(admin.ModelAdmin):
 
 class RecordStatusAdmin(admin.ModelAdmin):
     list_display = ('status', 'definition')
+    fields = ('status', 'definition')
     search_fields = ('status', 'definition')
     actions = [merge_selected]
 admin.site.register(RecordStatus, RecordStatusAdmin)
