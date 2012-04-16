@@ -62,7 +62,7 @@ class MuseumObject(models.Model):
             null=True, blank=True,
             verbose_name='previous category name',
             help_text='Functional Category from the old database')
-    artefact_type = models.ForeignKey('ArtefactType')
+    artefact_type = models.ForeignKey('ArtefactType', verbose_name='item name')
     category = models.ManyToManyField('Category', blank=True,
             help_text='New style categories')
 
