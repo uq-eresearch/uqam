@@ -265,7 +265,7 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ['parent__name', 'name']
         verbose_name_plural = "Categories"
         unique_together = (("slug", "parent"), ("name", "parent"))
 
