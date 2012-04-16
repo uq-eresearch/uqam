@@ -12,6 +12,8 @@ class DataDictionary(models.Model):
 
 class AcquisitionMethod(DataDictionary):
     method = models.CharField(max_length=50, unique=True)
+    preposition = models.CharField(help_text="Preposition to use with this "
+        "acquisition method, usually 'by' or 'from'.", max_length=30)
 
     def __unicode__(self):
         return self.method

@@ -167,7 +167,7 @@ admin.site.register(Category, CategoryAdmin)
 
 class AcquisitionMethodAdmin(admin.ModelAdmin):
     list_display = ('method', 'definition')
-    fields = ('method', 'definition')
+    fields = ('method', 'preposition', 'definition')
     search_fields = ('method', 'definition')
     actions = [merge_selected]
 admin.site.register(AcquisitionMethod, AcquisitionMethodAdmin)
