@@ -104,10 +104,11 @@ def search_home(request,
     exclude = columns.get_excluded_names()
 
     title = "Advanced Search/Filter"
+    if 'result' in request.path:
+        title = "Search results"
 
     table = None
     if is_filtered:
-        title = "Search results"
         table = ItemTable(filter.qs,
                 attrs=AttributeDict({'class': 'paleblue'}),
                 exclude=exclude,
