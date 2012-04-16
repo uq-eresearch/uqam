@@ -90,7 +90,8 @@ def search_home(request,
     is_filtered = bool(request.GET)
     filter = ItemFilterSet(request.GET or None)
 
-    columns = ColumnForm(MuseumObject)
+    columns = ColumnForm(MuseumObject,
+        initial={'columns': ('registration_number', 'artefact_type',)})
     if request.method == 'GET' and \
             'columns' in request.GET:
         columns = ColumnForm(MuseumObject, request.GET)
