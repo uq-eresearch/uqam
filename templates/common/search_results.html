@@ -10,6 +10,10 @@
   <ul class="tools">
       {% block object-tools-items %}
       <li>
+<a href="{% url admin:search %}?{{ request.META.QUERY_STRING }}">Modify
+    Search</a>
+      </li>
+      <li>
 <a href="{% url admin:search_xls %}?{{ request.META.QUERY_STRING }}">Download as Excel</a>
         </li>
       {% endblock object-tools-items %}
