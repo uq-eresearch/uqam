@@ -16,21 +16,20 @@ class ItemTable(tables.Table):
     'alt="">')
     registration_number = tables.LinkColumn(
             'artefact_view', args=[A('registration_number')])
+    category = tables.TemplateColumn('{{ record.categories }}')
 
     class Meta:
         model = MuseumObject
-        sequence = ("photo", "registration_number", "...")
-
-
-def registration_number_filter(queryset, values):
-    if values:
-        values = [int(v) for v in values.split(' ')]
-        return queryset.filter(registration_number__in=values)
-    else:
-        return queryset
+        sequence = ("photo", "registration_number", "category", "...")
 
 
 class ItemFilterSet(django_filters.FilterSet):
+    def registration_number_filter(queryset, values):
+        if values:
+            values = [int(v) for v in values.split(' ')]
+            return queryset.filter(registration_number__in=values)
+        else:
+            return queryset
 #    collections = django_filters.ModelChoiceFilter(name='Collection',
 #            extra = lambda f: {'queryset':
 #             f.rel.to._default_manager.complex_filter(f.rel.limit_choices_to),
@@ -46,7 +45,6 @@ class ItemFilterSet(django_filters.FilterSet):
                 'storage_section', 'storage_unit', 'storage_bay',
                 'storage_shelf_box_drawer', 'acquisition_date',
                 'acquisition_method', 'cultural_bloc', 'donor', 'collector',
-                'collections__title'
                 ]
 
 
@@ -60,12 +58,12 @@ class ColumnForm(forms.Form):
         self.model = model
         super(ColumnForm, self).__init__(*args, **kwargs)
         self.fields['columns'].choices = [(f.name, f.verbose_name.title())
-            for f in model._meta.fields]
+            for f in self.get_all_fields()]
 
     def get_excluded_names(self):
         """Return list of field names to exclude"""
         desired_fields = self.get_desired_field_names()
-        all_fields = [f for f in self.model._meta.fields]
+        all_fields = self.get_all_fields()
 
         return [field.name
                 for field in all_fields if field.name not in desired_fields]
@@ -73,7 +71,7 @@ class ColumnForm(forms.Form):
     def get_desired_fields(self):
         """Return list of fields (not just field name)"""
         desired_fields = self.get_desired_field_names()
-        all_fields = [f for f in MuseumObject._meta.fields]
+        all_fields = self.get_all_fields()
 
         return [field for field in all_fields if field.name in
                 desired_fields]
@@ -84,6 +82,12 @@ class ColumnForm(forms.Form):
             desired_fields = self.cleaned_data['columns']
         return desired_fields
 
+    def get_all_fields(self):
+        all_fields = [f for f in MuseumObject._meta.fields]
+        categories = self.model._meta.many_to_many[0]
+        all_fields.insert(5, categories)
+        return all_fields
+
 
 def search_home(request,
         template_name='advanced_search.html'):
@@ -91,7 +95,8 @@ def search_home(request,
     filter = ItemFilterSet(request.GET or None)
 
     columns = ColumnForm(MuseumObject,
-        initial={'columns': ('registration_number', 'artefact_type',)})
+        initial={'columns': ('registration_number', 'artefact_type',
+            'category')})
     if request.method == 'GET' and \
             'columns' in request.GET:
         columns = ColumnForm(MuseumObject, request.GET)
@@ -184,7 +189,11 @@ def populate_data(worksheet, queryset, fields):
         row += 1
         for col, field in enumerate(fields):
             cell = worksheet.cell(row=row, column=col)
-            cell.value = unicode(getattr(item, field.name))
+            #TODO: Fix horrible hack before reusing
+            if field.name == 'category':
+                cell.value = item.categories()
+            else:
+                cell.value = unicode(getattr(item, field.name))
             cell.style.alignment.wrap_text = True
 
 
