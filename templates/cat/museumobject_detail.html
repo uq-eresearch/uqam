@@ -54,18 +54,18 @@
   {{ museumobject.collector }}</a>
 </dd>
 
-<dt>Acquisition Date</dt>
+<dt>Acquisition date</dt>
 <dd>
   {{ museumobject.acquisition_date|date:"F d, Y" }}
 </dd>
 
-<dt>Acquisition Method</dt>
+<dt>Acquisition method</dt>
 <dd>
 {{ museumobject.acquisition_method }} <b>{{ museumobject.acquisition_method.preposition }}</b>
  <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
 </dd>
 
-<dt>Registration Number</dt>
+<dt>Registration number</dt>
 <dd>{{ museumobject.registration_number}}</dd>
 
 <dt>Dimensions</dt>
@@ -80,7 +80,7 @@
 
 <dt>Physical description</dt>
 <dd>{{ museumobject.description|linebreaks }} </dd>
-<dt>Research notes (comment)</dt>
+<dt>Research notes</dt>
 <dd>{{ museumobject.comment|linebreaks }}</dd>
 
 </dl>
