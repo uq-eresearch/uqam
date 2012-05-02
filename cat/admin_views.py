@@ -37,6 +37,24 @@ class ItemFilterSet(django_filters.FilterSet):
     registration_number = django_filters.CharFilter(
             action=registration_number_filter)
 
+    def country_filter(queryset, value):
+        if value:
+            return queryset.filter(place__country__icontains=value)
+        else:
+            return queryset
+
+    country = django_filters.CharFilter(
+            action=country_filter)
+
+    def has_images_filter(queryset, value=None):
+        if value is not None:
+            return queryset.filter(artefactrepresentation__isnull=(not value))
+        else:
+            return queryset
+
+    has_images = django_filters.BooleanFilter(
+            action=has_images_filter)
+
     class Meta:
         model = MuseumObject
         fields = ['registration_number', 'functional_category', 'category',
@@ -45,6 +63,7 @@ class ItemFilterSet(django_filters.FilterSet):
                 'storage_section', 'storage_unit', 'storage_bay',
                 'storage_shelf_box_drawer', 'acquisition_date',
                 'acquisition_method', 'cultural_bloc', 'donor', 'collector',
+                'country', 'has_images',
                 ]
 
 
