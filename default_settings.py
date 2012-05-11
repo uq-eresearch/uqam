@@ -172,6 +172,7 @@ INSTALLED_APPS = (
     'flatpages_tinymce',
     'django_tables2',
     'django_filters',
+    'easy_thumbnails',
 )
 
 # A sample logging configuration. The only tangible logging

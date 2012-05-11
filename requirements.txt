@@ -25,3 +25,4 @@ django-flatpages-tinymce
 -e git+git://github.com/alex/django-filter.git@51b39fca089f2cb1d3d3501d2e164635fbe52864#egg=django-filter
 django-filter==0.5.3
 django-tables2==0.10.0
+easy-thumbnails==1.0-alpha-21
