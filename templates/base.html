@@ -26,7 +26,7 @@
 <!--START: Header & Menu -->
 	<div id="header"><!--START: Header -->
 		<div id="header-inner">
-			<h1><a href="http://www.uq.edu.au/" title="Home">The University of Queensland</a></h1>
+            <h1><a href="http://www.uq.edu.au/" title="Home">The University of Queensland</a></h1>
 			<h2><a href="http://anthropology.metadata.net" title="UQ Anthropology Museum">UQ Anthropology Museum</a></h2> <!--Change Link and title -->
 			<div id="mininav">
 				<ul>
@@ -48,7 +48,7 @@
 				<label for="search-entry">Search Entry</label>
 				<input id="search-entry" size="15" type="text" value="Search this site..." name="q" class="s" onfocus="if (this.value == 'Search this site...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search this site...';}" tabindex="1" />
 				<input name="submit" value="" class="submit" title="Search this site" type="submit" />
-        <input type="hidden" name="models" value="cat.museumobject">
+                <input type="hidden" name="models" value="cat.museumobject">
 	
 				</fieldset>
 				</form>
@@ -58,34 +58,34 @@
 		</div>
 	</div><!-- QC: 1 -->
   <div id="topnav">
-		<div id="topnav-inner">
-				<ul class="tabs">
-						<li><a href="/">Home</a></li>
-						<li><a href="/about/">About Us</a></li>
-						<li class="hasmore"><a href="#">Collection</a>
-								<ul class="dropdown">
-										<li><a href="/about-collection/">About the Collection</a></li>
-										<li><a href="{% url search %}">Search</a></li>
-										<li><a href="{% url categories_list %}">Categories</a></li>
-										<li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
-										<li><a href="{% url person_list %}">People</a></li>
-										<li><a href="{% url place_map %}">Places</a></li>
-										<li><a href="{% url collections_home %}">Collections</a></li>
-								</ul>
-						</li>
-						<li><a href="/events/">Exhibitions and Events</a></li>
-						<li><a href="/other_activities/">Other activities</a></li>
-						<li><a href="/contact/">Contact us</a></li>
-                     {% if user.is_staff %}
-                        <li style=""><a href="/admin/">Admin</a></li>
-                     {% endif %}
-                     {% if user.is_authenticated %}
-                        <li style=""><a href="{% url auth_logout %}">Logout</a></li>
-                     {% else %}
-                        <li style="padding-left: 50px"><a href="{% url auth_login %}?next={{request.path}}">Log in</a></li>
-                     {% endif %}
-				</ul>
-		</div>
+    <div id="topnav-inner">
+        <ul class="tabs">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About Us</a></li>
+            <li class="hasmore"><a href="#">Collection</a>
+                <ul class="dropdown">
+                    <li><a href="/about-collection/">About the Collection</a></li>
+                    <li><a href="{% url search %}">Search</a></li>
+                    <li><a href="{% url categories_list %}">Categories</a></li>
+                    <li><a href="{% url bloc_list %}">Cultural Blocs</a></li>
+                    <li><a href="{% url person_list %}">People</a></li>
+                    <li><a href="{% url place_map %}">Places</a></li>
+                    <li><a href="{% url collections_home %}">Collections</a></li>
+                </ul>
+            </li>
+            <li><a href="/events/">Exhibitions and Events</a></li>
+            <li><a href="/other_activities/">Other activities</a></li>
+            <li><a href="/contact/">Contact us</a></li>
+         {% if user.is_staff %}
+            <li style=""><a href="/admin/">Admin</a></li>
+         {% endif %}
+         {% if user.is_authenticated %}
+            <li style=""><a href="{% url auth_logout %}">Logout</a></li>
+         {% else %}
+            <li style="padding-left: 50px"><a href="{% url auth_login %}?next={{request.path}}">Log in</a></li>
+         {% endif %}
+        </ul>
+    </div>
 </div><!--END: Header & Menu -->
 <div class="wrapper">
   <!-- START: Content -->
