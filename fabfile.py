@@ -109,14 +109,6 @@ def _syncdb():
     _venv('./manage.py migrate')
 
 
-def resetcat():
-    """
-    DANGER: Wipe/Reset the remote catalogue
-    """
-    _venv('./manage.py reset cat loans condition')
-    _venv('./manage.py migrate --fake')
-
-
 def importcat():
     """
     Remotely import the catalogue data
@@ -136,15 +128,6 @@ def importimages():
 
 def copyimages():
     local('rsync -rv %s(imagesdir) %(host_string)s:images' % env)
-
-#def importdata(db):
-    # Either:
-    # - copy from another database
-    # - do a fresh import
-
-#    sudo('yum install mdbtools')
-#    put(db, '/tmp/db.mdb')
-#    run('./manage.py importcat pathtomdb')
 
 
 def _venv(cmd):
@@ -233,5 +216,38 @@ def loaddata(app):
     filename = '/tmp/%s.json' % app
     put(filename, filename)
     _venv('./manage.py loaddata %s' % filename)
+
+
+def migrate_live_to_uat():
+    db_dump = '/tmp/uqam_dump.sql.gz'
+    run('pg_dump --clean -h localhost -U uqam uqam | '
+            ' gzip -c > %s' % dumpfile)
+
+
+def grab_live_data():
+    dumpfile = '/tmp/uqam_dump.sql.gz'
+    with settings(host_string='django@anthropology'):
+        run('pg_dump --clean -h localhost -U uqam uqam | '
+                ' gzip -c > %s' % dumpfile)
+        get(dumpfile, dumpfile)
+    local('sudo -u postgres dropdb uqam')
+    local('sudo -u postgres createdb --owner uqam --encoding UTF8 uqam')
+    local('echo "GRANT CONNECT ON DATABASE uqam TO uqam_read;" | sudo '
+            '-u postgres psql')
+    local('gunzip -c /tmp/uqam_dump.sql.gz | psql -h localhost -U uqam -d'
+            'uqam')
+
+
+def update_uat():
+    dumpfile = '/tmp/uqam_dump.sql.gz'
+    with settings(host_string='django@anthropology'):
+        run('pg_dump --clean -h localhost -U uqam uqam | '
+                ' gzip -c > %s' % dumpfile)
+        get(dumpfile, dumpfile)
+
+    with settings(host_string='django@anthropology-uat'):
+        put(dumpfile, dumpfile)
+        run('sudo -u postgres dropdb uqam')
+
 
 
