@@ -6,8 +6,8 @@ distribute==0.6.19
 django-auth-ldap==1.0.11
 django-extensions==0.7.1
 django-filebrowser==3.4.2
-django-grappelli==2.3.5
-django-haystack==1.2.5
+django-grappelli==2.3.8
+django-haystack==1.2.7
 python-ldap==2.3.13
 wsgiref==0.1.2
 gunicorn==0.13.4
@@ -22,5 +22,6 @@ docutils==0.8.1
 psycopg2==2.4.4
 django-tinymce
 django-flatpages-tinymce
+-e git+git://github.com/alex/django-filter.git@51b39fca089f2cb1d3d3501d2e164635fbe52864#egg=django-filter
 django-filter==0.5.3
 django-tables2==0.10.0
