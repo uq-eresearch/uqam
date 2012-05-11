@@ -1,6 +1,7 @@
 {% extends "base_wide.html" %}
 
 {% load uqam %}
+{% load thumbnail %}
 {% block body %}
 
 
@@ -260,14 +261,14 @@
 {% if museumobject.artefactrepresentation_set.exists %}
   <div id="myCarousel" class="carousel">
     <div class="carousel-inner">
-  {% for pic in museumobject.artefactrepresentation_set.all %}
+  {% for ar in museumobject.artefactrepresentation_set.all %}
     <div class="item{% if forloop.first%}active{%endif%}">
-    {% if pic.url %}
-      <a href="{{ pic.url }}" >
+    {% if ar.url %}
+      <a href="{{ ar.url }}" >
     {% else %}
-      <a href="{{ pic.image.url}}">
+      <a href="{{ ar.image.url }}">
     {% endif %}
-    <img src="{{ pic.image.url_400x350 }}" width="400" height="350" alt=""></a>
+    <img src="{% thumbnail ar.image 400x350 crop=scale %}" width="400" alt=""></a>
     </div>
   {% endfor %}
     </div><!-- /carousel-inner -->
