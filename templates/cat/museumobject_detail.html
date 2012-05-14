@@ -268,7 +268,7 @@
     {% else %}
       <a href="{{ ar.image.url }}">
     {% endif %}
-    <img src="{% thumbnail ar.image 400x350 crop=scale %}" width="400" alt=""></a>
+    <img src="{% thumbnail ar.image 400x350 crop=scale watermark='UQ Anthropology Museum' %}" width="400" alt=""></a>
     </div>
   {% endfor %}
     </div><!-- /carousel-inner -->

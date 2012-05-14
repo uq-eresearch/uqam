@@ -265,3 +265,8 @@ TINYMCE_DEFAULT_CONFIG = {
         'theme': 'advanced',
         'relative_urls': False,
         }
+
+from easy_thumbnails import defaults
+THUMBNAIL_PROCESSORS = defaults.PROCESSORS + (
+    'mediaman.thumbnail_processors.watermark_processor',
+)

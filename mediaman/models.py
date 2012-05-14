@@ -42,7 +42,11 @@ class MediaFile(models.Model):
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.storage import FileSystemStorage
-archival_storage = FileSystemStorage(location=settings.MEDIA_ROOT+'/archival')
+
+
+archival_storage = FileSystemStorage(
+        location=settings.MEDIA_ROOT + '/archival')
+
 
 class ArtefactRepresentation(MediaFile):
     image = ThumbnailerImageField(
