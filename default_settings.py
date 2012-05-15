@@ -46,6 +46,7 @@ TIME_ZONE = 'Australia/Brisbane'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-AU'
 
+# There is only one site
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -148,7 +149,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'grappelli.dashboard',
     'grappelli',
-    'filebrowser',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'djcelery',
@@ -168,8 +168,6 @@ INSTALLED_APPS = (
     'common',
     'location',
     'django.contrib.flatpages',
-    'tinymce',
-    'flatpages_tinymce',
     'django_tables2',
     'django_filters',
     'easy_thumbnails',
@@ -200,7 +198,6 @@ LOGGING = {
 
 EMAIL_HOST = 'mail.uq.edu.au'
 
-FILEBROWSER_DIRECTORY = ''
 
 HAYSTACK_SITECONF = 'cat.search_sites'
 HAYSTACK_SEARCH_ENGINE = 'whoosh'
@@ -253,18 +250,9 @@ GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
 import djcelery
 djcelery.setup_loader()
 BROKER_TRANSPORT = "django"
-#BROKER_HOST = "localhost"
-#BROKER_PORT = 5672
-#BROKER_USER = "guest"
-#BROKER_PASSWORD = "guest"
-#BROKER_VHOST = "/"
 
 GRAPPELLI_INDEX_DASHBOARD = 'uqam.grapdashboard.UQAMDashboard'
 
-TINYMCE_DEFAULT_CONFIG = {
-        'theme': 'advanced',
-        'relative_urls': False,
-        }
 
 from easy_thumbnails import defaults
 THUMBNAIL_PROCESSORS = defaults.PROCESSORS + (
