@@ -53,11 +53,6 @@ class ArtefactRepresentation(MediaFile):
         upload_to='mediareps/%Y/%m-%d/',
         storage=archival_storage,
         thumbnail_storage=default_storage)
-#        resize_source=dict(
-#            size=(64, 64), sharpen=True))
-#    image = ImageWithThumbsField(
-#                upload_to='mediareps/',
-#                sizes=((64, 64), (400, 350)))
     position = models.PositiveSmallIntegerField()
     artefact = models.ForeignKey(MuseumObject)
 
@@ -72,7 +67,7 @@ def remove_delete_image_file(sender, instance, **kwargs):
     instance.image.delete(save=False)
 
 from django.db.models.signals import post_delete
-post_delete.connect(remove_delete_image_file)
+post_delete.connect(remove_delete_image_file, sender=ArtefactRepresentation)
 
 #class ExternalArtefactRepresentation(models.Model):
 #    url = models.URLField()

@@ -44,6 +44,7 @@ def handle_uploaded_file(f):
 #@csrf_exempt
 def handle_upload(request):
     # Handle file upload
+    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -58,24 +59,32 @@ def handle_upload(request):
 
 
 def handle_item_image(form, ufile, user):
-    item_id = name_to_id(ufile.name)
-    cd = form.cleaned_data
+    reg_num = name_to_id(ufile.name)
+    data = form.cleaned_data
 
-    ar = ArtefactRepresentation()
-    ar.name = ufile.name
-    ar.original_filename = ufile.name
-    ar.original_path = cd['pathinfo0']
-    #TODO: Uncomment when fixed date format with custom
-    # jupload uploadpolicy: http://jupload.sourceforge.net/apidocs/wjhk/jupload2/policies/package-summary.html
-    #ar.original_filedate = cd['filemodificationdate0']
-    ar.md5sum = cd['md5sum0']
-    ar.mime_type = cd['mimetype0']
-    ar.user = user
-    ar.image = ufile
-    ar.filesize = ufile.size
+    ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, data, user)
     ar.position = 0
-    ar.artefact = MuseumObject.objects.get(registration_number=item_id)
+    ar.image = ufile
+    ar.artefact = MuseumObject.objects.get(registration_number=reg_num)
     ar.save()
+
+
+def set_mediafile_attrs(mediafile, ufile, data, user):
+    """
+    Copy metadata from uploaded file into Model
+    """
+    mediafile.name = ufile.name
+    mediafile.original_filename = ufile.name
+    mediafile.filesize = ufile.size
+    mediafile.original_path = data['pathinfo0']
+    #TODO: Uncomment when fixed date format with custom
+    # jupload uploadpolicy: http://jupload.sourceforge.net/
+    # apidocs/wjhk/jupload2/policies/package-summary.html
+    #mediafile.original_filedate = cd['filemodificationdate0']
+    mediafile.md5sum = data['md5sum0']
+    mediafile.mime_type = data['mimetype0']
+    mediafile.user = user
+    return mediafile
 
 
 def name_to_id(filename, path=None):
@@ -94,6 +103,14 @@ def name_to_id(filename, path=None):
     return int(id)
 
 
-def handle_document(form, ufile):
-    pass
+def handle_document(form, ufile, user):
+    reg_num = name_to_id(ufile.name)
+    mo = MuseumObject.objects.get(registration_number=reg_num)
+    data = form.cleaned_data
+
+    doc = Document()
+    doc = set_mediafile_attrs(doc, ufile, data, user)
+    doc.document = ufile
+    doc.save()
+    doc.museumobject_set.add(mo)
 
