@@ -24,4 +24,15 @@
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script language="Javascript">
+$(function() {
+	$("#id_username").focus();
+});
+</script>
 {% endblock %}
