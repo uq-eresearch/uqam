@@ -7,7 +7,7 @@ def watermark_processor(image, watermark=False, **kwargs):
     """
     Add a watermark to the image
     """
-    if watermark:
+    if watermark is not None:
         image = watermark_image(image, watermark)
     return image
 
