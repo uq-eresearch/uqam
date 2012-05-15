@@ -258,3 +258,7 @@ from easy_thumbnails import defaults
 THUMBNAIL_PROCESSORS = defaults.PROCESSORS + (
     'mediaman.thumbnail_processors.watermark_processor',
 )
+
+# This normally protects against XSS attacks, which shouldn't be a problem here.
+# If enabled however, it does interrupt some of the upload functionality.
+SESSION_COOKIE_HTTPONLY = False
