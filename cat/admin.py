@@ -16,6 +16,7 @@ class ArtefactRepInline(admin.TabularInline):
     model = ArtefactRepresentation
     search_fields = ['name', ]
     fields = ('name', 'image', 'position')
+    readonly_fields = ('name', 'image')
     sortable_field_name = "position"
 #    classes = ('collapse closed',)
 
@@ -23,6 +24,7 @@ class ArtefactRepInline(admin.TabularInline):
 class DocumentInline(admin.TabularInline):
     model = MuseumObject.related_documents.through
     search_fields = ['name', ]
+    fields = ('document',)
     raw_id_fields = ('document',)
     autocomplete_lookup_fields = {
             'm2m': ['document']
