@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
+from datetime import datetime
 from mediaman.models import ArtefactRepresentation, Document
 from cat.models import MuseumObject
 import re
@@ -29,19 +30,6 @@ class UploadFileForm(forms.Form):
     uploadtype = forms.ChoiceField(choices=UPLOAD_TYPE_CHOICES)
 
 
-class ArtForm(forms.ModelForm):
-    class Meta:
-        model = ArtefactRepresentation
-
-
-def handle_uploaded_file(f):
-    destination = open('some/file/name.txt', 'wb+')
-    for chunk in f.chunks():
-        destination.write(chunk)
-    destination.close()
-
-
-#@csrf_exempt
 def handle_upload(request):
     # Handle file upload
     if request.method == 'POST':
@@ -76,13 +64,13 @@ def set_mediafile_attrs(mediafile, ufile, data, user):
     mediafile.original_filename = ufile.name
     mediafile.filesize = ufile.size
     mediafile.original_path = data['pathinfo0']
-    #TODO: Uncomment when fixed date format with custom
-    # jupload uploadpolicy: http://jupload.sourceforge.net/
-    # apidocs/wjhk/jupload2/policies/package-summary.html
-    #mediafile.original_filedate = cd['filemodificationdate0']
+    # Date format from jupload is "dd/MM/yyyy HH:mm:ss"
+    filedate = datetime.strptime(data['filemodificationdate0'],
+        "%d/%m/%Y %H:%M:%S")
+    mediafile.original_filedate = filedate
     mediafile.md5sum = data['md5sum0']
     mediafile.mime_type = data['mimetype0']
-    mediafile.user = user
+    mediafile.uploaded_by = user
     return mediafile
 
 
