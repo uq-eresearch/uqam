@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
-from mediaman.models import ArtefactRepresentation
+from mediaman.models import ArtefactRepresentation, Document
 from cat.models import MuseumObject
 import re
 
@@ -44,7 +44,6 @@ def handle_uploaded_file(f):
 #@csrf_exempt
 def handle_upload(request):
     # Handle file upload
-    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
