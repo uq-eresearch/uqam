@@ -6,6 +6,10 @@ import os.path
 from filebrowser.fields import FileBrowseField
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.auth.models import User
+from django.db.models.signals import post_delete
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.core.files.storage import FileSystemStorage
 
 add_introspection_rules(
     [
@@ -25,23 +29,20 @@ add_introspection_rules(
 
 
 class MediaFile(models.Model):
-    md5sum = models.CharField(max_length=32, blank=True)
-    filesize = models.IntegerField(blank=True, null=True)
-    upload_date = models.DateTimeField(auto_now_add=True)
+    md5sum = models.CharField(max_length=32, blank=True, editable=False)
+    filesize = models.IntegerField(blank=True, null=True, editable=False)
+    upload_date = models.DateTimeField(auto_now_add=True, editable=False)
     uploaded_by = models.ForeignKey(User, related_name="+",
-            null=True, blank=True)
-    mime_type = models.CharField(max_length=80, blank=True)
-    original_filename = models.CharField(max_length=30)
-    original_path = models.CharField(max_length=255, blank=True)
-    original_filedate = models.DateTimeField(blank=True, null=True)
-    name = models.CharField(max_length=30)
+            null=True, blank=True, editable=False)
+    mime_type = models.CharField(max_length=80, blank=True, editable=False)
+    original_filename = models.CharField(max_length=30, editable=False)
+    original_path = models.CharField(max_length=255, blank=True, editable=False)
+    original_filedate = models.DateTimeField(blank=True, null=True, editable=False)
+    name = models.CharField(max_length=30, editable=False)
 
     class Meta:
         abstract = True
 
-from django.conf import settings
-from django.core.files.storage import default_storage
-from django.core.files.storage import FileSystemStorage
 
 
 archival_storage = FileSystemStorage(
