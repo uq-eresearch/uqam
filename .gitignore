@@ -7,3 +7,4 @@ development_mode
 _build
 celerybeat-schedule
 *.swp
+Guardfile
