@@ -1,8 +1,14 @@
 {% extends "admin/base_site.html" %}
 
-{% block extrastyle %}
-{% endblock extrastyle %}
-
+<!-- BREADCRUMBS -- >
+{% block breadcrumbs %}
+    {% if not is_popup %}
+        <ul class="grp-horizontal-list">
+            <li><a href="{% url admin:index %}">Home</a></li>
+            <li>{{ title }}</li>
+        </ul>
+    {% endif %}
+{% endblock %}
 
 <!-- LOADING -->
 {% load i18n %}
