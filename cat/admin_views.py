@@ -122,7 +122,7 @@ def search_home(request,
 
     exclude = columns.get_excluded_names()
 
-    title = "Advanced Search/Filter"
+    title = "Advanced search/filter"
     if 'result' in request.path:
         title = "Search results"
 
