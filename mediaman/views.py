@@ -22,7 +22,7 @@ UPLOAD_TYPE_CHOICES = (
 
 class UploadFileForm(forms.Form):
     File0 = forms.FileField()
-    mimetype0 = forms.CharField(max_length=60)
+    mimetype0 = forms.CharField(max_length=120)
     filemodificationdate0 = forms.CharField(max_length=20)
     pathinfo0 = forms.CharField(max_length=255)
     relpathinfo0 = forms.CharField(max_length=255, required=False)
