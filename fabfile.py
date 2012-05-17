@@ -160,24 +160,31 @@ def update_index():
 
 def test_upgrade():
     temp_archive = "/tmp/current.tar.gz"
+    db_dump = '/tmp/uqam_dump.sql.gz'
+
     run('rm -f %s' % temp_archive)
-    run('tar czf %s --exclude=media %s uqam.db' %
-            (temp_archive, env.appname))
+    run('tar czf %s --exclude=media %s' % (temp_archive, env.appname))
     get(temp_archive, temp_archive)
 
-    with lcd('/tmp'):
-        local('rm -rf /tmp/uqam.db /tmp/uqam')
-        local('tar xzf %s' % temp_archive)
+    run('pg_dump --clean -h localhost -U uqam uqam | '
+            ' gzip -c > %s' % db_dump)
+
+    get(db_dump, db_dump)
+    local('sudo -u postgres dropdb uqam')
+    local('sudo -u postgres createdb --owner uqam --encoding UTF8 uqam')
+    local('echo "GRANT CONNECT ON DATABASE uqam TO uqam_read;" | sudo '
+            '-u postgres psql')
+    local('gunzip -c %s | psql -h localhost -U uqam -d uqam' % db_dump)
+
 
     filename = _pack()
+    local('mkdir /tmp/uqam')
     with lcd('/tmp/uqam'):
         local('tar xjf %s' % filename)
         local('sed -i -r -e "s/\\/home\\/django/\\/tmp/g" default_settings.py')
         local('./manage.py syncdb')
         local('./manage.py migrate')
         local('sed -ire "s/DEBUG = False/DEBUG = True/g" default_settings.py')
-#        local('rm -rf ../public; mkdir -p ../public/static ../public/media')
-#        local('./manage.py collectstatic --noinput')
         local('./manage.py runserver 0.0.0.0:8000')
 
 
