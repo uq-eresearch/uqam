@@ -28,6 +28,8 @@ admin.site.register(Document, DocumentAdmin)
 
 class ArtefactRepresentationAdmin(admin.ModelAdmin):
     readonly_fields = ('image', 'artefact', 'position' ) + mediafile_readonly
+    
+    list_display = ('__unicode__', 'artefact')
 
 
 admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
