@@ -34,11 +34,11 @@ class MediaFile(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True, editable=False)
     uploaded_by = models.ForeignKey(User, related_name="+",
             null=True, blank=True, editable=False)
-    mime_type = models.CharField(max_length=120, blank=True, editable=False)
-    original_filename = models.CharField(max_length=30, editable=False)
+    mime_type = models.CharField(max_length=150, blank=True, editable=False)
+    original_filename = models.CharField(max_length=255, editable=False)
     original_path = models.CharField(max_length=255, blank=True, editable=False)
     original_filedate = models.DateTimeField(blank=True, null=True, editable=False)
-    name = models.CharField(max_length=30, editable=False)
+    name = models.CharField(max_length=255, editable=False)
 
     class Meta:
         abstract = True

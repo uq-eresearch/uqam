@@ -8,17 +8,41 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Changing field 'Document.name'
+        db.alter_column('mediaman_document', 'name', self.gf('django.db.models.fields.CharField')(max_length=255))
+
+        # Changing field 'Document.original_filename'
+        db.alter_column('mediaman_document', 'original_filename', self.gf('django.db.models.fields.CharField')(max_length=255))
+
         # Changing field 'Document.mime_type'
-        db.alter_column('mediaman_document', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=120))
+        db.alter_column('mediaman_document', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=150))
+
+        # Changing field 'ArtefactRepresentation.name'
+        db.alter_column('mediaman_artefactrepresentation', 'name', self.gf('django.db.models.fields.CharField')(max_length=255))
+
+        # Changing field 'ArtefactRepresentation.original_filename'
+        db.alter_column('mediaman_artefactrepresentation', 'original_filename', self.gf('django.db.models.fields.CharField')(max_length=255))
 
         # Changing field 'ArtefactRepresentation.mime_type'
-        db.alter_column('mediaman_artefactrepresentation', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=120))
+        db.alter_column('mediaman_artefactrepresentation', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=150))
 
 
     def backwards(self, orm):
         
+        # Changing field 'Document.name'
+        db.alter_column('mediaman_document', 'name', self.gf('django.db.models.fields.CharField')(max_length=30))
+
+        # Changing field 'Document.original_filename'
+        db.alter_column('mediaman_document', 'original_filename', self.gf('django.db.models.fields.CharField')(max_length=30))
+
         # Changing field 'Document.mime_type'
         db.alter_column('mediaman_document', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=80))
+
+        # Changing field 'ArtefactRepresentation.name'
+        db.alter_column('mediaman_artefactrepresentation', 'name', self.gf('django.db.models.fields.CharField')(max_length=30))
+
+        # Changing field 'ArtefactRepresentation.original_filename'
+        db.alter_column('mediaman_artefactrepresentation', 'original_filename', self.gf('django.db.models.fields.CharField')(max_length=30))
 
         # Changing field 'ArtefactRepresentation.mime_type'
         db.alter_column('mediaman_artefactrepresentation', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=80))
@@ -40,7 +64,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 5, 17, 11, 14, 19, 937861)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 5, 17, 13, 35, 42, 887727)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -48,7 +72,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 5, 17, 11, 14, 19, 937788)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 5, 17, 13, 35, 42, 887652)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -200,10 +224,10 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             'md5sum': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
-            'mime_type': ('django.db.models.fields.CharField', [], {'max_length': '120', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'mime_type': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'original_filedate': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'original_path': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'position': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'upload_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -215,10 +239,10 @@ class Migration(SchemaMigration):
             'filesize': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'md5sum': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
-            'mime_type': ('django.db.models.fields.CharField', [], {'max_length': '120', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'mime_type': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'original_filedate': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'original_path': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'upload_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'uploaded_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'+'", 'null': 'True', 'to': "orm['auth.User']"})
