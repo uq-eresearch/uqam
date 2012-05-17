@@ -19,7 +19,7 @@ class SimpleTest(TestCase):
 
     def assertNameToId(self, id, name, path=None):
         testid = name_to_id(name, path)
-        self.assertEqual(id, testid)
+        self.assertEqual([id], testid)
 
     def test_name_to_id(self):
         self.assertNameToId(1234, '1234.jpg')
