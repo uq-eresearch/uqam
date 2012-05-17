@@ -35,7 +35,11 @@ class SimpleTest(TestCase):
     def test_name_to_id_with_path(self):
         self.assertNameToId(12345, 'condition.tiff',
                 'S:\\scanneddocs\\12345\\')
+        self.assertNameToId(12345, 'condition.tiff',
+                'S:\\scanneddocs\\12345')
 
         self.assertNameToId(12345, 'condition.tiff',
                 '/home/omad/files/12345/')
+        self.assertNameToId(12345, 'condition.tiff',
+                '/home/omad/files/12345')
 
