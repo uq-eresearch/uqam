@@ -39,22 +39,33 @@ def handle_upload(request):
             uploadtype = form.cleaned_data['uploadtype']
             uploadedfile = form.files['File0']
             if uploadtype == 'II':
-                handle_item_image(form, uploadedfile, request.user)
+                handle_item_image(form.cleaned_data, uploadedfile, request.user)
             elif uploadtype == 'DOC':
-                handle_document(form, uploadedfile, request.user)
+                handle_document(form.cleaned_data, uploadedfile, request.user)
 
     return HttpResponse('SUCCESS')
 
 
-def handle_item_image(form, ufile, user):
-    reg_num = name_to_id(ufile.name, form.pathinfo0)
-    data = form.cleaned_data
+def handle_item_image(formdata, ufile, user):
+    reg_num = name_to_id(ufile.name, form['pathinfo0'])
 
-    ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, data, user)
+    ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, formdata, user)
     ar.position = 0
     ar.image = ufile
     ar.artefact = MuseumObject.objects.get(registration_number=reg_num)
     ar.save()
+
+
+def handle_document(formdata, ufile, user):
+    reg_num = name_to_id(ufile.name, formdata['pathinfo0'])
+    mo = MuseumObject.objects.get(registration_number=reg_num)
+
+
+    doc = Document()
+    doc = set_mediafile_attrs(doc, ufile, formdata, user)
+    doc.document = ufile
+    doc.save()
+    doc.museumobject_set.add(mo)
 
 
 def set_mediafile_attrs(mediafile, ufile, data, user):
@@ -106,15 +117,4 @@ def name_to_id(filename, path=None):
 
     return int(id)
 
-
-def handle_document(form, ufile, user):
-    reg_num = name_to_id(ufile.name, form.pathinfo0)
-    mo = MuseumObject.objects.get(registration_number=reg_num)
-    data = form.cleaned_data
-
-    doc = Document()
-    doc = set_mediafile_attrs(doc, ufile, data, user)
-    doc.document = ufile
-    doc.save()
-    doc.museumobject_set.add(mo)
 
