@@ -47,7 +47,7 @@ def handle_upload(request):
 
 
 def handle_item_image(form, ufile, user):
-    reg_num = name_to_id(ufile.name)
+    reg_num = name_to_id(ufile.name, form.pathinfo0)
     data = form.cleaned_data
 
     ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, data, user)
@@ -92,7 +92,7 @@ def name_to_id(filename, path=None):
 
 
 def handle_document(form, ufile, user):
-    reg_num = name_to_id(ufile.name)
+    reg_num = name_to_id(ufile.name, form.pathinfo0)
     mo = MuseumObject.objects.get(registration_number=reg_num)
     data = form.cleaned_data
 
