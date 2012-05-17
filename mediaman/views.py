@@ -76,17 +76,33 @@ def set_mediafile_attrs(mediafile, ufile, data, user):
 
 
 def name_to_id(filename, path=None):
-    """Calculate item id based on filename"""
-    match = re.match(r'(\d+).*$', filename)
+    """
+    Calculate item id based on filename and path
+
+    12345.jpg = 12345
+    1234_2.jpg = 1234
+
+    /home/test/files/12345/cond.tiff = 12345
+    S:\\scanned\\1252\\cond.tiff = 1252
+
+    Will also work on a range of ids, returning a list.
+    eg: S:\\scanned\\755-762\\test.pdf = [755, 756, ..., 762]
+
+    """
+    match = re.match(r'(\d{1,5}).*$', filename)
 
     # try using the filepath
     if match is None and path:
-        match = re.match(r'.*?[/\\](\d+).*', path)
+        match = re.match(r'.*?[/\\]([\d-]+).*', path)
 
     if match is None:
         return
 
     id = match.groups()[0]
+
+    if '-' in id: # range of ids
+        min, max = [int(i) for i in id.split('-')]
+        return range(min, max+1)
 
     return int(id)
 

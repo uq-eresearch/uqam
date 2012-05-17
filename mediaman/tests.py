@@ -43,3 +43,7 @@ class SimpleTest(TestCase):
         self.assertNameToId(12345, 'condition.tiff',
                 '/home/omad/files/12345')
 
+    def test_multiple_ids(self):
+        ids = name_to_id('source file.pdf', '/home/files/123-132')
+        expected = range(123, 132+1)
+        self.assertEqual(expected, ids)
