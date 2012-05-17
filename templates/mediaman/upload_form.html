@@ -14,13 +14,12 @@
 {% block content %}
 
 <form method="post" enctype="multipart/form-data"
-    action="/mediaman/handle_upload/" name="csrfform">
-{#    {% csrf_token %} #}
+    action="/mediaman/handle_upload/" name="uploaddetails">
     Type of files being uploaded:
     {{ form.uploadtype }}
     <hr>
     <!--
-    Extra fields to store
+    Extra fields applet sends
     * Upload User from session
     * Date
     * md5sum from jupload
@@ -38,26 +37,20 @@
             alt="The java pugin must be installed.">
     <param name="postURL" value="/mediaman/handle_upload/" />
     <!-- Optionnal, see code comments -->
-    <param name="showLogWindow" value="true" />
+    <param name="showLogWindow" value="false" />
     <param name="lookAndFeel" value="system" />
     <param name="specificHeaders" value="X-CSRFToken: {{csrf_token}}" />
     <param name="sendMD5Sum" value="true" />
 
-    <param name="formdata" value="csrfform" />
+    <param name="formdata" value="uploaddetails" />
+    <param name="nbFilesPerRequest" value="1" />
     Java 1.5 or higher plugin required. 
 
-    <param name="debugLevel" value="100" />
+    <param name="debugLevel" value="0" />
 </applet>
 
 
-<h2>Basic Form</h2>
-<form method="post" enctype="multipart/form-data"
-    action="/mediaman/handle_upload/">
-    {% csrf_token %}
-    {{ form.as_p }}
 
-  <input type="submit" />
-</form>
 
 
 {% endblock content %}
@@ -65,6 +58,7 @@
 
 {% block footer %}
 
-<script src="{{STATIC_URL}}jquery-1.7.1.min.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}jquery-1.7.1.min.js" type="text/javascript">
+</script>
 
 {% endblock footer %}
