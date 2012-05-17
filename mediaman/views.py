@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 from django import forms
 from datetime import datetime
 from mediaman.models import ArtefactRepresentation, Document
@@ -42,7 +43,7 @@ def handle_upload(request):
             elif uploadtype == 'DOC':
                 handle_document(form, uploadedfile, request.user)
 
-    return render(request, 'mediaman/success_page.html')
+    return HttpResponse('SUCCESS')
 
 
 def handle_item_image(form, ufile, user):
