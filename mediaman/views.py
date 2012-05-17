@@ -47,7 +47,7 @@ def handle_upload(request):
 
 
 def handle_item_image(formdata, ufile, user):
-    reg_num = name_to_id(ufile.name, form['pathinfo0'])
+    reg_num = name_to_id(ufile.name, formdata['pathinfo0'])
 
     ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, formdata, user)
     ar.position = 0
