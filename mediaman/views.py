@@ -11,7 +11,7 @@ import re
 def bulk_upload(request):
     form = UploadFileForm()
     return render(request, 'mediaman/upload_form.html',
-            {'form': form})
+            {'form': form, 'title': 'Bulk upload'})
 
 UPLOAD_TYPE_CHOICES = (
     ('II', 'Item Images'),
