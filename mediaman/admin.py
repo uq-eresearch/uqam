@@ -17,6 +17,12 @@ class DocumentAdmin(admin.ModelAdmin):
     inlines = [
         MOInline
     ]
+    def related_items(self, obj):
+        return ", ".join([str(m.registration_number) for m in obj.museumobject_set.all()])
+    def related_people(self, obj):
+        return " ".join([str(m) for m in obj.museumobject_set.all()])
+    list_display = ('__unicode__', 'related_items')
+#    list_select_related = True
 admin.site.register(Document, DocumentAdmin)
 
 
