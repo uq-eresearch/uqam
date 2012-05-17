@@ -34,7 +34,7 @@ class MediaFile(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True, editable=False)
     uploaded_by = models.ForeignKey(User, related_name="+",
             null=True, blank=True, editable=False)
-    mime_type = models.CharField(max_length=80, blank=True, editable=False)
+    mime_type = models.CharField(max_length=120, blank=True, editable=False)
     original_filename = models.CharField(max_length=30, editable=False)
     original_path = models.CharField(max_length=255, blank=True, editable=False)
     original_filedate = models.DateTimeField(blank=True, null=True, editable=False)
