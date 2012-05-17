@@ -64,8 +64,8 @@ class ArtefactRepresentation(MediaFile):
         return self.name
 
 
-def remove_delete_image_file(sender, ar, **kwargs):
-    ar.image.delete(save=False)
+def remove_delete_image_file(sender, instance, **kwargs):
+    instance.image.delete(save=False)
 
 post_delete.connect(remove_delete_image_file, sender=ArtefactRepresentation)
 
@@ -82,7 +82,7 @@ class Document(MediaFile):
         return self.name
 
 
-def delete_document_file(sender, document, **kwargs):
-    document.document.delete(save=False)
+def delete_document_file(sender, instance, **kwargs):
+    instance.document.delete(save=False)
 post_delete.connect(delete_document_file, sender=Document)
 
