@@ -1,0 +1,19 @@
+
+Using guard-reload on Ubuntu 11.10 with Django
+
+
+sudo apt-get install ruby1.9.1 ruby1.9.1-dev
+
+sudo gem install guard-livereload yajl-ruby
+
+guard init livereload
+
+vim Guardfile
+
+Remove all the rails garbage and add
+
+
+I don't want to learn about bundler!
+
+http://gembundler.com/
+

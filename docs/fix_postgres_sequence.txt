@@ -4,6 +4,24 @@ select max(id) from cat_person;
 
 alter sequence cat_person_id_seq restart with 1059;
 
-
 SELECT pg_catalog.setval(pg_get_serial_sequence('cat_person', 'id'),
 (SELECT MAX(id) FROM cat_person)+1);
+
+
+
+
+Misc Query
+==========
+
+select place_id, location_place.country, location_place.region,
+location_place.australian_state, location_place.name, count(distinct
+cultural_bloc_id)
+from cat_museumobject
+left join location_place on location_place.id = place_id
+group by place_id, location_place.name, location_place.country,
+location_place.australian_state, location_place.region
+order by count desc;
+
+
+
+
