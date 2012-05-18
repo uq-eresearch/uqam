@@ -16,11 +16,11 @@ def uname():
     run('uname -a')
 
 
-def upgrade():
+def upgrade(version="master"):
     """
     Push the latest code, update all requirements, restart everything
     """
-    push()
+    push(version)
     reqs()
     _collectstatic()
     _syncdb()
@@ -77,11 +77,11 @@ def reqs():
         run('pip install -U --requirement=%(reqfile)s' % env)
 
 
-def push():
+def push(version):
     """
     Deploy the newest source to the server
     """
-    filename = _pack()
+    filename = _pack(version)
     put(filename, filename)
     run('rm -rf %(tmpappdir)s' % env)
     run('mv %(appdir)s %(tmpappdir)s' % env)
@@ -95,9 +95,9 @@ def _collectstatic():
     _venv('./manage.py collectstatic --noinput')
 
 
-def _pack():
+def _pack(version):
     filename = '/tmp/uqam.tar.bz2'
-    local('git archive master | bzip2 > %s' % filename)
+    local('git archive %s | bzip2 > %s' % (version, filename))
     return filename
 
 
@@ -158,7 +158,7 @@ def update_index():
     _venv('./manage.py update_index')
 
 
-def test_upgrade():
+def test_upgrade(version="master"):
     temp_archive = "/tmp/current.tar.gz"
     db_dump = '/tmp/uqam_dump.sql.gz'
 
@@ -177,7 +177,8 @@ def test_upgrade():
     local('gunzip -c %s | psql -h localhost -U uqam -d uqam' % db_dump)
 
 
-    filename = _pack()
+    filename = _pack(version)
+    local('rm -rf /tmp/uqam')
     local('mkdir /tmp/uqam')
     with lcd('/tmp/uqam'):
         local('tar xjf %s' % filename)
