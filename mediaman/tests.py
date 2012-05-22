@@ -39,7 +39,7 @@ class SimpleTest(TestCase):
 
     def test_multiple_ids(self):
         ids = name_to_id('source file.pdf', '/home/files/123-132')
-        expected = range(123, 132+1)
+        expected = range(123, 132 + 1)
         self.assertEqual(expected, ids)
 
         ids = name_to_id('source file.pdf', '/home/files/123 - 132')

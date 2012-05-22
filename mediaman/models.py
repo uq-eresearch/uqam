@@ -44,7 +44,6 @@ class MediaFile(models.Model):
         abstract = True
 
 
-
 archival_storage = FileSystemStorage(
         location=settings.MEDIA_ROOT + '/archival')
 
@@ -86,4 +85,3 @@ class Document(MediaFile):
 def delete_document_file(sender, instance, **kwargs):
     instance.document.delete(save=False)
 post_delete.connect(delete_document_file, sender=Document)
-

@@ -12,13 +12,16 @@ class MOInline(admin.TabularInline):
     fields = ('document', 'museumobject')
     raw_id_fields = ('document', 'museumobject')
 
+
 class DocumentAdmin(admin.ModelAdmin):
     readonly_fields = ('document', ) + mediafile_readonly
     inlines = [
         MOInline
     ]
+
     def related_items(self, obj):
         return ", ".join([str(m.registration_number) for m in obj.museumobject_set.all()])
+
     def related_people(self, obj):
         return " ".join([str(m) for m in obj.museumobject_set.all()])
     list_display = ('__unicode__', 'related_items')
@@ -27,8 +30,8 @@ admin.site.register(Document, DocumentAdmin)
 
 
 class ArtefactRepresentationAdmin(admin.ModelAdmin):
-    readonly_fields = ('image', 'artefact', 'position' ) + mediafile_readonly
-    
+    readonly_fields = ('image', 'artefact', 'position') + mediafile_readonly
+
     list_display = ('__unicode__', 'artefact')
 
 

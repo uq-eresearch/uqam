@@ -176,7 +176,10 @@ def test_upgrade(version="master"):
             '-u postgres psql')
     local('gunzip -c %s | psql -h localhost -U uqam -d uqam' % db_dump)
 
+    test_upgrade_2(version)
 
+
+def test_upgrade_2(version):
     filename = _pack(version)
     local('rm -rf /tmp/uqam')
     local('mkdir /tmp/uqam')
@@ -227,7 +230,7 @@ def loaddata(app):
 
 
 def migrate_live_to_uat():
-    db_dump = '/tmp/uqam_dump.sql.gz'
+    dumpfile = '/tmp/uqam_dump.sql.gz'
     run('pg_dump --clean -h localhost -U uqam uqam | '
             ' gzip -c > %s' % dumpfile)
 
@@ -256,6 +259,3 @@ def update_uat():
     with settings(host_string='django@anthropology-uat'):
         put(dumpfile, dumpfile)
         run('sudo -u postgres dropdb uqam')
-
-
-

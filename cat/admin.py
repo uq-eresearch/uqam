@@ -4,8 +4,8 @@ from models import MuseumObject, FunctionalCategory
 from models import CulturalBloc, ArtefactType, Category
 from models import AcquisitionMethod, LoanStatus
 from models import AccessStatus, Obtained
-from models import PhotoType, RecordStatus
-from mediaman.models import ArtefactRepresentation, Document
+from models import RecordStatus
+from mediaman.models import ArtefactRepresentation
 from common.admin import UndeleteableModelAdmin
 from common.adminactions import merge_selected, add_to_collection
 from common.adminactions import generate_xls
@@ -143,8 +143,6 @@ class CulturalBlocAdmin(admin.ModelAdmin):
     search_fields = ['name', ]
     actions = [merge_selected]
 admin.site.register(CulturalBloc, CulturalBlocAdmin)
-
-
 
 
 class ArtefactTypeAdmin(admin.ModelAdmin):
