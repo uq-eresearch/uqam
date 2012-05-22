@@ -11,12 +11,6 @@ from views import name_to_id
 
 
 class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
-
     def assertNameToId(self, id, name, path=None):
         testid = name_to_id(name, path)
         self.assertEqual([id], testid)
@@ -47,3 +41,14 @@ class SimpleTest(TestCase):
         ids = name_to_id('source file.pdf', '/home/files/123-132')
         expected = range(123, 132+1)
         self.assertEqual(expected, ids)
+
+        ids = name_to_id('source file.pdf', '/home/files/123 - 132')
+        self.assertEqual(expected, ids)
+
+        ids = name_to_id('source file.pdf', 'G:\\files\\123 - 132')
+        self.assertEqual(expected, ids)
+
+    def test_name_plus_id(self):
+        #import ipdb; ipdb.set_trace()
+        self.assertNameToId(293, 'letter.pdf',
+                'S:\\file\\Person Name_293')
