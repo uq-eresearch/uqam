@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django import forms
 from datetime import datetime
 from mediaman.models import ArtefactRepresentation, Document
 from cat.models import MuseumObject
+from parties.models import Person
 import re
 
 
@@ -15,7 +15,8 @@ def bulk_upload(request):
 
 UPLOAD_TYPE_CHOICES = (
     ('II', 'Item Images'),
-    ('DOC', 'Item Documents'),
+    ('OH', 'Object Histories'),
+    ('DF', 'Donor Files'),
 #    ('OH', 'Object Histories'),
 #    ('CC', 'Catalogue Cards'),
 )
@@ -40,8 +41,10 @@ def handle_upload(request):
             uploadedfile = form.files['File0']
             if uploadtype == 'II':
                 handle_item_image(form.cleaned_data, uploadedfile, request.user)
-            elif uploadtype == 'DOC':
-                handle_document(form.cleaned_data, uploadedfile, request.user)
+            elif uploadtype == 'OH':
+                handle_object_history(form.cleaned_data, uploadedfile, request.user)
+            elif uploadtype == 'DF':
+                handle_donor_file(form.cleaned_data, uploadedfile, request.user)
 
     return HttpResponse('SUCCESS')
 
@@ -56,16 +59,27 @@ def handle_item_image(formdata, ufile, user):
     ar.save()
 
 
-def handle_document(formdata, ufile, user):
+def handle_object_history(formdata, ufile, user):
     reg_nums = name_to_id(ufile.name, formdata['pathinfo0'])
     mo = MuseumObject.objects.filter(registration_number__in=reg_nums)
 
+    doc = make_document(ufile, formdata, user)
+    doc.museumobject_set.add(*mo)
 
+
+def handle_donor_file(formdata, ufile, user):
+    person_id = name_to_id(ufile.name, formdata['pathinfo0'])
+    person = Person.objects.get(pk=person_id)
+
+    doc = make_document(ufile, formdata, user)
+    doc.person_set.add(person)
+
+
+def make_document(ufile, formdata, user):
     doc = Document()
     doc = set_mediafile_attrs(doc, ufile, formdata, user)
     doc.document = ufile
     doc.save()
-    doc.museumobject_set.add(*mo)
 
 
 def set_mediafile_attrs(mediafile, ufile, data, user):
@@ -86,6 +100,11 @@ def set_mediafile_attrs(mediafile, ufile, data, user):
     return mediafile
 
 
+class ParseError(Exception):
+    """Unable to parse Id from path/filename"""
+    pass
+
+
 def name_to_id(filename, path=None):
     """
     Calculate item id based on filename and path
@@ -102,19 +121,21 @@ def name_to_id(filename, path=None):
     """
     match = re.match(r'(\d{1,5}).*$', filename)
 
+    if match:
+        return [int(match.group(1))]
+
     # try using the filepath
-    if match is None and path:
-        match = re.match(r'.*?[/\\]([\d-]+).*', path)
+    if path is not None:
+        # match number range
+        match = re.match(r'.*?[/\\].*?(\d+) ?- ?(\d+)', path)
 
-    if match is None:
-        return
+        if match:
+            min, max = [int(i) for i in match.groups()]
+            return range(min, max + 1)
+        else:
+            match = re.match(r'.*?[/\\].*?(\d+)', path)
 
-    id = match.groups()[0]
+            if match:
+                return [int(match.group(1))]
 
-    if '-' in id: # range of ids
-        min, max = [int(i) for i in id.split('-')]
-        return range(min, max+1)
-
-    return [int(id)]
-
-
+    raise ParseError
