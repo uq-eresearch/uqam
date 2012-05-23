@@ -3,6 +3,7 @@ from django.conf import settings
 
 # From : http://www.redrobotstudios.com/blog/2010/02/06/requiring-https-for-certain-paths-in-django/
 
+
 class SecureRequiredMiddleware(object):
     def __init__(self):
         self.paths = getattr(settings, 'SECURE_REQUIRED_PATHS')

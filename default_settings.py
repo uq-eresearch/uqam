@@ -127,7 +127,8 @@ MIDDLEWARE_CLASSES = (
     'uqam.middleware.RequireLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'uqam.middleware.ReverseProxyHttpsHeadersMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'uqam.middleware.SecureRequiredMiddleware'
 )
 
 ROOT_URLCONF = 'uqam.urls'
@@ -262,3 +263,10 @@ THUMBNAIL_PROCESSORS = defaults.PROCESSORS + (
 # This normally protects against XSS attacks, which shouldn't be a problem here.
 # If enabled however, it does interrupt some of the upload functionality.
 SESSION_COOKIE_HTTPONLY = False
+
+
+HTTPS_SUPPORT = True
+SECURE_REQUIRED_PATHS = (
+    '/admin/',
+    '/accounts/',
+)

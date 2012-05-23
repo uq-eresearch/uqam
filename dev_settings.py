@@ -62,3 +62,4 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+HTTPS_SUPPORT = False
