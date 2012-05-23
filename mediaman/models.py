@@ -76,6 +76,7 @@ post_delete.connect(remove_delete_image_file, sender=ArtefactRepresentation)
 class Document(MediaFile):
     document = models.FileField(upload_to='docs/%Y/%m-%d/')
     document_text = models.TextField(blank=True)
+    public = models.BooleanField()
 #    document = FileBrowseField('Document', max_length=200, directory='docs/')
 
     def __unicode__(self):
