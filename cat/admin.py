@@ -126,6 +126,11 @@ class MOAdmin(UndeleteableModelAdmin):
     def my_view(self, request):
         pass
 
+    class Media:
+        from django.conf import settings
+        static_url = getattr(settings, 'STATIC_URL', '/static/')
+        css = {'all': (static_url + 'no-addanother-button.css',)}
+
 
 admin.site.register(MuseumObject, MOAdmin)
 
