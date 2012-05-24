@@ -30,7 +30,8 @@
 
 <applet code="wjhk.jupload2.JUploadApplet"
             name="JUpload"
-            archive="{{STATIC_URL}}jupload-5.0.7.jar"
+            archive="{{STATIC_URL}}jupload-5.0.7.jar,
+            {{STATIC_URL}}uqam-juploadpolicy.jar"
             width="1200"
             height="700"
             mayscripT="true"
@@ -45,6 +46,7 @@
 
     <param name="formdata" value="uploaddetails" />
     <param name="nbFilesPerRequest" value="1" />
+    <param name="uploadPolicy" value="net.metadata.anthropology.jupload.UQAMUploadPolicy" />
     Java 1.5 or higher plugin required. 
 
     <param name="debugLevel" value="0" />
