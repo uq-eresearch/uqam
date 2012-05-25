@@ -10,6 +10,7 @@ from common.admin import UndeleteableModelAdmin
 from common.adminactions import merge_selected, add_to_collection
 from common.adminactions import generate_xls
 from admin_views import search_home, search_xls
+from django.core import urlresolvers
 
 
 class MediaFileInline(admin.TabularInline):
@@ -29,7 +30,6 @@ class ArtefactRepInline(MediaFileInline):
             thumb_opts = {'size': (64, 64), 'watermark': ''}
             thumb = obj.image.get_thumbnail(thumb_opts)
             return '<a href="%s"><img src="%s"></a>' % (obj.image.url, thumb.url)
-            return '<img src="%s">' % thumb.url
         except:
             return 'Error generating thumbnail'
     thumbnail.allow_tags = True
@@ -39,8 +39,12 @@ class ArtefactRepInline(MediaFileInline):
 
 class DocumentInline(MediaFileInline):
     model = MuseumObject.related_documents.through
-    fields = ('document_link',)
-    readonly_fields = ('document_link',)
+    fields = ('document_link', 'admin_link', 'is_public')
+    readonly_fields = ('document_link', 'admin_link', 'is_public')
+
+    def is_public(self, obj):
+        return obj.document.public
+    is_public.boolean = True
 
     def document_link(self, obj):
         try:
@@ -48,7 +52,16 @@ class DocumentInline(MediaFileInline):
             return '<a href="%s">%s</a>' % (doc.url, doc.name)
         except:
             return ''
+
+    def admin_link(self, obj):
+        try:
+            doc = obj.document
+            admin_url = urlresolvers.reverse('admin:mediaman_document_change', args=(doc.id,))
+            return '<a href="%s">View in admin</a>' % (admin_url,)
+        except:
+            return ''
     document_link.allow_tags = True
+    admin_link.allow_tags = True
     verbose_name_plural = 'Related documents'
 
 

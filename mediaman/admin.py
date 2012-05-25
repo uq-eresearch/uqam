@@ -2,6 +2,7 @@ from django.contrib import admin
 from models import Document, ArtefactRepresentation
 from cat.models import MuseumObject
 from parties.models import Person
+from django.core import urlresolvers
 
 mediafile_readonly = ('md5sum', 'filesize', 'uploaded_by', 'mime_type',
         'original_filename', 'original_path', 'original_filedate',
@@ -14,7 +15,9 @@ class MOInline(admin.TabularInline):
     readonly_fields = ('item_link',)
     def item_link(self, obj):
         if obj.museumobject:
-            return '<a href="%s">%s</a>' % (obj.museumobject.get_absolute_url(), obj.museumobject.__unicode__())
+            mo = obj.museumobject
+            admin_url = urlresolvers.reverse('admin:cat_museumobject_change', args=(mo.id,))
+            return '<a href="%s">%s</a>' % (admin_url, mo.__unicode__())
         else:
             return ''
     item_link.allow_tags = True
@@ -29,7 +32,9 @@ class PersonInline(admin.TabularInline):
     readonly_fields = ('person_link',)
     def person_link(self, obj):
         if obj.person:
-            return '<a href="%s">%s</a>' % (obj.person.get_absolute_url(), obj.person.display_name)
+            p = obj.person
+            admin_url = urlresolvers.reverse('admin:parties_person_change', args=(p.id,))
+            return '<a href="%s">%s</a>' % (admin_url, p.display_name)
         else:
             return ''
     person_link.allow_tags = True
@@ -62,7 +67,7 @@ class DocumentAdmin(MediaFileAdmin):
 
     def related_people(self, obj):
         return " ".join([str(m) for m in obj.museumobject_set.all()])
-    list_display = ('__unicode__', 'related_items', 'upload_date')
+    list_display = ('__unicode__', 'related_items', 'upload_date', 'public')
 
 admin.site.register(Document, DocumentAdmin)
 
