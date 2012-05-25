@@ -68,9 +68,19 @@ admin.site.register(Document, DocumentAdmin)
 
 
 class ArtefactRepresentationAdmin(MediaFileAdmin):
-    readonly_fields = ('image', 'artefact', 'position') + mediafile_readonly
-
+    readonly_fields = ('image', 'artefact', 'position') + mediafile_readonly + ('thumbnail',)
+    fields = readonly_fields
     list_display = ('__unicode__', 'artefact', 'upload_date')
+
+    def thumbnail(self, obj):
+        try:
+            thumb_opts = {'size': (64, 64), 'watermark': ''}
+            thumb = obj.image.get_thumbnail(thumb_opts)
+            return '<a href="%s"><img src="%s"></a>' % (obj.image.url, thumb.url)
+        except:
+            return 'Error generating thumbnail'
+    thumbnail.allow_tags = True
+
 
 
 admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
