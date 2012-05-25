@@ -40,7 +40,7 @@
     <!-- Optionnal, see code comments -->
     <param name="showLogWindow" value="false" />
     <param name="lookAndFeel" value="system" />
-    <param name="specificHeaders" value="X-CSRFToken: {{csrf_token}}" />
+    <param name="specificHeaders" value="X-CSRFToken: {{csrf_token}}\nReferer: {{ request.build_absolute_uri }}" />
     <param name="sendMD5Sum" value="true" />
     <param name="lang" value="en" />
 
