@@ -38,11 +38,17 @@ class ArtefactRepInline(MediaFileInline):
 
 class DocumentInline(MediaFileInline):
     model = MuseumObject.related_documents.through
-    fields = ('document',)
-    raw_id_fields = ('document',)
-    autocomplete_lookup_fields = {
-            'm2m': ['document']
-    }
+    fields = ('document_link',)
+    readonly_fields = ('document_link',)
+
+    def document_link(self, obj):
+        try:
+            doc = obj.document.document
+            return '<a href="%s">%s</a>' % (doc.url, doc.name)
+        except:
+            return ''
+    document_link.allow_tags = True
+    verbose_name_plural = 'Related documents'
 
 
 class MOAdmin(UndeleteableModelAdmin):
