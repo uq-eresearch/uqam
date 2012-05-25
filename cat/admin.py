@@ -26,7 +26,7 @@ class ArtefactRepInline(MediaFileInline):
 
     def thumbnail(self, obj):
         try:
-            thumb_opts = {'size': (48, 48), 'watermark': ''}
+            thumb_opts = {'size': (64, 64), 'watermark': ''}
             thumb = obj.image.get_thumbnail(thumb_opts)
             return '<img src="%s">' % thumb.url
         except:
