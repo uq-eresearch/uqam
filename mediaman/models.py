@@ -2,8 +2,6 @@ from django.db import models
 from mediaman.thumbs import ImageWithThumbsField
 from cat.models import MuseumObject
 from south.modelsinspector import add_introspection_rules
-import os.path
-from filebrowser.fields import FileBrowseField
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
@@ -77,7 +75,6 @@ class Document(MediaFile):
     document = models.FileField(upload_to='docs/%Y/%m-%d/')
     document_text = models.TextField(blank=True)
     public = models.BooleanField()
-#    document = FileBrowseField('Document', max_length=200, directory='docs/')
 
     def __unicode__(self):
         return self.name
