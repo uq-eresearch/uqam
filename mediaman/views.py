@@ -68,11 +68,11 @@ def handle_object_history(formdata, ufile, user):
 
 
 def handle_donor_file(formdata, ufile, user):
-    person_id = name_to_id(ufile.name, formdata['pathinfo0'])
+    person_id = name_to_id(ufile.name, formdata['pathinfo0'])[0]
     person = Person.objects.get(pk=person_id)
 
     doc = make_document(ufile, formdata, user)
-    doc.person_set.add(person)
+    doc.related_people.add(person)
 
 
 def make_document(ufile, formdata, user):
@@ -80,6 +80,7 @@ def make_document(ufile, formdata, user):
     doc = set_mediafile_attrs(doc, ufile, formdata, user)
     doc.document = ufile
     doc.save()
+    return doc
 
 
 def set_mediafile_attrs(mediafile, ufile, data, user):
