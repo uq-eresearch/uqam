@@ -12,18 +12,32 @@ from common.adminactions import generate_xls
 from admin_views import search_home, search_xls
 
 
-class ArtefactRepInline(admin.TabularInline):
+class MediaFileInline(admin.TabularInline):
+    extra = 0
+    search_fields = ['name', ]
+
+    def has_add_permission(self, request):
+        return False
+
+
+class ArtefactRepInline(MediaFileInline):
     model = ArtefactRepresentation
-    search_fields = ['name', ]
-    fields = ('name', 'image', 'position')
-    readonly_fields = ('name', 'image')
+    fields = ('name', 'image', 'thumbnail', 'position')
+
+    def thumbnail(self, obj):
+        try:
+            thumb_opts = {'size': (48, 48), 'watermark': ''}
+            thumb = obj.image.get_thumbnail(thumb_opts)
+            return '<img src="%s">' % thumb.url
+        except:
+            return 'Error generating thumbnail'
+    thumbnail.allow_tags = True
+    readonly_fields = ('name', 'image', 'thumbnail')
     sortable_field_name = "position"
-#    classes = ('collapse closed',)
 
 
-class DocumentInline(admin.TabularInline):
+class DocumentInline(MediaFileInline):
     model = MuseumObject.related_documents.through
-    search_fields = ['name', ]
     fields = ('document',)
     raw_id_fields = ('document',)
     autocomplete_lookup_fields = {
@@ -54,8 +68,6 @@ class MOAdmin(UndeleteableModelAdmin):
                    'maker'],
             'm2m': ['category']
     }
-#    readonly_fields = ('loan_status',)
-
     fieldsets = (
         (None, {
             'fields': ('registration_number', 'old_registration_number',
