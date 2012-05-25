@@ -13,26 +13,35 @@ class MOInline(admin.TabularInline):
     raw_id_fields = ('document', 'museumobject')
 
 
-class DocumentAdmin(admin.ModelAdmin):
+class MediaFileAdmin(admin.ModelAdmin):
+    ordering = ('-upload_date',)
+
+    def has_add_permission(self, request):
+        '''Always deny adding in admin
+
+        Files should always be uploaded through the bulk upload tool
+        '''
+        return False
+
+
+class DocumentAdmin(MediaFileAdmin):
     readonly_fields = ('document', ) + mediafile_readonly
-    inlines = [
-        MOInline
-    ]
+    inlines = [MOInline]
 
     def related_items(self, obj):
         return ", ".join([str(m.registration_number) for m in obj.museumobject_set.all()])
 
     def related_people(self, obj):
         return " ".join([str(m) for m in obj.museumobject_set.all()])
-    list_display = ('__unicode__', 'related_items')
-#    list_select_related = True
+    list_display = ('__unicode__', 'related_items', 'upload_date')
+
 admin.site.register(Document, DocumentAdmin)
 
 
-class ArtefactRepresentationAdmin(admin.ModelAdmin):
+class ArtefactRepresentationAdmin(MediaFileAdmin):
     readonly_fields = ('image', 'artefact', 'position') + mediafile_readonly
 
-    list_display = ('__unicode__', 'artefact')
+    list_display = ('__unicode__', 'artefact', 'upload_date')
 
 
 admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
