@@ -315,7 +315,7 @@ directionNav: false
 
 {% if museumobject.place.latitude %}{% with p=museumobject.place %}
 <script type="text/javascript"
-    src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+  src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
     var geocoder, map;
     $(document).ready(

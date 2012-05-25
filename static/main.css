@@ -22,24 +22,6 @@ body {
 */
 
 
-.nivoSlider {
-    position:relative;
-    width:400; /* Change this to your images width */
-    height:350; /* Change this to your images height */
-    background:url(images/loading.gif) no-repeat 50% 50%;
-}
-.nivoSlider img {
-    position:absolute;
-    top:0px;
-    left:0px;
-    display:none;
-}
-.nivoSlider a {
-    border:0;
-    display:block;
-}
-
-
 .highlighted {
     background-color: yellow;
 
@@ -60,14 +42,14 @@ body {
  * title to be replaced
  * margin between black menu links to be adjusted
 -----------------------------------------------------------------------------*/
-#header-inner h2 a { background: transparent url('http://socialscience.uq.edu.au/images/custom/masthead-logo-socialscience.gif') no-repeat scroll 0pt 0pt; width: 200px; }
+#header-inner h2 a { background: transparent url('/static/images/masthead-logo-socialscience.gif') no-repeat scroll 0pt 0pt; width: 200px; }
 #header-inner h2 a { background: transparent url('/static/masthead-logo-anthmuseum.gif') no-repeat scroll 0pt 0pt; width: 200px; }
 
 #topnav ul li { margin: 0 37px 0 0; }
 
 /* custom style template for School of Social Science
 -----------------------------------------------------------------------------*/
-body{background:transparent url('http://socialscience.uq.edu.au/images/custom/body-bg.jpg') repeat-x scroll 81px 130px} /*content bg-gradient*/
+body{background:transparent url('/static/images/body-bg.jpg') repeat-x scroll 81px 130px} /*content bg-gradient*/
 #header-inner h2 a { background: transparent url('/static/masthead-logo-anthmuseum.gif') no-repeat scroll 0pt 0pt; width: 350px; }
 #topnav ul li{margin:0 20px 0 0}
 #content-image-table{margin-top:16px}
