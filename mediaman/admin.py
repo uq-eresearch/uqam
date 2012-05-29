@@ -13,6 +13,7 @@ class MOInline(admin.TabularInline):
     model = MuseumObject.related_documents.through
     fields = ('museumobject', 'item_link',)
     readonly_fields = ('item_link',)
+
     def item_link(self, obj):
         if obj.museumobject:
             mo = obj.museumobject
@@ -30,6 +31,7 @@ class PersonInline(admin.TabularInline):
     model = Person.related_documents.through
     fields = ('person', 'person_link',)
     readonly_fields = ('person_link',)
+
     def person_link(self, obj):
         if obj.person:
             p = obj.person
@@ -56,6 +58,7 @@ class MediaFileAdmin(admin.ModelAdmin):
 class DocumentAdmin(MediaFileAdmin):
     readonly_fields = ('document', ) + mediafile_readonly + ('document_link',)
     fields = ('document',) + mediafile_readonly + ('document_text', 'public', 'document_link',)
+
     def document_link(self, obj):
         doc = obj.document
         return '<a href="%s">%s</a>' % (doc.url, doc.name)
@@ -65,17 +68,17 @@ class DocumentAdmin(MediaFileAdmin):
     def related_items(self, obj):
         return ", ".join([str(m.registration_number) for m in obj.museumobject_set.all()])
 
-    def related_people(self, obj):
-        return " ".join([str(m) for m in obj.museumobject_set.all()])
-    list_display = ('__unicode__', 'related_items', 'upload_date', 'public')
+    def people(self, obj):
+        return ", ".join([str(p) for p in obj.related_people.all()])
+    list_display = ('__unicode__', 'related_items', 'people', 'upload_date', 'public')
 
 admin.site.register(Document, DocumentAdmin)
 
 
 class ArtefactRepresentationAdmin(MediaFileAdmin):
-    readonly_fields = ('image', 'artefact', 'position') + mediafile_readonly + ('thumbnail',)
-    fields = readonly_fields
-    list_display = ('__unicode__', 'artefact', 'upload_date')
+    readonly_fields = ('image', 'artefact') + mediafile_readonly + ('thumbnail',)
+    fields = ('public',) + readonly_fields
+    list_display = ('__unicode__', 'artefact', 'upload_date', 'public')
 
     def thumbnail(self, obj):
         try:
@@ -85,7 +88,6 @@ class ArtefactRepresentationAdmin(MediaFileAdmin):
         except:
             return 'Error generating thumbnail'
     thumbnail.allow_tags = True
-
 
 
 admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
