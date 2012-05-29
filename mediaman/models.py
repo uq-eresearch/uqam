@@ -36,8 +36,9 @@ class MediaFile(models.Model):
     mime_type = models.CharField(max_length=150, blank=True, editable=False)
     original_filename = models.CharField(max_length=255, editable=False)
     original_path = models.CharField(max_length=255, blank=True, editable=False)
-    original_filedate = models.DateTimeField(blank=True, null=True, editable=False)
+    original_filedate = models.DateTimeField('date last modified', blank=True, null=True, editable=False)
     name = models.CharField(max_length=255, editable=False)
+    public = models.BooleanField()
 
     def file_size(self):
         t = Template('{{ filesize|filesizeformat }}')
@@ -62,6 +63,8 @@ class ArtefactRepresentation(MediaFile):
 
     class Meta:
         ordering = ['position']
+        #TODO: use order_with_respect_to instead of position
+#        order_with_respect_to 'image'
 
     def __unicode__(self):
         return self.name
@@ -81,7 +84,6 @@ post_delete.connect(remove_delete_image_file, sender=ArtefactRepresentation)
 class Document(MediaFile):
     document = models.FileField(upload_to='docs/%Y/%m-%d/')
     document_text = models.TextField(blank=True)
-    public = models.BooleanField()
 
     def __unicode__(self):
         return self.name
