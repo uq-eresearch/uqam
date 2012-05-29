@@ -10,12 +10,16 @@ from common.adminactions import merge_selected
 
 class DocumentInline(MediaFileInline):
     model = Person.related_documents.through
-    fields = ('document_link',)
-    readonly_fields = ('document_link',)
+    fields = ('document_link', 'is_public')
+    readonly_fields = ('document_link', 'is_public')
+
+    def is_public(self, obj):
+        return obj.document.public
+    is_public.boolean = True
 
     def document_link(self, obj):
         try:
-            doc = obj.document.document
+            doc = obj.document
             admin_url = urlresolvers.reverse('admin:mediaman_document_change', args=(doc.id,))
             return '<a href="%s">%s</a>' % (admin_url, doc.name)
         except:
