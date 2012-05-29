@@ -17,9 +17,7 @@ UPLOAD_TYPE_CHOICES = (
     ('NO', ''),
     ('II', 'Item Images'),
     ('OH', 'Object Histories'),
-    ('DF', 'Donor Files'),
-#    ('OH', 'Object Histories'),
-#    ('CC', 'Catalogue Cards'),
+    ('SF', 'Source Files'),
 )
 
 
@@ -44,7 +42,7 @@ def handle_upload(request):
                 handle_item_image(form.cleaned_data, uploadedfile, request.user)
             elif uploadtype == 'OH':
                 handle_object_history(form.cleaned_data, uploadedfile, request.user)
-            elif uploadtype == 'DF':
+            elif uploadtype == 'SF':
                 handle_donor_file(form.cleaned_data, uploadedfile, request.user)
             else:
                 return HttpResponse('ERROR: Please select the type of files')
