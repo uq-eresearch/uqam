@@ -14,6 +14,7 @@ def bulk_upload(request):
             {'form': form, 'title': 'Bulk upload'})
 
 UPLOAD_TYPE_CHOICES = (
+    ('NO', ''),
     ('II', 'Item Images'),
     ('OH', 'Object Histories'),
     ('DF', 'Donor Files'),
