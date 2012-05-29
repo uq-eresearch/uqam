@@ -8,6 +8,7 @@ from django.db.models.signals import post_delete
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.storage import FileSystemStorage
+from django.template import Template, Context
 
 add_introspection_rules(
     [
@@ -37,6 +38,11 @@ class MediaFile(models.Model):
     original_path = models.CharField(max_length=255, blank=True, editable=False)
     original_filedate = models.DateTimeField(blank=True, null=True, editable=False)
     name = models.CharField(max_length=255, editable=False)
+
+    def file_size(self):
+        t = Template('{{ filesize|filesizeformat }}')
+        c = Context({"filesize": self.filesize})
+        return t.render(c)
 
     class Meta:
         abstract = True
