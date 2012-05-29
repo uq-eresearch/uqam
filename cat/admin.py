@@ -39,14 +39,14 @@ class ArtefactRepInline(MediaFileInline):
 
 class DocumentInline(MediaFileInline):
     model = MuseumObject.related_documents.through
-    fields = ('document_link', 'admin_link', 'is_public')
-    readonly_fields = ('document_link', 'admin_link', 'is_public')
+    fields = ('view_document', 'admin_link', 'is_public')
+    readonly_fields = ('view_document', 'admin_link', 'is_public')
 
     def is_public(self, obj):
         return obj.document.public
     is_public.boolean = True
 
-    def document_link(self, obj):
+    def view_document(self, obj):
         try:
             doc = obj.document.document
             return '<a href="%s">%s</a>' % (doc.url, doc.name)
@@ -60,7 +60,7 @@ class DocumentInline(MediaFileInline):
             return '<a href="%s">View in admin</a>' % (admin_url,)
         except:
             return ''
-    document_link.allow_tags = True
+    view_document.allow_tags = True
     admin_link.allow_tags = True
     verbose_name_plural = 'Related documents'
 
