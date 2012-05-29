@@ -45,6 +45,12 @@ def handle_upload(request):
                 handle_object_history(form.cleaned_data, uploadedfile, request.user)
             elif uploadtype == 'DF':
                 handle_donor_file(form.cleaned_data, uploadedfile, request.user)
+            else:
+                return HttpResponse('ERROR: Please select the type of files')
+        else:
+            return HttpResponse('ERROR: %s' % form.errors)
+    else:
+        return HttpResponse('ERROR: Only POST requests allowed')
 
     return HttpResponse('SUCCESS')
 
