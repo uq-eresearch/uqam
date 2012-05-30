@@ -58,6 +58,12 @@ def handle_upload(request):
 def handle_item_image(formdata, ufile, user):
     reg_num = name_to_id(ufile.name, formdata['pathinfo0'])[0]
 
+    if ArtefactRepresentation.objects.filter(
+        artefact__registration_number=reg_num,
+        md5sum=formdata['md5sum0']).exists():
+        # Representation already exists
+        return
+
     ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, formdata, user)
     ar.position = 0
     ar.image = ufile
@@ -69,7 +75,7 @@ def handle_object_history(formdata, ufile, user):
     reg_nums = name_to_id(ufile.name, formdata['pathinfo0'])
     mo = MuseumObject.objects.filter(registration_number__in=reg_nums)
 
-    doc = make_document(ufile, formdata, user)
+    doc = acquire_document(ufile, formdata, user)
     doc.museumobject_set.add(*mo)
 
 
@@ -77,15 +83,22 @@ def handle_source_file(formdata, ufile, user):
     person_id = name_to_id(ufile.name, formdata['pathinfo0'])[0]
     person = Person.objects.get(pk=person_id)
 
-    doc = make_document(ufile, formdata, user)
+    doc = acquire_document(ufile, formdata, user)
     doc.related_people.add(person)
 
 
-def make_document(ufile, formdata, user):
-    doc = Document()
-    doc = set_mediafile_attrs(doc, ufile, formdata, user)
-    doc.document = ufile
-    doc.save()
+def acquire_document(ufile, formdata, user):
+    """Return a document to link against
+
+    Either create a new one, or find existing based on md5sum"""
+    q = Document.objects.filter(md5sum=formdata['md5sum0'])
+    if q.exists():
+        doc = q[0]
+    else:
+        doc = Document()
+        doc = set_mediafile_attrs(doc, ufile, formdata, user)
+        doc.document = ufile
+        doc.save()
     return doc
 
 
