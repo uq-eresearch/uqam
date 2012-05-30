@@ -5,8 +5,7 @@ from parties.models import Person
 from django.core import urlresolvers
 
 mediafile_readonly = ('file_size', 'uploaded_by', 'mime_type',
-        'original_filename', 'original_path', 'original_filedate',
-        'name')
+        'original_filename', 'original_path', 'original_filedate',)
 
 
 class MOInline(admin.TabularInline):
@@ -56,13 +55,13 @@ class MediaFileAdmin(admin.ModelAdmin):
 
 
 class DocumentAdmin(MediaFileAdmin):
-    readonly_fields = ('document', ) + mediafile_readonly + ('document_link',)
-    fields = ('document',) + mediafile_readonly + ('document_text', 'public', 'document_link',)
+    readonly_fields = mediafile_readonly + ('view_document',)
+    fields = mediafile_readonly + ('document_text', 'public', 'view_document',)
 
-    def document_link(self, obj):
+    def view_document(self, obj):
         doc = obj.document
         return '<a href="%s">%s</a>' % (doc.url, doc.name)
-    document_link.allow_tags = True
+    view_document.allow_tags = True
     inlines = [MOInline, PersonInline]
 
     def related_items(self, obj):
@@ -76,17 +75,17 @@ admin.site.register(Document, DocumentAdmin)
 
 
 class ArtefactRepresentationAdmin(MediaFileAdmin):
-    readonly_fields = ('image', 'artefact_link') + mediafile_readonly + ('thumbnail',)
+    readonly_fields = ('item_link',) + mediafile_readonly + ('thumbnail',)
     fields = ('public',) + readonly_fields
     list_display = ('__unicode__', 'artefact', 'upload_date', 'public')
 
-    def artefact_link(self, obj):
+    def item_link(self, obj):
         if obj.artefact:
             admin_url = urlresolvers.reverse('admin:cat_museumobject_change', args=(obj.artefact_id,))
             return '<a href="%s">%s</a>' % (admin_url, obj.artefact)
         else:
             return ''
-    artefact_link.allow_tags = True
+    item_link.allow_tags = True
 
     def thumbnail(self, obj):
         try:
