@@ -1,8 +1,6 @@
 # encoding: utf-8
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 from django.db.models import Count
 
 
@@ -17,6 +15,7 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'Document', fields ['md5sum']
         db.create_unique('mediaman_document', ['md5sum'])
 
+        orm.ArtefactRepresentation.objects.filter(md5sum='').delete()
         self.delete_dup_artefactrepresentations(orm)
         db.commit_transaction()
         db.start_transaction()
