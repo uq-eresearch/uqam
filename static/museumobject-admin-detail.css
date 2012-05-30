@@ -1,0 +1,12 @@
+.add-another {
+    display: none !important;
+}
+
+/* Hide Position */
+div.grp-th.position {
+    display: none !important;
+}
+
+div.grp-td.position {
+    display: none !important;
+}

@@ -20,9 +20,23 @@ class MediaFileInline(admin.TabularInline):
     def has_add_permission(self, request):
         return False
 
+from django.forms import ModelForm, HiddenInput
+
+
+class ARAdminForm(ModelForm):
+#    def __init__(self, *args, **kwargs):
+#        super(ARAdminForm, self).__init__(*args, **kwargs)
+#        self.fields['position'].widget = HiddenInput()
+    class Meta:
+        model = ArtefactRepresentation
+        widgets = {
+            'position': HiddenInput
+        }
+
 
 class ArtefactRepInline(MediaFileInline):
     model = ArtefactRepresentation
+#    form = ARAdminForm
     fields = ('name', 'image', 'thumbnail', 'position')
 
     def thumbnail(self, obj):
@@ -43,7 +57,7 @@ class DocumentInline(MediaFileInline):
     readonly_fields = ('view_document', 'admin_link', 'is_public')
 
     def is_public(self, obj):
-        return obj.document.public
+        return obj.document.is_public
     is_public.boolean = True
 
     def view_document(self, obj):
@@ -161,7 +175,7 @@ class MOAdmin(UndeleteableModelAdmin):
     class Media:
         from django.conf import settings
         static_url = getattr(settings, 'STATIC_URL', '/static/')
-        css = {'all': (static_url + 'no-addanother-button.css',)}
+        css = {'all': (static_url + 'museumobject-admin-detail.css',)}
 
 
 admin.site.register(MuseumObject, MOAdmin)
