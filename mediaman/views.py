@@ -33,17 +33,18 @@ class UploadFileForm(forms.Form):
 
 def handle_upload(request):
     # Handle file upload
+#    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            uploadtype = form.cleaned_data['uploadtype']
-            uploadedfile = form.files['File0']
-            if uploadtype == 'II':
-                handle_item_image(form.cleaned_data, uploadedfile, request.user)
-            elif uploadtype == 'OH':
-                handle_object_history(form.cleaned_data, uploadedfile, request.user)
-            elif uploadtype == 'SF':
-                handle_donor_file(form.cleaned_data, uploadedfile, request.user)
+            upload_type = form.cleaned_data['uploadtype']
+            uploaded_file = form.files['File0']
+            if upload_type == 'II':
+                handle_item_image(form.cleaned_data, uploaded_file, request.user)
+            elif upload_type == 'OH':
+                handle_object_history(form.cleaned_data, uploaded_file, request.user)
+            elif upload_type == 'SF':
+                handle_source_file(form.cleaned_data, uploaded_file, request.user)
             else:
                 return HttpResponse('ERROR: Please select the type of files')
         else:
@@ -72,7 +73,7 @@ def handle_object_history(formdata, ufile, user):
     doc.museumobject_set.add(*mo)
 
 
-def handle_donor_file(formdata, ufile, user):
+def handle_source_file(formdata, ufile, user):
     person_id = name_to_id(ufile.name, formdata['pathinfo0'])[0]
     person = Person.objects.get(pk=person_id)
 
