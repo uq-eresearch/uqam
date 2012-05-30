@@ -4,7 +4,7 @@ from cat.models import MuseumObject
 from parties.models import Person
 from django.core import urlresolvers
 
-mediafile_readonly = ('md5sum', 'file_size', 'uploaded_by', 'mime_type',
+mediafile_readonly = ('file_size', 'uploaded_by', 'mime_type',
         'original_filename', 'original_path', 'original_filedate',
         'name')
 
