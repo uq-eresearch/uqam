@@ -76,9 +76,17 @@ admin.site.register(Document, DocumentAdmin)
 
 
 class ArtefactRepresentationAdmin(MediaFileAdmin):
-    readonly_fields = ('image', 'artefact') + mediafile_readonly + ('thumbnail',)
+    readonly_fields = ('image', 'artefact_link') + mediafile_readonly + ('thumbnail',)
     fields = ('public',) + readonly_fields
     list_display = ('__unicode__', 'artefact', 'upload_date', 'public')
+
+    def artefact_link(self, obj):
+        if obj.artefact:
+            admin_url = urlresolvers.reverse('admin:cat_museumobject_change', args=(obj.artefact_id,))
+            return '<a href="%s">%s</a>' % (admin_url, obj.artefact)
+        else:
+            return ''
+    artefact_link.allow_tags = True
 
     def thumbnail(self, obj):
         try:
