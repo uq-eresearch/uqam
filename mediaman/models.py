@@ -28,7 +28,6 @@ add_introspection_rules(
 
 
 class MediaFile(models.Model):
-    md5sum = models.CharField(max_length=32, blank=True, editable=False)
     filesize = models.IntegerField(blank=True, null=True, editable=False)
     upload_date = models.DateTimeField(auto_now_add=True, editable=False)
     uploaded_by = models.ForeignKey(User, related_name="+",
@@ -54,6 +53,7 @@ archival_storage = FileSystemStorage(
 
 
 class ArtefactRepresentation(MediaFile):
+    md5sum = models.CharField(max_length=32, blank=True, editable=False)
     image = ThumbnailerImageField(
         upload_to='mediareps/%Y/%m-%d/',
         storage=archival_storage,
@@ -61,10 +61,11 @@ class ArtefactRepresentation(MediaFile):
     position = models.PositiveSmallIntegerField()
     artefact = models.ForeignKey(MuseumObject)
 
-    class Meta:
+    class Meta(MediaFile.Meta):
         ordering = ['position']
         #TODO: use order_with_respect_to instead of position
 #        order_with_respect_to 'image'
+        unique_together = ('artefact', 'md5sum')
 
     def __unicode__(self):
         return self.name
@@ -82,11 +83,15 @@ post_delete.connect(remove_delete_image_file, sender=ArtefactRepresentation)
 
 
 class Document(MediaFile):
+    md5sum = models.CharField(max_length=32, blank=True, editable=False, unique=True)
     document = models.FileField(upload_to='docs/%Y/%m-%d/')
     document_text = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
+
+    class Meta(MediaFile.Meta):
+        pass
 
 
 def delete_document_file(sender, instance, **kwargs):
