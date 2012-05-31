@@ -5,6 +5,7 @@ from datetime import datetime
 from mediaman.models import ArtefactRepresentation, Document
 from cat.models import MuseumObject
 from parties.models import Person
+from django.core.exceptions import ObjectDoesNotExist
 import re
 
 
@@ -39,20 +40,35 @@ def handle_upload(request):
         if form.is_valid():
             upload_type = form.cleaned_data['uploadtype']
             uploaded_file = form.files['File0']
-            if upload_type == 'II':
-                handle_item_image(form.cleaned_data, uploaded_file, request.user)
-            elif upload_type == 'OH':
-                handle_object_history(form.cleaned_data, uploaded_file, request.user)
-            elif upload_type == 'SF':
-                handle_source_file(form.cleaned_data, uploaded_file, request.user)
-            else:
-                return HttpResponse('ERROR: Please select the type of files')
+            if ignore_file(uploaded_file):
+                return HttpResponse("SUCCESS\n Ignored File: %s" % uploaded_file.name)
+            try:
+                if upload_type == 'II':
+                    handle_item_image(form.cleaned_data, uploaded_file, request.user)
+                elif upload_type == 'OH':
+                    handle_object_history(form.cleaned_data, uploaded_file, request.user)
+                elif upload_type == 'SF':
+                    handle_source_file(form.cleaned_data, uploaded_file, request.user)
+                else:
+                    return HttpResponse('ERROR: Please select the type of files')
+            except ParseError:
+                return HttpResponse('ERROR: Check file name/path. Unable to determine registration number or person.')
+            except ObjectDoesNotExist as inst:
+                return HttpResponse('ERROR: %s' % inst)
+
         else:
             return HttpResponse('ERROR: %s' % form.errors)
     else:
         return HttpResponse('ERROR: Only POST requests allowed')
 
     return HttpResponse('SUCCESS')
+
+
+IGNORED_FILES = re.compile(r'^\..*|^Thumbs\.db', flags=re.IGNORECASE)
+
+
+def ignore_file(uploaded_file):
+    return IGNORED_FILES.match(uploaded_file.name)
 
 
 def handle_item_image(formdata, ufile, user):

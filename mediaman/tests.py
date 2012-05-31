@@ -7,12 +7,14 @@ Replace this with more appropriate tests for your application.
 
 #from django.test import TestCase
 from unittest import TestCase
-from views import name_to_id
+import views
+#from django.core.exceptions import ObjectDoesNotExist
+
 
 
 class SimpleTest(TestCase):
     def assertNameToId(self, id, name, path=None):
-        testid = name_to_id(name, path)
+        testid = views.name_to_id(name, path)
         self.assertEqual([id], testid)
 
     def test_name_to_id(self):
@@ -38,17 +40,21 @@ class SimpleTest(TestCase):
                 '/home/omad/files/12345')
 
     def test_multiple_ids(self):
-        ids = name_to_id('source file.pdf', '/home/files/123-132')
+        ids = views.name_to_id('source file.pdf', '/home/files/123-132')
         expected = range(123, 132 + 1)
         self.assertEqual(expected, ids)
 
-        ids = name_to_id('source file.pdf', '/home/files/123 - 132')
+        ids = views.name_to_id('source file.pdf', '/home/files/123 - 132')
         self.assertEqual(expected, ids)
 
-        ids = name_to_id('source file.pdf', 'G:\\files\\123 - 132')
+        ids = views.name_to_id('source file.pdf', 'G:\\files\\123 - 132')
         self.assertEqual(expected, ids)
 
     def test_name_plus_id(self):
         #import ipdb; ipdb.set_trace()
         self.assertNameToId(293, 'letter.pdf',
                 'S:\\file\\Person Name_293')
+
+    def test_invalid_names(self):
+        self.assertRaises(views.ParseError,
+                self.assertNameToId, 4567, '_IGP4567.jpg')
