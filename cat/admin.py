@@ -20,24 +20,11 @@ class MediaFileInline(admin.TabularInline):
     def has_add_permission(self, request):
         return False
 
-from django.forms import ModelForm, HiddenInput
-
-
-class ARAdminForm(ModelForm):
-#    def __init__(self, *args, **kwargs):
-#        super(ARAdminForm, self).__init__(*args, **kwargs)
-#        self.fields['position'].widget = HiddenInput()
-    class Meta:
-        model = ArtefactRepresentation
-        widgets = {
-            'position': HiddenInput
-        }
-
 
 class ArtefactRepInline(MediaFileInline):
     model = ArtefactRepresentation
-#    form = ARAdminForm
-    fields = ('name', 'image', 'thumbnail', 'position')
+#   position field hidden with CSS
+    fields = ('name', 'image', 'thumbnail', 'public', 'position')
 
     def thumbnail(self, obj):
         try:
