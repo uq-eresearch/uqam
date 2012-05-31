@@ -49,13 +49,14 @@ class MediaFile(models.Model):
 
 
 archival_storage = FileSystemStorage(
-        location=settings.MEDIA_ROOT + '/archival')
+        location=settings.MEDIA_ROOT + '/archival',
+        base_url=settings.MEDIA_URL + 'archival/')
 
 
 class ArtefactRepresentation(MediaFile):
     md5sum = models.CharField(max_length=32, blank=True, editable=False)
     image = ThumbnailerImageField(
-        upload_to='mediareps/%Y/%m-%d/',
+        upload_to='item_images/%Y/%m-%d/',
         storage=archival_storage,
         thumbnail_storage=default_storage)
     position = models.PositiveSmallIntegerField()

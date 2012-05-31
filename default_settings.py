@@ -273,3 +273,9 @@ SECURE_REQUIRED_PATHS = (
     '/admin/',
     '/accounts/',
 )
+
+
+from django.core.files.storage import FileSystemStorage
+ARCHIVAL_STORAGE = FileSystemStorage(
+        location=MEDIA_ROOT + '/archival',
+        base_url=MEDIA_URL + 'archival/')
