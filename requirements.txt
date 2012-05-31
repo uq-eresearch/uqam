@@ -21,4 +21,4 @@ docutils==0.8.1
 psycopg2==2.4.4
 git+http://github.com/alex/django-filter.git@51b39fca089f2cb1d3d3501d2e164635fbe52864#egg=django-filter
 django-tables2==0.11.0
-easy-thumbnails==1.0-alpha-21
+easy-thumbnails==1.0.3

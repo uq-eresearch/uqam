@@ -255,8 +255,11 @@ BROKER_TRANSPORT = "django"
 GRAPPELLI_INDEX_DASHBOARD = 'uqam.grapdashboard.UQAMDashboard'
 
 
-from easy_thumbnails import defaults
-THUMBNAIL_PROCESSORS = defaults.PROCESSORS + (
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    'easy_thumbnails.processors.scale_and_crop',
+    'easy_thumbnails.processors.filters',
     'mediaman.thumbnail_processors.watermark_processor',
 )
 
