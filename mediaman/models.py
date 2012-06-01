@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.core.files.storage import FileSystemStorage
 from django.template import Template, Context
 
 add_introspection_rules(
@@ -48,16 +47,13 @@ class MediaFile(models.Model):
         abstract = True
 
 
-archival_storage = FileSystemStorage(
-        location=settings.MEDIA_ROOT + '/archival',
-        base_url=settings.MEDIA_URL + 'archival/')
 
 
 class ArtefactRepresentation(MediaFile):
     md5sum = models.CharField(max_length=32, blank=True, editable=False)
     image = ThumbnailerImageField(
         upload_to='item_images/%Y/%m-%d/',
-        storage=archival_storage,
+        storage=settings.ARCHIVAL_STORAGE,
         thumbnail_storage=default_storage)
     position = models.PositiveSmallIntegerField()
     artefact = models.ForeignKey(MuseumObject)
