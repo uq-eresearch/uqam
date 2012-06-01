@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import datetime
 from django.db.models.signals import post_save
+from cat.models import Category
+from location.models import Place
 
 
 class Collection(models.Model):
@@ -57,6 +59,18 @@ class Collection(models.Model):
         return {u"xmlns": u"http://www.w3.org/2005/Atom",
                 u"xmlns:rdfa": u"http://www.w3.org/ns/rdfa#"}
 
+    def get_categories(self):
+        """Queryset of categories of items in collection"""
+        items = self.items.all()
+        return Category.objects.filter(
+            museumobject__in=items).distinct()
+
+    def get_places(self):
+        """Queryset of Places of items in collection"""
+        items = self.items.all()
+        return Place.objects.filter(
+            museumobject__in=items).distinct()
+
 
 class Syndication(models.Model):
     remote_url = models.CharField(max_length=300)
@@ -68,8 +82,6 @@ class Syndication(models.Model):
 
     def __unicode__(self):
         return self.remote_url
-
-from tasks import send_collection
 
 
 def queue_for_syndication(sender, **kwargs):
