@@ -76,12 +76,6 @@ STATIC_ROOT = '/home/django/public/static/'
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-# URL prefix for admin static files -- CSS, JavaScript and images.
-# Make sure to use a trailing slash.
-# Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = '/static/admin/'
-ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
-
 # Additional locations of static files
 STATICFILES_DIRS = (
     DIRNAME + '/static',
