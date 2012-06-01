@@ -57,7 +57,8 @@ class Collection(models.Model):
 
     def entry_attributes(self):
         return {u"xmlns": u"http://www.w3.org/2005/Atom",
-                u"xmlns:rdfa": u"http://www.w3.org/ns/rdfa#"}
+                u"xmlns:rdfa": u"http://www.w3.org/ns/rdfa#",
+                u"xmlns:georss": u"http://www.georss.org/georss"}
 
     def get_categories(self):
         """Queryset of categories of items in collection"""

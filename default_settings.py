@@ -273,3 +273,8 @@ from django.core.files.storage import FileSystemStorage
 ARCHIVAL_STORAGE = FileSystemStorage(
         location=MEDIA_ROOT + '/archival',
         base_url=MEDIA_URL + 'archival/')
+
+COLLECTION_CURATOR = {
+    'href': u'http://dataspace-uat.uq.edu.au/BlArGh',
+    'label': u'Example Curator'
+}
