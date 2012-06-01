@@ -74,7 +74,7 @@ def installsyspackages():
 def reqs():
     """Update the remote virtualenv to newest requirements"""
     with prefix('source %(virtenv)s/bin/activate' % env):
-        run('pip install -U --requirement=%(reqfile)s' % env)
+        run('pip install --requirement=%(reqfile)s' % env)
 
 
 def push(version):
