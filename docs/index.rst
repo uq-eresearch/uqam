@@ -19,6 +19,8 @@ Contents:
    admin
    databases
    testing
+   development_notes
+   changelog
 
 
 Indices and tables
