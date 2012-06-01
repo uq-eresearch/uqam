@@ -5,7 +5,7 @@
   <head>
     <title>{% block title %}UQ Anthropology Museum{% endblock %}</title>
 
-    <link rel="stylesheet" href="http{% if request.issecure %}s{% endif %}://uq.edu.au/templates/web/css/default.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/css/default.css" media="screen" type="text/css" />
 {#    <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap.css" type="text/css" media="screen, projection"> #}
 {#    <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap-responsive.css" type="text/css" media="screen, projection"> #}
     <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
