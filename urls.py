@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 
     url(r'^grappelli/', include('grappelli.urls')),
 
-    url(r'^collection/', include('uqamcollections.urls')),
+    url(r'^collection/', include('subcollections.urls')),
 
     (r'^search/', include('haystack.urls')),
     url(r'^accounts/login/$',
