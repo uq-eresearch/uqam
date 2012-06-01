@@ -105,7 +105,7 @@ def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='te
     handler.endElement(u"source")
 
     handler.startElement(u"link",
-            {u"rel": "http://xmlns.com/foaf/0.1/homepage",
+            {u"rel": "http://xmlns.com/foaf/0.1/page",
              u"href": link})
     handler.endElement(u"link")
 
