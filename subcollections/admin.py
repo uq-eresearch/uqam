@@ -19,9 +19,8 @@ class CollectionAdmin(admin.ModelAdmin):
     }
 
     def save_model(self, request, obj, form, change):
-        if getattr(obj, 'author', None) is None:
-            obj.author = request.user
-            obj.save()
+        obj.author = request.user
+        obj.save()
 
 #    formfield_overrides = {
 #        ManyToManyField: {'widget': RichTextEditorWidget},
