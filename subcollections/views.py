@@ -1,16 +1,18 @@
 from django.http import HttpResponseRedirect
 from django.forms import ModelForm
 from django import forms
-from uqamcollections.models import Collection
+from subcollections.models import Collection
 from cat.models import MuseumObject
 from utils.utils import do_paging
 from django.shortcuts import render, get_object_or_404
+from feeds import write_collection_as_atom
 
 
 def collections_home(request):
     collections = Collection.objects.filter(is_public=True)
     return render(request, 'collections/collections_list.html',
             {'collections': collections})
+
 
 class SearchSelectMultipleWidget(forms.widgets.SelectMultiple):
 
@@ -20,12 +22,14 @@ class SearchSelectMultipleWidget(forms.widgets.SelectMultiple):
     def value_from_datadict():
         pass
 
+
 class CollectionsForm(ModelForm):
-    items = forms.CharField(max_length=100)  
+    items = forms.CharField(max_length=100)
     #, widget=SearchSelectMultipleWidget)
 
     class Meta:
         model = Collection
+
 
 def collection_edit(request, collection_id):
     if request.method == 'POST':
@@ -37,6 +41,7 @@ def collection_edit(request, collection_id):
         form = CollectionsForm(instance=collection)
     return render(request, 'collections/collection_edit.html',
             {'collection': collection, 'form': form})
+
 
 def collection_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id, is_public=True)
@@ -70,7 +75,6 @@ def collection_add(request):
                 {'collections': collections, 'ids': ids})
 
 
-from feeds import write_collection_as_atom
 def atom_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
 

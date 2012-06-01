@@ -2,7 +2,7 @@ from django.conf.urls.defaults import patterns, url
 from feeds import AllCollectionsFeed, CollectionFeed
 
 
-urlpatterns = patterns('uqamcollections.views',
+urlpatterns = patterns('subcollections.views',
     url(r'^$', 'collections_home', name='collections_home'),
 
     url(r'^(\d+)$', 'collection_detail', name='collection_detail'),

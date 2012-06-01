@@ -155,7 +155,7 @@ INSTALLED_APPS = (
     'mediaman',
     'haystack',
     'gunicorn',
-    'uqamcollections',
+    'subcollections',
     'dataimport',
     'djkombu',
     'reports',

@@ -1,11 +1,12 @@
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed, rfc3339_date
-from uqamcollections.models import Collection
+from subcollections.models import Collection
 from django.shortcuts import get_object_or_404
 from django.utils.xmlutils import SimplerXMLGenerator
 from utils.utils import get_site_url
 from django.http import HttpResponse
 from django.contrib.sites.models import get_current_site
+
 
 class AllCollectionsFeed(Feed):
     """
@@ -24,6 +25,7 @@ class AllCollectionsFeed(Feed):
 
     def item_description(self, item):
         return item.description
+
 
 class CollectionFeed(Feed):
     """

@@ -12,7 +12,7 @@ class UQAMDashboard(Dashboard):
             collapsible=False,
             models=('cat.models.MuseumObject', 'parties.*', 'location.*',
                 'loans.models.LoanAgreement', 'condition.*',
-                'uqamcollections.*'),
+                'subcollections.*'),
             exclude=('django.contrib.*', 'djcelery.*', 'reports.*'),
         ))
 

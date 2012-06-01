@@ -1,7 +1,6 @@
 from django.db import models
 from datetime import datetime
 from django.db.models.signals import post_save
-import requests
 
 
 class Collection(models.Model):
@@ -15,7 +14,6 @@ class Collection(models.Model):
             help_text="Should collection be visible to the public")
     is_syndicated = models.BooleanField(
             help_text="Should collection be sent for syndication")
-    categories = models.CharField(max_length=120, blank=True)
     rights = models.CharField(max_length=200,
             help_text="Information about rights held in and over the entity")
     access_rights = models.CharField(max_length=200,

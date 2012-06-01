@@ -3,7 +3,7 @@
 {% block content %}
 <div style="float:right;font-size: 80%;">
     {% if user.is_staff %}
-    <a href="{% url admin:uqamcollections_collection_change collection.id %}">Admin</a>
+    <a href="{% url admin:subcollections_collection_change collection.id %}">Admin</a>
     {% endif %}
     <a href="{{collection.get_absolute_url}}/atom">Atom</a>
 </div>

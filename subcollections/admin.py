@@ -1,5 +1,5 @@
 from django.contrib import admin
-from uqamcollections.models import Collection, Syndication
+from subcollections.models import Collection, Syndication
 from django.contrib.auth.models import User
 
 #from django.db.models import ManyToManyField
