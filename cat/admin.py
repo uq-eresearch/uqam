@@ -44,7 +44,7 @@ class DocumentInline(MediaFileInline):
     readonly_fields = ('view_document', 'admin_link', 'is_public')
 
     def is_public(self, obj):
-        return obj.document.is_public
+        return obj.document.public
     is_public.boolean = True
 
     def view_document(self, obj):
