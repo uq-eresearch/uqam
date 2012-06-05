@@ -7,7 +7,9 @@ from cat.models import MuseumObject
 from parties.models import Person
 from django.core.exceptions import ObjectDoesNotExist
 import re
+import logging
 
+logger = logging.getLogger(__name__)
 
 def bulk_upload(request):
     form = UploadFileForm()
@@ -52,10 +54,11 @@ def handle_upload(request):
                 else:
                     return HttpResponse('ERROR: Please select the type of files')
             except ParseError:
+                logger.warning("Unable to parse id from filename.")
                 return HttpResponse('ERROR: Check file name/path. Unable to determine registration number or person.')
             except ObjectDoesNotExist as inst:
+                logger.warning("Unable to find object matching id.")
                 return HttpResponse('ERROR: %s' % inst)
-
         else:
             return HttpResponse('ERROR: %s' % form.errors)
     else:
