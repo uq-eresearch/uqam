@@ -6,8 +6,6 @@
     <title>{% block title %}UQ Anthropology Museum{% endblock %}</title>
 
     <link rel="stylesheet" href="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/css/default.css" media="screen" type="text/css" />
-{#    <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap.css" type="text/css" media="screen, projection"> #}
-{#    <link rel="stylesheet" href="{{STATIC}}bootstrap/css/bootstrap-responsive.css" type="text/css" media="screen, projection"> #}
     <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="{{STATIC}}fancydropdown.css" type="text/css">
 
@@ -222,7 +220,6 @@
 
 
     <script type="text/javascript" src="{{STATIC}}jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{STATIC}}bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="{{STATIC}}fancydropdown.js"></script>
     {% block javascript %}
     {% endblock %}
