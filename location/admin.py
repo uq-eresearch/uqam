@@ -1,7 +1,8 @@
-from django.contrib import admin
+#from django.contrib import admin
 from models import Place, Region
 from tasks import GeocodePlace
-from common.adminactions import merge_selected, add_to_collection
+from common.adminactions import merge_selected
+from django.contrib.gis import admin
 
 
 class RegionAdmin(admin.ModelAdmin):
@@ -10,7 +11,8 @@ class RegionAdmin(admin.ModelAdmin):
 admin.site.register(Region, RegionAdmin)
 
 
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(admin.OSMGeoAdmin):
+    default_zoom = 1
     list_display = ('id', 'country', 'region', 'australian_state',
             'name', 'gn_name')
     list_filter = ('country', 'australian_state', 'region',)
