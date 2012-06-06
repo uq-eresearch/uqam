@@ -24,7 +24,7 @@ class MediaFileInline(admin.TabularInline):
 class ArtefactRepInline(MediaFileInline):
     model = ArtefactRepresentation
 #   position field hidden with CSS
-    fields = ('name', 'image', 'thumbnail', 'public', 'position')
+    fields = ('name', 'image', 'thumbnail', 'view_admin_record', 'public', 'position')
 
     def thumbnail(self, obj):
         try:
@@ -33,8 +33,16 @@ class ArtefactRepInline(MediaFileInline):
             return '<a href="%s"><img src="%s"></a>' % (obj.image.url, thumb.url)
         except:
             return 'Error generating thumbnail'
+
+    def view_admin_record(self, obj):
+        try:
+            admin_url = urlresolvers.reverse('admin:mediaman_artefactrepresentation_change', args=(obj.id,))
+            return '<a href="%s">View image record</a>' % (admin_url,)
+        except:
+            return ''
+    view_admin_record.allow_tags = True
     thumbnail.allow_tags = True
-    readonly_fields = ('name', 'image', 'thumbnail')
+    readonly_fields = ('name', 'image', 'thumbnail', 'view_admin_record')
     sortable_field_name = "position"
 
 
