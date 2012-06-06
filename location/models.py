@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 
 
 class Place(models.Model):
@@ -16,6 +16,10 @@ class Place(models.Model):
             help_text="GeoNames ID", blank=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+
+    point = models.PointField(blank=True, null=True)
+
+    objects = models.GeoManager()
 
     class Meta:
         ordering = ["id"]
