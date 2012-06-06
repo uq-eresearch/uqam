@@ -22,14 +22,6 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
     },
-    RO_DATABASE: {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'uqam',
-        'USER': 'uqam_read',
-        'PASSWORD': 'uqam_read',
-        'HOST': 'localhost',
-        'PORT': '',
-    },
 }
 
 
