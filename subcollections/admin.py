@@ -1,8 +1,5 @@
 from django.contrib import admin
 from subcollections.models import Collection, Syndication
-from django.contrib.auth.models import User
-
-#from django.db.models import ManyToManyField
 
 
 class CollectionAdmin(admin.ModelAdmin):
@@ -21,10 +18,6 @@ class CollectionAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.author = request.user
         obj.save()
-
-#    formfield_overrides = {
-#        ManyToManyField: {'widget': RichTextEditorWidget},
-#    }
 
 
 admin.site.register(Collection, CollectionAdmin)

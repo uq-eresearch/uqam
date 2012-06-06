@@ -47,8 +47,6 @@ class MediaFile(models.Model):
         abstract = True
 
 
-
-
 class ArtefactRepresentation(MediaFile):
     md5sum = models.CharField(max_length=32, blank=True, editable=False)
     image = ThumbnailerImageField(
