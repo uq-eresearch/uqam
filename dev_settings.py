@@ -63,3 +63,8 @@ TEMPLATE_LOADERS = (
 )
 
 HTTPS_SUPPORT = False
+
+ARCHIVAL_STORAGE = FileSystemStorage(
+        location=MEDIA_ROOT + '/archival',
+        base_url=MEDIA_URL + 'archival/')
+
