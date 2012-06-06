@@ -15,8 +15,8 @@ MANAGERS = ADMINS
 RO_DATABASE = 'readonly'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'uqam',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'geouqam',
         'USER': 'uqam',
         'PASSWORD': 'uqam',
         'HOST': 'localhost',
@@ -166,6 +166,7 @@ INSTALLED_APPS = (
     'django_tables2',
     'django_filters',
     'easy_thumbnails',
+    'django.contrib.gis',
 )
 
 LOGS_ROOT = os.path.join(DIRNAME, 'logs')
