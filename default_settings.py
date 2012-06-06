@@ -333,3 +333,8 @@ COLLECTION_CURATOR = {
     'href': u'http://dataspace-uat.uq.edu.au/BlArGh',
     'label': u'Example Curator'
 }
+
+
+THUMBNAIL_SOURCE_GENERATORS = (
+        'easy_thumbnails.source_generators.pil_image',
+    )
