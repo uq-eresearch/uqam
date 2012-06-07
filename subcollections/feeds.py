@@ -126,9 +126,10 @@ def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='ap
 
 def add_categories(handler, collection, request):
     for category in collection.get_categories():
-        cat_url = get_site_url(request, category.get_absolute_url())
+# TODO: add this back when dataspace is fixed
+#        cat_url = get_site_url(request, category.get_absolute_url())
         handler.addQuickElement(u'category', attrs={
-            u'term': cat_url,
+#            u'term': cat_url,
             u'label': unicode(category)
         })
 
