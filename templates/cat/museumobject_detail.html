@@ -136,7 +136,7 @@
 {% endif %}
 
 {% if museumobject.collections.all %}
-    <dt>Collections</dt>
+    <dt>Sub collections</dt>
     <dd>
     {% for collection in museumobject.collections.all %}
     <a href="{{ collection.get_absolute_url }}">{{ collection.title }}</a>
