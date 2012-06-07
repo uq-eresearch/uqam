@@ -4,9 +4,14 @@ from django.contrib.sites.models import get_current_site
 
 
 def get_site_url(request, path):
+    """Retrieve current site site
 
+    Always returns as http (never https)
+    """
     current_site = get_current_site(request)
-    return add_domain(current_site.domain, path, request.is_secure())
+    site_url = add_domain(current_site.domain, path, request.is_secure())
+    return site_url.replace('https', 'http')
+
 
 def do_paging(request, queryset):
     paginator = Paginator(queryset, 25)
