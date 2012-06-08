@@ -337,4 +337,5 @@ COLLECTION_CURATOR = {
 
 THUMBNAIL_SOURCE_GENERATORS = (
         'easy_thumbnails.source_generators.pil_image',
+        'mediaman.source_generator.pgmagick_image',
     )
