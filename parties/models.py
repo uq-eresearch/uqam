@@ -44,6 +44,10 @@ class Maker(models.Model):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__iexact",)
+
 
 class Client(models.Model):
     name = models.CharField(max_length=200)
@@ -64,6 +68,10 @@ class Client(models.Model):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__iexact",)
+
 
 class MuseumStaff(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -75,3 +83,7 @@ class MuseumStaff(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__iexact",)
