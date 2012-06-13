@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from models import MuseumObject, Category
@@ -8,6 +7,7 @@ from utils.utils import do_paging
 from haystack.views import basic_search
 from haystack.forms import SearchForm
 from django.shortcuts import redirect
+from uqam.utils.utils import url_with_querystring
 
 import string
 
@@ -21,9 +21,46 @@ def home_page(request):
             {'objects': objects})
 
 
-def detail(request, artefact_id):
-    a = get_object_or_404(MuseumObject, registration_number=artefact_id)
-    return render(request, 'detail.html', {'artefact': a})
+def item_detail(request, reg_num):
+    mo = get_object_or_404(MuseumObject, registration_number=reg_num)
+
+    context = {'museumobject': mo}
+    search_context = _current_search_results(request, reg_num)
+    context.update(search_context)
+
+    return render(request, 'cat/museumobject_detail.html', context)
+
+
+def _current_search_results(request, reg_num):
+    context = {}
+    index = None
+#    import ipdb; ipdb.set_trace()
+    if request.session['search_results'] is not None:
+        results = request.session['search_results']
+        ids = get_ids(results)
+        try:
+            index = ids.index('cat.museumobject.%s' % reg_num)
+        except:
+            pass
+    if index is not None:
+        context['search_index'] = index + 1
+        context['search_results'] = results
+        search_query = request.session['search_query']
+        search_url = url_with_querystring(
+            reverse('haystack_search'), **search_query)
+        context['search_url'] = search_url
+        try:
+            context['search_next_obj'] = results[index + 1].object
+        except:
+            pass
+        try:
+            context['search_prev_obj'] = results[index - 1].object
+        except:
+            pass
+    return context
+
+def get_ids(results):
+    return [y.id for y in results.query.get_results()]
 
 
 def all_countries(request):
@@ -72,6 +109,7 @@ def categories_list(request, full_slug=None):
             {"categories": cat_list,
              "objects": objects,
              "breadcrumbs": breadcrumbs})
+
 
 
 def search(request):

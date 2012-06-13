@@ -20,7 +20,6 @@ urlpatterns = patterns('',
 
     url(r'^collection/', include('subcollections.urls')),
 
-    (r'^search/', include('haystack.urls')),
     url(r'^accounts/login/$',
         'django.contrib.auth.views.login',
         name='auth_login'),
