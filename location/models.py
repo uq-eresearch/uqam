@@ -1,6 +1,59 @@
 from django.contrib.gis.db import models
 
 
+class LocationBase(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField()
+    description = models.CharField(max_length=255)
+
+    gn_name = models.CharField(max_length=100,
+            help_text="GeoNames Name", blank=True)
+    gn_id = models.CharField(max_length=20,
+            help_text="GeoNames ID", blank=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        abstract = True
+
+
+class GlobalRegion(LocationBase):
+
+    class Meta:
+        pass
+
+
+class Country(LocationBase):
+    parent = models.ForeignKey(GlobalRegion)
+
+    class Meta:
+        verbose_name_plural = 'countries'
+        unique_together = ('parent', 'slug')
+
+
+class StateProvince(LocationBase):
+    parent = models.ForeignKey(Country)
+
+    class Meta:
+        unique_together = ('parent', 'slug')
+
+
+class RegionDistrict(LocationBase):
+    parent = models.ForeignKey(StateProvince)
+
+    class Meta:
+        unique_together = ('parent', 'slug')
+
+
+class Locality(LocationBase):
+    parent = models.ForeignKey(RegionDistrict)
+
+    point = models.PointField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = 'localities'
+        unique_together = ('parent', 'slug')
+
+
 class Place(models.Model):
     country = models.CharField(max_length=30, blank=True)
     region = models.CharField(max_length=40, blank=True)
@@ -85,4 +138,3 @@ class Region(models.Model):
 
     def __unicode__(self):
         return self.name
-

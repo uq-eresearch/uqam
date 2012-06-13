@@ -1,8 +1,16 @@
 #from django.contrib import admin
 from models import Place, Region
+from models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 from tasks import GeocodePlace
 from common.adminactions import merge_selected
 from django.contrib.gis import admin
+
+
+admin.site.register(GlobalRegion)
+admin.site.register(Country)
+admin.site.register(StateProvince)
+admin.site.register(RegionDistrict)
+admin.site.register(Locality)
 
 
 class RegionAdmin(admin.ModelAdmin):
