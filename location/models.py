@@ -4,7 +4,7 @@ from django.contrib.gis.db import models
 class LocationBase(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
 
     gn_name = models.CharField(max_length=100,
             help_text="GeoNames Name", blank=True)
@@ -14,6 +14,9 @@ class LocationBase(models.Model):
 
     class Meta:
         abstract = True
+
+    def __unicode__(self):
+        return self.name
 
 
 class GlobalRegion(LocationBase):
