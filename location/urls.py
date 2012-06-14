@@ -5,6 +5,8 @@ from location.models import Place
 
 urlpatterns = patterns('location.views',
 
+    url(r'^tree_view$', 'tree_view', name='tree_view'),
+
     url(r'^$',
         ListView.as_view(
             model=Place), name='place_list'),
