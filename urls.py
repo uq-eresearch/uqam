@@ -35,6 +35,8 @@ urlpatterns = patterns('',
     url(r'^place/', include('location.urls')),
 
     url(r'^mediaman/', include('mediaman.urls')),
+
+    url(r'^chaining/', include('smart_selects.urls')),
 )
 
 if settings.DEBUG:

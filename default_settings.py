@@ -159,6 +159,8 @@ INSTALLED_APPS = (
     'django_filters',
     'easy_thumbnails',
     'django.contrib.gis',
+
+    'smart_selects',
 )
 
 LOGS_ROOT = os.path.join(DIRNAME, 'logs')

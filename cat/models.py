@@ -2,6 +2,7 @@
 from django.db import models
 from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 import string
+from smart_selects.db_fields import ChainedForeignKey
 
 
 class DataDictionary(models.Model):
@@ -91,10 +92,18 @@ class MuseumObject(models.Model):
 
 # New Geo-locations data
     global_region = models.ForeignKey(GlobalRegion, blank=True, null=True)
-    country = models.ForeignKey(Country, blank=True, null=True)
-    state_province = models.ForeignKey(StateProvince, blank=True, null=True)
-    region_district = models.ForeignKey(RegionDistrict, blank=True, null=True)
-    locality = models.ForeignKey(Locality, blank=True, null=True)
+    country = ChainedForeignKey(Country, blank=True, null=True,
+        chained_field='global_region', chained_model_field='parent',
+        show_all=False, auto_choose=True)
+    state_province = ChainedForeignKey(StateProvince, blank=True, null=True,
+        chained_field='country', chained_model_field='parent',
+        show_all=False, auto_choose=True)
+    region_district = ChainedForeignKey(RegionDistrict, blank=True, null=True,
+        chained_field='state_province', chained_model_field='parent',
+        show_all=False, auto_choose=True)
+    locality = ChainedForeignKey(Locality, blank=True, null=True,
+        chained_field='region_district', chained_model_field='parent',
+        show_all=False, auto_choose=True)
 
     donor = models.ForeignKey(
             'parties.Person',
