@@ -103,6 +103,11 @@ class MOAdmin(UndeleteableModelAdmin):
                        'other_number', 'functional_category', 'category',
                        'artefact_type', 'cultural_bloc', 'place')
         }),
+        ('Geo-location', {
+            'classes': ('collapse',),
+            'fields': ('global_region', 'country', 'state_province',
+                'region_district', 'locality')
+        }),
         ('Status', {
             'classes': ('collapse',),
             'fields': ('loan_status', 'access_status', 'record_status',)

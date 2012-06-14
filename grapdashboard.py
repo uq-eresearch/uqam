@@ -10,10 +10,10 @@ class UQAMDashboard(Dashboard):
             title=_('Catalogue'),
             column=1,
             collapsible=False,
-            models=('cat.models.MuseumObject', 'parties.*', 'location.*',
+            models=('cat.models.MuseumObject', 'parties.*',
                 'loans.models.LoanAgreement', 'condition.*',
                 'subcollections.*'),
-            exclude=('django.contrib.*', 'djcelery.*', 'reports.*'),
+            exclude=('django.contrib.*', 'djcelery.*', 'reports.*',  'location.*'),
         ))
 
         self.children.append(modules.ModelList(
