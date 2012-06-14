@@ -2,16 +2,16 @@
 
 <ul>
 {% for gr in global_regions %}
-  <li>{{gr.name}} (id={{gr.id}})
+  <li>{{gr.name}} ({{gr.country_set.all.count}})
     <ul>
       {% for country in gr.country_set.all %}
-      <li>{{country.name}} (id={{country.id}})
+      <li>{{country.name}} ({{country.stateprovince_set.all.count}})
       <ul>
         {% for sp in country.stateprovince_set.all %}
-        <li>{{sp.name}} (id={{sp.id}})
+        <li>{{sp.name}} ({{sp.regiondistrict_set.all.count}})
           <ul>
             {% for rd in sp.regiondistrict_set.all %}
-            <li>{{rd.name}}
+            <li>{{rd.name}} ({{rd.locality_set.all.count}})
                 <ul>
                 {% for locality in rd.locality_set.all %}
                 <li>{{locality.name}}</li>

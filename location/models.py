@@ -13,6 +13,7 @@ class LocationBase(models.Model):
     objects = models.GeoManager()
 
     class Meta:
+        ordering = ['name']
         abstract = True
 
     def __unicode__(self):
@@ -21,14 +22,14 @@ class LocationBase(models.Model):
 
 class GlobalRegion(LocationBase):
 
-    class Meta:
+    class Meta(LocationBase.Meta):
         pass
 
 
 class Country(LocationBase):
     parent = models.ForeignKey(GlobalRegion)
 
-    class Meta:
+    class Meta(LocationBase.Meta):
         verbose_name_plural = 'countries'
         unique_together = ('parent', 'slug')
 
@@ -36,14 +37,14 @@ class Country(LocationBase):
 class StateProvince(LocationBase):
     parent = models.ForeignKey(Country)
 
-    class Meta:
+    class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
 
 
 class RegionDistrict(LocationBase):
     parent = models.ForeignKey(StateProvince)
 
-    class Meta:
+    class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
 
 
@@ -52,7 +53,7 @@ class Locality(LocationBase):
 
     point = models.PointField(blank=True, null=True)
 
-    class Meta:
+    class Meta(LocationBase.Meta):
         verbose_name_plural = 'localities'
         unique_together = ('parent', 'slug')
 
