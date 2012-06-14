@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 import string
 
 
@@ -87,6 +88,13 @@ class MuseumObject(models.Model):
             help_text='Old region classification')
     place = models.ForeignKey('location.Place', null=True, db_index=True,
             help_text='Where the object is from')
+
+# New Geo-locations data
+    global_region = models.ForeignKey(GlobalRegion, blank=True, null=True)
+    country = models.ForeignKey(Country, blank=True, null=True)
+    state_province = models.ForeignKey(StateProvince, blank=True, null=True)
+    region_district = models.ForeignKey(RegionDistrict, blank=True, null=True)
+    locality = models.ForeignKey(Locality, blank=True, null=True)
 
     donor = models.ForeignKey(
             'parties.Person',
