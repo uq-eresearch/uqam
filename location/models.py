@@ -3,7 +3,7 @@ from django.contrib.gis.db import models
 
 class LocationBase(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField()
+    slug = models.SlugField(help_text='Unique identifier. May be used in URLs.')
     description = models.CharField(max_length=255, blank=True)
 
     gn_name = models.CharField(max_length=100,
@@ -27,7 +27,7 @@ class GlobalRegion(LocationBase):
 
 
 class Country(LocationBase):
-    parent = models.ForeignKey(GlobalRegion)
+    parent = models.ForeignKey(GlobalRegion, verbose_name='Global region')
 
     class Meta(LocationBase.Meta):
         verbose_name_plural = 'countries'
@@ -35,21 +35,21 @@ class Country(LocationBase):
 
 
 class StateProvince(LocationBase):
-    parent = models.ForeignKey(Country)
+    parent = models.ForeignKey(Country, verbose_name='Country')
 
     class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
 
 
 class RegionDistrict(LocationBase):
-    parent = models.ForeignKey(StateProvince)
+    parent = models.ForeignKey(StateProvince, verbose_name='State/province')
 
     class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
 
 
 class Locality(LocationBase):
-    parent = models.ForeignKey(RegionDistrict)
+    parent = models.ForeignKey(RegionDistrict, verbose_name='Region/district')
 
     point = models.PointField(blank=True, null=True)
 

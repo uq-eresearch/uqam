@@ -14,13 +14,14 @@ table,th, td {
 <table>
   <tr><th>Global region</th><th>Country</th><th>State/province</th><th>Region/district</th><th>Locality</th></tr>
 {% for gr in global_regions %}
-<tr><td>{{gr.name}}</td><td colspan="4">&nbsp;</td></tr>
+<tr><td>{{gr.name}}</td></tr>
   {% for country in gr.country_set.all %}
-  <tr><td>&nbsp;</td><td>{{country.name}}</td><td colspan="3">&nbsp;</td></tr>
+  <tr><td>&nbsp;</td><td><a href="{% url admin:location_country_change country.id %}">{{country.name}}</a></td></tr>
     {% for sp in country.stateprovince_set.all %}
-    <tr><td colspan="2">&nbsp;</td><td>{{sp.name}}</td><td colspan="2">&nbsp;</td></tr>
+    <tr><td colspan="2">&nbsp;</td><td><a href="{% url admin:location_stateprovince_change sp.id %}">{{sp.name}}</a></td></tr>
       {% for rd in sp.regiondistrict_set.all %}
-      <tr><td colspan="3">&nbsp;</td><td>{{rd.name}}</td><td colspan="1">&nbsp;</td></tr>
+      <tr><td colspan="3">&nbsp;</td><td>
+        <a href="{% url admin:location_regiondistrict_change rd.id %}">{{rd.name}}</a></td></tr>
         {% for locality in rd.locality_set.all %}
         <tr><td colspan="4">&nbsp;</td><td><a href="{% url admin:location_locality_change locality.id %}">{{locality.name}}</a></td></tr>
         {% endfor %}

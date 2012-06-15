@@ -100,5 +100,5 @@ def place_geoname(request, geoname_id):
 
 def tree_view(request):
     global_regions = GlobalRegion.objects.all()
-    return render(request, "location/tree_view_table.html",
+    return render(request, "location/tree_view.html",
         {'global_regions': global_regions})
