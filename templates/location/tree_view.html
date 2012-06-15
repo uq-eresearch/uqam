@@ -2,19 +2,19 @@
 
 <ul>
 {% for gr in global_regions %}
-  <li>{{gr.name}} ({{gr.country_set.all.count}})
+  <li>{{gr.name}}
     <ul>
       {% for country in gr.country_set.all %}
-      <li>{{country.name}} ({{country.stateprovince_set.all.count}})
+      <li>{{country.name}}
       <ul>
         {% for sp in country.stateprovince_set.all %}
-        <li>{{sp.name}} ({{sp.regiondistrict_set.all.count}})
+        <li>{{sp.name}}
           <ul>
             {% for rd in sp.regiondistrict_set.all %}
-            <li>{{rd.name}} ({{rd.locality_set.all.count}})
+            <li>{{rd.name}}
                 <ul>
                 {% for locality in rd.locality_set.all %}
-                <li>{{locality.name}}</li>
+                <li><a href="{% url admin:location_locality_change locality.id %}">{{locality.name}}</a></li>
                 {% endfor %}
               </ul>
             </li>
