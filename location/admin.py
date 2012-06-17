@@ -27,12 +27,69 @@ class StateProvinceAdminForm(forms.ModelForm):
     class Meta:
         model = Country
 
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.admin import SimpleListFilter
+
+
+class GlobalRegionListFilter(SimpleListFilter):
+    title = _('global region')
+    parameter_name = 'global_region'
+
+    def lookups(self, request, model_admin):
+        return [(gr.id, gr.name) for gr in GlobalRegion.objects.all()]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(parent__parent_id=self.value())
+        else:
+            return queryset
+
+
+class StateProvinceListFilter(SimpleListFilter):
+    title = 'state/province'
+    parameter_name = 'state_province'
+
+    def lookups(self, request, model_admin):
+        gr_id = request.GET.get('global_region', None)
+        return [(sp.id, sp.name) for sp in StateProvince.objects.filter(parent__id=gr_id)]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(parent__id=self.value())
+        else:
+            return queryset
+
+
+class CountryListFilter(SimpleListFilter):
+    title = 'country'
+    parameter_name = 'country'
+
+    def lookups(self, request, model_admin):
+        gr_id = request.GET.get('global_region', None)
+        return [(c.id, c.name) for c in Country.objects.filter(parent__id=gr_id)]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(parent__id=self.value())
+        else:
+            return queryset
+
 
 class StateProvinceAdmin(admin.ModelAdmin):
     fields = ('name', 'slug', 'description', 'gn_name',
         'gn_id', 'global_region', 'parent')
     form = StateProvinceAdminForm
-    list_filter = ('parent__name', 'parent__parent__name')
+    list_filter = (GlobalRegionListFilter, CountryListFilter)
+
+    def global_region(self, obj):
+        return obj.parent.parent.name
+
+    def country(self, obj):
+        return obj.parent.name
+
+    def state_province(self, obj):
+        return obj.name
+    list_display = ('global_region', 'country', 'state_province')
 
 
 admin.site.register(StateProvince, StateProvinceAdmin)
