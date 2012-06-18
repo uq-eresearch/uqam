@@ -130,7 +130,10 @@ $(function() {
             "drop_target": false,
             "drag_target": false
         },
-        "plugins": [ "themes", "json_data", "dnd", "types", "crrm"]
+        "ui": {
+            "disable_selecting_children": true
+        },
+        "plugins": [ "themes", "json_data", "dnd", "types", "crrm", "ui"]
     });
 });
 

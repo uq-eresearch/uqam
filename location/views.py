@@ -116,9 +116,9 @@ import json
 def find_children(request, type=None, id=None):
     if type:
         object = find_location(type, id)
-        children = object.children.all()
+        children = object.children.annotate(Count('museumobject'))
     else:
-        children = GlobalRegion.objects.all()
+        children = GlobalRegion.objects.annotate(Count('museumobject'))
 
     nodes = serialize_locs_jstree(children)
     return HttpResponse(
@@ -128,13 +128,16 @@ def find_children(request, type=None, id=None):
 
 def serialize_locs_jstree(objs):
     """Serialize a single level of objs for use with jstree"""
-    contenttype = ContentType.objects.get_for_model(objs[0])
+    if objs:
+        contenttype = ContentType.objects.get_for_model(objs[0])
+    else:
+        return None
     type_name = contenttype.model
     has_children = hasattr(objs[0], 'children')
     nodes = []
     for obj in objs:
         node = {}
-        node['data'] = obj.name
+        node['data'] = obj.name + " (%d)" % obj.museumobject__count
         node['attr'] = {'id': type_name + '-' + str(obj.id), 'rel': type_name}
         if has_children:
             node['state'] = 'closed'
@@ -148,19 +151,23 @@ def find_location(model_type, id):
 
 
 def move_element(request):
-#    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         el_type, el_id = request.POST['obj'].split('-')
         np_type, np_id = request.POST['new-parent'].split('-')
         process_element_move(el_type, el_id, np_type, np_id)
-        return HttpResponse(200)
+
+        response = HttpResponse("{success: true}")
+        response.status_code = 200
+        return response
     else:
-        return HttpResponse(405)
+        response = HttpResponse()
+        response.status_code = 405
+        return response
 
 
 def process_element_move(type, id, np_type, np_id):
+#    import ipdb; ipdb.set_trace()
     element = find_location(type, id)
-    new_parent = find_location(np_type, np_id)
     element.parent_id = np_id
     element.save()
 
@@ -172,7 +179,7 @@ def process_element_move(type, id, np_type, np_id):
 def calc_field_changes(element, np_id):
     fieldname = element._meta.concrete_model.museumobject_set.related.field.name
     field_changes = {}
-    field_changes[fieldname] = np_id
+    field_changes[fieldname] = element.id
     if hasattr(element, 'parent'):
         field_changes.update(
             calc_field_changes(element.parent, element.parent.id))
