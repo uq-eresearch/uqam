@@ -102,3 +102,65 @@ def tree_view(request):
     global_regions = GlobalRegion.objects.all()
     return render(request, "location/tree_view.html",
         {'global_regions': global_regions})
+
+
+def jstree(request):
+    global_regions = GlobalRegion.objects.all()
+    return render(request, "location/jstree.html",
+        {'global_regions': global_regions})
+
+from django.contrib.contenttypes.models import ContentType
+import json
+
+
+def find_children(request, type=None, id=None):
+    if type:
+        object = find_location(type, id)
+        children = object.children.all()
+    else:
+        children = GlobalRegion.objects.all()
+
+    nodes = serialize_locs_jstree(children)
+    return HttpResponse(
+        json.dumps(nodes, sort_keys=True, indent=4),
+        content_type='application/json')
+
+
+def serialize_locs_jstree(objs):
+    """Serialize a single level of objs for use with jstree"""
+    contenttype = ContentType.objects.get_for_model(objs[0])
+    type_name = contenttype.model
+    has_children = hasattr(objs[0], 'children')
+    nodes = []
+    for obj in objs:
+        node = {}
+        node['data'] = obj.name
+        node['attr'] = {'id': obj.id, 'type': type_name}
+        if has_children:
+            node['state'] = 'closed'
+        nodes.append(node)
+    return nodes
+
+
+
+
+def find_location(model_type, id):
+    element_type = ContentType.objects.get(app_label='location', model=model_type)
+    return element_type.get_object_for_this_type(id=id)
+
+
+def move_element(request):
+    if request.method == 'POST':
+        element_type = request.POST['element_type']
+        id = request.POST['element_id ']
+        new_parent_id = request.POST['new_parent_id']
+        process_element_move(element_type, id, new_parent_id)
+    else:
+        return HttpResponse(405)
+
+
+def process_element_move(type, id, new_parent):
+    location_object = find_location(type, id)
+    location_object.parent_id = new_parent
+
+    return

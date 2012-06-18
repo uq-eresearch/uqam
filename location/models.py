@@ -27,7 +27,8 @@ class GlobalRegion(LocationBase):
 
 
 class Country(LocationBase):
-    parent = models.ForeignKey(GlobalRegion, verbose_name='Global region')
+    parent = models.ForeignKey(GlobalRegion, related_name='children',
+        verbose_name='Global region')
 
     class Meta(LocationBase.Meta):
         verbose_name_plural = 'countries'
@@ -35,21 +36,24 @@ class Country(LocationBase):
 
 
 class StateProvince(LocationBase):
-    parent = models.ForeignKey(Country, verbose_name='Country')
+    parent = models.ForeignKey(Country, related_name='children',
+        verbose_name='Country')
 
     class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
 
 
 class RegionDistrict(LocationBase):
-    parent = models.ForeignKey(StateProvince, verbose_name='State/province')
+    parent = models.ForeignKey(StateProvince, related_name='children',
+        verbose_name='State/province')
 
     class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
 
 
 class Locality(LocationBase):
-    parent = models.ForeignKey(RegionDistrict, verbose_name='Region/district')
+    parent = models.ForeignKey(RegionDistrict, related_name='children',
+        verbose_name='Region/district')
 
     point = models.PointField(blank=True, null=True)
 

@@ -6,6 +6,9 @@ from location.models import Place
 urlpatterns = patterns('location.views',
 
     url(r'^tree_view$', 'tree_view', name='tree_view'),
+    url(r'^jstree$', 'jstree', name='jstree'),
+    url(r'^find_children/$', 'find_children', name='find_children'),
+    url(r'^find_children/(?P<type>[\w ]+)/(?P<id>\d+)', 'find_children', name='find_children'),
 
     url(r'^$',
         ListView.as_view(

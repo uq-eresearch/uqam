@@ -1,0 +1,81 @@
+<html>
+<head>
+    <script type="text/javascript" src="/static/jstree/_lib/jquery.js"></script>
+<script type="text/javascript" src="/static/jstree/jquery.jstree.js"></script>
+
+<script type="text/javascript">
+
+$(function() {
+{% comment %}
+    $("#geolocations").jstree({
+        "core": {
+            "animation": 0
+        },
+        "plugins": ["themes", "html_data"]
+    });
+{% endcomment %}
+    $("#geolocations").jstree({
+        "core": {
+            "animation": 0
+        },
+        "json_data": {
+            "ajax": {
+                "url": function(node) {
+                    if (node === -1) {
+                        return "/place/find_children/";
+                    } else {
+                        return "/place/find_children/" + node.attr('type') + "/" + node.attr('id');
+                    }
+                }
+            }
+        },
+        "plugins": [ "themes", "json_data"]
+    });
+});
+
+</script>
+  </head>
+<body>
+    
+
+
+
+<div id="geolocations">
+
+{% comment %}
+<ul>
+{% for gr in global_regions %}
+  <li><a href="#">{{gr.name}}</a>
+    <ul>
+      {% for country in gr.country_set.all %}
+      <li><a href="#">{{country.name}}</a>
+      <ul>
+        {% for sp in country.stateprovince_set.all %}
+        <li><a href="#">{{sp.name}}</a>
+          <ul>
+            {% for rd in sp.regiondistrict_set.all %}
+            <li><a href="#">{{rd.name}}</a>
+                <ul>
+                {% for locality in rd.locality_set.all %}
+                <li><a href="{% url admin:location_locality_change locality.id %}">{{locality.name}}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+            {% endfor %}
+
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endfor %}
+<ul>
+
+{% endcomment %}
+</div>
+
+</body>
+</html>
