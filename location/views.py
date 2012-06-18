@@ -135,13 +135,11 @@ def serialize_locs_jstree(objs):
     for obj in objs:
         node = {}
         node['data'] = obj.name
-        node['attr'] = {'id': obj.id, 'type': type_name}
+        node['attr'] = {'id': type_name + '-' + str(obj.id), 'rel': type_name}
         if has_children:
             node['state'] = 'closed'
         nodes.append(node)
     return nodes
-
-
 
 
 def find_location(model_type, id):
@@ -150,17 +148,36 @@ def find_location(model_type, id):
 
 
 def move_element(request):
+    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
-        element_type = request.POST['element_type']
-        id = request.POST['element_id ']
-        new_parent_id = request.POST['new_parent_id']
-        process_element_move(element_type, id, new_parent_id)
+        el_type, el_id = request.POST['obj'].split('-')
+        np_type, np_id = request.POST['new-parent'].split('-')
+        process_element_move(el_type, el_id, np_type, np_id)
     else:
         return HttpResponse(405)
 
 
-def process_element_move(type, id, new_parent):
-    location_object = find_location(type, id)
-    location_object.parent_id = new_parent
+def process_element_move(type, id, np_type, np_id):
+    element = find_location(type, id)
+    new_parent = find_location(np_type, np_id)
+    element.parent_id = np_id
+    element.save()
 
+    field_changes = calc_field_changes(element, np_id)
+    element.museumobject_set.update(**field_changes)
     return
+
+
+def calc_field_changes(element, np_id):
+    fieldname = element.museumobject_set.related.field.name
+    field_changes = {}
+    field_changes[fieldname] = np_id
+    if hasattr(element, 'parent'):
+        field_changes.update(
+            calc_field_updates(element.parent, element.parent.id))
+    return field_changes
+
+
+
+def update_museumobjects(mo_set, new_parent_id):
+    mo_set.update

@@ -6,6 +6,42 @@
 <script type="text/javascript">
 
 $(function() {
+    jQuery(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
 {% comment %}
     $("#geolocations").jstree({
         "core": {
@@ -14,6 +50,36 @@ $(function() {
         "plugins": ["themes", "html_data"]
     });
 {% endcomment %}
+    $("#geolocations").bind("move_node.jstree", function(event, data) {
+        var tree = data.inst; /* the actual tree instance */
+        var args = data.args; /* arguments passed to the function */
+        var rslt = data.rslt; /* any data the function passed to the event */
+        var rlbk = data.rlbk; /* an option rollback object - not always present */
+        data.rslt.o.each(function (o) {
+            // send request
+            var move = $.parseJSON($.ajax({
+                "url": "/place/move_element",
+                "type": "post",
+                "async": false,
+                "data": {
+                    "obj": data.rslt.o[o].id,
+                    "new-parent": args[o].np[0].id
+                }
+
+            }).responseText);
+            // When everything's ok, the reponseText will be {success: true}
+            // In all other cases it won't exist at all.
+            if (move.success == undefined) {
+                // Here I want to rollback the CURRENT failed node.
+                // $.jstree.rollback(data.rlbk); will rollback all 
+                // of the directories that have been moved.
+                $.jstree.rollback(data.rlbk);
+            }
+        })
+
+        // $.jstree.rollback(data.rlbk);
+
+    });
     $("#geolocations").jstree({
         "core": {
             "animation": 0
@@ -24,12 +90,47 @@ $(function() {
                     if (node === -1) {
                         return "/place/find_children/";
                     } else {
-                        return "/place/find_children/" + node.attr('type') + "/" + node.attr('id');
+                        return "/place/find_children/" + node.attr('id');
                     }
                 }
             }
         },
-        "plugins": [ "themes", "json_data"]
+        "types": {
+            "valid_children": ["globalregion"],
+            "types": {
+                "globalregion": {
+                    "valid_children": ["country"]
+                },
+                "country": {
+                    "valid_children": ["stateprovince"]
+                },
+                "stateprovince": {
+                    "valid_children": ["regiondistrict"]
+                },
+                "regiondistrict": {
+                    "valid_children": ["locality"]
+                }
+            }
+        },
+        "crrm": {
+            "move": {
+                "check_move": function(m) {
+                    var newp = m.np;
+                    var oldp = m.op;
+                    // check if the movement is to a different parent
+                    if (newp[0].id != oldp[0].id) {
+                        return true;
+                    }
+                    return false;
+                },
+                "default_position": "first"
+            }
+        },
+        "dnd": {
+            "drop_target": false,
+            "drag_target": false
+        },
+        "plugins": [ "themes", "json_data", "dnd", "types", "crrm"]
     });
 });
 
