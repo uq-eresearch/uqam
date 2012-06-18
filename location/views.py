@@ -148,11 +148,12 @@ def find_location(model_type, id):
 
 
 def move_element(request):
-    import ipdb; ipdb.set_trace()
+#    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         el_type, el_id = request.POST['obj'].split('-')
         np_type, np_id = request.POST['new-parent'].split('-')
         process_element_move(el_type, el_id, np_type, np_id)
+        return HttpResponse(200)
     else:
         return HttpResponse(405)
 
@@ -169,12 +170,12 @@ def process_element_move(type, id, np_type, np_id):
 
 
 def calc_field_changes(element, np_id):
-    fieldname = element.museumobject_set.related.field.name
+    fieldname = element._meta.concrete_model.museumobject_set.related.field.name
     field_changes = {}
     field_changes[fieldname] = np_id
     if hasattr(element, 'parent'):
         field_changes.update(
-            calc_field_updates(element.parent, element.parent.id))
+            calc_field_changes(element.parent, element.parent.id))
     return field_changes
 
 
