@@ -217,7 +217,6 @@ def create_element(request):
 def delete_element(request):
     el_type, el_id = request.POST['obj'].split('-')
     element = find_location(el_type, el_id)
-    if len(element.museumobject_set.all()):
-        element.delete()
-    else:
-        throw
+    element.delete()
+
+    return HttpResponse('success')

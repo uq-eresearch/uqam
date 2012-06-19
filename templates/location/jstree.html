@@ -111,6 +111,18 @@ $(function() {
         }).always(function() {
             tree.refresh();
         });
+    }).bind("delete_node.jstree", function(event, data) {
+        var node = data.rslt.obj;
+        var tree = $.jstree._reference('#geolocations');
+        $.ajax({
+            "url": "/place/delete_element",
+            "type": "POST",
+            "data": {
+                "obj": node.attr('id')
+            }
+        }).always(function() {
+            tree.refresh();
+        });
     });
     $("#geolocations").jstree({
         "core": {
