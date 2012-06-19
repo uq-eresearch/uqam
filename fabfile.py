@@ -6,6 +6,7 @@ env.gateway = 'uqdayers@gladys'
 #env.hosts = ['anthropology']
 env.appname = 'uqam'
 env.appdir = '/home/django/uqam'
+env.logsdir = '/home/django/uqam/logs'
 env.tmpappdir = '/home/django/uqam_tmp'
 env.virtenv = '/home/django/env'
 env.reqfile = env.appdir + '/requirements.txt'
@@ -70,6 +71,9 @@ def installsyspackages():
     with settings(user=sudouser):
         sudo('yum install postgresql-devel openldap-devel openssl-devel')
 
+        #required for pgmagick, which is required for pdf thumbnails
+        sudo('yum install gcc-c++ GraphicsMagick-c++-devel boost-devel')
+
 
 def reqs():
     """Update the remote virtualenv to newest requirements"""
@@ -86,6 +90,7 @@ def push(version):
     run('rm -rf %(tmpappdir)s' % env)
     run('mv %(appdir)s %(tmpappdir)s' % env)
     run('mkdir -p %(appdir)s' % env)
+    run('mkdir -p %(logsdir)s' % env)
 
     with cd(env.appdir):
         run('tar xjf %s' % filename)
