@@ -1,8 +1,8 @@
 # Django settings for uqam project.
 import os.path
 
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = True
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -337,5 +337,5 @@ COLLECTION_CURATOR = {
 
 THUMBNAIL_SOURCE_GENERATORS = (
         'easy_thumbnails.source_generators.pil_image',
-        'mediaman.source_generator.pgmagick_image',
+        'mediaman.source_generators.pgmagick_image',
     )
