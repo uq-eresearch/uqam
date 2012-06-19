@@ -1,11 +1,14 @@
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseServerError
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.utils.xmlutils import SimplerXMLGenerator
 from models import Place, Region
 from models import GlobalRegion
 from utils.utils import do_paging
 from django.db.models import Count
+from django.contrib.contenttypes.models import ContentType
+import json
 
 
 def place_detail(request, place_id):
@@ -27,7 +30,6 @@ def place_detail(request, place_id):
 
 
 def place_json(request, encoding='utf-8', mimetype='text/plain'):
-    import json
     places = Place.objects.exclude(
             latitude=None).annotate(Count('museumobject')).values(
             'id', 'name', 'latitude', 'longitude', 'country',
@@ -109,9 +111,6 @@ def jstree(request):
     return render(request, "location/jstree.html",
         {'global_regions': global_regions})
 
-from django.contrib.contenttypes.models import ContentType
-import json
-
 
 def find_children(request, type=None, id=None):
     if type:
@@ -150,15 +149,13 @@ def find_location(model_type, id):
     return element_type.get_object_for_this_type(id=id)
 
 
+@require_POST
 def move_element(request):
-    if request.method == 'POST':
-        el_type, el_id = request.POST['obj'].split('-')
-        np_type, np_id = request.POST['new-parent'].split('-')
-        process_element_move(el_type, el_id, np_type, np_id)
+    el_type, el_id = request.POST['obj'].split('-')
+    np_type, np_id = request.POST['new-parent'].split('-')
+    process_element_move(el_type, el_id, np_type, np_id)
 
-        return HttpResponse('{"success": true}', mimetype="application/json")
-    else:
-        return HttpResponseNotAllowed(['POST'])
+    return HttpResponse('{"success": true}', mimetype="application/json")
 
 
 def process_element_move(type, id, np_type, np_id):
@@ -186,6 +183,41 @@ def calc_field_changes(element, np_id):
     return field_changes
 
 
+@require_POST
+def rename_element(request):
+    el_type, el_id = request.POST['obj'].split('-')
+    new_name = request.POST['new-name']
+    element = find_location(el_type, el_id)
+    element.name = new_name
+    element.save()
+    return HttpResponse('success')
 
-def update_museumobjects(mo_set, new_parent_id):
-    mo_set.update
+
+from django.template.defaultfilters import slugify
+
+
+@require_POST
+def create_element(request):
+    name = request.POST['name']
+    model_type = request.POST['type']
+    p_type, p_id = request.POST['parent'].split('-')
+    parent = find_location(p_type, p_id)
+    location_model = ContentType.objects.get(app_label='location', model=model_type)
+
+    new_location = location_model.model_class()()
+    new_location.name = name
+    new_location.parent = parent
+    new_location.slug = slugify(name)
+    new_location.save()
+
+    return HttpResponse('success')
+
+
+@require_POST
+def delete_element(request):
+    el_type, el_id = request.POST['obj'].split('-')
+    element = find_location(el_type, el_id)
+    if len(element.museumobject_set.all()):
+        element.delete()
+    else:
+        throw

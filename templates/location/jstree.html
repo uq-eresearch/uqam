@@ -1,5 +1,8 @@
-<html>
-<head>
+{% extends "admin/base_site.html" %}
+
+
+<!-- CONTENT -->
+{% block content %}
     <script type="text/javascript" src="/static/jstree/_lib/jquery.js"></script>
 <script type="text/javascript" src="/static/jstree/jquery.jstree.js"></script>
 
@@ -64,7 +67,7 @@ $(function() {
             var op = args[0].op[0];
             var request = $.ajax({
                 "url": "/place/move_element",
-                "type": "post",
+                "type": "POST",
                 "data": {
                     "obj": obj.id,
                     "new-parent": np.id
@@ -78,9 +81,36 @@ $(function() {
             });
 
         })
-
-        // $.jstree.rollback(data.rlbk);
-
+    }).bind("create.jstree", function(event, data) {
+        var node = data.rslt.obj[0];
+        var parent_id = data.rslt.parent.attr("id");
+        var name = data.rslt.name;
+        var type = data.rslt.obj.attr('rel')
+        var tree = $.jstree._reference('#geolocations');
+        $.ajax({
+            "url": "/place/create_element",
+            "type": "POST",
+            "data": {
+                "name": name,
+                "type": type,
+                "parent": parent_id
+            }
+        }).always(function() {
+            tree.refresh();
+        })
+    }).bind("rename.jstree", function(event, data) {
+        var node = data.rslt.obj;
+        var tree = $.jstree._reference('#geolocations');
+        $.ajax({
+            "url": "/place/rename_element",
+            "type": "POST",
+            "data": {
+                "obj": node.attr('id'),
+                "new-name": data.rslt.new_name
+            }
+        }).always(function() {
+            tree.refresh();
+        });
     });
     $("#geolocations").jstree({
         "core": {
@@ -135,7 +165,39 @@ $(function() {
         "ui": {
             "disable_selecting_children": true
         },
-        "plugins": [ "themes", "json_data", "dnd", "types", "crrm"]
+        "contextmenu": {
+            "items": {
+                "create": {
+                    "label": "Create",
+                    "action": function (obj) {
+                        this.create(obj);
+                    }, "_disabled": false,
+                    "_class": "add",
+                    "separator_before": false,
+                    "separator_after": false,
+                    "icon": false
+                }, "rename": {
+                    "label": "Rename",
+                    "action": function (obj) {
+                        this.rename(obj);
+                    }, "_disabled": false,
+                    "_class": "rename",
+                    "separator_before": false,
+                    "separator_after": false,
+                    "icon": false
+                }, "remove": {
+                    "label": "Delete",
+                    "action": function (obj) {
+                        this.remove(obj);
+                    }, "_disabled": false,
+                    "_class": "delete",
+                    "separator_before": true,
+                    "separator_after": false,
+                    "icon": false
+                }, "ccp": false
+            }
+        },
+        "plugins": [ "themes", "json_data", "dnd", "types", "crrm", "contextmenu"]
     });
 });
 
@@ -183,5 +245,4 @@ $(function() {
 {% endcomment %}
 </div>
 
-</body>
-</html>
+{% endblock %}
