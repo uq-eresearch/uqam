@@ -123,6 +123,9 @@ $(function() {
         }).always(function() {
             tree.refresh();
         });
+    }).bind("dblclick.jstree", function (e, data) {
+        var node = $(e.target).closest("li");
+        var id = node[0].id; //id of the selected node
     });
     $("#geolocations").jstree({
         "core": {
@@ -143,16 +146,28 @@ $(function() {
             "valid_children": ["globalregion"],
             "types": {
                 "globalregion": {
-                    "valid_children": ["country"]
+                    "valid_children": ["country"],
+                    "icon": {"image": "/static/geolocations_icons.png"}
                 },
                 "country": {
-                    "valid_children": ["stateprovince"]
+                    "valid_children": ["stateprovince"],
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-16px 0px"}
                 },
                 "stateprovince": {
-                    "valid_children": ["regiondistrict"]
+                    "valid_children": ["regiondistrict"],
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-32px 0px"}
                 },
                 "regiondistrict": {
-                    "valid_children": ["locality"]
+                    "valid_children": ["locality"],
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-48px 0px"}
+                },
+                "locality": {
+                    "valid_children": "none",
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-64px 0px"}
                 }
             }
         },
@@ -208,6 +223,9 @@ $(function() {
                     "icon": false
                 }, "ccp": false
             }
+        },
+        "themes": {
+            "theme": "apple"
         },
         "plugins": [ "themes", "json_data", "dnd", "types", "crrm", "contextmenu"]
     });
