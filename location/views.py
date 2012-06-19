@@ -220,3 +220,10 @@ def delete_element(request):
     element.delete()
 
     return HttpResponse('success')
+
+
+def view_geoloc(request, loctype, id):
+    geolocation = find_location(loctype, id)
+
+    return render(request, 'location/geolocation.html',
+        {'geolocation': geolocation})
