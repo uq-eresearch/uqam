@@ -5,6 +5,9 @@ except ImportError:
 
 from PIL import Image as PilImage
 from pgmagick import Image, Blob
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def pgmagick_image(source, **options):
@@ -25,6 +28,7 @@ def pgmagick_image(source, **options):
         blob = Blob(source.read())
         image = Image(blob)
     except Exception:
+        logger.exception("unable to read image to create thumbnail")
         return
 
     if not image.isValid():
