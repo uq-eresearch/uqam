@@ -55,26 +55,28 @@ $(function() {
         var args = data.args; /* arguments passed to the function */
         var rslt = data.rslt; /* any data the function passed to the event */
         var rlbk = data.rlbk; /* an option rollback object - not always present */
+        var tree = $.jstree._reference('#geolocations');
+
         data.rslt.o.each(function (o) {
             // send request
-            var move = $.parseJSON($.ajax({
+            var obj = data.rslt.o[o];
+            var np = args[0].np[0];
+            var op = args[0].op[0];
+            var request = $.ajax({
                 "url": "/place/move_element",
                 "type": "post",
-                "async": false,
                 "data": {
-                    "obj": data.rslt.o[o].id,
-                    "new-parent": args[o].np[0].id
+                    "obj": obj.id,
+                    "new-parent": np.id
                 }
-
-            }).responseText);
-            // When everything's ok, the reponseText will be {success: true}
-            // In all other cases it won't exist at all.
-            if (move.success == undefined) {
-                // Here I want to rollback the CURRENT failed node.
-                // $.jstree.rollback(data.rlbk); will rollback all 
-                // of the directories that have been moved.
+            });
+            request.done(function() {
+                tree.refresh();
+            });
+            request.fail(function(jqXHR, textStatus) {
                 $.jstree.rollback(data.rlbk);
-            }
+            });
+
         })
 
         // $.jstree.rollback(data.rlbk);
@@ -133,7 +135,7 @@ $(function() {
         "ui": {
             "disable_selecting_children": true
         },
-        "plugins": [ "themes", "json_data", "dnd", "types", "crrm", "ui"]
+        "plugins": [ "themes", "json_data", "dnd", "types", "crrm"]
     });
 });
 

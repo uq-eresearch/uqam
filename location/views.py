@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseServerError
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.utils.xmlutils import SimplerXMLGenerator
@@ -156,13 +156,9 @@ def move_element(request):
         np_type, np_id = request.POST['new-parent'].split('-')
         process_element_move(el_type, el_id, np_type, np_id)
 
-        response = HttpResponse("{success: true}")
-        response.status_code = 200
-        return response
+        return HttpResponse('{"success": true}', mimetype="application/json")
     else:
-        response = HttpResponse()
-        response.status_code = 405
-        return response
+        return HttpResponseNotAllowed(['POST'])
 
 
 def process_element_move(type, id, np_type, np_id):
@@ -177,6 +173,10 @@ def process_element_move(type, id, np_type, np_id):
 
 
 def calc_field_changes(element, np_id):
+    """Walk up the tree of geo-locations, finding the new parents
+
+    These will be set onto all the museumobjects.
+    """
     fieldname = element._meta.concrete_model.museumobject_set.related.field.name
     field_changes = {}
     field_changes[fieldname] = element.id
