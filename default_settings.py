@@ -1,8 +1,8 @@
 # Django settings for uqam project.
 import os.path
 
-DEBUG = True
-TEMPLATE_DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = False
 
 DIRNAME = os.path.dirname(__file__)
 
