@@ -24,7 +24,7 @@
 
             {% for result in page.object_list %}
                 <p>
-                <a href="{{ result.object.get_absolute_url }}">{{ result.object }} {{result.object.artefact_type}}<br>
+                <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">{{ result.object }} {{result.object.artefact_type}}<br>
                 </a>
                     {% highlight result.text with query max_length 60 %}
                 

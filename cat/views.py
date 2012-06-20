@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from models import MuseumObject, Category
-from location.models import Place, Region
+from location.models import Place
 from django.db.models import Count
 from utils.utils import do_paging
 from haystack.views import basic_search
@@ -33,19 +33,17 @@ def item_detail(request, reg_num):
 
 def _current_search_results(request, reg_num):
     context = {}
-    index = None
-#    import ipdb; ipdb.set_trace()
-    if request.session['search_results'] is not None:
-        results = request.session['search_results']
-        ids = get_ids(results)
-        try:
-            index = ids.index('cat.museumobject.%s' % reg_num)
-        except:
-            pass
+    index = request.GET.get('search_result', None)
+    results = request.session['search_results']
+    results_per_page = request.session['search_results_per_page']
+
     if index is not None:
-        context['search_index'] = index + 1
+        index = int(index)
+        context['search_index'] = index
         context['search_results'] = results
         search_query = request.session['search_query']
+        page_num = (index / results_per_page) + 1
+        search_query.update({'page': page_num})
         search_url = url_with_querystring(
             reverse('haystack_search'), **search_query)
         context['search_url'] = search_url
@@ -58,9 +56,6 @@ def _current_search_results(request, reg_num):
         except:
             pass
     return context
-
-def get_ids(results):
-    return [y.id for y in results.query.get_results()]
 
 
 def all_countries(request):
