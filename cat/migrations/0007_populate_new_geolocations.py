@@ -11,15 +11,17 @@ def id_generator(size=6, chars=string.ascii_lowercase):
 
 class Migration(DataMigration):
 
-    def get_or_create(self, model, name, parent, max_slug=50):
+    def get_or_create(self, model, name, parent, max_slug=50, description=None, place=None):
         slug = slugify(name)[:max_slug]
         try:
             obj = model.objects.get(slug=slug, parent=parent)
         except model.DoesNotExist:
             obj = model(name=name, slug=slug, parent=parent)
+            obj.description = description
+            if place is not None:
+                obj.gn_id = place.gn_id
+                obj.gn_name = place.gn_name
             obj.save()
-        except Exception as e:
-            print e
 
         return obj
 
@@ -29,7 +31,6 @@ class Migration(DataMigration):
         orm.MuseumObject.objects.filter(cultural_bloc=None).update(cultural_bloc=c)
 
         # Migrate to new geo-locations structure
-        "Write your forwards methods here."
         for mo in orm.MuseumObject.objects.all():
             cultural_bloc = mo.cultural_bloc
             country = mo.place.country
@@ -42,8 +43,10 @@ class Migration(DataMigration):
                 slug=slugify(cultural_bloc.name))
             country = self.get_or_create(orm['location.Country'], country, global_region)
             state_province = self.get_or_create(orm['location.StateProvince'], australian_state, country)
-            region_district = self.get_or_create(orm['location.RegionDistrict'], region, state_province)
-            locality = self.get_or_create(orm['location.Locality'], place_name, region_district)
+            region_district = self.get_or_create(
+                orm['location.RegionDistrict'], region, state_province, description=region.description)
+            locality = self.get_or_create(orm['location.Locality'], place_name,
+                region_district, place=mo.place)
 
             mo.global_region = global_region
             mo.country = country
@@ -60,13 +63,7 @@ class Migration(DataMigration):
         "Write your backwards methods here."
         orm.MuseumObject.objects.all().update(global_region=None, country=None,
             state_province=None, region_district=None, locality=None)
-#        for mo in orm.MuseumObject.objects.all():
-#            mo.global_region = None
-#            mo.country = None
-#            mo.state_province = None
-#            mo.region_district = None
-#            mo.locality = None
-#            mo.save()
+
         orm['location.GlobalRegion'].objects.all().delete()
         orm['location.Country'].objects.all().delete()
         orm['location.StateProvince'].objects.all().delete()
