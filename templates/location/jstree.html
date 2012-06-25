@@ -3,7 +3,7 @@
 
 <!-- CONTENT -->
 {% block content %}
-    <script type="text/javascript" src="/static/jstree/_lib/jquery.js"></script>
+    <script type="text/javascript" src="/static/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="/static/jstree/jquery.jstree.js"></script>
 
 <script type="text/javascript">
@@ -274,5 +274,37 @@ $(function() {
 
 {% endcomment %}
 </div>
+
+<style>
+#legend ins {
+    background-image: url(/static/geolocations_icons.png);
+    height: 16px;
+    width: 16px;
+}
+#legend ins[rel="country"] {
+    background-position: -16px 0px;
+}
+#legend ins[rel="stateprovince"] {
+    background-position: -32px 0px;
+}
+#legend ins[rel="localregion"] {
+    background-position: -48px 0px;
+}
+#legend ins[rel="locality"] {
+    background-position: -64px 0px;
+}
+</style>
+
+<div id="legend">
+    <table class="jstree">
+        <tr><th colspan="2">Legend</th></tr>
+        <tr><td><ins rel="globalregion"></ins></td><td>Global Region</td></tr>
+        <tr><td><ins rel="country"></ins></td><td>Country</td></tr>
+        <tr><td><ins rel="stateprovince"></ins></td><td>State/province</td></tr>
+        <tr><td><ins rel="localregion"></ins></td><td>Local Region</td></tr>
+        <tr><td><ins rel="locality"></ins></td><td>Locality</td></tr>
+    </table>
+</div>
+
 
 {% endblock %}
