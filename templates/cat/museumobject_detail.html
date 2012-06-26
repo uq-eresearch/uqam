@@ -16,7 +16,11 @@
 <dt>Category</dt>
   <dd>
 {% for category in museumobject.category.all %}
-    <a href="{{ category.get_absolute_url }}">{{ category }}</a><br>
+    {% if category.parent %}
+      <a href="{{ category.parent.get_absolute_url }}">{{category.parent.name}}</a>
+      >
+    {% endif %}
+    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
 {% endfor %}
   </dd>
 
