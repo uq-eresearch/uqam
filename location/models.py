@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.contenttypes.models import ContentType
 
 
 class LocationBase(models.Model):
@@ -18,6 +19,12 @@ class LocationBase(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @models.permalink
+    def get_absolute_url(self):
+        #import ipdb; ipdb.set_trace()
+        contenttype = ContentType.objects.get_for_model(self).model
+        return ('view_geoloc', [str(contenttype), str(self.id)])
 
 
 class GlobalRegion(LocationBase):

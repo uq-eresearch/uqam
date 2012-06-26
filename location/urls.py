@@ -14,7 +14,9 @@ urlpatterns = patterns('location.views',
     url(r'^create_element', 'create_element', name='create_element'),
     url(r'^delete_element', 'delete_element', name='delete_element'),
 
-    url(r'^(?P<loctype>\w+)/(?P<id>\d+)$', 'view_geoloc', name='view_geoloc'),
+    url(r'^(?P<loctype>[\w ]+)-(?P<id>\d+)$', 'view_geoloc', name='view_geoloc'),
+#    url(r'^(?P<global_region>[\w_].)/$', 'view_geoloc', name='view_geoloc'),
+#    url(r'^(?P<global_region>[\w_].)/(?P<country>[\w_].)/$', 'view_geoloc', name='view_geoloc'),
 
     url(r'^$',
         ListView.as_view(

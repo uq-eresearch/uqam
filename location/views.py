@@ -227,3 +227,9 @@ def view_geoloc(request, loctype, id):
 
     return render(request, 'location/geolocation.html',
         {'geolocation': geolocation})
+
+
+def view_location(request, global_region, country=None, state_prov=None, local_region=None, locality=None):
+    geolocation = 'foo'
+    return render(request, 'location/geolocation.html',
+        {'geolocation': geolocation})

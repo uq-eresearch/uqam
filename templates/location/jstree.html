@@ -194,6 +194,19 @@ $(function() {
         },
         "contextmenu": {
             "items": {
+                "view": {
+                    "label": "View on site",
+                    "action": function(obj) {
+                        var url = "/place/" + obj.attr('id');
+                        window.open(url);
+                    }
+                },
+                "view_admin": {
+                    "label": "View in admin",
+                    "action": function(obj) {
+                        window.open()
+                    }
+                },
                 "create": {
                     "label": "Create",
                     "action": function (obj) {

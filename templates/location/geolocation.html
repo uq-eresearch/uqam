@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>{{geolocation.name}}</h1>
+
+
+<h2>Children</h2>
+<ul>
+{% for child in geolocation.children.all %}
+    <li><a href="{{child.get_absolute_url}}">{{child.name}}&nbsp;</a></li>
+{% endfor %}
+</ul>
+
+<table><tr>
+        <th>Name</th><th>Objects</th>
+    </tr>
+{% for region in regions %}
+
+<tr><td>
+    {% url region_list region.region as the_url %}
+    <a href="{{ the_url }}">{{region.region}}</a>
+</td><td>
+    {{region.count}}
+</td></tr>
+{% endfor %}
+</table>
+
+
+
+{% endblock %}
