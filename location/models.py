@@ -26,6 +26,13 @@ class LocationBase(models.Model):
         contenttype = ContentType.objects.get_for_model(self).model
         return ('view_geoloc', [str(contenttype), str(self.id)])
 
+    def get_parents(self):
+        if hasattr(self, 'parent'):
+            parent = self.parent
+            return parent.get_parents() + [parent]
+        else:
+            return []
+
 
 class GlobalRegion(LocationBase):
 

@@ -1,10 +1,15 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+
+<ul>
+{% for parent in geolocation.get_parents %}
+    <li><a href="{{parent.get_absolute_url}}">{{parent.name}}&nbsp;</a></li>
+{% endfor %}
+</ul>
+
 <h1>{{geolocation.name}}</h1>
 
-
-<h2>Children</h2>
 <ul>
 {% for child in geolocation.children.all %}
     <li><a href="{{child.get_absolute_url}}">{{child.name}}&nbsp;</a></li>
