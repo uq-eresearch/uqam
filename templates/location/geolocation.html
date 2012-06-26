@@ -16,19 +16,9 @@
 {% endfor %}
 </ul>
 
-<table><tr>
-        <th>Name</th><th>Objects</th>
-    </tr>
-{% for region in regions %}
+<h2>Items ({{objects.object_list.count}})</h2>
+{% include "snippets/paged_object_list.html" %}
 
-<tr><td>
-    {% url region_list region.region as the_url %}
-    <a href="{{ the_url }}">{{region.region}}</a>
-</td><td>
-    {{region.count}}
-</td></tr>
-{% endfor %}
-</table>
 
 
 

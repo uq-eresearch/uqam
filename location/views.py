@@ -225,8 +225,13 @@ def delete_element(request):
 def view_geoloc(request, loctype, id):
     geolocation = find_location(loctype, id)
 
+    items = geolocation.museumobject_set.all()
+
+    objects = do_paging(request, items)
+
     return render(request, 'location/geolocation.html',
-        {'geolocation': geolocation})
+        {'geolocation': geolocation,
+         'objects': objects})
 
 
 def view_location(request, global_region, country=None, state_prov=None, local_region=None, locality=None):
