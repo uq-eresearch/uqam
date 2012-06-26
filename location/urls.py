@@ -5,6 +5,7 @@ from location.models import Place
 
 urlpatterns = patterns('location.views',
 
+    url(r'^places$', 'view_places', name='view_places'),
     url(r'^tree_view$', 'tree_view', name='tree_view'),
     url(r'^jstree$', 'jstree', name='jstree'),
     url(r'^find_children/$', 'find_children', name='find_children'),
