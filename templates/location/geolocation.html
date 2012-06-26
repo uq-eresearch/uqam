@@ -16,7 +16,7 @@
 {% endfor %}
 </ul>
 
-<h2>Items ({{objects.object_list.count}})</h2>
+<h2>Items ({{objects.paginator.count}})</h2>
 {% include "snippets/paged_object_list.html" %}
 
 

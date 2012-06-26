@@ -2,7 +2,7 @@
 
 
 {% if objects.object_list %}
-{% load paginator %}{% paginator 15 %}
+{% load paginator %}{% paginator 10 %}
 
 <ul class="thumbnails">
 {% for object in objects.object_list %}
@@ -15,32 +15,7 @@
 
 {% endfor %}
 </ul>
-{% load paginator %}{% paginator 15 %}
+{% load paginator %}{% paginator 10 %}
 
 {% endif %}
-{% if objects.object_list %}
 
-
-{% if objects.paginator.num_pages > 1 %}
-<div class="row">
-<ul class="pager">
-  <li>
-    {% if objects.has_previous %}
-       <a href="?page={{ objects.previous_page_number }}">&larr; Previous</a>
-    {% endif %}
-  </li>
-  <li>
-        Page {{ objects.number }} of {{ objects.paginator.num_pages }}
-  </li>
-  <li>
-    {% if objects.has_next %}
-        <a href="?page={{ objects.next_page_number }}">Next &rarr;</a>
-    {% endif %}
-  </li>
-</ul>
-</div>
-{% endif %}
-
-
-
-{% endif %}

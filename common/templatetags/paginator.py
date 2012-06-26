@@ -12,14 +12,15 @@ register = template.Library()
 
 def paginator(context, adjacent_pages=2):
     """
-    To be used in conjunction with the object_list generic view.
+    To be used with a Django paginator.
+
+    Must be stored in the context, as either 'objects', or 'page'.
 
     Adds pagination context variables for use in displaying first, adjacent and
     last page links in addition to those created by the object_list generic
     view.
-
     """
-    objects = context['objects']
+    objects = context.get('objects') or context.get('page')
     paginator = objects.paginator
 
     startPage = max(objects.number - adjacent_pages, 1)
@@ -32,9 +33,9 @@ def paginator(context, adjacent_pages=2):
             if n > 0 and n <= paginator.num_pages]
 
     return {
-        'paginator': paginator,
+        'objects': objects,
         'page': objects.number,
-        'pages': paginator.num_pages,
+#        'pages': paginator.num_pages,
         'page_numbers': page_numbers,
         'show_first': 1 not in page_numbers,
         'show_last': paginator.num_pages not in page_numbers,
