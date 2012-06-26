@@ -66,7 +66,7 @@ $(function() {
             var np = args[0].np[0];
             var op = args[0].op[0];
             var request = $.ajax({
-                "url": "/place/move_element",
+                "url": "{% url admin:move_element %}",
                 "type": "POST",
                 "data": {
                     "obj": obj.id,
@@ -88,7 +88,7 @@ $(function() {
         var type = data.rslt.obj.attr('rel')
         var tree = $.jstree._reference('#geolocations');
         $.ajax({
-            "url": "/place/create_element",
+            "url": "{% url admin:create_element %}",
             "type": "POST",
             "data": {
                 "name": name,
@@ -102,7 +102,7 @@ $(function() {
         var node = data.rslt.obj;
         var tree = $.jstree._reference('#geolocations');
         $.ajax({
-            "url": "/place/rename_element",
+            "url": "{% url admin:rename_element %}",
             "type": "POST",
             "data": {
                 "obj": node.attr('id'),
@@ -115,7 +115,7 @@ $(function() {
         var node = data.rslt.obj;
         var tree = $.jstree._reference('#geolocations');
         $.ajax({
-            "url": "/place/delete_element",
+            "url": "{% url admin:delete_element %}",
             "type": "POST",
             "data": {
                 "obj": node.attr('id')
@@ -137,9 +137,9 @@ $(function() {
             "ajax": {
                 "url": function(node) {
                     if (node === -1) {
-                        return "/place/find_children/";
+                        return "{% url find_children %}";
                     } else {
-                        return "/place/find_children/" + node.attr('id');
+                        return "{% url find_children %}" + node.attr('id');
                     }
                 }
             }

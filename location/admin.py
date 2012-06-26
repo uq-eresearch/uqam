@@ -4,10 +4,24 @@ from models import GlobalRegion, Country, StateProvince, RegionDistrict, Localit
 from tasks import GeocodePlace
 from common.adminactions import merge_selected
 from django.contrib.gis import admin
+from django.conf.urls.defaults import patterns, url
+from admin_views import jstree, move_element, rename_element
+from admin_views import create_element, delete_element
 
 
 class GlobalRegionAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
+
+    def get_urls(self):
+        urls = super(GlobalRegionAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(r'^jstree$', self.admin_site.admin_view(jstree), name='jstree'),
+            url(r'^move_element', self.admin_site.admin_view(move_element), name='move_element'),
+            url(r'^rename_element', self.admin_site.admin_view(rename_element), name='rename_element'),
+            url(r'^create_element', self.admin_site.admin_view(create_element), name='create_element'),
+            url(r'^delete_element', self.admin_site.admin_view(delete_element), name='delete_element'),
+        )
+        return my_urls + urls
 admin.site.register(GlobalRegion, GlobalRegionAdmin)
 
 

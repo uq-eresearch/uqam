@@ -16,6 +16,14 @@ class UQAMDashboard(Dashboard):
             exclude=('django.contrib.*', 'djcelery.*', 'reports.*',  'location.*'),
         ))
 
+        self.children.append(modules.LinkList(
+            title=_('Geo-location'),
+            column=1,
+            children=(
+                ['Geo-locations', '/admin/location/globalregion/jstree'],
+            )
+        ))
+
         self.children.append(modules.ModelList(
             title=_('Geo-location'),
             column=1,
