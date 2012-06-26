@@ -126,6 +126,8 @@ $(function() {
     }).bind("dblclick.jstree", function (e, data) {
         var node = $(e.target).closest("li");
         var id = node[0].id; //id of the selected node
+        var url = "/place/" + id;
+        window.open(url);
     });
     $("#geolocations").jstree({
         "core": {
@@ -194,17 +196,14 @@ $(function() {
         },
         "contextmenu": {
             "items": {
-                "view": {
-                    "label": "View on site",
-                    "action": function(obj) {
-                        var url = "/place/" + obj.attr('id');
-                        window.open(url);
-                    }
-                },
                 "view_admin": {
                     "label": "View in admin",
                     "action": function(obj) {
-                        window.open()
+                        var vals = obj.attr('id').split('-');
+                        var type = vals[0];
+                        var id = vals[1];
+                        var url = "/admin/location/" + type + "/" + id + "/";
+                        window.open(url);
                     }
                 },
                 "create": {
@@ -249,7 +248,7 @@ $(function() {
 <body>
     
 
-
+<h1>Places</h1>
 
 <div id="geolocations">
 
@@ -300,7 +299,7 @@ $(function() {
 #legend ins[rel="stateprovince"] {
     background-position: -32px 0px;
 }
-#legend ins[rel="localregion"] {
+#legend ins[rel="regiondistrict"] {
     background-position: -48px 0px;
 }
 #legend ins[rel="locality"] {
@@ -308,13 +307,14 @@ $(function() {
 }
 </style>
 
+<br>
 <div id="legend">
     <table class="jstree">
         <tr><th colspan="2">Legend</th></tr>
         <tr><td><ins rel="globalregion"></ins></td><td>Global Region</td></tr>
         <tr><td><ins rel="country"></ins></td><td>Country</td></tr>
         <tr><td><ins rel="stateprovince"></ins></td><td>State/province</td></tr>
-        <tr><td><ins rel="localregion"></ins></td><td>Local Region</td></tr>
+        <tr><td><ins rel="regiondistrict"></ins></td><td>Region/district</td></tr>
         <tr><td><ins rel="locality"></ins></td><td>Locality</td></tr>
     </table>
 </div>

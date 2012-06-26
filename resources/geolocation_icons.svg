@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="geolocation_icons.svg"
-   inkscape:export-filename="/home/uqdayers/uqam/uqam/resources/geolocation_icons.png"
+   inkscape:export-filename="/home/uqdayers/uqam/uqam/static/geolocations_icons.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -127,7 +127,7 @@
          sodipodi:role="line"
          id="tspan2995-4"
          x="48.585644"
-         y="11.990595">LR</tspan></text>
+         y="11.990595">RD</tspan></text>
     <path
        style="fill:#598f29;fill-opacity:1;stroke:none"
        d="m 65,1 0,14 C 65,15 78.908795,15.271844 79,9.064725 79.091206,2.8576051 65,1 65,1 z"
