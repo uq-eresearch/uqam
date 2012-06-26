@@ -1,10 +1,21 @@
 {% extends "admin/base_site.html" %}
 
+{% load static %}
+
+<!-- BREADCRUMBS -- >
+{% block breadcrumbs %}
+    {% if not is_popup %}
+        <ul class="grp-horizontal-list">
+            <li><a href="{% url admin:index %}">Home</a></li>
+            <li>{{ title }}</li>
+        </ul>
+    {% endif %}
+{% endblock %}
 
 <!-- CONTENT -->
 {% block content %}
-    <script type="text/javascript" src="/static/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="/static/jstree/jquery.jstree.js"></script>
+<script type="text/javascript" src="{% static 'jquery-1.7.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jstree/jquery.jstree.js' %}"></script>
 
 <script type="text/javascript">
 
@@ -197,7 +208,7 @@ $(function() {
         "contextmenu": {
             "items": {
                 "view_admin": {
-                    "label": "View in admin",
+                    "label": "Edit",
                     "action": function(obj) {
                         var vals = obj.attr('id').split('-');
                         var type = vals[0];
@@ -244,11 +255,7 @@ $(function() {
 });
 
 </script>
-  </head>
-<body>
     
-
-<h1>Places</h1>
 
 <div id="geolocations">
 
@@ -317,6 +324,26 @@ $(function() {
         <tr><td><ins rel="regiondistrict"></ins></td><td>Region/district</td></tr>
         <tr><td><ins rel="locality"></ins></td><td>Locality</td></tr>
     </table>
+</div>
+
+<div id="instructions">
+    <h2>Instructions</h2>
+    <ul><li>
+        <p>
+            The number in brackets is the number of items in that location.
+        </p>
+        <p>
+            Drag locations to sort the hierarchy.
+        </p>
+        <p>
+            Locations must stay at the same level (ie. a country cannot become a state).
+        </p>
+        <p>
+            Locations cannot be merged. Move the finer level locations instead.
+        </p>
+        <p>
+            Right click to <em>rename</em>, <em>create</em> or <em>delete</em> locations. A location can only be deleted if there are no items recorded as being in that location.
+        </p>
 </div>
 
 
