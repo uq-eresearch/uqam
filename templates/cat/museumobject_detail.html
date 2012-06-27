@@ -6,6 +6,20 @@
 
 
 <div id="content-primary" class="wide">
+  <div class="search-results">
+    {% if search_results %}
+      <a href="{{search_url}}">Results</a>
+       {{search_index}} of {{search_results.count}}
+
+      {% if search_prev_obj %}
+        <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_index|add:'-1'}}"|>Prev</a>
+      {% endif %}
+      {% if search_next_obj %}
+        <a href="{{ search_next_obj.get_absolute_url }}?search_result={{search_index|add:'1'}}">Next</a>
+      {% endif %}
+    {% endif %}
+  </div>
+
 <h1>{{ museumobject.artefact_type }}</h1>
 <h3>Item Information</h3>
 

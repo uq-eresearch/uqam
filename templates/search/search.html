@@ -22,6 +22,16 @@
     <h3>Results ({{page.paginator.count}})</h3>
     {% load highlight %}
 
+    {% for result in page.object_list %}
+        <p>
+        <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">{{ result.object }} {{result.object.artefact_type}}<br>
+        </a>
+            {% highlight result.text with query max_length 60 %}
+        
+        </p>
+    {% empty %}
+        <p>No results found.</p>
+    {% endfor %}
 
     {% load paginator %}{% paginator 15 %}
     {% for result in page.object_list %}

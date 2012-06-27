@@ -50,9 +50,9 @@ urlpatterns = patterns('cat.views',
     url(r'^item/$',
         ListView.as_view(
             model=MuseumObject, paginate_by=20), name='artefact_list'),
-    url(r'^item/(?P<slug>\d+)$',
-        DetailView.as_view(slug_field='registration_number',
-            model=MuseumObject), name='artefact_view'),
+    url(r'^item/(?P<reg_num>\d+)$', 'item_detail', name='artefact_view'),
+#        DetailView.as_view(slug_field='registration_number',
+ #           model=MuseumObject), name='artefact_view'),
 
 
 
