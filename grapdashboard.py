@@ -10,10 +10,26 @@ class UQAMDashboard(Dashboard):
             title=_('Catalogue'),
             column=1,
             collapsible=False,
-            models=('cat.models.MuseumObject', 'parties.*', 'location.*',
+            models=('cat.models.MuseumObject', 'parties.*',
                 'loans.models.LoanAgreement', 'condition.*',
                 'subcollections.*'),
-            exclude=('django.contrib.*', 'djcelery.*', 'reports.*'),
+            exclude=('django.contrib.*', 'djcelery.*', 'reports.*',  'location.*'),
+        ))
+
+        self.children.append(modules.LinkList(
+            title=_('Geo-location'),
+            column=1,
+            children=(
+                ['Geo-locations', '/admin/location/globalregion/jstree'],
+            )
+        ))
+
+        self.children.append(modules.ModelList(
+            title=_('Geo-location'),
+            column=1,
+            models=('location.models.GlobalRegion', 'location.models.Country',
+                'location.models.StateProvince', 'location.models.RegionDistrict',
+                'location.models.Locality', 'location.models.Place', 'location.models.Region'),
         ))
 
         self.children.append(modules.AppList(

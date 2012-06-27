@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import permission_required
 from django import forms
 from datetime import datetime
 from mediaman.models import ArtefactRepresentation, Document
@@ -11,6 +12,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+@permission_required('mediaman.add_document')
 def bulk_upload(request):
     form = UploadFileForm()
     return render(request, 'mediaman/upload_form.html',
@@ -34,9 +37,9 @@ class UploadFileForm(forms.Form):
     uploadtype = forms.ChoiceField(choices=UPLOAD_TYPE_CHOICES)
 
 
+@permission_required('mediaman.add_document')
 def handle_upload(request):
     # Handle file upload
-#    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():

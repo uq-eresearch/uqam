@@ -16,7 +16,11 @@
 <dt>Category</dt>
   <dd>
 {% for category in museumobject.category.all %}
-    <a href="{{ category.get_absolute_url }}">{{ category }}</a><br>
+    {% if category.parent %}
+      <a href="{{ category.parent.get_absolute_url }}">{{category.parent.name}}</a>
+      >
+    {% endif %}
+    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
 {% endfor %}
   </dd>
 
@@ -45,8 +49,20 @@
 
 <dt>Place</dt>
 <dd>
-<a href="{{museumobject.place.get_absolute_url}}">
-  {{ museumobject.place }}</a>
+  <a href="{{museumobject.global_region.get_absolute_url}}">
+    {{ museumobject.global_region }}</a>
+    >
+  <a href="{{museumobject.country.get_absolute_url}}">
+    {{ museumobject.country }}</a>
+    >
+  <a href="{{museumobject.state_province.get_absolute_url}}">
+    {{ museumobject.state_province }}</a>
+    >
+  <a href="{{museumobject.region_district.get_absolute_url}}">
+    {{ museumobject.region_district }}</a>
+    >
+  <a href="{{museumobject.locality.get_absolute_url}}">
+    {{ museumobject.locality }}</a>
 </dd>
 
 <dt>Collector</dt>

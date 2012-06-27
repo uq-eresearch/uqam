@@ -1,0 +1,353 @@
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+
+<!-- BREADCRUMBS -- >
+{% block breadcrumbs %}
+    {% if not is_popup %}
+        <ul class="grp-horizontal-list">
+            <li><a href="{% url admin:index %}">Home</a></li>
+            <li>{{ title }}</li>
+        </ul>
+    {% endif %}
+{% endblock %}
+
+<!-- CONTENT -->
+{% block content %}
+<script type="text/javascript" src="{% static 'jquery-1.7.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jstree/jquery.jstree.js' %}"></script>
+
+<script type="text/javascript">
+
+$(function() {
+    jQuery(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+{% comment %}
+    $("#geolocations").jstree({
+        "core": {
+            "animation": 0
+        },
+        "plugins": ["themes", "html_data"]
+    });
+{% endcomment %}
+    $("#geolocations").bind("move_node.jstree", function(event, data) {
+        var tree = data.inst; /* the actual tree instance */
+        var args = data.args; /* arguments passed to the function */
+        var rslt = data.rslt; /* any data the function passed to the event */
+        var rlbk = data.rlbk; /* an option rollback object - not always present */
+        var tree = $.jstree._reference('#geolocations');
+
+        data.rslt.o.each(function (o) {
+            // send request
+            var obj = data.rslt.o[o];
+            var np = args[0].np[0];
+            var op = args[0].op[0];
+            var request = $.ajax({
+                "url": "{% url admin:move_element %}",
+                "type": "POST",
+                "data": {
+                    "obj": obj.id,
+                    "new-parent": np.id
+                }
+            });
+            request.done(function() {
+                tree.refresh();
+            });
+            request.fail(function(jqXHR, textStatus) {
+                $.jstree.rollback(data.rlbk);
+            });
+
+        })
+    }).bind("create.jstree", function(event, data) {
+        var node = data.rslt.obj[0];
+        var parent_id = data.rslt.parent.attr("id");
+        var name = data.rslt.name;
+        var type = data.rslt.obj.attr('rel')
+        var tree = $.jstree._reference('#geolocations');
+        $.ajax({
+            "url": "{% url admin:create_element %}",
+            "type": "POST",
+            "data": {
+                "name": name,
+                "type": type,
+                "parent": parent_id
+            }
+        }).always(function() {
+            tree.refresh();
+        })
+    }).bind("rename.jstree", function(event, data) {
+        var node = data.rslt.obj;
+        var tree = $.jstree._reference('#geolocations');
+        $.ajax({
+            "url": "{% url admin:rename_element %}",
+            "type": "POST",
+            "data": {
+                "obj": node.attr('id'),
+                "new-name": data.rslt.new_name
+            }
+        }).always(function() {
+            tree.refresh();
+        });
+    }).bind("delete_node.jstree", function(event, data) {
+        var node = data.rslt.obj;
+        var tree = $.jstree._reference('#geolocations');
+        $.ajax({
+            "url": "{% url admin:delete_element %}",
+            "type": "POST",
+            "data": {
+                "obj": node.attr('id')
+            }
+        }).always(function() {
+            tree.refresh();
+        });
+    }).bind("dblclick.jstree", function (e, data) {
+        var node = $(e.target).closest("li");
+        var id = node[0].id; //id of the selected node
+        var url = "/place/" + id;
+        window.open(url);
+    });
+    $("#geolocations").jstree({
+        "core": {
+            "animation": 0
+        },
+        "json_data": {
+            "ajax": {
+                "url": function(node) {
+                    if (node === -1) {
+                        return "{% url find_children %}";
+                    } else {
+                        return "{% url find_children %}" + node.attr('id');
+                    }
+                }
+            }
+        },
+        "types": {
+            "valid_children": ["globalregion"],
+            "types": {
+                "globalregion": {
+                    "valid_children": ["country"],
+                    "icon": {"image": "/static/geolocations_icons.png"}
+                },
+                "country": {
+                    "valid_children": ["stateprovince"],
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-16px 0px"}
+                },
+                "stateprovince": {
+                    "valid_children": ["regiondistrict"],
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-32px 0px"}
+                },
+                "regiondistrict": {
+                    "valid_children": ["locality"],
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-48px 0px"}
+                },
+                "locality": {
+                    "valid_children": "none",
+                    "icon": {"image": "/static/geolocations_icons.png",
+                            "position": "-64px 0px"}
+                }
+            }
+        },
+        "crrm": {
+            "move": {
+                "check_move": function(m) {
+                    var newp = m.np;
+                    var oldp = m.op;
+                    // check if the movement is to a different parent
+                    if (newp[0].id != oldp[0].id) {
+                        return true;
+                    }
+                    return false;
+                },
+                "default_position": "first"
+            }
+        },
+        "dnd": {
+            "drop_target": false,
+            "drag_target": false
+        },
+        "ui": {
+            "disable_selecting_children": true
+        },
+        "contextmenu": {
+            "items": {
+                "view_admin": {
+                    "label": "Edit",
+                    "action": function(obj) {
+                        var vals = obj.attr('id').split('-');
+                        var type = vals[0];
+                        var id = vals[1];
+                        var url = "/admin/location/" + type + "/" + id + "/";
+                        window.open(url);
+                    }
+                },
+                "create": {
+                    "label": "Create",
+                    "action": function (obj) {
+                        this.create(obj);
+                    }, "_disabled": false,
+                    "_class": "add",
+                    "separator_before": false,
+                    "separator_after": false,
+                    "icon": false
+                }, "rename": {
+                    "label": "Rename",
+                    "action": function (obj) {
+                        this.rename(obj);
+                    }, "_disabled": false,
+                    "_class": "rename",
+                    "separator_before": false,
+                    "separator_after": false,
+                    "icon": false
+                }, "remove": {
+                    "label": "Delete",
+                    "action": function (obj) {
+                        this.remove(obj);
+                    }, "_disabled": false,
+                    "_class": "delete",
+                    "separator_before": true,
+                    "separator_after": false,
+                    "icon": false
+                }, "ccp": false
+            }
+        },
+        "themes": {
+            "theme": "apple"
+        },
+        "plugins": [ "themes", "json_data", "dnd", "types", "crrm", "contextmenu"]
+    });
+});
+
+</script>
+    
+
+<div id="geolocations">
+
+{% comment %}
+<ul>
+{% for gr in global_regions %}
+  <li><a href="#">{{gr.name}}</a>
+    <ul>
+      {% for country in gr.country_set.all %}
+      <li><a href="#">{{country.name}}</a>
+      <ul>
+        {% for sp in country.stateprovince_set.all %}
+        <li><a href="#">{{sp.name}}</a>
+          <ul>
+            {% for rd in sp.regiondistrict_set.all %}
+            <li><a href="#">{{rd.name}}</a>
+                <ul>
+                {% for locality in rd.locality_set.all %}
+                <li><a href="{% url admin:location_locality_change locality.id %}">{{locality.name}}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+            {% endfor %}
+
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endfor %}
+<ul>
+
+{% endcomment %}
+</div>
+
+<style>
+#legend ins {
+    background-image: url(/static/geolocations_icons.png);
+    height: 16px;
+    width: 16px;
+}
+#legend ins[rel="country"] {
+    background-position: -16px 0px;
+}
+#legend ins[rel="stateprovince"] {
+    background-position: -32px 0px;
+}
+#legend ins[rel="regiondistrict"] {
+    background-position: -48px 0px;
+}
+#legend ins[rel="locality"] {
+    background-position: -64px 0px;
+}
+</style>
+
+<br>
+<div id="legend">
+    <table class="jstree">
+        <tr><th colspan="2">Legend</th></tr>
+        <tr><td><ins rel="globalregion"></ins></td><td>Global Region</td></tr>
+        <tr><td><ins rel="country"></ins></td><td>Country</td></tr>
+        <tr><td><ins rel="stateprovince"></ins></td><td>State/province</td></tr>
+        <tr><td><ins rel="regiondistrict"></ins></td><td>Region/district</td></tr>
+        <tr><td><ins rel="locality"></ins></td><td>Locality</td></tr>
+    </table>
+</div>
+
+<div id="instructions">
+    <h2>Instructions</h2>
+    <ul><li>
+        <p>
+            The number in brackets is the number of items in that location.
+        </p>
+        <p>
+            Drag locations to sort the hierarchy.
+        </p>
+        <p>
+            Locations must stay at the same level (ie. a country cannot become a state).
+        </p>
+        <p>
+            Locations cannot be merged. Move the finer level locations instead.
+        </p>
+        <p>
+            Right click to <em>rename</em>, <em>create</em> or <em>delete</em> locations. A location can only be deleted if there are no items recorded as being in that location.
+        </p>
+        <p>
+            Double click to view the public page and associated items for a location.
+        </p>
+</div>
+
+
+{% endblock %}

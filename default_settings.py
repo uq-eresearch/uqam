@@ -16,17 +16,9 @@ RO_DATABASE = 'readonly'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'uqam',
+        'NAME': 'geouqam',
         'USER': 'uqam',
         'PASSWORD': 'uqam',
-        'HOST': 'localhost',
-        'PORT': '',
-    },
-    RO_DATABASE: {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'uqam',
-        'USER': 'uqam_read',
-        'PASSWORD': 'uqam_read',
         'HOST': 'localhost',
         'PORT': '',
     },
@@ -166,6 +158,8 @@ INSTALLED_APPS = (
     'django_tables2',
     'django_filters',
     'easy_thumbnails',
+
+    'smart_selects',
 )
 
 LOGS_ROOT = os.path.join(DIRNAME, 'logs')
@@ -186,9 +180,15 @@ LOGGING = {
             'datefmt': "%d/%b/%Y %H:%M:%S"
         },
     },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
+            'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
         },
         'logfile': {

@@ -54,19 +54,7 @@ urlpatterns = patterns('cat.views',
         DetailView.as_view(slug_field='registration_number',
             model=MuseumObject), name='artefact_view'),
 
-    url(r'^blocs/$',
-        ListView.as_view(
-            model=CulturalBloc), name='bloc_list'),
-    url(r'^blocs/(.*)$',
-        CulturalBlocListView.as_view(), name='culturalbloc_detail'),
 
-
-    url(r'^country/$', 'all_countries', name='country_list'),
-    url(r'^country/(.+)/$', 'regions', name='country_region_list'),
-
-    url(r'^region/$', 'all_regions', name='all_regions_list'),
-    url(r'^region/(.+)/$',
-        RegionListView.as_view(), name='region_list'),
 
     url(r'^withimages/$',
         WithImagesListView.as_view(

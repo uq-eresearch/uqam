@@ -22,7 +22,7 @@ class Person(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name_plural = "People"
+        verbose_name_plural = "people"
 
     @staticmethod
     def autocomplete_search_fields():

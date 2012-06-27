@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 import string
+from smart_selects.db_fields import ChainedForeignKey
 
 
 class DataDictionary(models.Model):
@@ -87,6 +89,22 @@ class MuseumObject(models.Model):
             help_text='Old region classification')
     place = models.ForeignKey('location.Place', null=True, db_index=True,
             help_text='Where the object is from')
+
+# New Geo-locations data
+    global_region = models.ForeignKey(GlobalRegion, blank=True, null=True,
+        on_delete=models.PROTECT)
+    country = ChainedForeignKey(Country, blank=True, null=True,
+        chained_field='global_region', chained_model_field='parent',
+        show_all=False, auto_choose=True, on_delete=models.PROTECT)
+    state_province = ChainedForeignKey(StateProvince, blank=True, null=True,
+        chained_field='country', chained_model_field='parent',
+        show_all=False, auto_choose=True, on_delete=models.PROTECT)
+    region_district = ChainedForeignKey(RegionDistrict, blank=True, null=True,
+        chained_field='state_province', chained_model_field='parent',
+        show_all=False, auto_choose=True, on_delete=models.PROTECT)
+    locality = ChainedForeignKey(Locality, blank=True, null=True,
+        chained_field='region_district', chained_model_field='parent',
+        show_all=False, auto_choose=True, on_delete=models.PROTECT)
 
     donor = models.ForeignKey(
             'parties.Person',

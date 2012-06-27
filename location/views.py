@@ -3,8 +3,11 @@ from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.utils.xmlutils import SimplerXMLGenerator
 from models import Place, Region
+from models import GlobalRegion
 from utils.utils import do_paging
 from django.db.models import Count
+from django.contrib.contenttypes.models import ContentType
+import json
 
 
 def place_detail(request, place_id):
@@ -26,7 +29,6 @@ def place_detail(request, place_id):
 
 
 def place_json(request, encoding='utf-8', mimetype='text/plain'):
-    import json
     places = Place.objects.exclude(
             latitude=None).annotate(Count('museumobject')).values(
             'id', 'name', 'latitude', 'longitude', 'country',
@@ -95,3 +97,75 @@ def place_duplicates(request):
 def place_geoname(request, geoname_id):
     places = Place.objects.filter(gn_id=geoname_id)
     return render(request, "location/place_geoname.html", {'places': places})
+
+
+def tree_view(request):
+    global_regions = GlobalRegion.objects.all()
+    return render(request, "location/tree_view.html",
+        {'global_regions': global_regions})
+
+
+def find_location(model_type, id):
+    element_type = ContentType.objects.get(app_label='location', model=model_type)
+    return element_type.get_object_for_this_type(id=id)
+
+
+def find_children(request, type=None, id=None):
+    if type:
+        object = find_location(type, id)
+        children = object.children.annotate(Count('museumobject'))
+    else:
+        children = GlobalRegion.objects.annotate(Count('museumobject'))
+
+    nodes = serialize_locs_jstree(children)
+    return HttpResponse(
+        json.dumps(nodes, sort_keys=True, indent=4),
+        content_type='application/json')
+
+
+def serialize_locs_jstree(objs):
+    """Serialize a single level of objs for use with jstree"""
+    if objs:
+        contenttype = ContentType.objects.get_for_model(objs[0])
+    else:
+        return None
+    type_name = contenttype.model
+    has_children = hasattr(objs[0], 'children')
+    nodes = []
+    for obj in objs:
+        node = {}
+        node['data'] = obj.name + " (%d)" % obj.museumobject__count
+        node['attr'] = {'id': type_name + '-' + str(obj.id), 'rel': type_name}
+        if has_children:
+            node['state'] = 'closed'
+        nodes.append(node)
+    return nodes
+
+
+def view_places(request):
+    grs = GlobalRegion.objects.all()
+
+    return render(request, 'location/geolocation.html',
+        {'children': grs})
+
+
+def view_geoloc(request, loctype, id):
+    geolocation = find_location(loctype, id)
+
+    items = geolocation.museumobject_set.all()
+
+    objects = do_paging(request, items)
+    children = []
+    if hasattr(geolocation, 'children'):
+        children = geolocation.children.all()
+
+    return render(request, 'location/geolocation.html',
+        {'geolocation': geolocation,
+         'objects': objects,
+         'children': children})
+
+
+def view_location(request, global_region, country=None, state_prov=None, local_region=None, locality=None):
+    geolocation = 'foo'
+    return render(request, 'location/geolocation.html',
+        {'geolocation': geolocation})

@@ -1,4 +1,79 @@
+
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+
+
+class LocationBase(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(help_text='Unique identifier. May be used in URLs.')
+    description = models.CharField(max_length=255, blank=True)
+
+    gn_name = models.CharField(max_length=100,
+            help_text="GeoNames Name", blank=True)
+    gn_id = models.CharField(max_length=20,
+            help_text="GeoNames ID", blank=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['name']
+        abstract = True
+
+    def __unicode__(self):
+        return self.name
+
+    @models.permalink
+    def get_absolute_url(self):
+        #import ipdb; ipdb.set_trace()
+        contenttype = ContentType.objects.get_for_model(self).model
+        return ('view_geoloc', [str(contenttype), str(self.id)])
+
+    def get_parents(self):
+        if hasattr(self, 'parent'):
+            parent = self.parent
+            return parent.get_parents() + [parent]
+        else:
+            return []
+
+
+class GlobalRegion(LocationBase):
+
+    class Meta(LocationBase.Meta):
+        pass
+
+
+class Country(LocationBase):
+    parent = models.ForeignKey(GlobalRegion, related_name='children',
+        verbose_name='Global region')
+
+    class Meta(LocationBase.Meta):
+        verbose_name_plural = 'countries'
+        unique_together = ('parent', 'slug')
+
+
+class StateProvince(LocationBase):
+    parent = models.ForeignKey(Country, related_name='children',
+        verbose_name='Country')
+
+    class Meta(LocationBase.Meta):
+        unique_together = ('parent', 'slug')
+
+
+class RegionDistrict(LocationBase):
+    parent = models.ForeignKey(StateProvince, related_name='children',
+        verbose_name='State/province')
+
+    class Meta(LocationBase.Meta):
+        unique_together = ('parent', 'slug')
+
+
+class Locality(LocationBase):
+    parent = models.ForeignKey(RegionDistrict, related_name='children',
+        verbose_name='Region/district')
+
+    class Meta(LocationBase.Meta):
+        verbose_name_plural = 'localities'
+        unique_together = ('parent', 'slug')
 
 
 class Place(models.Model):
@@ -81,4 +156,3 @@ class Region(models.Model):
 
     def __unicode__(self):
         return self.name
-
