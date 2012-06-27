@@ -16,6 +16,8 @@ class Migration(DataMigration):
             if place is not None:
                 obj.gn_id = place.gn_id
                 obj.gn_name = place.gn_name
+                obj.latitude = place.latitude
+                obj.longitude = place.longitude
             obj.save()
 
         return obj
