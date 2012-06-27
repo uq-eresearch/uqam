@@ -15,7 +15,7 @@ MANAGERS = ADMINS
 RO_DATABASE = 'readonly'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'geouqam',
         'USER': 'uqam',
         'PASSWORD': 'uqam',
@@ -158,7 +158,6 @@ INSTALLED_APPS = (
     'django_tables2',
     'django_filters',
     'easy_thumbnails',
-    'django.contrib.gis',
 
     'smart_selects',
 )

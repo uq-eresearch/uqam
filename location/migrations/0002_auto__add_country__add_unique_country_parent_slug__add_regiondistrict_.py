@@ -13,10 +13,12 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('gn_name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
             ('gn_id', self.gf('django.db.models.fields.CharField')(max_length=20, blank=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['location.GlobalRegion'])),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', to=orm['location.GlobalRegion'])),
         ))
         db.send_create_signal('location', ['Country'])
 
@@ -28,10 +30,12 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('gn_name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
             ('gn_id', self.gf('django.db.models.fields.CharField')(max_length=20, blank=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['location.StateProvince'])),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', to=orm['location.StateProvince'])),
         ))
         db.send_create_signal('location', ['RegionDistrict'])
 
@@ -43,9 +47,11 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('gn_name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
             ('gn_id', self.gf('django.db.models.fields.CharField')(max_length=20, blank=True)),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
         ))
         db.send_create_signal('location', ['GlobalRegion'])
 
@@ -54,10 +60,12 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('gn_name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
             ('gn_id', self.gf('django.db.models.fields.CharField')(max_length=20, blank=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['location.Country'])),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', to=orm['location.Country'])),
         ))
         db.send_create_signal('location', ['StateProvince'])
 
@@ -69,11 +77,12 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('gn_name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
             ('gn_id', self.gf('django.db.models.fields.CharField')(max_length=20, blank=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['location.RegionDistrict'])),
-            ('point', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', to=orm['location.RegionDistrict'])),
         ))
         db.send_create_signal('location', ['Locality'])
 
@@ -112,33 +121,38 @@ class Migration(SchemaMigration):
 
     models = {
         'location.country': {
-            'Meta': {'unique_together': "(('parent', 'slug'),)", 'object_name': 'Country'},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'Meta': {'ordering': "['name']", 'unique_together': "(('parent', 'slug'),)", 'object_name': 'Country'},
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'gn_id': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True'}),
             'gn_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['location.GlobalRegion']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'to': "orm['location.GlobalRegion']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         },
         'location.globalregion': {
-            'Meta': {'object_name': 'GlobalRegion'},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'Meta': {'ordering': "['name']", 'object_name': 'GlobalRegion'},
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'gn_id': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True'}),
             'gn_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         },
         'location.locality': {
-            'Meta': {'unique_together': "(('parent', 'slug'),)", 'object_name': 'Locality'},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'Meta': {'ordering': "['name']", 'unique_together': "(('parent', 'slug'),)", 'object_name': 'Locality'},
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'gn_id': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True'}),
             'gn_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['location.RegionDistrict']"}),
-            'point': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'to': "orm['location.RegionDistrict']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         },
         'location.place': {
@@ -152,7 +166,6 @@ class Migration(SchemaMigration):
             'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
-            'point': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
             'region': ('django.db.models.fields.CharField', [], {'max_length': '40', 'blank': 'True'})
         },
         'location.region': {
@@ -162,23 +175,27 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '60'})
         },
         'location.regiondistrict': {
-            'Meta': {'unique_together': "(('parent', 'slug'),)", 'object_name': 'RegionDistrict'},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'Meta': {'ordering': "['name']", 'unique_together': "(('parent', 'slug'),)", 'object_name': 'RegionDistrict'},
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'gn_id': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True'}),
             'gn_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['location.StateProvince']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'to': "orm['location.StateProvince']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         },
         'location.stateprovince': {
-            'Meta': {'unique_together': "(('parent', 'slug'),)", 'object_name': 'StateProvince'},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'Meta': {'ordering': "['name']", 'unique_together': "(('parent', 'slug'),)", 'object_name': 'StateProvince'},
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'gn_id': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True'}),
             'gn_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['location.Country']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'to': "orm['location.Country']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         }
     }

@@ -1,4 +1,5 @@
-from django.contrib.gis.db import models
+
+from django.db import models
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -11,7 +12,8 @@ class LocationBase(models.Model):
             help_text="GeoNames Name", blank=True)
     gn_id = models.CharField(max_length=20,
             help_text="GeoNames ID", blank=True)
-    objects = models.GeoManager()
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     class Meta:
         ordering = ['name']
@@ -69,8 +71,6 @@ class Locality(LocationBase):
     parent = models.ForeignKey(RegionDistrict, related_name='children',
         verbose_name='Region/district')
 
-    point = models.PointField(blank=True, null=True)
-
     class Meta(LocationBase.Meta):
         verbose_name_plural = 'localities'
         unique_together = ('parent', 'slug')
@@ -91,10 +91,6 @@ class Place(models.Model):
             help_text="GeoNames ID", blank=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-
-    point = models.PointField(blank=True, null=True)
-
-    objects = models.GeoManager()
 
     class Meta:
         ordering = ["id"]
