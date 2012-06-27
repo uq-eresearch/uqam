@@ -16,7 +16,7 @@ RO_DATABASE = 'readonly'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'geouqam',
+        'NAME': 'uqam',
         'USER': 'uqam',
         'PASSWORD': 'uqam',
         'HOST': 'localhost',

@@ -10,8 +10,8 @@ TEMPLATE_DEBUG = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'geouqam',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'uqam',
         'USER': 'uqam',
         'PASSWORD': 'uqam',
         'HOST': 'localhost',
