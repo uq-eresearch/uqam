@@ -61,7 +61,7 @@
                     position: latlng,
                     title: data[i].name + ", " + data[i].country + " (" + count + ")",
                     zIndex: count,
-                    url: '/place/' + data[i].id
+                    url: '/place/locality-' + data[i].id
                 });
                 
                 google.maps.event.addListener(marker, 'click', goToUrl);

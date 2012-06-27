@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.utils.xmlutils import SimplerXMLGenerator
 from models import Place, Region
+from models import Locality
 from models import GlobalRegion
 from utils.utils import do_paging
 from django.db.models import Count
@@ -29,9 +30,9 @@ def place_detail(request, place_id):
 
 
 def place_json(request, encoding='utf-8', mimetype='text/plain'):
-    places = Place.objects.exclude(
+    places = Locality.objects.exclude(
             latitude=None).annotate(Count('museumobject')).values(
-            'id', 'name', 'latitude', 'longitude', 'country',
+            'id', 'name', 'latitude', 'longitude',
             'museumobject__count')
     return HttpResponse(json.dumps(list(places), indent=2))
 
@@ -42,7 +43,7 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     """
 #    mimetype = "application/vnd.google-earth.kml+xml"
 #    mimetype = "text/html"
-    places = Place.objects.exclude(
+    places = Locality.objects.exclude(
             latitude=None).annotate(Count('museumobject'))
 
     response = HttpResponse(mimetype=mimetype)

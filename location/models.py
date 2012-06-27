@@ -22,6 +22,9 @@ class LocationBase(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_kml_coordinates(self):
+        return "%s,%s,0" % (self.longitude, self.latitude)
+
     @models.permalink
     def get_absolute_url(self):
         #import ipdb; ipdb.set_trace()
