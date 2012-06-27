@@ -22,6 +22,7 @@
     <h3>Results ({{page.paginator.count}})</h3>
     {% load highlight %}
 
+    {% load paginator %}{% paginator 15 %}
     {% for result in page.object_list %}
         <p>
         <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">{{ result.object }} {{result.object.artefact_type}}<br>
@@ -34,24 +35,7 @@
     {% endfor %}
 
     {% load paginator %}{% paginator 15 %}
-    {% for result in page.object_list %}
-        <p>
-        <a href="{{ result.object.get_absolute_url }}">{{ result.object }} {{result.object.artefact_type}}<br>
-        </a>
-            {% highlight result.text with query max_length 60 %}
-        
-        </p>
-    {% empty %}
-        <p>No results found.</p>
-    {% endfor %}
 
-    {% if page.has_previous or page.has_next %}
-        <div>
-            {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-            |
-            {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-        </div>
-    {% endif %}
 {% else %}
     {# Show some example queries to run, maybe query syntax, something else? #}
 {% endif %}
