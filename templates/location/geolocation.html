@@ -1,26 +1,33 @@
 {% extends "base_generic.html" %}
 
+{% load uqam %}
 {% block content %}
 
 <ul>
     <li><a href="{% url view_places %}">Places</a></li>
 {% for parent in geolocation.get_parents %}
-    <li><a href="{{parent.get_absolute_url}}">{{parent.name}}&nbsp;</a></li>
+    <li>{{parent|verbose_name|capfirst}}:<a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a></li>
 {% endfor %}
 </ul>
 
 <h1>{{geolocation.name}}</h1>
 
+{% if geolocation.description %}
+<h2>Description</h2>
+<p>{{ geolocation.description }}</p>
+{% endif %}
 {% if places %}
 
 {% endif %}
 
-
+{% if children %}
+<h2>Children</h2>
 <ul>
 {% for child in children %}
     <li><a href="{{child.get_absolute_url}}">{{child.name}}&nbsp;</a></li>
 {% endfor %}
 </ul>
+{% endif %}
 
 {% if objects %}
     <h2>Items ({{objects.paginator.count}})</h2>

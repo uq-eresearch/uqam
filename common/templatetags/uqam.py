@@ -13,3 +13,11 @@ def dimension(value, arg):
     if value:
         return str(value) + " " + arg
     return ""
+
+
+@register.filter
+def verbose_name(obj):
+    """
+    Return the verbose name of a model
+    """
+    return obj._meta.verbose_name
