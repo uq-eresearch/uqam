@@ -24,13 +24,13 @@ class UQAMDashboard(Dashboard):
             )
         ))
 
-        self.children.append(modules.ModelList(
-            title=_('Geo-location'),
-            column=1,
-            models=('location.models.GlobalRegion', 'location.models.Country',
-                'location.models.StateProvince', 'location.models.RegionDistrict',
-                'location.models.Locality', 'location.models.Place', 'location.models.Region'),
-        ))
+#        self.children.append(modules.ModelList(
+#            title=_('Geo-location'),
+#            column=1,
+#            models=('location.models.GlobalRegion', 'location.models.Country',
+#                'location.models.StateProvince', 'location.models.RegionDistrict',
+#                'location.models.Locality', 'location.models.Place', 'location.models.Region'),
+#        ))
 
         self.children.append(modules.AppList(
             title='Data dictionary',
