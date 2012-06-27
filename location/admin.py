@@ -3,7 +3,7 @@ from models import Place, Region
 from models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 from tasks import GeocodePlace
 from common.adminactions import merge_selected
-from django.contrib.gis import admin
+from django.contrib import admin
 from django.conf.urls.defaults import patterns, url
 from admin_views import jstree, move_element, rename_element
 from admin_views import create_element, delete_element
@@ -63,7 +63,7 @@ class RegionAdmin(admin.ModelAdmin):
 admin.site.register(Region, RegionAdmin)
 
 
-class PlaceAdmin(admin.OSMGeoAdmin):
+class PlaceAdmin(admin.ModelAdmin):
     default_zoom = 1
     list_display = ('id', 'country', 'region', 'australian_state',
             'name', 'gn_name')
