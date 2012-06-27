@@ -32,7 +32,12 @@ def paginator(context, adjacent_pages=2):
     page_numbers = [n for n in range(startPage, endPage) \
             if n > 0 and n <= paginator.num_pages]
 
+    query = context.get('query', '')
+    if query != '':
+        query = "&q=" + query
+
     return {
+        'query': query,
         'objects': objects,
         'page': objects.number,
 #        'pages': paginator.num_pages,
