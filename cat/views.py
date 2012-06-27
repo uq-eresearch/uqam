@@ -34,11 +34,14 @@ def item_detail(request, reg_num):
 def _current_search_results(request, reg_num):
     context = {}
     index = request.GET.get('search_result', None)
-    results = request.session['search_results']
-    results_per_page = request.session['search_results_per_page']
+
 
     if index is not None:
         index = int(index)
+
+        results = request.session.get('search_results', [])
+        results_per_page = request.session.get('search_results_per_page')
+
         context['search_index'] = index
         context['search_results'] = results
         search_query = request.session['search_query']
