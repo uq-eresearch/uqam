@@ -2,7 +2,7 @@
 import os.path
 
 DEBUG = False
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 
 DIRNAME = os.path.dirname(__file__)
 
