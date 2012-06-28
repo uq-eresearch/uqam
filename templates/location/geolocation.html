@@ -21,7 +21,6 @@
 {% endif %}
 
 {% if children %}
-<h2>Children</h2>
 <ul>
 {% for child in children %}
     <li><a href="{{child.get_absolute_url}}">{{child.name}}&nbsp;</a></li>
