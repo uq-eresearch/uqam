@@ -71,7 +71,8 @@ class MuseumObject(models.Model):
     storage_section = models.CharField(max_length=4, blank=True)
     storage_unit = models.CharField(max_length=4, blank=True)
     storage_bay = models.CharField(max_length=4, blank=True)
-    storage_shelf_box_drawer = models.CharField(max_length=4, blank=True)
+    storage_shelf_box_drawer = models.CharField(max_length=4, blank=True,
+        verbose_name="Storage shelf/box/drawer")
 
     acquisition_date = models.DateField("date acquired by museum",
             null=True, blank=True)
@@ -118,12 +119,14 @@ class MuseumObject(models.Model):
             null=True,
             blank=True,
             related_name="donated_objects_2",
+            verbose_name="2nd recorded donor (historic/wrong)",
             help_text='2nd Imported donor record, possibly historic')
     how_donor_obtained = models.ForeignKey(Obtained, null=True,
             related_name='donor_obtained')
     ## TODO: when_donor_obtained should be DateField
     ### But contains some imprecise dates
-    when_donor_obtained = models.CharField(max_length=50, blank=True)
+    when_donor_obtained = models.CharField(max_length=50, blank=True,
+        help_text="Please use the following format: <em>YYYY-MM-DD</em>.")
 
     photographer = models.CharField(max_length=100)
     collector = models.ForeignKey(
@@ -136,6 +139,7 @@ class MuseumObject(models.Model):
             'parties.Person',
             null=True,
             blank=True,
+            verbose_name="2nd recorded collector (historic/wrong)",
             related_name="collected_objects_2")
     how_collector_obtained = models.ForeignKey(Obtained, null=True,
             related_name="collector_obtained")

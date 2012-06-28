@@ -78,6 +78,8 @@ class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
                     'description', 'comment',)
     actions = [add_to_collection, generate_xls]
+    readonly_fields = ('place', 'cultural_bloc', 'functional_category',
+        'donor_2', 'collector_2')
 
     list_filter = ('place__country', 'functional_category__name',
                     'access_status', 'loan_status', 'cultural_bloc',
@@ -101,7 +103,7 @@ class MOAdmin(UndeleteableModelAdmin):
         (None, {
             'fields': ('registration_number', 'old_registration_number',
                        'other_number', 'functional_category', 'category',
-                       'artefact_type', 'cultural_bloc', 'place')
+                       'artefact_type')
         }),
         ('Geo-location', {
             'classes': ('collapse',),
@@ -114,8 +116,8 @@ class MOAdmin(UndeleteableModelAdmin):
         }),
         ('Storage location', {
             'classes': ('collapse',),
-            'fields': (('storage_section', 'storage_unit',),
-                ('storage_bay', 'storage_shelf_box_drawer'),)
+            'fields': ('storage_section', 'storage_unit',
+                'storage_bay', 'storage_shelf_box_drawer')
         }),
         ('Acquisition', {
             'classes': ('collapse',),
@@ -146,7 +148,7 @@ class MOAdmin(UndeleteableModelAdmin):
         }),
         ('Location', {
             'classes': ('collapse',),
-            'fields': ('longitude', 'latitude')
+            'fields': (('longitude', 'latitude'),)
         }),
         ('Dimensions', {
             'classes': ('collapse',),
