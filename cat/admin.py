@@ -105,6 +105,9 @@ class MOAdmin(UndeleteableModelAdmin):
                        'other_number', 'functional_category', 'category',
                        'artefact_type')
         }),
+        ('Old place information', {
+            'fields': ('cultural_bloc', 'place',)
+        }),
         ('Geo-location', {
             'classes': ('collapse',),
             'fields': ('global_region', 'country', 'state_province',
