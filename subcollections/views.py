@@ -1,11 +1,11 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.forms import ModelForm
 from django import forms
 from subcollections.models import Collection
+from subcollections.models import collection_as_atom
 from cat.models import MuseumObject
 from utils.utils import do_paging
 from django.shortcuts import render, get_object_or_404
-from feeds import write_collection_as_atom
 
 
 def collections_home(request):
@@ -77,6 +77,8 @@ def collection_add(request):
 
 def atom_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
+    mimetype = 'application/xml'
 
-    response = write_collection_as_atom(request, collection)
+    atom = collection_as_atom(collection)
+    response = HttpResponse(atom, mimetype=mimetype)
     return response

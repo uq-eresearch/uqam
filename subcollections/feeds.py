@@ -1,12 +1,7 @@
 from django.contrib.syndication.views import Feed
-from django.utils.feedgenerator import Atom1Feed, rfc3339_date
 from subcollections.models import Collection
 from django.shortcuts import get_object_or_404
-from django.utils.xmlutils import SimplerXMLGenerator
-from django.conf import settings
-from utils.utils import get_site_url
-from django.http import HttpResponse
-from django.contrib.sites.models import get_current_site
+from django.utils.feedgenerator import Atom1Feed
 
 
 class AllCollectionsFeed(Feed):
@@ -54,96 +49,3 @@ class CollectionFeed(Feed):
 
     def item_description(self, item):
         return item.description
-
-
-def write_collection_as_atom(request, collection, encoding='utf-8', mimetype='application/xml'):
-    """
-    Serialise a collection to an Atom format
-
-    Uses the profile from http://dataspace.metadata.net/doc/atom
-    """
-    response = HttpResponse(mimetype=mimetype)
-    current_site = get_current_site(request)
-
-    link = get_site_url(request, collection.get_absolute_url())
-    site_id = get_site_url(request, "/")
-
-    handler = SimplerXMLGenerator(response, encoding)
-    handler.startDocument()
-    handler.startElement(u"entry", collection.entry_attributes())
-    handler.addQuickElement(u"id", link)
-    handler.addQuickElement(u"title", collection.title)
-    handler.addQuickElement(u'content', collection.description, {'type': 'html'})
-    if collection.date_published:
-        handler.addQuickElement(u"published", rfc3339_date(collection.date_published).decode('utf-8'))
-    if collection.last_published:
-        handler.addQuickElement(u"updated", rfc3339_date(collection.last_published).decode('utf-8'))
-
-    handler.addQuickElement(u"link", attrs={
-            u'href':  'http://purl.org/dc/dcmitype/Collection',
-            u'rel':   'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-            u'title': 'Collection'})
-
-    handler.addQuickElement(u"rights", collection.rights)
-    handler.startElement(u"rdfa:meta",
-            {u'property': u'http://purl.org/dc/terms/accessRights',
-                u'content': collection.access_rights})
-    handler.endElement(u"rdfa:meta")
-
-    handler.addQuickElement(u'link', attrs={
-            u'rel': u'http://purl.org/dc/terms/publisher',
-            u'href': settings.COLLECTION_CURATOR['href'],
-            u'label': settings.COLLECTION_CURATOR['label']
-        })
-
-    handler.startElement(u"source", {})
-    handler.addQuickElement(u"id", site_id)
-    handler.addQuickElement(u"title", current_site.name)
-    handler.startElement(u"author", {})
-    handler.addQuickElement(u"name", collection.author.get_full_name())
-    handler.addQuickElement(u"email", collection.author.email)
-    handler.endElement(u"author")
-    handler.endElement(u"source")
-
-    handler.startElement(u"link",
-            {u"rel": "http://xmlns.com/foaf/0.1/page",
-             u"href": link})
-    handler.endElement(u"link")
-
-    handler.addQuickElement(u'category', attrs={
-        u'term': u'http://purl.org/asc/1297.0/2008/for/1601',
-        u'scheme': u'http://purl.org/asc/1297.0/2008/for/',
-        u'label': u'1601 Anthropology'
-        })
-
-    add_categories(handler, collection, request)
-    add_spatial(handler, collection, request)
-
-    handler.endElement(u"entry")
-
-    return response
-
-
-def add_categories(handler, collection, request):
-    for category in collection.get_categories():
-# TODO: add this back when dataspace is fixed
-#        cat_url = get_site_url(request, category.get_absolute_url())
-        handler.addQuickElement(u'category', attrs={
-#            u'term': cat_url,
-            u'label': unicode(category)
-        })
-
-
-def add_spatial(handler, collection, request):
-    for place in collection.get_places():
-        place_url = get_site_url(request, place.get_absolute_url())
-        handler.addQuickElement(u'link', attrs={
-            u'rel': u'http://purl.org/dc/terms/spatial',
-            u'href': place_url,
-            u'title': unicode(place)
-            })
-
-        if place.latitude is not None:
-            handler.addQuickElement(u'georss:point',
-                unicode(place.latitude) + u" " + unicode(place.longitude)
-            )
