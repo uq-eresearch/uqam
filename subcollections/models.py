@@ -2,7 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.db.models.signals import post_save
 from cat.models import Category
-from location.models import Place
+from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 
 
 class Collection(models.Model):
@@ -67,10 +67,14 @@ class Collection(models.Model):
             museumobject__in=items).distinct()
 
     def get_places(self):
-        """Queryset of Places of items in collection"""
+        """
+        Get all places referenced by items in this collection
+        """
         items = self.items.all()
-        return Place.objects.filter(
-            museumobject__in=items).distinct()
+        places = []
+        for place_type in (GlobalRegion, Country, StateProvince, RegionDistrict, Locality):
+            places.extend(place_type.objects.filter(museumobject__in=items).distinct())
+        return places
 
 
 class Syndication(models.Model):
