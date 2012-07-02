@@ -1,6 +1,6 @@
 import copy
-from django.http import HttpResponseRedirect, HttpResponse
-from django.template import Context, loader
+from django.http import HttpResponseRedirect
+import json
 from django.utils.safestring import mark_safe
 from django.contrib import messages
 from modelmerge import merge_model_objects
@@ -103,8 +103,6 @@ def merge_selected(modeladmin, request, queryset):
 merge_selected.short_description = "Merge selected records"
 
 
-
-
 def generate_xls(modeladmin, request, queryset):
     model = queryset.model
 #    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
@@ -126,11 +124,12 @@ def output_xls(queryset):
     w.save('image.xls')
 
 import django_tables2 as tables
-from django.views.generic.list import ListView
 from cat.models import MuseumObject
+
 
 class SimpleTable(tables.Table):
     pass
+
 
 class ItemTable(tables.Table):
     model = MuseumObject
@@ -139,3 +138,14 @@ class ItemTable(tables.Table):
 
 def display_table(modeladmin, request, queryset):
     pass
+
+
+def add_to_opener(modeladmin, request, queryset):
+    """
+    Add (multiple) selected items to the multi-select field
+    that opened this pop-up window.
+    """
+    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+    json_list = json.dumps(selected)
+    return render(request, 'admin/add_to_opener.html',
+        {'chosenIds': json_list})

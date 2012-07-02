@@ -8,9 +8,10 @@ from models import RecordStatus
 from mediaman.models import ArtefactRepresentation
 from common.admin import UndeleteableModelAdmin
 from common.adminactions import merge_selected, add_to_collection
-from common.adminactions import generate_xls
+from common.adminactions import generate_xls, add_to_opener
 from admin_views import search_home, search_xls
 from django.core import urlresolvers
+from django.utils.datastructures import SortedDict
 
 
 class MediaFileInline(admin.TabularInline):
@@ -176,6 +177,17 @@ class MOAdmin(UndeleteableModelAdmin):
 
     def my_view(self, request):
         pass
+
+    def get_actions(self, request):
+        from django.contrib.admin.views.main import IS_POPUP_VAR
+        if IS_POPUP_VAR in request.GET:
+            actions = []
+            actions.extend(self.get_action(add_to_opener))
+            return SortedDict([
+                ('add_to_opener', (add_to_opener, 'add_to_opener', 'Select items'))
+            ])
+        else:
+            return super(MOAdmin, self).get_actions()
 
     class Media:
         from django.conf import settings

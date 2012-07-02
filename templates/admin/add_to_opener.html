@@ -1,0 +1,29 @@
+{% load static %}
+
+
+<html>
+<head>
+
+<script type="text/javascript" src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
+
+<script type="text/javascript" src="{% static "grappelli/jquery/jquery-1.7.2.min.js" %}"></script>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        var name = windowname_to_id(window.name);
+        var elem = opener.document.getElementById(name);
+
+        var chosenIds = {{ chosenIds|safe }};
+
+        if (elem.className.indexOf('vManyToManyRawIdAdminField') != -1 && elem.value) {
+            elem.value += ',' + chosenIds;
+        } else {
+            elem.value = chosenIds;
+        }
+        elem.focus();
+        window.close();
+    });
+</script>
+
+</head>
+</html>
