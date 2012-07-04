@@ -331,7 +331,7 @@ ARCHIVAL_STORAGE = FileSystemStorage(
 
 COLLECTION_CURATOR = {
     'href': u'http://dataspace-uat.uq.edu.au/BlArGh',
-    'label': u'Example Curator'
+    'title': u'Example Curator'
 }
 
 

@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.forms import ModelForm
 from django import forms
 from subcollections.models import Collection
-from subcollections.models import collection_as_atom
 from cat.models import MuseumObject
 from utils.utils import do_paging
 from django.shortcuts import render, get_object_or_404
@@ -79,6 +78,6 @@ def atom_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
     mimetype = 'application/xml'
 
-    atom = collection_as_atom(collection)
+    atom = collection.as_atom()
     response = HttpResponse(atom, mimetype=mimetype)
     return response
