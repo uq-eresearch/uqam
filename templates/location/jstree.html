@@ -206,45 +206,48 @@ $(function() {
             "disable_selecting_children": true
         },
         "contextmenu": {
-            "items": {
-                "view_admin": {
-                    "label": "Edit",
-                    "action": function(obj) {
-                        var vals = obj.attr('id').split('-');
-                        var type = vals[0];
-                        var id = vals[1];
-                        var url = "/admin/location/" + type + "/" + id + "/";
-                        window.open(url);
+            "items": function customMenu(node) {
+                var items = {
+                    "view_admin": {
+                        "label": "Edit",
+                        "action": function(obj) {
+                            var vals = obj.attr('id').split('-');
+                            var type = vals[0];
+                            var id = vals[1];
+                            var url = "/admin/location/" + type + "/" + id + "/";
+                            window.open(url);
+                        }
+                    },
+                    "create": {
+                        "label": "Create",
+                        "action": function (obj) {
+                            this.create(obj);
+                        }, "_disabled": false,
+                        "_class": "add",
+                        "separator_before": false
+                    },
+                    "rename": {
+                        "label": "Rename",
+                        "action": function (obj) {
+                            var name = this.get_text(obj);
+                            name = name.replace(/ \(\d+\)$/, '');
+                            this.set_text(obj, name);
+                            this.rename(obj);
+                        }, "_disabled": false,
+                        "_class": "rename",
+                        "separator_before": false
+                    },
+                    "remove": {
+                        "label": "Delete",
+                        "action": function (obj) {
+                            this.remove(obj);
+                        }, "_disabled": false,
+                        "_class": "delete",
+                        "separator_before": true
                     }
-                },
-                "create": {
-                    "label": "Create",
-                    "action": function (obj) {
-                        this.create(obj);
-                    }, "_disabled": false,
-                    "_class": "add",
-                    "separator_before": false,
-                    "separator_after": false,
-                    "icon": false
-                }, "rename": {
-                    "label": "Rename",
-                    "action": function (obj) {
-                        this.rename(obj);
-                    }, "_disabled": false,
-                    "_class": "rename",
-                    "separator_before": false,
-                    "separator_after": false,
-                    "icon": false
-                }, "remove": {
-                    "label": "Delete",
-                    "action": function (obj) {
-                        this.remove(obj);
-                    }, "_disabled": false,
-                    "_class": "delete",
-                    "separator_before": true,
-                    "separator_after": false,
-                    "icon": false
-                }, "ccp": false
+                };
+
+                return items;
             }
         },
         "themes": {
