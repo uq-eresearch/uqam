@@ -1,6 +1,6 @@
-
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
+from django.template.defaultfilters import slugify
 
 
 class LocationBase(models.Model):
@@ -21,6 +21,10 @@ class LocationBase(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(LocationBase, self).save(*args, **kwargs)
 
     def get_kml_coordinates(self):
         return "%s,%s,0" % (self.longitude, self.latitude)

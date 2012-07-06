@@ -87,7 +87,8 @@ $(function() {
             request.done(function() {
                 tree.refresh();
             });
-            request.fail(function(jqXHR, textStatus) {
+            request.fail(function(xhr, textStatus) {
+                alert("Error: " + xhr.responseText);
                 $.jstree.rollback(data.rlbk);
             });
 
@@ -106,9 +107,10 @@ $(function() {
                 "type": type,
                 "parent": parent_id
             }
-        }).always(function() {
-            tree.refresh();
-        })
+        }).fail(function(xhr, textStats) {
+            $.jstree.rollback(data.rlbk);
+            alert(xhr.responseText);
+        });
     }).bind("rename.jstree", function(event, data) {
         var node = data.rslt.obj;
         var tree = $.jstree._reference('#geolocations');
@@ -119,20 +121,24 @@ $(function() {
                 "obj": node.attr('id'),
                 "new-name": data.rslt.new_name
             }
+        }).fail(function(xhr, textStats) {
+            alert("Error: " + xhr.responseText);
         }).always(function() {
             tree.refresh();
         });
     }).bind("delete_node.jstree", function(event, data) {
         var node = data.rslt.obj;
         var tree = $.jstree._reference('#geolocations');
+        tree = this;
         $.ajax({
             "url": "{% url admin:delete_element %}",
             "type": "POST",
             "data": {
                 "obj": node.attr('id')
             }
-        }).always(function() {
-            tree.refresh();
+        }).fail(function(xhr, textStatus) {
+            $.jstree.rollback(data.rlbk);
+            alert('Unable to delete: ' + xhr.responseText);
         });
     }).bind("dblclick.jstree", function (e, data) {
         var node = $(e.target).closest("li");
@@ -187,10 +193,11 @@ $(function() {
         "crrm": {
             "move": {
                 "check_move": function(m) {
+                    $('#status').html("Position: " + m.p + " Calc Pos: " + m.cp + " m.r: " + m.r + " m.np: " + m.np);
                     var newp = m.np;
                     var oldp = m.op;
                     // check if the movement is to a different parent
-                    if (newp[0].id != oldp[0].id) {
+                    if (newp[0].id != oldp[0].id && m.cp === 0) {
                         return true;
                     }
                     return false;
@@ -209,7 +216,7 @@ $(function() {
             "items": function customMenu(node) {
                 var items = {
                     "view_admin": {
-                        "label": "Edit",
+                        "label": "Edit in Admin",
                         "action": function(obj) {
                             var vals = obj.attr('id').split('-');
                             var type = vals[0];
@@ -237,7 +244,7 @@ $(function() {
                         "_class": "rename",
                         "separator_before": false
                     },
-                    "remove": {
+                    "delete": {
                         "label": "Delete",
                         "action": function (obj) {
                             this.remove(obj);
@@ -246,6 +253,9 @@ $(function() {
                         "separator_before": true
                     }
                 };
+                if (!this._is_loaded(node) || this._get_children(node).length > 1) {
+                    items['delete']._disabled = true;
+                }
 
                 return items;
             }
@@ -253,48 +263,23 @@ $(function() {
         "themes": {
             "theme": "apple"
         },
-        "plugins": [ "themes", "json_data", "dnd", "types", "crrm", "contextmenu"]
+        "plugins": [ "themes", "json_data", "dnd", "types", "crrm", "contextmenu", "ui"]
     });
 });
 
+
 </script>
+
     
 
 <div id="geolocations">
 
-{% comment %}
-<ul>
-{% for gr in global_regions %}
-  <li><a href="#">{{gr.name}}</a>
-    <ul>
-      {% for country in gr.country_set.all %}
-      <li><a href="#">{{country.name}}</a>
-      <ul>
-        {% for sp in country.stateprovince_set.all %}
-        <li><a href="#">{{sp.name}}</a>
-          <ul>
-            {% for rd in sp.regiondistrict_set.all %}
-            <li><a href="#">{{rd.name}}</a>
-                <ul>
-                {% for locality in rd.locality_set.all %}
-                <li><a href="{% url admin:location_locality_change locality.id %}">{{locality.name}}</a></li>
-                {% endfor %}
-              </ul>
-            </li>
-            {% endfor %}
+</div>
 
-          </ul>
-        </li>
-        {% endfor %}
-      </ul>
-      </li>
-      {% endfor %}
-    </ul>
-  </li>
-{% endfor %}
-<ul>
-
-{% endcomment %}
+<div id="controls">
+    <a href="#" onclick="$.jstree._reference('#geolocations').refresh();return false;">Refresh</a>
+</div>
+<div id="status">
 </div>
 
 <style>
