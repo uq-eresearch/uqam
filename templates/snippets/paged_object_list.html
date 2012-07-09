@@ -8,7 +8,7 @@
 {% for object in objects.object_list %}
   <li class="span3">
   <a href="{{ object.get_absolute_url }}">
-    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_64x64 "http://placehold.it/48" %}" width="48" height="48" alt="">
+    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt="">
     <strong>{{object}}</strong>
   </a>
   </li>

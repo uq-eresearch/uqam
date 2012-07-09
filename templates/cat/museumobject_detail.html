@@ -4,11 +4,14 @@
 {% load thumbnail %}
 {% block body %}
 
+{% include "snippets/top_search_panel.html" %}
 
 <div id="content-primary" class="wide">
+
+
   <div class="search-results">
     {% if search_results %}
-      <a href="{{search_url}}">Results</a>
+      <a href="{{search_url}}">Back to results</a>
        {{search_index}} of {{search_results.count}}
 
       {% if search_prev_obj %}
@@ -21,14 +24,13 @@
   </div>
 
 <h1>{{ museumobject.artefact_type }}</h1>
-<h3>Item Information</h3>
 
 <dl class="item-detail">
 <dt>Item Type</dt>
 <dd> {{ museumobject.artefact_type }}</dd>
 
 <dt>Category</dt>
-  <dd>
+<dd>
 {% for category in museumobject.category.all %}
     {% if category.parent %}
       <a href="{{ category.parent.get_absolute_url }}">{{category.parent.name}}</a>
@@ -36,7 +38,7 @@
     {% endif %}
     <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
 {% endfor %}
-  </dd>
+</dd>
 
 <dt>Indigenous name</dt>
 <dd>{{ museumobject.indigenous_name }}&nbsp;
@@ -72,6 +74,13 @@
   <a href="{{museumobject.locality.get_absolute_url}}">
     {{ museumobject.locality }}</a>
 </dd>
+
+{% if museumobject.place.latitude %}
+<dt>Map</dt>
+<dd>
+    <div id="map_canvas" style="height:105px"></div>
+</dd>
+{% endif %}
 
 <dt>Collector</dt>
 <dd>
@@ -257,34 +266,13 @@
 <div id="content-secondary" class="wide">
 {% if user.is_staff %}
 <div style="float:right;font-size: 80%;">
-    <a href="#" id="printLabelLink">Printable Label</a>
     <a href="{% url admin:cat_museumobject_change museumobject.id %}">Admin</a>
 </div>
 
 
-<style type="text/css">
-    #printableLabel {
-        background-color: white;
-        display:none;
-        padding: 15px;
-    }
-</style>
-
-<div id="printableLabel">
-  <b>Printable label</b>
-  <pre id="printLabelText">
-  {% firstof museumobject.maker "Maker unknown" %}, {% firstof museumobject.creation_date|date:"Y" "creation date unknown" %}
-  {{ museumobject.artefact_type }}{% if museumobject.raw_material or museumobject.dimensions %}
-  {{ museumobject.dimensions }}{% if museumobject.raw_material %}, {{ museumobject.raw_material }}{%endif%}{% endif %}
-  {% firstof museumobject.assoc_cultural_group museumobject.place.country %}
-  Donated by {{ museumobject.donor }}{% if museumobject.acquisition_date %} {{ museumobject.acquisition_date|date:"Y" }}{% endif %}
-  </pre>
-</div><!-- /printableLabel -->
-
 {% endif %}
 {% if museumobject.artefactrepresentation_set.exists %}
-  <div id="myCarousel" class="carousel">
-    <div class="carousel-inner">
+  <div id="item-images">
   {% for ar in museumobject.artefactrepresentation_set.all %}
     <div class="item{% if forloop.first%}active{%endif%}">
     {% if ar.url %}
@@ -292,52 +280,18 @@
     {% else %}
       <a href="{{ ar.image.url }}">
     {% endif %}
-    <img src="{% thumbnail ar.image 400x350 crop=scale watermark='UQ Anthropology Museum' %}" width="400" alt=""></a>
+    <img src="{% thumbnail ar.image 384x256 crop=scale watermark='UQ Anthropology Museum' %}" width="384" height="256" alt=""></a>
     </div>
   {% endfor %}
-    </div><!-- /carousel-inner -->
-    <!-- Carousel nav -->
-    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-  </div><!-- /carousel -->
+  </div>
 {% endif %}
-{% if museumobject.place.latitude %}
-    <hr>
-    <div id="map_canvas" style="margin-top: 50px; width:100%; height:150px"></div>
-{% endif %}
-
-
-
-
 </div> <!-- /content-secondary -->
 {% endblock body %}
 
 
 {% block javascript %}
-<script type="text/javascript" src="/static/jquery.bpopup-0.6.0.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#printLabelLink").bind("click", function() {
-            $("#printableLabel").bPopup();
-            return false;
-        });
-    });
-</script>
-
-{% if museumobject.artefactrepresentation_set.exists %}
-<script type="text/javascript">
-$(window).load(function() {
-    $('#slider').nivoSlider({
-effect: 'fade',
-manualAdvance: true,
-animSpeed: 200,
-directionNav: false
-    });
-});
-</script>
-{% endif %}
-
-{% if museumobject.place.latitude %}{% with p=museumobject.place %}
+{% if museumobject.place.latitude %}
+{% with p=museumobject.place %}
 <script type="text/javascript"
   src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
@@ -365,5 +319,6 @@ directionNav: false
         });
     });
 </script>
-{% endwith %}{% endif %}
+{% endwith %}
+{% endif %}
 {% endblock %}

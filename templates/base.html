@@ -86,23 +86,6 @@
 <div class="wrapper">
   <!-- START: Content -->
   <div id="content">
-    {% block top_breadcrumbs %}
-    <!-- START: Breadcrumb Trails -->
-    <div id="breadCrumb0" class="breadCrumb module">
-      <div style="overflow: hidden; position: relative; width: 930px;">
-        <div>
-          <ul style="width: 5000px; ">
-            <li class="first">
-              <a href="/">Home</a>
-            </li>
-            <li class="last">UQ Anthropology Museum</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <!-- END: Breadcrumb Trails -->
-    {% endblock top_breadcrumbs %}
-
     {% block body %}
 
     {% endblock body %}
@@ -128,6 +111,9 @@
     </div>
     <!-- END: Breadcrumb Trails -->
     {% endblock bottom_breadcrumbs %}
+    <div id="pagebase">
+        {% include "snippets/copyright_statement.html" %}
+    </div>
   </div><!-- /content -->
 
 </div><!-- /wrapper -->

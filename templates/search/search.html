@@ -1,38 +1,46 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-    <h2>Search</h2>
 
-{% comment %}
-    <form method="get" action=".">
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Search">
-                </td>
-            </tr>
-        </table>
-    </form>
-{% endcomment %}
-
+{% include "snippets/top_search_panel.html" %}
 
 {% if query %}
-    <h3>Results ({{page.paginator.count}})</h3>
-    {% load highlight %}
+    <h3>Search Results</h3>
+    <p>Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</p>
 
-    {% load paginator %}{% paginator 15 %}
+    {% load paginator %}{% paginator 4 %}
+
+    <table class="search-results">
+        <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
     {% for result in page.object_list %}
-        <p>
-        <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">{{ result.object }} {{result.object.artefact_type}}<br>
-        </a>
-            {% highlight result.text with query max_length 60 %}
-        
-        </p>
+        <tr>
+            <td>
+                <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">
+                    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt="">
+                </a>
+            </td>
+            <td class="item">
+                <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">
+                    <span class="item_type">{{ result.object.artefact_type }}<br>
+                <span class="registration_number">Registration No. <span class="number">{{ result.object.registration_number }}</span></span>
+                </a>
+            </td>
+            <td class="category">
+                {% for category in result.object.category.all %}
+                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
+                {% endfor %}
+            </td>
+            <td class="place">
+                  <a href="{{result.object.global_region.get_absolute_url}}">
+                    {{ result.object.global_region }}</a>
+                    >
+                  <a href="{{result.object.country.get_absolute_url}}">
+                    {{ result.object.country }}</a>
+            </td>
     {% empty %}
-        <p>No results found.</p>
+        <tr><td colspan="4">No results found.</td></tr>
     {% endfor %}
+    </table>
 
     {% load paginator %}{% paginator 15 %}
 
