@@ -18,8 +18,3 @@ class MuseumObjectIndex(SearchIndex):
         return self.get_model().objects.all()
 
 site.register(MuseumObject, MuseumObjectIndex)
-
-#class PersonIndex(SearchIndex):
-#    text = CharField(document=True, use_template=True)
-#
-#site.register(Person, PersonIndex)
