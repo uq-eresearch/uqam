@@ -330,8 +330,8 @@ ARCHIVAL_STORAGE = FileSystemStorage(
         base_url=MEDIA_URL + 'archival/')
 
 COLLECTION_CURATOR = {
-    'href': u'http://dataspace-uat.uq.edu.au/BlArGh',
-    'title': u'Example Curator'
+    'href': u'http://dataspace-uat.metadata.net/agents/779',
+    'title': u'Diana Young'
 }
 
 
