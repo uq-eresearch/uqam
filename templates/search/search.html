@@ -5,23 +5,26 @@
 {% include "snippets/top_search_panel.html" %}
 
 {% if query %}
+<div class="search-results-head">
     <h3>Search Results</h3>
-    <p>Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</p>
+    <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
 
     {% load paginator %}{% paginator 4 %}
+</div><!-- /search-results-head -->
 
+<div class="search-results">
     <table class="search-results">
         <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
     {% for result in page.object_list %}
         <tr>
-            <td>
+            <td class="thumbnail">
                 <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">
                     <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt="">
                 </a>
             </td>
             <td class="item">
                 <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">
-                    <span class="item_type">{{ result.object.artefact_type }}<br>
+                    <span class="item_type">{{ result.object.artefact_type }}</span><br>
                 <span class="registration_number">Registration No. <span class="number">{{ result.object.registration_number }}</span></span>
                 </a>
             </td>
@@ -42,8 +45,8 @@
     {% endfor %}
     </table>
 
-    {% load paginator %}{% paginator 15 %}
-
+    {% load paginator %}{% paginator 4 %}
+</div><!-- /search-results -->
 {% else %}
     {# Show some example queries to run, maybe query syntax, something else? #}
 {% endif %}

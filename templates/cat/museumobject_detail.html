@@ -52,7 +52,7 @@
 
 
 
-<div id="content-primary" class="wide">
+<div id="item-record">
 
 <dl class="catalogue-info">
 
@@ -149,24 +149,17 @@
     <b>Depth: </b> {{ museumobject.depth|dimension:"mm" }}
     <b>Circumference: </b> {{ museumobject.circumference|dimension:"mm" }}
   </dd>
+</dl><!-- /physical-description -->
 
 
-</dl>
+</div><!-- /item-record -->
 
 
-<div class="physical-description">
-  <h3>Physical description</h3>
-  <p>{{ museumobject.description|linebreaks }}</p>
-</div>
-
-<div class="research-notes">
-  <h3>Research notes</h3>
-  <p>{{ museumobject.comment|linebreaks }}</p>
-</div>
 
 {% if user.is_staff %}
+<div class="staff-information">
 <h3>Staff Information</h3>
-<dl class="item-detail">
+<dl class="staff-detail">
 <dt>Functional Category (old)</dt>
 <dd>{{ museumobject.functional_category }}</dd>
 
@@ -215,8 +208,6 @@
     <br>
     {% endfor %}
     </dd>
-
-
 {% endif %}
 
 
@@ -249,6 +240,7 @@
   </dd>
 {% endif %}
 
+
 {% if museumobject.reg_info %}
   <dt>Registration Information</dt>
   <dd>
@@ -256,12 +248,14 @@
   </dd>
 {% endif %}
 
+
 {% if museumobject.exhibition_history %}
   <dt>Exhibition History</dt>
   <dd>
     {{ museumobject.exhibition_history|linebreaks }}
   </dd>
 {% endif %}
+
 
 {% if museumobject.conditionreport_set.all %}
   <dt>Condition Reports</dt>
@@ -274,6 +268,7 @@
   </dd>
 {% endif %}
 
+
 {% if museumobject.conservationaction_set.all %}
     <dt>Conservation Actions</dt>
     <dd>
@@ -283,6 +278,7 @@
     {% endfor %}
     </dd>
 {% endif %}
+
 
 {% if museumobject.deaccession_set.all %}
     <dt>Deacession</dt>
@@ -298,7 +294,18 @@
 
 {% endif %} {# is_staff #}
 
-</div><!-- /content-primary -->
+
+<div class="physical-description">
+  <h3>Physical description</h3>
+  <p>{{ museumobject.description|linebreaks }}</p>
+</div>
+
+<div class="research-notes">
+  <h3>Research notes</h3>
+  <p>{{ museumobject.comment|linebreaks }}</p>
+</div>
+
+
 
 {% endblock body %}
 

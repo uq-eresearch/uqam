@@ -4,7 +4,6 @@
       <a href="?page={{ objects.previous_page_number }}{{ query }}">&lt; Prev</a>
       </span>
    {% endif %}
-
    {% if show_first %}
       <span class="page"><a href="?page=1{{ query }}">1</a></span>
       <span class="ellipsis">...</span>
@@ -13,8 +12,7 @@
       {% ifequal linkpage page %}
          <span class="current">{{ page }}</span>
       {% else %}
-         <span class="page"><a href="?page={{ linkpage }}{{ query }}"
-               >{{ linkpage }}</a></span>
+         <span class="page"><a href="?page={{ linkpage }}{{ query }}">{{ linkpage }}</a></span>
       {% endifequal %}
    {% endfor %}
    {% if show_last %}
@@ -24,4 +22,4 @@
    {% if objects.has_next %}
       <span class="page"><a href="?page={{ objects.next_page_number }}{{ query }}">Next &gt;</a></span>
    {% endif %}
-</div>
+   </div><!-- /pager -->
