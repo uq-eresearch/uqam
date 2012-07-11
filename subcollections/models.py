@@ -192,6 +192,7 @@ class Collection(models.Model):
         """
         self.syndication_result = response.text
         self.last_syndicated = datetime.now()
+        self.save()
         self.edit_url = self.find_edit_url(response.text)
 
     @staticmethod
