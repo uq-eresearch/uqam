@@ -199,8 +199,10 @@ class Collection(models.Model):
     def find_edit_url(atom_string):
         from xml.etree import ElementTree
         tree = ElementTree.fromstring(atom_string)
-        tree.findall('{http://www.w3.org/2005/Atom}link')
-        return tree.find('{http://www.w3.org/2005/Atom}link[@rel="edit"]').get('href')
+        alllinks = tree.findall('{http://www.w3.org/2005/Atom}link')
+        return [c.get('href') for c in alllinks if c.get('rel') == 'edit'][0]
+# The following is much nicer, but only works in python 2.7+ *sadface*
+#        return tree.find('{http://www.w3.org/2005/Atom}link[@rel="edit"]').get('href')
 
 
 class Syndication(models.Model):
