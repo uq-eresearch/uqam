@@ -1,11 +1,11 @@
 <div class="pager">
    {% if objects.has_previous %}
       <span class="page">
-      <a href="?page={{ objects.previous_page_number }}{{ query }}">&lt; Prev</a>
+      <a href="?page={{ objects.previous_page_number }}{{ query }}">Prev</a>
       </span>
    {% endif %}
    {% if show_first %}
-      <span class="page"><a href="?page=1{{ query }}">1</a></span>
+      <span class="page prev"><a href="?page=1{{ query }}">1</a></span>
       <span class="ellipsis">...</span>
    {% endif %}
    {% for linkpage in page_numbers %}
@@ -20,6 +20,6 @@
       <span class="page"><a href="?page={{ objects.paginator.num_pages }}{{ query }}">{{ objects.paginator.num_pages }}</a></span>
    {% endif %}
    {% if objects.has_next %}
-      <span class="page"><a href="?page={{ objects.next_page_number }}{{ query }}">Next &gt;</a></span>
+      <span class="page next"><a href="?page={{ objects.next_page_number }}{{ query }}">Next</a></span>
    {% endif %}
    </div><!-- /pager -->

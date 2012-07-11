@@ -16,16 +16,21 @@
 
 {% if search_results %}
   <div class="search-results-navigation">
+    <div class="back-to-results">
       <a href="{{search_url}}">Back to results</a>
+    </div>
+    <div class="paging">
+
        {{search_index}} of {{search_results.count}}
 
       {% if search_prev_obj %}
-        <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_index|add:'-1'}}"|>Prev</a>
+        <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_index|add:'-1'}}">Prev</a>
       {% endif %}
       {% if search_next_obj %}
         <a href="{{ search_next_obj.get_absolute_url }}?search_result={{search_index|add:'1'}}">Next</a>
       {% endif %}
-  </div>
+    </div>
+  </div><!-- /search-results-navigation -->
 {% endif %}
 
 
@@ -34,10 +39,9 @@
 
 <!--#####  ITEM REPRESENTATIONS ##### -->
 <div id="item-representations">
-{% if museumobject.artefactrepresentation_set.exists %}
   <div id="item-images">
   {% for ar in museumobject.artefactrepresentation_set.all %}
-    <div class="item{% if forloop.first%}active{%endif%}">
+    <div class="item-image {% if forloop.first%}active{%endif%}">
     {% if ar.url %}
       <a href="{{ ar.url }}" >
     {% else %}
@@ -45,111 +49,122 @@
     {% endif %}
     <img src="{% thumbnail ar.image 384x256 crop=scale watermark='UQ Anthropology Museum' %}" width="384" height="256" alt=""></a>
     </div>
+  {% empty %}
+    <div class="item-image">
+      <img class="placeholder" src="http://placehold.it/384x256" alt="placeholder">
+    </div>
   {% endfor %}
   </div>
-{% endif %}
+
+  <div class="extra-representations">
+    <div class="view-3d">
+      View in 3D
+    </div>
+    <div class="view-pseudo-3d">
+      View in Pseudo-3D
+    </div>
+  </div><!-- /extra-representations -->
 </div> <!-- /item-representations -->
 
 
 
 <div id="item-record">
 
-<dl class="catalogue-info">
+  <dl class="catalogue-info">
 
-  <dt class="registration-number">Registration number</dt>
-  <dd class="registration-number">{{ museumobject.registration_number }}</dd>
+    <dt class="registration-number">Registration number</dt>
+    <dd class="registration-number">{{ museumobject.registration_number }}</dd>
 
-  <dt class="item-type">Item type</dt>
-  <dd class="item-type">{{ museumobject.artefact_type }}</dd>
+    <dt class="item-type">Item type</dt>
+    <dd class="item-type">{{ museumobject.artefact_type }}</dd>
 
-  <dt class="category">Category</dt>
-  <dd class="category">
-  {% for category in museumobject.category.all %}
-    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
-  {% endfor %}
-  </dd>
-</dl>
+    <dt class="category">Category</dt>
+    <dd class="category">
+    {% for category in museumobject.category.all %}
+      <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
+    {% endfor %}
+    </dd>
+  </dl><!-- /catalogue-info -->
 
 
-<dl class="culturallocation-info">
+  <dl class="culturallocation-info">
 
-  <dt class="indigenous-name">Indigenous name</dt>
-  <dd class="indigenous-name">{{ museumobject.indigenous_name }}&nbsp;</dd>
+    <dt class="indigenous-name">Indigenous name</dt>
+    <dd class="indigenous-name">{{ museumobject.indigenous_name }}&nbsp;</dd>
 
-  <dt class="maker">Maker</dt>
-  <dd class="maker">
-  {% if museumobject.maker %}
-  <a href="{{ museumobject.maker.get_absolute_url }}">
-    {{ museumobject.maker }}</a>
-  {% endif %}&nbsp;
-  </dd>
+    <dt class="maker">Maker</dt>
+    <dd class="maker">
+    {% if museumobject.maker %}
+    <a href="{{ museumobject.maker.get_absolute_url }}">
+      {{ museumobject.maker }}</a>
+    {% endif %}&nbsp;
+    </dd>
 
-  <dt class="assoc-cultural-group">Associated cultural group</dt>
-  <dd class="assoc-cultural-group">{{ museumobject.assoc_cultural_group }}&nbsp;</dd>
+    <dt class="assoc-cultural-group">Associated cultural group</dt>
+    <dd class="assoc-cultural-group">{{ museumobject.assoc_cultural_group }}&nbsp;</dd>
 
-  <dt class="place">Place</dt>
-  <dd class="place">
-    <a href="{{museumobject.global_region.get_absolute_url}}">
-      {{ museumobject.global_region }}</a>
-      >
-    <a href="{{museumobject.country.get_absolute_url}}">
-      {{ museumobject.country }}</a>
-      >
-    <a href="{{museumobject.state_province.get_absolute_url}}">
-      {{ museumobject.state_province }}</a>
-      >
-    <a href="{{museumobject.region_district.get_absolute_url}}">
-      {{ museumobject.region_district }}</a>
-      >
-    <a href="{{museumobject.locality.get_absolute_url}}">
-      {{ museumobject.locality }}</a>
-  </dd>
+    <dt class="place">Place</dt>
+    <dd class="place">
+      <a href="{{museumobject.global_region.get_absolute_url}}">
+        {{ museumobject.global_region }}</a>
+        >
+      <a href="{{museumobject.country.get_absolute_url}}">
+        {{ museumobject.country }}</a>
+        >
+      <a href="{{museumobject.state_province.get_absolute_url}}">
+        {{ museumobject.state_province }}</a>
+        >
+      <a href="{{museumobject.region_district.get_absolute_url}}">
+        {{ museumobject.region_district }}</a>
+        >
+      <a href="{{museumobject.locality.get_absolute_url}}">
+        {{ museumobject.locality }}</a>
+    </dd>
 
-  {% if museumobject.place.latitude %}
-  <dt class="map">Map</dt>
-  <dd class="map">
-      <div id="map_canvas" style="height:105px"></div>
-  </dd>
+    {% if museumobject.place.latitude %}
+    <dt class="map">Map</dt>
+    <dd class="map">
+        <div id="map_canvas" style="height:105px"></div>
+    </dd>
+    {% endif %}
+  </dl><!-- /culturallocation-info -->
+
+
+  <dl class="aquisition-info">
+    <dt class="collector">Collector</dt>
+    <dd class="collector">
+    <a href="{{museumobject.collector.get_absolute_url}}">
+      {{ museumobject.collector }}</a>
+    </dd>
+
+    <dt class="acquisition-date">Acquisition date</dt>
+    <dd class="acquisition-date">
+      {{ museumobject.acquisition_date|date:"F d, Y" }}
+    </dd>
+
+    <dt class="acquisition-method">Acquisition method</dt>
+    <dd class="acquisition-method">
+    {{ museumobject.acquisition_method }} <b>{{ museumobject.acquisition_method.preposition }}</b>
+     <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
+    </dd>
+  </dl><!-- /aquisition-info -->
+
+
+  <dl class="physical-description">
+  {% if museumobject.raw_material %}
+    <dt>Raw material</dt>
+    <dd>{{ museumobject.raw_material }}
+    </dd>
   {% endif %}
-
-</dl>
-
-
-<dl class="aquisition-info">
-  <dt class="collector">Collector</dt>
-  <dd class="collector">
-  <a href="{{museumobject.collector.get_absolute_url}}">
-    {{ museumobject.collector }}</a>
-  </dd>
-
-  <dt class="acquisition-date">Acquisition date</dt>
-  <dd class="acquisition-date">
-    {{ museumobject.acquisition_date|date:"F d, Y" }}
-  </dd>
-
-  <dt class="acquisition-method">Acquisition method</dt>
-  <dd class="acquisition-method">
-  {{ museumobject.acquisition_method }} <b>{{ museumobject.acquisition_method.preposition }}</b>
-   <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
-  </dd>
-
-</dl>
-
-<dl class="physical-description">
-{% if museumobject.raw_material %}
-  <dt>Raw material</dt>
-  <dd>{{ museumobject.raw_material }}
-  </dd>
-{% endif %}
-<dt>Dimensions</dt>
-  <dd>
-    <b>Height: </b> {{ museumobject.height|dimension:"mm" }}
-    <b>Length: </b> {{ museumobject.length|dimension:"mm" }}
-    <b>Width: </b> {{ museumobject.width|dimension:"mm" }}
-    <b>Depth: </b> {{ museumobject.depth|dimension:"mm" }}
-    <b>Circumference: </b> {{ museumobject.circumference|dimension:"mm" }}
-  </dd>
-</dl><!-- /physical-description -->
+  <dt>Dimensions</dt>
+    <dd>
+      <b>Height: </b> {{ museumobject.height|dimension:"mm" }}
+      <b>Length: </b> {{ museumobject.length|dimension:"mm" }}
+      <b>Width: </b> {{ museumobject.width|dimension:"mm" }}
+      <b>Depth: </b> {{ museumobject.depth|dimension:"mm" }}
+      <b>Circumference: </b> {{ museumobject.circumference|dimension:"mm" }}
+    </dd>
+  </dl><!-- /physical-description -->
 
 
 </div><!-- /item-record -->
@@ -158,151 +173,140 @@
 
 {% if user.is_staff %}
 <div class="staff-information">
-<h3>Staff Information</h3>
-<dl class="staff-detail">
-<dt>Functional Category (old)</dt>
-<dd>{{ museumobject.functional_category }}</dd>
+  <h3>Staff information</h3>
+  <dl class="staff-detail">
+    {% if museumobject.functional_category %}
+      <dt>Functional Category (old)</dt>
+      <dd>{{ museumobject.functional_category }}</dd>
+    {% endif %}
 
 
-{% if museumobject.category_illustrated %}
-<dt>Category Illustrated</dt>
-<dd>
-    <a href="{{ museumobject.category_illustrated.get_absolute_url }}">
-    {{ museumobject.category_illustrated }}</a>
-</dd>
-{% endif %}
+    {% if museumobject.category_illustrated %}
+      <dt>Category Illustrated</dt>
+      <dd>
+        <a href="{{ museumobject.category_illustrated.get_absolute_url }}">
+        {{ museumobject.category_illustrated }}</a>
+      </dd>
+    {% endif %}
 
-{% if museumobject.artefact_illustrated %}
-<dt>Artefact Illustrated</dt>
-<dd>
-    <a href="{{ museumobject.artefact_illustrated.get_absolute_url }}">
-    {{ museumobject.artefact_illustrated }}</a>
-</dd>
-{% endif %}
+    {% if museumobject.artefact_illustrated %}
+      <dt>Artefact Illustrated</dt>
+      <dd>
+        <a href="{{ museumobject.artefact_illustrated.get_absolute_url }}">
+        {{ museumobject.artefact_illustrated }}</a>
+      </dd>
+    {% endif %}
 
-{% if museumobject.manufacture_technique %}
-    <dt>Manufacture technique</dt>
-    <dd>{{ museumobject.manufacture_technique }}
-    </dd>
-{% endif %}
+    {% if museumobject.manufacture_technique %}
+      <dt>Manufacture technique</dt>
+      <dd>{{ museumobject.manufacture_technique }}</dd>
+    {% endif %}
 
-{% if museumobject.creation_date %}
-    <dt>Creation date</dt>
-    <dd>{{ museumobject.creation_date }}
-    </dd>
-{% endif %}
+    {% if museumobject.creation_date %}
+      <dt>Creation date</dt>
+      <dd>{{ museumobject.creation_date }}</dd>
+    {% endif %}
 
 
-{% if museumobject.recorded_use %}
-    <dt>Recorded use</dt>
-    <dd>{{ museumobject.recorded_use }}
-    </dd>
-{% endif %}
+    {% if museumobject.recorded_use %}
+      <dt>Recorded use</dt>
+      <dd>{{ museumobject.recorded_use }}</dd>
+    {% endif %}
 
-{% if museumobject.collections.all %}
-    <dt>Sub collections</dt>
-    <dd>
-    {% for collection in museumobject.collections.all %}
-    <a href="{{ collection.get_absolute_url }}">{{ collection.title }}</a>
-
-    <br>
-    {% endfor %}
-    </dd>
-{% endif %}
+    {% if museumobject.collections.all %}
+      <dt>Sub collections</dt>
+      <dd>
+        {% for collection in museumobject.collections.all %}
+        <a href="{{ collection.get_absolute_url }}">{{ collection.title }}</a><br>
+        {% endfor %}
+      </dd>
+    {% endif %}
 
 
-
-{% if museumobject.significance %}
-    <dt>Statement of significance</dt>
-    <dd>{{ museumobject.significance }}
-    </dd>
-{% endif %}
+    {% if museumobject.significance %}
+      <dt>Statement of significance</dt>
+      <dd>{{ museumobject.significance }}</dd>
+    {% endif %}
 
 
-
-{% if museumobject.related_documents.all %}
-    <dt>Related documents</dt>
-    <dd>
-    {% for doc in museumobject.related_documents.all %}
+    {% if museumobject.related_documents.all %}
+      <dt>Related documents</dt>
+      <dd>
+        {% for doc in museumobject.related_documents.all %}
         <a href="{{doc.document.url}}">{{doc.name}}</a> <br>
-    {% endfor %}
-    </dd>
-{% endif %}
+        {% endfor %}
+      </dd>
+    {% endif %}
 
 
-
-{% if museumobject.photorecord_set %}
-  <dt>Photographic Record</dt>
-  <dd>
-  {% for pr in museumobject.photorecord_set.all %}
-    {{ pr.phototype }} {{ pr.comments}}<br>
-  {% endfor %}
-  </dd>
-{% endif %}
-
-
-{% if museumobject.reg_info %}
-  <dt>Registration Information</dt>
-  <dd>
-    {{ museumobject.reg_info|linebreaks }}
-  </dd>
-{% endif %}
+    {% if museumobject.photorecord_set %}
+      <dt>Photographic Record</dt>
+      <dd>
+        {% for pr in museumobject.photorecord_set.all %}
+        {{ pr.phototype }} {{ pr.comments}}<br>
+        {% endfor %}
+      </dd>
+    {% endif %}
 
 
-{% if museumobject.exhibition_history %}
-  <dt>Exhibition History</dt>
-  <dd>
-    {{ museumobject.exhibition_history|linebreaks }}
-  </dd>
-{% endif %}
+    {% if museumobject.reg_info %}
+      <dt>Registration Information</dt>
+      <dd>{{ museumobject.reg_info|linebreaks }}</dd>
+    {% endif %}
 
 
-{% if museumobject.conditionreport_set.all %}
-  <dt>Condition Reports</dt>
-  <dd>
-    {% for report in museumobject.conditionreport_set.all %}
-    <a href="{% url admin:condition_conditionreport_change report.id %}">
-        {{ report.date }} - {{ report.condition }}
-    </a><br>
-    {% endfor %}
-  </dd>
-{% endif %}
+    {% if museumobject.exhibition_history %}
+      <dt>Exhibition History</dt>
+      <dd>{{ museumobject.exhibition_history|linebreaks }}</dd>
+    {% endif %}
 
 
-{% if museumobject.conservationaction_set.all %}
-    <dt>Conservation Actions</dt>
-    <dd>
-    {% for action in museumobject.conservationaction_set.all %}
-    <a href="{% url admin:condition_conservationaction_change action.id %}">
-        {{ action }} </a><br>
-    {% endfor %}
-    </dd>
-{% endif %}
+    {% if museumobject.conditionreport_set.all %}
+      <dt>Condition Reports</dt>
+      <dd>
+        {% for report in museumobject.conditionreport_set.all %}
+        <a href="{% url admin:condition_conditionreport_change report.id %}">
+            {{ report.date }} - {{ report.condition }}
+        </a><br>
+        {% endfor %}
+      </dd>
+    {% endif %}
 
 
-{% if museumobject.deaccession_set.all %}
-    <dt>Deacession</dt>
-    <dd>
-    {% for deaccession in museumobject.deaccession_set.all %}
-    <a href="{% url admin:condition_deaccession_change deaccession.id %}">
-        {{ deaccession }}</a><br>
-    {% endfor %}
-    </dd>
-{% endif %}
+    {% if museumobject.conservationaction_set.all %}
+      <dt>Conservation Actions</dt>
+      <dd>
+        {% for action in museumobject.conservationaction_set.all %}
+        <a href="{% url admin:condition_conservationaction_change action.id %}">
+            {{ action }} </a><br>
+        {% endfor %}
+      </dd>
+    {% endif %}
 
-</dl>
 
+    {% if museumobject.deaccession_set.all %}
+      <dt>Deacession</dt>
+      <dd>
+        {% for deaccession in museumobject.deaccession_set.all %}
+        <a href="{% url admin:condition_deaccession_change deaccession.id %}">
+            {{ deaccession }}</a><br>
+        {% endfor %}
+      </dd>
+    {% endif %}
+
+  </dl>
+</div><!-- /staff-information -->
 {% endif %} {# is_staff #}
 
 
 <div class="physical-description">
-  <h3>Physical description</h3>
-  <p>{{ museumobject.description|linebreaks }}</p>
+  <h3>Description</h3>
+  {{ museumobject.description|linebreaks }}
 </div>
 
 <div class="research-notes">
   <h3>Research notes</h3>
-  <p>{{ museumobject.comment|linebreaks }}</p>
+  {{ museumobject.comment|linebreaks }}
 </div>
 
 
