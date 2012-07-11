@@ -152,12 +152,11 @@
 
   <dl class="physical-description">
   {% if museumobject.raw_material %}
-    <dt>Raw material</dt>
-    <dd>{{ museumobject.raw_material }}
-    </dd>
+    <dt class="raw-materials">Raw material</dt>
+    <dd class="raw-materials">{{ museumobject.raw_material }}</dd>
   {% endif %}
-  <dt>Dimensions</dt>
-    <dd>
+    <dt class="dimensions">Dimensions</dt>
+    <dd class="dimensions">
       <b>Height: </b> {{ museumobject.height|dimension:"mm" }}
       <b>Length: </b> {{ museumobject.length|dimension:"mm" }}
       <b>Width: </b> {{ museumobject.width|dimension:"mm" }}
