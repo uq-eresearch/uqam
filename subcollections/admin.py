@@ -8,7 +8,8 @@ class CollectionAdmin(admin.ModelAdmin):
     raw_id_fields = ('items',)
 
     readonly_fields = ('author', 'updated', 'created', 'edit_url',
-            'last_published', 'date_published', 'last_syndicated')
+            'last_published', 'date_published', 'last_syndicated',
+            'syndication_result')
 
     autocomplete_lookup_fields = {
         'm2m': ['items'],
