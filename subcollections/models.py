@@ -169,7 +169,7 @@ class Collection(models.Model):
     #        cat_url = get_site_url(site, category.get_absolute_url())
             handler.addQuickElement(u'category', attrs={
     #            u'term': cat_url,
-                u'label': unicode(category)
+                u'term': unicode(category)
             })
 
     def _add_spatial(self, handler, site):
