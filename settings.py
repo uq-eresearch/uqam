@@ -6,4 +6,4 @@ else:
     from default_settings import *
 
 
-TEST_RUNNER = 'common.testrunner.NoDbTestRunner'
+#TEST_RUNNER = 'common.testrunner.NoDbTestRunner'
