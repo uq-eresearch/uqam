@@ -64,10 +64,10 @@ def merge_selected(modeladmin, request, queryset):
     #Build the display_table... This is just for the template.
     #----------------------------------------
     display_table = []
-    try:
-        list_display.remove('action_checkbox')
-    except ValueError:
-        pass
+#    try:
+#        list_display.remove('action_checkbox')
+#    except ValueError:
+#        pass
 
     from django.forms.forms import pretty_name
     titles = []
