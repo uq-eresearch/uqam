@@ -35,7 +35,6 @@ def _current_search_results(request, reg_num):
     context = {}
     index = request.GET.get('search_result', None)
 
-
     if index is not None:
         index = int(index)
 
@@ -107,7 +106,6 @@ def categories_list(request, full_slug=None):
             {"categories": cat_list,
              "objects": objects,
              "breadcrumbs": breadcrumbs})
-
 
 
 def search(request):

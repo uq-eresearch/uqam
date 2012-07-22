@@ -16,7 +16,6 @@ from django.test.client import Client
 
 
 class ViewTest(TestCase):
-    fixtures = ['first_ten.json']
 
     def setUp(self):
         self.client = Client()
