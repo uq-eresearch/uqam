@@ -339,3 +339,14 @@ THUMBNAIL_SOURCE_GENERATORS = (
         'easy_thumbnails.source_generators.pil_image',
         'mediaman.source_generators.pgmagick_image',
     )
+
+
+### Testing ###
+TEST_RUNNER = "ignoretests.DjangoIgnoreTestSuiteRunner"
+IGNORE_TESTS = (
+    'django.contrib.auth',
+    'django_filters',
+    'django.contrib.flatpages',
+    'django.contrib.messages',
+    'easy_thumbnails',
+)

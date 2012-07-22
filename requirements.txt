@@ -4,7 +4,7 @@ South==0.7.5
 Whoosh==2.3.0
 distribute==0.6.19
 django-auth-ldap==1.1
-django-extensions==0.7.1
+django-extensions==0.9
 #https://github.com/omad/django-grappelli/zipball/master/dashboard
 django-haystack==1.2.7
 python-ldap==2.4.10
@@ -24,3 +24,4 @@ django-tables2==0.11.0
 easy-thumbnails==1.0.3
 pgmagick==0.5.1
 django-smart-selects==1.0.4
+django-ignoretests==0.3.2
