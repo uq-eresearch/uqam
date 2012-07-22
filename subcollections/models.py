@@ -95,6 +95,7 @@ class Collection(models.Model):
 
         Uses the profile from http://dataspace.metadata.net/doc/atom
         """
+        syndication = Syndication.objects.get(id=1)
         output = StringIO.StringIO()
         site = Site.objects.get(id=1)
 
@@ -125,8 +126,8 @@ class Collection(models.Model):
 
         handler.addQuickElement(u'link', attrs={
                 u'rel': u'http://purl.org/dc/terms/publisher',
-                u'href': settings.COLLECTION_CURATOR['href'],
-                u'title': settings.COLLECTION_CURATOR['title']
+                u'href': syndication.curator_href,
+                u'title': syndication.curator_name
             })
 
         handler.startElement(u"source", {})
@@ -209,6 +210,9 @@ class Syndication(models.Model):
     remote_url = models.CharField(max_length=300)
     username = models.CharField(max_length=100, blank=True)
     password = models.CharField(max_length=100, blank=True)
+
+    curator_href = models.CharField(max_length=200, blank=True)
+    curator_name = models.CharField(max_length=200, blank=True)
 
     # Constants
     content_type = "application/atom+xml"

@@ -329,11 +329,6 @@ ARCHIVAL_STORAGE = FileSystemStorage(
         location=MEDIA_ROOT + '/archival',
         base_url=MEDIA_URL + 'archival/')
 
-COLLECTION_CURATOR = {
-    'href': u'http://dataspace-uat.metadata.net/agents/779',
-    'title': u'Diana Young'
-}
-
 
 THUMBNAIL_SOURCE_GENERATORS = (
         'easy_thumbnails.source_generators.pil_image',
