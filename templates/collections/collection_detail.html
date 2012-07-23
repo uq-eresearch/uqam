@@ -18,16 +18,25 @@
 {% endif %}
 <b>Date updated:</b> {{ collection.last_published }}<br>
 
+<b>Categories:</b>
+{% for category in collection.get_categories %}
+<a href="{{category.get_absolute_url}}">{{category.name}}</a>{% if not forloop.last %}, {% endif %}
+{% endfor %}
+
+<br>
 <b>Places:</b>
 {% for place in collection.get_places %}
 <a href="{{place.get_absolute_url}}">{{place}}</a>{% if not forloop.last %}, {% endif %}
 {% endfor %}
 
+
+<div id="map_canvas" style="height:300px; width:400px;"></div>
+
 <br>
-<b>Categories:</b>
-{% for category in collection.get_categories %}
-<a href="{{category.get_absolute_url}}">{{category.name}}</a>{% if not forloop.last %}, {% endif %}
+{% for p in collection.get_places %}
+
 {% endfor %}
+
 
 <h2>Items</h2>
 {% include "snippets/paged_object_list.html" %}
@@ -35,3 +44,48 @@
 
 {% endblock %}
 
+
+{% block javascript %}
+{% with places=collection.get_places %}
+{% if places %}
+<script type="text/javascript"
+  src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+    var geocoder, map;
+    $(document).ready(
+    function initialize() {
+        var myOptions = {
+            zoom: 3, // Zoomed out to show location in country
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+        var bounds = new google.maps.LatLngBounds();
+
+        var places = [{% for p in places %}{%if p.latitude %}
+            ['{{p.name}}', {{p.latitude}}, {{p.longitude}}, '{{p.get_absolute_url}}']{% if not forloop.last %},{% endif %}
+        {% endif %}{% endfor %}];
+
+        for (var i = 0; i < places.length; i++) {
+            var place = places[i];
+            var latlng = new google.maps.LatLng(place[1], place[2])
+            var marker = new google.maps.Marker({
+                map: map,
+                position: latlng,
+                title: place[0],
+                url: place[4]
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+                window.location.href = marker.url;
+            });
+            bounds.extend(latlng);
+        }
+
+        map.fitBounds(bounds);
+    });
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}
