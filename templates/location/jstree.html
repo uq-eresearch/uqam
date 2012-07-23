@@ -107,6 +107,10 @@ $(function() {
                 "type": type,
                 "parent": parent_id
             }
+        }).done(function(xhr) {
+            $(data.rslt.obj).attr("id", type + "-" + xhr.id);
+            tree.set_text(node, name + " (0)");
+
         }).fail(function(xhr, textStats) {
             $.jstree.rollback(data.rlbk);
             alert(xhr.responseText);
@@ -121,10 +125,17 @@ $(function() {
                 "obj": node.attr('id'),
                 "new-name": data.rslt.new_name
             }
-        }).fail(function(xhr, textStats) {
-            alert("Error: " + xhr.responseText);
-        }).always(function() {
+        }).error(function(xhr) {
             tree.refresh();
+        }).done(function(xhr) {
+            if (xhr.error) {
+                var name = data.rslt.old_name + " (" + xhr.count + ")";
+                tree.set_text(node, name);
+                alert("Error: " + xhr.message);
+            } else {
+                var name = xhr.new_name + " (" + xhr.count + ")";
+                tree.set_text(node, name);
+            }
         });
     }).bind("delete_node.jstree", function(event, data) {
         var node = data.rslt.obj;
@@ -278,6 +289,7 @@ $(function() {
 
 <div id="controls">
     <a href="#" onclick="$.jstree._reference('#geolocations').refresh();return false;">Refresh</a>
+    <a href="{% url admin:location_globalregion_add %}">Add Global Region</a>
 </div>
 <div id="status">
 </div>

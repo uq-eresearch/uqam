@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.deletion import ProtectedError
 from django.db.utils import IntegrityError
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -99,14 +100,22 @@ def rename_element(request):
     new_name = request.POST['new-name']
     element = find_location(el_type, el_id)
     element.name = new_name
+    linked_count = element.museumobject_set.count()
     try:
         element.save()
     except IntegrityError:
-        # Return 409 Conflict
+        # Would like to return 409 Conflict
+        # but browser has issue parsing json, so using a 200
+        # with an error flag instead
         logger.warn('Error renaming location: %s', element)
-        return HttpResponse('A location by that name already exists', status=409)
+        return HttpResponse(json.dumps({
+            'message': 'A location by that name already exists',
+            'count': linked_count,
+            'error': True}), mimetype="application/json")
 
-    return HttpResponse('success')
+    return HttpResponse(json.dumps(
+        {'new_name': element.name, 'count': linked_count, 'error': False}),
+        mimetype="application/json")
 
 
 @require_POST
@@ -128,7 +137,8 @@ def create_element(request):
         logger.warn('Error creating location: %s', new_location)
         return HttpResponse('A location by that name already exists', status=409)
 
-    return HttpResponse('success')
+    return HttpResponse(json.dumps(
+        {'id': new_location.id}), mimetype="application/json")
 
 
 @require_POST
