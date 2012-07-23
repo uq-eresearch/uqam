@@ -82,11 +82,22 @@ class Collection(models.Model):
     def get_places(self):
         """
         Get all places referenced by items in this collection
+
+        Returns a list of each place, ignoring places with blank names
+        and ignoring places with duplicate names, even if they are different 'types'
+        of place.
+
+        Ordered from most all encompassing to most detailed.
         """
         items = self.items.all()
+        names_set = set()
         places = []
-        for place_type in (GlobalRegion, Country, StateProvince, RegionDistrict, Locality):
-            places.extend(place_type.objects.filter(museumobject__in=items).distinct())
+        for place_type in (Locality, RegionDistrict, StateProvince, Country, GlobalRegion):
+            for place in place_type.objects.filter(museumobject__in=items).distinct():
+                if place.name and place.name not in names_set:
+                    names_set.add(place.name)
+                    places.append(place)
+        places.reverse()
         return places
 
     def as_atom(self, encoding='utf-8'):
