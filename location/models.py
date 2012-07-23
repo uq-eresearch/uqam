@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
+from exceptions import IllegalMove
 
 
 class LocationBase(models.Model):
@@ -41,6 +42,14 @@ class LocationBase(models.Model):
             return parent.get_parents() + [parent]
         else:
             return []
+
+    def moveto_parent(self):
+        if not hasattr(self, 'parent'):
+            # Top level of tree, cannot move
+            raise IllegalMove()
+
+        
+
 
 
 class GlobalRegion(LocationBase):
