@@ -16,18 +16,6 @@ class CollectionAdmin(admin.ModelAdmin):
         'fk': ['agent'],
     }
 
-    fieldsets = (
-        (None, {
-            'fields': ('title', 'description', 'items',
-                'is_public', 'is_syndicated', 'rights',
-                'access_rights')
-        }),
-        ('Syndication Information', {
-            'classes': ('collapse',),
-            'fields': ('author', 'updated')
-        })
-    )
-
     def save_model(self, request, obj, form, change):
         obj.author = request.user
         obj.save()
