@@ -1,4 +1,9 @@
 {% extends "admin/change_form.html" %}
+
+{% block javascripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/save_me_genie.js"></script>
+{% endblock %}
  
 {% block object-tools %}
   {{ block.super }}
