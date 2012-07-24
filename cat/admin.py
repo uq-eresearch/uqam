@@ -77,14 +77,14 @@ class DocumentInline(MediaFileInline):
 
 class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
-                    'description', 'comment',)
-    actions = [add_to_collection, generate_xls]
+                    'description', 'comment', 'is_public_comment')
+    actions = [add_to_collection, generate_xls, 'make_comment_public', 'make_comment_private']
     readonly_fields = ('place', 'cultural_bloc', 'functional_category',
         'donor_2', 'collector_2')
 
     list_filter = ('place__country', 'functional_category__name',
                     'access_status', 'loan_status', 'cultural_bloc',
-                    'artefact_type', 'collector', 'donor')
+                    'artefact_type', 'collector', 'donor', 'record_status')
 
     search_fields = ['registration_number', 'description', 'comment',
                      'donor__name', 'collector__name', 'maker__name']
@@ -160,6 +160,14 @@ class MOAdmin(UndeleteableModelAdmin):
                 ('depth', 'circumference'))
         }),
     )
+
+    def make_comment_public(self, request, queryset):
+        queryset.update(is_public_comment=True)
+    make_comment_public.short_description = "Make comments public"
+
+    def make_comment_private(self, request, queryset):
+        queryset.update(is_public_comment=False)
+    make_comment_private.short_description = "Make comments private"
 
     def get_urls(self):
         urls = super(MOAdmin, self).get_urls()

@@ -43,8 +43,17 @@ class PersonInline(admin.TabularInline):
     raw_id_fields = ('person',)
 
 
+def make_public(modeladmin, request, queryset):
+    queryset.update(public=True)
+
+
+def make_private(modeladmin, request, queryset):
+    queryset.update(public=False)
+
+
 class MediaFileAdmin(admin.ModelAdmin):
     ordering = ('-upload_date',)
+    actions = [make_public, make_private]
 
     def has_add_permission(self, request):
         '''Always deny adding in admin
