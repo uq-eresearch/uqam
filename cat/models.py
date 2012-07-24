@@ -196,6 +196,8 @@ class MuseumObject(models.Model):
             'mediaman.Document',
             null=True, blank=True)
 
+    public = models.BooleanField(default=True)
+
     def dimensions(self):
         '''Returns textual dimensions for the item
 
