@@ -187,7 +187,7 @@ class MOAdmin(UndeleteableModelAdmin):
                 ('add_to_opener', (add_to_opener, 'add_to_opener', 'Select items'))
             ])
         else:
-            return super(MOAdmin, self).get_actions()
+            return super(MOAdmin, self).get_actions(request)
 
     class Media:
         from django.conf import settings
