@@ -5,8 +5,8 @@ Whoosh==2.3.0
 distribute==0.6.19
 django-auth-ldap==1.1
 django-extensions==0.9
-#https://github.com/omad/django-grappelli/zipball/master/dashboard
 django-haystack==1.2.7
+django-grappelli==2.4.0
 python-ldap==2.4.10
 wsgiref==0.1.2
 gunicorn==0.13.4
