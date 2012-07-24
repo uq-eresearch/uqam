@@ -37,29 +37,10 @@ def process_element_move(type, id, np_type, np_id):
     new_parent = find_location(np_type, np_id)
     element = find_location(type, id)
 
-    move(new_parent, element)
+    element.moveto_parent(new_parent)
 
 
-def move(new_parent, element):
-    np_children = new_parent.children.filter(slug=element.slug)
-
-    if np_children:
-        child = np_children[0]
-        if hasattr(child, 'children') and child.children.exists():
-            raise IntegrityError
-
-        # merge child/element
-        field_changes = calc_field_changes(child, new_parent.id)
-        element.museumobject_set.update(**field_changes)
-
-        element.delete()
-    else:
-        field_changes = calc_field_changes(element, new_parent.id)
-        element.museumobject_set.update(**field_changes)
-        element.parent_id = new_parent.id
-        element.save()
-
-
+### Unused ###
 def perform_move(new_parent, element):
     if hasattr(element, 'children') and \
       element.children.exists():

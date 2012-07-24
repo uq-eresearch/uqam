@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
-from exceptions import IllegalMove
+from exceptions import IllegalMove, SameLevelMove, WrongLevelMove
+from django.db.utils import IntegrityError
 
 
 class LocationBase(models.Model):
@@ -43,13 +44,67 @@ class LocationBase(models.Model):
         else:
             return []
 
-    def moveto_parent(self):
+    def moveto_parent(self, new_parent):
+        self._validate_move(new_parent)
+        return self._perform_move(new_parent)
+
+    def _validate_move(self, new_parent):
         if not hasattr(self, 'parent'):
             # Top level of tree, cannot move
             raise IllegalMove()
 
-        
+        if type(self) == type(new_parent):
+            # Parent cannot be of same type
+            raise SameLevelMove
 
+        parent_field = self._meta.get_field_by_name('parent')[0]
+        req_parent_type = parent_field.rel.to
+
+        if req_parent_type != type(new_parent):
+            # new_parent is wrong type for this class
+            raise WrongLevelMove
+
+    def _perform_move(self, new_parent):
+        #import ipdb; ipdb.set_trace()
+        # Check for conflicting children
+        np_children = new_parent.children.filter(slug=self.slug)
+
+        if np_children:
+            child = np_children[0]
+            if hasattr(child, 'children') and child.children.exists():
+                raise IntegrityError
+
+            # merge child/self
+            field_changes = calc_field_changes(child)
+            self.museumobject_set.update(**field_changes)
+
+            self.delete()
+            return child
+        else:
+            # Simple move
+            self.parent = new_parent
+            self.save()
+
+            # Update museumobjects
+            field_changes = calc_field_changes(self)
+            self.museumobject_set.update(**field_changes)
+            return self
+
+
+def calc_field_changes(element):
+    """
+    Walk up the tree of geo-locations, finding the new parents
+
+    These will be set onto all the museumobjects.
+    """
+    fieldname = element._meta.concrete_model.museumobject_set.\
+            related.field.name
+    field_changes = {}
+    field_changes[fieldname] = element.id
+    if hasattr(element, 'parent'):
+        field_changes.update(
+            calc_field_changes(element.parent))
+    return field_changes
 
 
 class GlobalRegion(LocationBase):
