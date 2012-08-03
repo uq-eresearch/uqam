@@ -93,19 +93,19 @@ class MuseumObject(models.Model):
 
 # New Geo-locations data
     global_region = models.ForeignKey(GlobalRegion, blank=True, null=True,
-        on_delete=models.PROTECT)
+        on_delete=models.SET_NULL)
     country = ChainedForeignKey(Country, blank=True, null=True,
         chained_field='global_region', chained_model_field='parent',
-        show_all=False, auto_choose=True, on_delete=models.PROTECT)
+        show_all=False, auto_choose=True, on_delete=models.SET_NULL)
     state_province = ChainedForeignKey(StateProvince, blank=True, null=True,
         chained_field='country', chained_model_field='parent',
-        show_all=False, auto_choose=True, on_delete=models.PROTECT)
+        show_all=False, auto_choose=True, on_delete=models.SET_NULL)
     region_district = ChainedForeignKey(RegionDistrict, blank=True, null=True,
         chained_field='state_province', chained_model_field='parent',
-        show_all=False, auto_choose=True, on_delete=models.PROTECT)
+        show_all=False, auto_choose=True, on_delete=models.SET_NULL)
     locality = ChainedForeignKey(Locality, blank=True, null=True,
         chained_field='region_district', chained_model_field='parent',
-        show_all=False, auto_choose=True, on_delete=models.PROTECT)
+        show_all=False, auto_choose=True, on_delete=models.SET_NULL)
 
     donor = models.ForeignKey(
             'parties.Person',
