@@ -62,8 +62,9 @@ class ItemFilterSet(django_filters.FilterSet):
                 'record_status', 'raw_material', 'description',
                 'storage_section', 'storage_unit', 'storage_bay',
                 'storage_shelf_box_drawer', 'acquisition_date',
-                'acquisition_method', 'cultural_bloc', 'donor', 'collector',
-                'country', 'has_images',
+                'acquisition_method', 'donor', 'collector',
+                'maker', 'has_images', 'global_region', 'country',
+                'state_province', 'region_district', 'locality'
                 ]
 
 
@@ -110,6 +111,9 @@ class ColumnForm(forms.Form):
 
 def search_home(request,
         template_name='advanced_search.html'):
+    """
+    Advanced search/filter form
+    """
     is_filtered = bool(request.GET)
     filter = ItemFilterSet(request.GET or None)
 

@@ -74,6 +74,8 @@ class DocumentInline(MediaFileInline):
     admin_doc_link.allow_tags = True
     verbose_name_plural = 'Related documents'
 
+from django.contrib.admin import SimpleListFilter
+
 
 class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
@@ -83,12 +85,16 @@ class MOAdmin(UndeleteableModelAdmin):
     readonly_fields = ('place', 'cultural_bloc', 'functional_category',
         'donor_2', 'collector_2')
 
-    list_filter = ('place__country', 'functional_category__name',
-                    'access_status', 'loan_status', 'cultural_bloc',
-                    'artefact_type', 'collector', 'donor', 'record_status')
+    list_filter = ('artefact_type', 'category',
+                    'access_status', 'loan_status',
+                    'collector', 'donor', 'record_status',
+                    'global_region', 'is_public_comment', 'public',
+                    'maker')
 
     search_fields = ['registration_number', 'description', 'comment',
-                     'donor__name', 'collector__name', 'maker__name']
+                     'donor__name', 'collector__name', 'maker__name',
+                     'global_region__name', 'country__name', 'state_province__name',
+                     'region_district__name', 'locality__name']
 
     inlines = [
             DocumentInline, ArtefactRepInline
@@ -196,6 +202,9 @@ class MOAdmin(UndeleteableModelAdmin):
         pass
 
     def get_actions(self, request):
+        """
+        Allow selecting multiple items when change-list is opened as a popup
+        """
         from django.contrib.admin.views.main import IS_POPUP_VAR
         if IS_POPUP_VAR in request.GET:
             actions = []

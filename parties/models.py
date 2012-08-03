@@ -18,7 +18,7 @@ class Person(models.Model):
         return ('person_detail', [str(self.id)])
 
     def __unicode__(self):
-        return self.display_name
+        return self.name
 
     class Meta:
         ordering = ['name']
