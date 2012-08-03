@@ -4,10 +4,11 @@ from django.template.defaultfilters import slugify
 from exceptions import IllegalMove, SameLevelMove, WrongLevelMove
 from django.db.utils import IntegrityError
 
+slug_length = 50
 
 class LocationBase(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(help_text='Unique identifier. May be used in URLs.')
+    slug = models.SlugField(help_text='Unique identifier. May be used in URLs.', max_length=slug_length)
     description = models.CharField(max_length=255, blank=True)
 
     gn_name = models.CharField(max_length=100,
@@ -25,7 +26,7 @@ class LocationBase(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.name)[:slug_length]
         super(LocationBase, self).save(*args, **kwargs)
 
     def get_kml_coordinates(self):
@@ -65,21 +66,12 @@ class LocationBase(models.Model):
             raise WrongLevelMove
 
     def _perform_move(self, new_parent):
-        #import ipdb; ipdb.set_trace()
-        # Check for conflicting children
-        np_children = new_parent.children.filter(slug=self.slug)
+        # Check for conflicting children and merge if they exist
+        if hasattr(new_parent, 'children') and \
+            new_parent.children.filter(slug=self.slug):
 
-        if np_children:
-            child = np_children[0]
-            if hasattr(child, 'children') and child.children.exists():
-                raise IntegrityError
-
-            # merge child/self
-            field_changes = calc_field_changes(child)
-            self.museumobject_set.update(**field_changes)
-
-            self.delete()
-            return child
+            to_merge = new_parent.children.get(slug=self.slug)
+            return self.merge(to_merge, self)
         else:
             # Simple move
             self.parent = new_parent
@@ -90,6 +82,41 @@ class LocationBase(models.Model):
             self.museumobject_set.update(**field_changes)
             return self
 
+    @staticmethod
+    def merge(target, old):
+        if hasattr(old, 'children'):
+            # Deal with all the children of old
+            targets_children = [child.slug for child in target.children.all()]
+
+            for child in old.children.all():
+                if child.slug in targets_children:
+                    # Need to merge
+                    match = target.children.get(slug=child.slug)
+                    LocationBase.merge(match, child)
+                else:
+                    # Simply move child
+                    child.parent = target
+                    child.save()
+
+                    changes = calc_field_changes(target)
+                    child.museumobject_set.update(**changes)
+
+        # now that old has no children
+        # Actually merge the two
+        changes = calc_field_changes(target)
+        old.museumobject_set.update(**changes)
+        if old.museumobject_set.exists():
+            raise Exception
+        else:
+            old.delete()
+
+        return target
+
+
+def find_mo_field_name(element):
+    return element._meta.concrete_model.museumobject_set.\
+            related.field.name
+
 
 def calc_field_changes(element):
     """
@@ -97,10 +124,8 @@ def calc_field_changes(element):
 
     These will be set onto all the museumobjects.
     """
-    fieldname = element._meta.concrete_model.museumobject_set.\
-            related.field.name
-    field_changes = {}
-    field_changes[fieldname] = element.id
+    fieldname = find_mo_field_name(element)
+    field_changes = {fieldname: element.id}
     if hasattr(element, 'parent'):
         field_changes.update(
             calc_field_changes(element.parent))
@@ -115,7 +140,7 @@ class GlobalRegion(LocationBase):
 
 class Country(LocationBase):
     parent = models.ForeignKey(GlobalRegion, related_name='children',
-        verbose_name='Global region')
+        verbose_name='Global region', on_delete=models.PROTECT)
 
     class Meta(LocationBase.Meta):
         verbose_name_plural = 'countries'
@@ -124,7 +149,7 @@ class Country(LocationBase):
 
 class StateProvince(LocationBase):
     parent = models.ForeignKey(Country, related_name='children',
-        verbose_name='Country')
+        verbose_name='Country', on_delete=models.PROTECT)
 
     class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
@@ -132,7 +157,7 @@ class StateProvince(LocationBase):
 
 class RegionDistrict(LocationBase):
     parent = models.ForeignKey(StateProvince, related_name='children',
-        verbose_name='State/province')
+        verbose_name='State/province', on_delete=models.PROTECT)
 
     class Meta(LocationBase.Meta):
         unique_together = ('parent', 'slug')
@@ -140,7 +165,7 @@ class RegionDistrict(LocationBase):
 
 class Locality(LocationBase):
     parent = models.ForeignKey(RegionDistrict, related_name='children',
-        verbose_name='Region/district')
+        verbose_name='Region/district', on_delete=models.PROTECT)
 
     class Meta(LocationBase.Meta):
         verbose_name_plural = 'localities'

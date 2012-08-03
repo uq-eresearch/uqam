@@ -8,15 +8,15 @@ class MoveTest(TestCase):
     fixtures = ['testlocations.json']
 
     def setUp(self):
-        self.new_parent = GlobalRegion.objects.get(name='Asia')
-        self.orig_parent = GlobalRegion.objects.get(name='Australia')
+        self.asia = GlobalRegion.objects.get(name='Asia')
+        self.gr_australia = GlobalRegion.objects.get(name='Australia')
 
-        self.country_1 = Country.objects.get(name='Australia', parent=self.orig_parent)
-        self.country_2 = Country.objects.get(name='Thailand', parent=self.new_parent)
-        self.country_no_children = Country.objects.get(name='NoChildren', parent=self.orig_parent)
+        self.country_australia = Country.objects.get(name='Australia', parent=self.gr_australia)
+        self.country_thailand = Country.objects.get(name='Thailand', parent=self.asia)
+        self.country_no_children = Country.objects.get(name='NoChildren', parent=self.gr_australia)
 
         self.stateprovince_1 = StateProvince.objects.get(name='Queensland',
-            parent=self.country_1)
+            parent=self.country_australia)
 
         self.regiondistrict_1 = RegionDistrict.objects.get(name='SEQ',
             parent=self.stateprovince_1)
@@ -29,21 +29,40 @@ class MoveTest(TestCase):
         Try moving a global region inside another global region
         """
         with self.assertRaises(IllegalMove):
-            self.orig_parent.moveto_parent(self.new_parent)
+            self.gr_australia.moveto_parent(self.asia)
 
     def test_cannot_move_to_same_level(self):
         """
         Try moving a country into another country
         """
         with self.assertRaises(SameLevelMove):
-            self.country_1.moveto_parent(self.country_2)
+            self.country_australia.moveto_parent(self.country_thailand)
 
     def test_cannot_move_to_wrong_level(self):
         """
         Try (and fail) moving a StateProvince into a GlobalRegion
         """
         with self.assertRaises(WrongLevelMove):
-            self.stateprovince_1.moveto_parent(self.new_parent)
+            self.stateprovince_1.moveto_parent(self.asia)
+
+    def test_move_locality(self):
+        maleny = Locality.objects.get(name='Maleny')
+        orig_parent = maleny.parent
+        northern = RegionDistrict.objects.get(name='Northern')
+        num_in_child = maleny.museumobject_set.count()
+        num_in_new_parent = northern.museumobject_set.count()
+        num_in_orig_parent = maleny.parent.museumobject_set.count()
+#        import ipdb; ipdb.set_trace()
+        child = maleny.moveto_parent(northern)
+
+        # Check counts
+        self.assertEqual(num_in_child,
+            child.museumobject_set.count())
+        self.assertEqual(num_in_new_parent + num_in_child,
+            northern.museumobject_set.count())
+        self.assertEqual(num_in_orig_parent - num_in_child,
+            orig_parent.museumobject_set.count())
+
 
     def test_simple_country_move(self):
         """
@@ -52,27 +71,27 @@ class MoveTest(TestCase):
         The country has linked museumobjects, but no children
         and no merge required.
         """
-        child = Country.objects.get(name='NoChildren', parent=self.orig_parent)
+        child = Country.objects.get(name='NoChildren', parent=self.gr_australia)
         num_in_child = child.museumobject_set.count()
-        num_in_new_parent = self.new_parent.museumobject_set.count()
-        num_in_orig_parent = self.orig_parent.museumobject_set.count()
+        num_in_new_parent = self.asia.museumobject_set.count()
+        num_in_orig_parent = self.gr_australia.museumobject_set.count()
 
         # Perform the move
-        child = child.moveto_parent(self.new_parent)
+        child = child.moveto_parent(self.asia)
 
         # Check parent field updated
-        self.assertEqual(self.new_parent, child.parent)
+        self.assertEqual(self.asia, child.parent)
 
         # Check counts
         self.assertEqual(num_in_child,
             child.museumobject_set.count())
         self.assertEqual(num_in_new_parent + num_in_child,
-            self.new_parent.museumobject_set.count())
+            self.asia.museumobject_set.count())
         self.assertEqual(num_in_orig_parent - num_in_child,
-            self.orig_parent.museumobject_set.count())
+            self.gr_australia.museumobject_set.count())
 
-        self.assertTreeCounts(self.orig_parent)
-        self.assertTreeCounts(self.new_parent)
+        self.assertTreeCounts(self.gr_australia)
+        self.assertTreeCounts(self.asia)
 
     def test_simple_country_merge(self):
         """
@@ -82,12 +101,12 @@ class MoveTest(TestCase):
         have some linked museum objects, so must be merged.
         """
         child = self.country_no_children
-        curr_parent = child.parent
+        old_parent = child.parent
         new_parent = GlobalRegion.objects.get(name='Europe')
         merge_target = Country.objects.get(name='NoChildren', parent=new_parent)
 
         num_in_child = child.museumobject_set.count()
-        num_in_curr_parent = curr_parent.museumobject_set.count()
+        num_in_old_parent = old_parent.museumobject_set.count()
         num_in_new_parent = new_parent.museumobject_set.count()
         num_in_merge_target = merge_target.museumobject_set.count()
 
@@ -98,14 +117,47 @@ class MoveTest(TestCase):
         self.assertEqual(new_parent, child.parent)
 
         # Check counts
-        self.assertEqual(num_in_curr_parent - num_in_child,
-            child.museumobject_set.count())
+        self.assertEqual(num_in_old_parent - num_in_child,
+            old_parent.museumobject_set.count())
         self.assertEqual(num_in_new_parent + num_in_child,
             new_parent.museumobject_set.count())
         self.assertEqual(num_in_child + num_in_merge_target,
             merge_target.museumobject_set.count())
         self.assertTreeCounts(new_parent)
-        self.assertTreeCounts(curr_parent)
+        self.assertTreeCounts(old_parent)
+
+    def test_complex_country_merge(self):
+        """
+        Move a country to another global region
+
+        A country with the same name exists already, and both countries
+        have both linked museum objects and conflicting children, so must be merged.
+        """
+        child = Country.objects.get(name='Australia', parent=self.asia)
+        old_parent = child.parent
+        new_parent = GlobalRegion.objects.get(name='Australia')
+        merge_target = Country.objects.get(name='Australia', parent=self.gr_australia)
+
+        num_in_child = child.museumobject_set.count()
+        num_in_old_parent = old_parent.museumobject_set.count()
+        num_in_new_parent = new_parent.museumobject_set.count()
+        num_in_merge_target = merge_target.museumobject_set.count()
+
+        # Perform the move
+        child = child.moveto_parent(new_parent)
+
+        # Check parent field updated
+        self.assertEqual(new_parent, child.parent)
+
+        # Check counts
+        self.assertEqual(num_in_old_parent - num_in_child,
+            old_parent.museumobject_set.count())
+        self.assertEqual(num_in_new_parent + num_in_child,
+            new_parent.museumobject_set.count())
+        self.assertEqual(num_in_child + num_in_merge_target,
+            merge_target.museumobject_set.count())
+        self.assertTreeCounts(new_parent)
+        self.assertTreeCounts(old_parent)
 
     def move_country_with_children(self):
         """
