@@ -16,17 +16,18 @@
 
 <!-- CONTENT -->
 {% block content %}
-<div class="container-flexible">
-    <div class="form-container">
-<form action="{% url admin:search_results %}" method="get">
-  <fieldset class="module">
+<div class="grp-content-container">
+  <form action="{% url admin:search_results %}" method="get">
+
+
+  <fieldset class="grp-module">
     <h2 class="collapse-handler">Query</h2>
   {% for field in filter.form %}
-    <div class="row cells-1">
-      <div>
-        <div class="column span-4"><label for="{{field.html_name}}">
+    <div class="grp-row grp-cells-1">
+      <div class="l-2c-fluid l-d-4">
+        <div class="c-1"><label for="{{field.html_name}}">
                 {{ field.label_tag }}</label></div>
-        <div class="column span-flexible">
+        <div class="c-2">
             {{ field }}
         </div>
       </div>
@@ -34,14 +35,14 @@
   {% endfor %}
   </fieldset>
 
-  <fieldset class="module">
+  <fieldset class="grp-module">
   <h2>Fields</h2>
   {% for field in columns %}
-    <div class="row cells-1">
-      <div>
-        <div class="column span-4"><label for="{{field.html_name}}">
+    <div class="grp-row grp-cells-1">
+      <div class="l-2c-fluid l-d-4">
+        <div class="c-1"><label for="{{field.html_name}}">
                 {{ field.label_tag }}</label></div>
-        <div class="column span-flexible">
+        <div class="c-2">
             {{ field }}
         </div>
       </div>
@@ -49,13 +50,13 @@
   {% endfor %}
   </fieldset>
 
-  <fieldset class="module">
+  <fieldset class="grp-module">
   <h2>Per Page</h2>
-    <div class="row cells-1">
-      <div>
-        <div class="column span-4"><label for="per_page">
+    <div class="grp-row grp-cells-1">
+      <div class="l-2c-fluid l-d-4">
+        <div class="c-1"><label for="per_page">
                 Per page</label></div>
-        <div class="column span-flexible">
+        <div class="c-2">
           <select name="per_page">
               <option value="30" selected="selected">30</option>
               <option value="100">100</option>
@@ -65,10 +66,16 @@
       </div>
     </div>
   </fieldset>
-  <input type="submit" />
+
+  <footer class="grp-module grp-submit-row grp-fixed-footer">
+    <ul>
+      <li>
+        <input type="submit" value="Search" class="grp-button grp-default"/>
+      </li>
+    </ul>
+  </footer>
 </form>
 
-    </div>
 </div>
 
 {% endblock content %}

@@ -126,6 +126,11 @@ def search_home(request,
 
     exclude = columns.get_excluded_names()
 
+    # fix field attrs
+    for field in filter.form.fields.values():
+        if isinstance(field, forms.fields.CharField):
+            field.widget.attrs['class'] = 'vTextField'
+
     title = "Advanced search/filter"
     if 'result' in request.path:
         title = "Search results"
