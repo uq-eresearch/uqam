@@ -273,7 +273,7 @@ class ArtefactType(DataDictionary):
 
 class Category(models.Model):
     """
-    A hierarchical set of categories for classifying Museum Objects
+    A hierarchical set of categories for classifying Museum items
     """
     name = models.CharField(max_length=30)
     description = models.TextField(blank=True)
@@ -309,7 +309,7 @@ class Category(models.Model):
 
 class Reference(models.Model):
     """
-    Publications mentioning a museum object
+    Publications mentioning a museum item
     """
     museum_object = models.ForeignKey(MuseumObject)
     author = models.CharField(max_length=150)
@@ -321,7 +321,7 @@ class Reference(models.Model):
 
 class PhotoRecord(models.Model):
     """
-    Photographic record of a museum object
+    Photographic record of a museum item
     """
     museum_object = models.ForeignKey(MuseumObject)
     phototype = models.ForeignKey('PhotoType')
