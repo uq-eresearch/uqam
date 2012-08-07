@@ -3,6 +3,13 @@
 
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
+
+{# fix grappelli weirdness #}
+<style>
+table thead th a {
+    margin-right: 0px;
+}
+</style>
 {% endblock extrastyle %}
 
 <!-- OBJECT TOOLS -->
