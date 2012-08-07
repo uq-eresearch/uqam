@@ -5,6 +5,90 @@
 {% include "snippets/top_search_panel.html" %}
 
 {% if query %}
+<!-- Begin faceting. -->
+<h2>By Category</h2>
+    <div>
+        <dl>
+            {% if facets.fields.categories %}
+                <dt>Categories</dt>
+                {# Provide only the top 5 categories #}
+                {% for categories in facets.fields.categories|slice:":5" %}
+                  {% if categories.1 > 0 %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=categories_exact:{{ categories.0|urlencode }}">{{ categories.0 }}</a> ({{ categories.1 }})</dd>
+                  {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No categories facets.</p>
+            {% endif %}
+        </dl>
+    </div>
+<h2>Places</h2>
+    <div>
+        <dl>
+            {% if facets.fields.global_region %}
+                <dt>Global region</dt>
+                {# Provide only the top 5 global_region #}
+                {% for global_region in facets.fields.global_region|slice:":5" %}
+                  {% if global_region.1 > 0 %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=global_region_exact:{{ global_region.0|urlencode }}">{{ global_region.0 }}</a> ({{ global_region.1 }})</dd>
+                  {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No global_region facets.</p>
+            {% endif %}
+        </dl>
+    </div>
+    <div>
+        <dl>
+            {% if facets.fields.country %}
+                <dt>Country</dt>
+                {# Provide only the top 5 country #}
+                {% for country in facets.fields.country|slice:":5" %}
+                  {% if country.1 > 0 %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=country_exact:{{ country.0|urlencode }}">{{ country.0 }}</a> ({{ country.1 }})</dd>
+                  {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No country facets.</p>
+            {% endif %}
+        </dl>
+    </div>
+<h2>People</h2>
+    <div>
+        <dl>
+            {% if facets.fields.people %}
+                <dt>People</dt>
+                {# Provide only the top 5 people #}
+                {% for people in facets.fields.people|slice:":5" %}
+                  {% if people.1 > 0 %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=people_exact:{{ people.0|urlencode }}">{{ people.0 }}</a> ({{ people.1 }})</dd>
+                  {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No people facets.</p>
+            {% endif %}
+        </dl>
+    </div>
+<h2>Other</h2>
+    <div>
+        <dl>
+            {% if facets.fields.has_images %}
+                <dt>Has images</dt>
+                {# Provide only the top 5 has_images #}
+                {% for has_images in facets.fields.has_images|slice:":5" %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=has_images_exact:{{ has_images.0|urlencode }}">{{ has_images.0 }}</a> ({{ has_images.1 }})</dd>
+                {% endfor %}
+            {% else %}
+                <p>No has_images facets.</p>
+            {% endif %}
+        </dl>
+    </div>
+
+
+    <!-- End faceting -->
+
+
+
 <div class="search-results-head">
     <h3>Search Results</h3>
     <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>

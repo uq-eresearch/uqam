@@ -46,6 +46,7 @@ def _current_search_results(request, reg_num):
         search_query = request.session['search_query']
         page_num = (index / results_per_page) + 1
         search_query.update({'page': page_num})
+        search_query.update({'selected_facets': request.session['search_facets']})
         search_url = url_with_querystring(
             reverse('haystack_search'), **search_query)
         context['search_url'] = search_url

@@ -1,10 +1,10 @@
-from haystack.views import SearchView
+from haystack.views import FacetedSearchView
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class PersistentSearchView(SearchView):
+class PersistentSearchView(FacetedSearchView):
     __name__ = "PersistentSearchView"
 
     def extra_context(self):
@@ -15,7 +15,7 @@ class PersistentSearchView(SearchView):
 
         if self.form.is_valid():
             self.request.session['search_query'] = self.form.cleaned_data
-#        import ipdb; ipdb.set_trace()
+            self.request.session['search_facets'] = self.form.selected_facets
         if self.results:
             # Access the first result to prevent ZeroDivisionError
             self.results[0]
