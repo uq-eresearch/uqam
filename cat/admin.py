@@ -12,6 +12,7 @@ from common.adminactions import generate_xls, add_to_opener
 from admin_views import search_home, search_xls
 from django.core import urlresolvers
 from django.utils.datastructures import SortedDict
+from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 
 
 class MediaFileInline(admin.TabularInline):
@@ -77,6 +78,87 @@ class DocumentInline(MediaFileInline):
 from django.contrib.admin import SimpleListFilter
 
 
+class HierarchyListFilter(SimpleListFilter):
+    """
+    An admin list filter for hierarchical data
+
+    Used for the geo-locations. Is not directly usable, must be overridden
+    with appropriate class fields set.
+
+    Designed to be used in order of the hierarchy. Will set a flag and stop
+    processing children if a higher level filter is set. So checks the children/parents
+    for validity.
+    """
+    def __init__(self, request, *args):
+        super(HierarchyListFilter, self).__init__(
+            request, *args)
+
+        if self.is_invalid_parent(self.get_parent(request)):
+            request.stop_processing_hierarchy_filter = True
+
+    def is_invalid_parent(self, parent):
+        current = None
+
+        val = self.value()
+        if val:
+            current = self.model.objects.get(id=val)
+        return current and current.parent != parent
+
+    def get_parent(self, request):
+        if hasattr(self, '_parent'):
+            return self._parent
+        parent_id = request.GET.get(self.parent_parameter_name)
+        parent_field = self.model._meta.get_field_by_name('parent')[0]
+        parent_type = parent_field.rel.to
+        self._parent = parent_type.objects.filter(id=parent_id)[0] if parent_id else None
+        return self._parent
+
+    def lookups(self, request, model_admin):
+#        import ipdb; ipdb.set_trace()
+        if hasattr(request, 'stop_processing_hierarchy_filter'):
+            return []
+        print 'lookups(): %s' % self.title
+        parent = self.get_parent(request)
+        options = self.model.objects.filter(parent=parent)
+        return [(str(val.id), val.name) for val in options]
+
+    def queryset(self, request, queryset):
+        print 'queryset(): %s' % self.title
+        if self.value() and not hasattr(request, 'stop_processing_hierarchy_filter'):
+            args = {self.parameter_name: self.value()}
+            return queryset.filter(**args)
+        else:
+            return queryset
+
+
+class CountryListFilter(HierarchyListFilter):
+    title = 'country'
+    parameter_name = 'country_id'
+    parent_parameter_name = 'global_region__id__exact'
+    model = Country
+
+
+class StateProvinceListFilter(HierarchyListFilter):
+    title = 'state/province'
+    parameter_name = 'state_province_id'
+    parent_parameter_name = 'country_id'
+    model = StateProvince
+
+
+class RegionDistrictListFilter(HierarchyListFilter):
+    title = 'region/district'
+    parameter_name = 'region_district_id'
+    parent_parameter_name = 'state_province_id'
+    model = RegionDistrict
+
+
+class LocalityListFilter(HierarchyListFilter):
+    title = 'locality'
+    parameter_name = 'country_id'
+    parent_parameter_name = 'region_district_id'
+    model = Locality
+
+
 class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
                     'description', 'comment', 'public', 'is_public_comment')
@@ -88,8 +170,9 @@ class MOAdmin(UndeleteableModelAdmin):
     list_filter = ('artefact_type', 'category',
                     'access_status', 'loan_status',
                     'collector', 'donor', 'record_status',
-                    'global_region', 'is_public_comment', 'public',
-                    'maker')
+                    'global_region', CountryListFilter, StateProvinceListFilter,
+                    RegionDistrictListFilter, LocalityListFilter, 'is_public_comment',
+                    'public', 'maker')
 
     search_fields = ['registration_number', 'description', 'comment',
                      'donor__name', 'collector__name', 'maker__name',
