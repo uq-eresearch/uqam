@@ -12,9 +12,9 @@
             {% if facets.fields.categories %}
                 <dt>Categories</dt>
                 {# Provide only the top 5 categories #}
-                {% for categories in facets.fields.categories|slice:":5" %}
-                  {% if categories.1 > 0 %}
-                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=categories_exact:{{ categories.0|urlencode }}">{{ categories.0 }}</a> ({{ categories.1 }})</dd>
+                {% for category in facets.fields.categories|slice:":5" %}
+                  {% if category.1 > 0 %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=categories_exact:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</dd>
                   {% endif %}
                 {% endfor %}
             {% else %}
