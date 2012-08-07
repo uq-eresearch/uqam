@@ -24,7 +24,33 @@ class ItemTable(tables.Table):
         sequence = ("photo", "registration_number", "category", "...")
 
 
+from smart_selects.db_fields import ChainedForeignKey
+from smart_selects.form_fields import ChainedModelChoiceField
+from smart_selects.widgets import ChainedSelect
+
+
+class ChainedModelChoiceFilter(refinery.filters.Filter):
+    field_class = ChainedModelChoiceField
+
+
 class ItemFilterSet(refinery.FilterTool):
+    def extra(f):
+        return {
+            'widget': ChainedSelect(f.app_name, f.model_name, f.chain_field, f.model_field, f.show_all, f.auto_choose),
+            'app_name': f.app_name,
+            'model_name': f.model_name,
+            'chain_field': f.chain_field,
+            'model_field': f.model_field,
+            'show_all': f.show_all,
+            'auto_choose': f.auto_choose
+        }
+    filter_overrides = {
+        ChainedForeignKey: {
+            'filter_class': ChainedModelChoiceFilter,
+            'extra': extra
+        }
+    }
+
     def registration_number_filter(values):
         if values:
             values = [int(v) for v in values.split(' ')]
