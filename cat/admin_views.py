@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django import forms
 from django.http import HttpResponse
 from cat.models import MuseumObject
-import django_filters
 import django_tables2 as tables
 from django_tables2 import RequestConfig
 from django_tables2.utils import AttributeDict
 from django_tables2.utils import A
+import refinery
+from django.db.models import Q
 
 
 class ItemTable(tables.Table):
@@ -23,36 +24,27 @@ class ItemTable(tables.Table):
         sequence = ("photo", "registration_number", "category", "...")
 
 
-class ItemFilterSet(django_filters.FilterSet):
-    def registration_number_filter(queryset, values):
+class ItemFilterSet(refinery.FilterTool):
+    def registration_number_filter(values):
         if values:
             values = [int(v) for v in values.split(' ')]
-            return queryset.filter(registration_number__in=values)
+            return Q(registration_number__in=values)
         else:
-            return queryset
+            return Q()
 #    collections = django_filters.ModelChoiceFilter(name='Collection',
 #            extra = lambda f: {'queryset':
 #             f.rel.to._default_manager.complex_filter(f.rel.limit_choices_to),
 #              'to_field_name': f.rel.field_name})
-    registration_number = django_filters.CharFilter(
+    registration_number = refinery.CharFilter(
             action=registration_number_filter)
 
-    def country_filter(queryset, value):
-        if value:
-            return queryset.filter(place__country__icontains=value)
-        else:
-            return queryset
-
-    country = django_filters.CharFilter(
-            action=country_filter)
-
-    def has_images_filter(queryset, value=None):
+    def has_images_filter(value=None):
         if value is not None:
-            return queryset.filter(artefactrepresentation__isnull=(not value))
+            return Q(artefactrepresentation__isnull=(not value))
         else:
-            return queryset
+            return Q()
 
-    has_images = django_filters.BooleanFilter(
+    has_images = refinery.BooleanFilter(
             action=has_images_filter)
 
     class Meta:

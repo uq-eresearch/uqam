@@ -345,7 +345,6 @@ THUMBNAIL_SOURCE_GENERATORS = (
 TEST_RUNNER = "ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
     'django.contrib.auth',
-    'django_filters',
     'django.contrib.flatpages',
     'django.contrib.messages',
     'easy_thumbnails',
