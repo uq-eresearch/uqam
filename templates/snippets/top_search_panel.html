@@ -1,7 +1,7 @@
 <div id="search-panel">
     <form method="get" action="/search/">
     <fieldset>
-    <input size="15" type="text" value="Search the collection..." name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
+    {{form.q}}
     <input name="submit" value="Search" class="submit" title="Search" type="submit" />
 
     </fieldset>
