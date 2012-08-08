@@ -156,7 +156,6 @@ INSTALLED_APPS = (
     'location',
     'django.contrib.flatpages',
     'django_tables2',
-    'django_filters',
     'easy_thumbnails',
 
     'smart_selects',
@@ -229,7 +228,7 @@ LOGGING = {
         },
         'django.db.backends': {
             'handlers': ['db'],
-            'level': 'WARN',
+            'level': 'ERROR',
             'propagate': False,
         },
         'django.request': {
