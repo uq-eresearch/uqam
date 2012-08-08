@@ -6,6 +6,7 @@ from .models import MuseumObject
 class MuseumObjectIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
     categories = MultiValueField(faceted=True)
+    item_name = CharField(model_attr='artefact_type', faceted=True)
     global_region = CharField(model_attr='global_region', faceted=True)
     country = CharField(model_attr='country', faceted=True)
     people = MultiValueField(faceted=True)
