@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
+{% block headextra %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}temppublicstyles.css" />
+{% endblock %}
+
 {% block body %}
 
 {% include "snippets/top_search_panel.html" %}
 
 {% if query %}
 <!-- Begin faceting. -->
+<div class="filter-bar">
 <h2>By Category</h2>
     <div>
         <dl>
@@ -19,6 +24,21 @@
                 {% endfor %}
             {% else %}
                 <p>No categories facets.</p>
+            {% endif %}
+        </dl>
+    </div>
+    <div>
+        <dl>
+            {% if facets.fields.item_name %}
+                <dt>Item name</dt>
+                {# Provide only the top 5 item_name #}
+                {% for name in facets.fields.item_name|slice:":5" %}
+                  {% if name.1 > 0 %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=item_name_exact:{{ name.0|urlencode }}">{{ name.0 }}</a> ({{ name.1 }})</dd>
+                  {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No item_name facets.</p>
             {% endif %}
         </dl>
     </div>
@@ -84,6 +104,7 @@
         </dl>
     </div>
 
+</div>
 
     <!-- End faceting -->
 

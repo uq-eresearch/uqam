@@ -1,0 +1,23 @@
+div.filter-bar {
+    float: left;
+    margin: 5px;
+    padding: 5px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px;
+    font-size: 80%;
+}
+
+
+div.filter-bar h2 {
+    font-size: 120%;
+}
+
+div #search-panel {
+    margin: 10px;
+}
+div.filter-bar dl dt {
+    font-weight: bold;
+    font-style: italic;
+}
+
