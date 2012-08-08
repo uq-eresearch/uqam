@@ -194,6 +194,7 @@ def test_upgrade_2(version):
         local('./manage.py syncdb')
         local('./manage.py migrate')
         local('sed -ire "s/DEBUG = False/DEBUG = True/g" default_settings.py')
+        local('sed -ire "s/HTTPS_SUPPORT = True/HTTPS_SUPPORT = False/g" default_settings.py')
         local('./manage.py runserver 0.0.0.0:8000')
 
 
