@@ -21,7 +21,7 @@ DATABASES = {
 
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
-INSTALLED_APPS += ('debug_toolbar', 'django_filters.tests')
+INSTALLED_APPS += ('debug_toolbar',)
 
 
 # Debug Toolbar configuration
