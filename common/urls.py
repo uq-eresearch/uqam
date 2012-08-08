@@ -3,7 +3,7 @@ from haystack.forms import FacetedSearchForm
 from haystack.query import SearchQuerySet
 from views import PersistentSearchView
 
-sqs = SearchQuerySet().facet('categories').facet('people').facet('country').facet('has_images').facet('global_region')
+sqs = SearchQuerySet().facet('categories').facet('people').facet('country').facet('has_images').facet('global_region').facet('item_name')
 
 
 urlpatterns = patterns('haystack.views',
