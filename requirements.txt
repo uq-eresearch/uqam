@@ -26,3 +26,4 @@ django-smart-selects==1.0.4
 django-ignoretests==0.3.2
 pygments==1.5
 django-refinery==0.1
+pysolr==2.1.0-beta
