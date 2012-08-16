@@ -5,8 +5,8 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 
-#from django.test import TestCase
-from unittest import TestCase
+from django.test import TestCase
+#from unittest import TestCase
 import views
 #from django.core.exceptions import ObjectDoesNotExist
 
@@ -58,3 +58,23 @@ class SimpleTest(TestCase):
     def test_invalid_names(self):
         self.assertRaises(views.ParseError,
                 self.assertNameToId, 4567, '_IGP4567.jpg')
+
+
+
+
+
+class MediaTests(TestCase):
+
+    def item_image_handler():
+        pass
+
+    def test_upload(self):
+        uploader = Uploader()
+        uploader.add_handler('II', 'Item Images', item_image_handler)
+
+        uploader.add_handler('OH', 'Object Histories', object_history_handler)
+        
+
+        uploader.as_view()
+
+
