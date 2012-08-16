@@ -1,0 +1,25 @@
+diff -u smart_selects/widgets.py ../../../../django1.4/lib/python2.7/site-packages/smart_selects/widgets.py
+--- smart_selects/widgets.py	2012-08-03 09:31:31.000000000 +1000
++++ ../../../../django1.4/lib/python2.7/site-packages/smart_selects/widgets.py	2012-06-14 12:28:54.278374753 +1000
+@@ -16,6 +16,12 @@
+     USE_DJANGO_JQUERY = False
+     JQUERY_URL = getattr(settings, 'JQUERY_URL', 'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js')
+ 
++if django.VERSION >= (1, 3, 0):
++    from django.templatetags.static import static
++    ADMIN_MEDIA_PREFIX = static('admin/')
++else:
++    ADMIN_MEDIA_PREFIX = settings.ADMIN_MEDIA_PREFIX
++
+ 
+ class ChainedSelect(Select):
+     def __init__(self, app_name, model_name, chain_field, model_field, show_all, auto_choose, *args, **kwargs):
+@@ -29,7 +35,7 @@
+ 
+     class Media:
+         if USE_DJANGO_JQUERY:
+-            js = ["%s%s" % (settings.ADMIN_MEDIA_PREFIX, i) for i in
++            js = ["%s%s" % (ADMIN_MEDIA_PREFIX, i) for i in
+                     ('js/jquery.min.js', 'js/jquery.init.js')]
+         elif JQUERY_URL:
+             js = (
