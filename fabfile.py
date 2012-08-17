@@ -1,5 +1,6 @@
 from fabric.api import env, local, run, put, cd, prefix, sudo, settings, get
 from fabric.api import lcd, open_shell
+from datetime import date
 
 env.user = 'django'
 env.gateway = 'uqdayers@gladys'
@@ -21,6 +22,7 @@ def upgrade(version="master"):
     """
     Push the latest code, update all requirements, restart everything
     """
+    backup()
     push(version)
     reqs()
     _collectstatic()
@@ -265,3 +267,15 @@ def update_uat():
     with settings(host_string='django@anthropology-uat'):
         put(dumpfile, dumpfile)
         run('sudo -u postgres dropdb uqam')
+
+
+def backup():
+    """
+    Create a backup of the current code and database
+    """
+    now = str(date.today())
+    filename = 'backups/backup-' + now + '-preupgrade'
+    run('mkdir backups')
+    run('pg_dump --clean -h localhost -U uqam uqam | '
+            ' gzip -c > %s.sql' % filename)
+    run('tar czf %s.tar.gz uqam' % filename)
