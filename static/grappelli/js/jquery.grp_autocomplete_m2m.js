@@ -121,7 +121,7 @@
             })
             .autocomplete({
                 minLength: 1,
-                delay: 1000,
+                delay: 100,
                 position: {my: "left top", at: "left bottom", of: options.wrapper_autocomplete},
                 open: function(event, ui) {
                     $(".ui-menu").width(options.wrapper_autocomplete.outerWidth()-6);
@@ -158,7 +158,7 @@
             .data("autocomplete")._renderItem = function(ul,item) {
                 return $("<li></li>")
                     .data( "item.autocomplete", item )
-                    .append( "<a>" + item.label + " (" + item.value + ")")
+                    .append( "<a>" + item.label )
                     .appendTo(ul);
             };
     };

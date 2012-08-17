@@ -99,7 +99,7 @@
             })
             .autocomplete({
                 minLength: 1,
-                delay: 1000,
+                delay: 100,
                 source: function(request, response) {
                     $.ajax({
                         url: options.autocomplete_lookup_url,
@@ -135,7 +135,7 @@
             .data("autocomplete")._renderItem = function(ul,item) {
                 return $("<li></li>")
                     .data( "item.autocomplete", item )
-                    .append( "<a>" + item.label + " (" + item.value + ")")
+                    .append( "<a>" + item.label )
                     .appendTo(ul);
             };
     };
