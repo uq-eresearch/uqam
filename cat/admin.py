@@ -165,7 +165,7 @@ class MOAdmin(UndeleteableModelAdmin):
     actions = [add_to_collection, generate_xls, 'make_comment_public',
         'make_comment_private', 'make_record_public', 'make_record_private']
     readonly_fields = ('place', 'cultural_bloc', 'functional_category',
-        'donor_2', 'collector_2')
+        'donor_2', 'collector_2', 'old_registration_number',)
 
     list_filter = ('artefact_type', 'category',
                     'access_status', 'loan_status',
@@ -195,6 +195,9 @@ class MOAdmin(UndeleteableModelAdmin):
             'fields': ('registration_number', 'old_registration_number',
                        'other_number', 'functional_category', 'category',
                        'artefact_type')
+        }),
+        ('Registration', {
+            'fields': ('registered_by', 'registration_date')
         }),
         ('Old place information', {
             'fields': ('cultural_bloc', 'place',)
