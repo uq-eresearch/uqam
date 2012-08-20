@@ -79,7 +79,7 @@ post_delete.connect(remove_delete_image_file, sender=ArtefactRepresentation)
 
 class Document(MediaFile):
     md5sum = models.CharField(max_length=32, blank=True, editable=False, unique=True)
-    document = models.FileField(upload_to='docs/%Y/%m-%d/')
+    document = models.FileField(max_length=255, upload_to='docs/%Y/%m-%d/')
     document_text = models.TextField(blank=True)
 
     def __unicode__(self):
