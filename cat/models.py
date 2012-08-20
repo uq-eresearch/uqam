@@ -168,10 +168,10 @@ class MuseumObject(models.Model):
     is_public_comment = models.BooleanField(default=False,
             verbose_name='public comment',
             help_text='Is comment allowed to be shown publicly')
-    comment = models.TextField(blank=True)
+    comment = models.TextField(blank=True,
+            verbose_name="research notes",)
     private_comment = models.TextField(
             blank=True,
-            verbose_name="research notes",
             help_text="Only visible to staff")
     significance = models.TextField("statement of significance",
             blank=True)
