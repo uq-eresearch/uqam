@@ -254,7 +254,7 @@ class MOAdmin(UndeleteableModelAdmin):
     #### SETUP ADMIN ACTIONS #####
     actions = [add_to_collection, generate_xls, 'make_comment_public',
         'make_comment_private', 'make_record_public', 'make_record_private',
-        'move_comment_to_private_comment']
+        'move_comment_to_reg_info']
 
     def make_comment_public(self, request, queryset):
         queryset.update(is_public_comment=True)
