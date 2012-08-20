@@ -82,8 +82,8 @@ class MuseumObject(models.Model):
     access_status = models.ForeignKey(AccessStatus, null=True)
     reg_info = models.TextField("registration information", blank=True)
 
-    registered_by = models.ForeignKey('parties.MuseumStaff', null=True)
-    registration_date = models.DateField(null=True)
+    registered_by = models.ForeignKey('parties.MuseumStaff', null=True, blank=True)
+    registration_date = models.DateField(null=True, blank=True)
 
     cultural_bloc = models.ForeignKey('CulturalBloc', null=True,
             blank=True,
@@ -166,6 +166,7 @@ class MuseumObject(models.Model):
     description = models.TextField(blank=True)
 
     is_public_comment = models.BooleanField(default=False,
+            verbose_name='public comment',
             help_text='Is comment allowed to be shown publicly')
     comment = models.TextField(blank=True)
     private_comment = models.TextField(
