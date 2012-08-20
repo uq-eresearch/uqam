@@ -12,6 +12,7 @@ from common.adminactions import generate_xls, add_to_opener
 from admin_views import search_home, search_xls
 from django.core import urlresolvers
 from django.utils.datastructures import SortedDict
+from django.db.models import F
 from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 
 
@@ -114,10 +115,8 @@ class HierarchyListFilter(SimpleListFilter):
         return self._parent
 
     def lookups(self, request, model_admin):
-#        import ipdb; ipdb.set_trace()
         if hasattr(request, 'stop_processing_hierarchy_filter'):
             return []
-        print 'lookups(): %s' % self.title
         parent = self.get_parent(request)
         options = self.model.objects.filter(parent=parent)
         return [(str(val.id), val.name) for val in options]
@@ -162,8 +161,6 @@ class LocalityListFilter(HierarchyListFilter):
 class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
                     'description', 'comment', 'public', 'is_public_comment')
-    actions = [add_to_collection, generate_xls, 'make_comment_public',
-        'make_comment_private', 'make_record_public', 'make_record_private']
     readonly_fields = ('place', 'cultural_bloc', 'functional_category',
         'donor_2', 'collector_2', 'old_registration_number',)
 
@@ -254,6 +251,11 @@ class MOAdmin(UndeleteableModelAdmin):
         }),
     )
 
+    #### SETUP ADMIN ACTIONS #####
+    actions = [add_to_collection, generate_xls, 'make_comment_public',
+        'make_comment_private', 'make_record_public', 'make_record_private',
+        'move_comment_to_private_comment']
+
     def make_comment_public(self, request, queryset):
         queryset.update(is_public_comment=True)
     make_comment_public.short_description = "Make comments public"
@@ -263,12 +265,19 @@ class MOAdmin(UndeleteableModelAdmin):
     make_comment_private.short_description = "Make comments private"
 
     def make_record_public(self, request, queryset):
-        queryset.update(public=True)
+        queryset.update(public=True, is_public_comment=True)
     make_record_public.short_description = "Make entire record public"
 
     def make_record_private(self, request, queryset):
-        queryset.update(public=False)
+        queryset.update(public=False, is_public_comment=False)
     make_record_private.short_description = "Make entire record private"
+
+    def move_comment_to_private_comment(self, request, queryset):
+        for mo in queryset:
+            mo.private_comment = mo.private_comment + '\n\n' + mo.comment
+            mo.comment = ''
+            mo.save()
+    move_comment_to_private_comment.short_description = "Move comment field to private comment"
 
     def get_urls(self):
         urls = super(MOAdmin, self).get_urls()
