@@ -80,7 +80,7 @@ class MuseumObject(models.Model):
     loan_status = models.ForeignKey(LoanStatus, null=True,
             help_text='Is object on outwards/inwards loan')
     access_status = models.ForeignKey(AccessStatus, null=True)
-    reg_info = models.TextField("registration information", blank=True)
+    reg_info = models.TextField("registration notes", blank=True)
 
     registered_by = models.ForeignKey('parties.MuseumStaff', null=True, blank=True)
     registration_date = models.DateField(null=True, blank=True)
@@ -171,6 +171,7 @@ class MuseumObject(models.Model):
     comment = models.TextField(blank=True)
     private_comment = models.TextField(
             blank=True,
+            verbose_name="research notes",
             help_text="Only visible to staff")
     significance = models.TextField("statement of significance",
             blank=True)

@@ -272,12 +272,12 @@ class MOAdmin(UndeleteableModelAdmin):
         queryset.update(public=False, is_public_comment=False)
     make_record_private.short_description = "Make entire record private"
 
-    def move_comment_to_private_comment(self, request, queryset):
+    def move_comment_to_reg_info(self, request, queryset):
         for mo in queryset:
-            mo.private_comment = mo.private_comment + '\n\n' + mo.comment
+            mo.reg_info = mo.reg_info + '\n\n' + mo.comment
             mo.comment = ''
             mo.save()
-    move_comment_to_private_comment.short_description = "Move comment field to private comment"
+    move_comment_to_reg_info.short_description = "Move comment field to registration notes"
 
     def get_urls(self):
         urls = super(MOAdmin, self).get_urls()
