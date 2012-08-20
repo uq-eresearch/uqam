@@ -189,7 +189,7 @@ def test_upgrade(version="master"):
 def test_upgrade_2(version):
     filename = _pack(version)
     local('rm -rf /tmp/uqam')
-    local('mkdir /tmp/uqam')
+    local('mkdir -p /tmp/uqam')
     with lcd('/tmp/uqam'):
         local('tar xjf %s' % filename)
         local('sed -i -r -e "s/\\/home\\/django/\\/tmp/g" default_settings.py')
@@ -275,7 +275,7 @@ def backup():
     """
     now = str(date.today())
     filename = 'backups/backup-' + now + '-preupgrade'
-    run('mkdir backups')
+    run('mkdir -p backups')
     run('pg_dump --clean -h localhost -U uqam uqam | '
             ' gzip -c > %s.sql' % filename)
     run('tar czf %s.tar.gz uqam' % filename)
