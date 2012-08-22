@@ -317,7 +317,7 @@ THUMBNAIL_PROCESSORS = (
 )
 
 # This normally protects against XSS attacks, which shouldn't be a problem here.
-# If enabled however, it does interrupt some of the upload functionality.
+# If enabled, it interrupts the bulk upload functionality.
 SESSION_COOKIE_HTTPONLY = False
 
 
