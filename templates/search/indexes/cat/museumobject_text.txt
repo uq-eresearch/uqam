@@ -1,16 +1,26 @@
-{{ object.id }}
+{{ object.registration_number }}
+{{ object.artefact_type }}
+{% for category in object.category.all %}
+ {{ category.name }}
+{% endfor %}
+{{ object.indigenous_name }}
+{{ object.maker }}
+{{ object.assoc_cultural_group }}
+
+{# geolocation info #}
+{{ object.global_region }}
+{{ object.country }}
+{{ object.state_province }}
+{{ object.region_district }}
+{{ object.locality }}
+
 {{ object.donor }}
 {{ object.collector }}
-{{ object.functional_category }}
-{{ object.artefact_type }}
-{{ object.cultural_bloc }}
-{{ object.place }}
 {{ object.photographer }}
 {{ object.source }}
-{{ object.maker_or_artist }}
 {{ object.raw_material }}
-{{ object.indigenous_name }}
 {{ object.recorded_use }}
-{{ object.assoc_cultural_group }}
 {{ object.description }}
-{{ object.comment }}
+{% if object.is_public_comment %}
+    {{ object.comment }}
+{% endif %}
