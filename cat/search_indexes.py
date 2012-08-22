@@ -35,6 +35,6 @@ class MuseumObjectIndex(SearchIndex):
         """
         ### TODO ###
         # Ignore private/reserved etc objects
-        return self.get_model().objects.all()
+        return self.get_model().objects.filter(public=True)
 
 site.register(MuseumObject, MuseumObjectIndex)
