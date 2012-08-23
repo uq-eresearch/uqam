@@ -110,15 +110,21 @@
         >
       <a href="{{museumobject.country.get_absolute_url}}">
         {{ museumobject.country }}</a>
+      {% if museumobject.state_province %}
         >
       <a href="{{museumobject.state_province.get_absolute_url}}">
         {{ museumobject.state_province }}</a>
+      {% endif %}
+      {% if museumobject.region_district %}
         >
       <a href="{{museumobject.region_district.get_absolute_url}}">
         {{ museumobject.region_district }}</a>
+      {% endif %}
+      {% if museumobject.locality %}
         >
       <a href="{{museumobject.locality.get_absolute_url}}">
         {{ museumobject.locality }}</a>
+      {% endif %}
     </dd>
 
     {% if museumobject.place.latitude %}
