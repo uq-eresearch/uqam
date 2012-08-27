@@ -7,6 +7,10 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ("parties", "0003_auto__chg_field_person_display_name__chg_field_person_name"),
+    )
+
     def forwards(self, orm):
         # Adding field 'MuseumObject.old_maker'
         db.add_column('cat_museumobject', 'old_maker',
