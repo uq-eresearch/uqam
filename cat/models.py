@@ -150,7 +150,8 @@ class MuseumObject(models.Model):
     how_source_obtained = models.ForeignKey(Obtained, null=True,
             related_name='source_obtained')
 
-    maker = models.ForeignKey('parties.Maker', null=True, blank=True)
+    maker = models.ForeignKey('parties.Person', null=True, blank=True, related_name='created_items')
+    old_maker = models.ForeignKey('parties.Maker', null=True, blank=True, related_name='old_maker')
     manufacture_technique = models.CharField(max_length=200, blank=True)
     creation_date = models.DateField(null=True, blank=True)
     site_name_number = models.CharField(max_length=150, blank=True)
