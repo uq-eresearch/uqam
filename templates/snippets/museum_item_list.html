@@ -1,0 +1,46 @@
+
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Item</th>
+            <th>Category</th>
+            <th>Place</th>
+        </tr>
+    </thead>
+    <tbody>
+{% load endless %}
+{% paginate items using page_type %}
+{% for item in items %}
+        <tr>
+            <td class="thumbnail">
+                <a href="{{ item.get_absolute_url }}">
+                    <img src="{% firstof item.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt="">
+                </a>
+            </td>
+            <td class="item">
+                <a href="{{ item.get_absolute_url }}">
+                    <span class="item_type">{{ item.artefact_type }}</span><br>
+                <span class="registration_number">Registration No. <span class="number">{{ item.registration_number }}</span></span>
+                </a>
+            </td>
+            <td class="category">
+                {% for category in item.category.all %}
+                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
+                {% endfor %}
+            </td>
+            <td class="place">
+                  <a href="{{item.global_region.get_absolute_url}}">
+                    {{ item.global_region }}</a>
+                    >
+                  <a href="{{item.country.get_absolute_url}}">
+                    {{ item.country }}</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="4">No results found.</td></tr>
+{% endfor %}
+    </tbody>
+</table>
+{% show_pages %}

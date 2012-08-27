@@ -1,12 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base_wide.html' %}
 
 {% block headextra %}
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}temppublicstyles.css" />
 {% endblock %}
 
-{% block body %}
+{% block content %}
 
-{% include "snippets/top_search_panel.html" %}
 
 {% if query %}
 <!-- Begin faceting. -->
@@ -124,7 +123,7 @@
         <tr>
             <td class="thumbnail">
                 <a href="{{ result.object.get_absolute_url }}?search_result={{forloop.counter0|add:page.start_index}}">
-                    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt="">
+                    <img src="{% firstof result.object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt="">
                 </a>
             </td>
             <td class="item">

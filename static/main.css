@@ -69,3 +69,51 @@ body{background:transparent url('/static/images/body-bg.jpg') repeat-x scroll 81
     width: 400px;
     float: left;
 }
+
+/* Copyright statement */
+#copyright-statement p {
+    font-size: 10px;
+}
+
+#copyright-statement {
+    float: left;
+    width: 960px;
+}
+div.copyright-statement {
+    padding: 0px 10px 0px 20px;
+}
+
+/* Top Conditions Statement */
+.conditions-agreement-statement {
+    padding-top: 5px;
+    padding-left: 25px;
+    font-size: 10px;
+}
+
+
+/* Sub-collection details page */
+.collection-details dt {
+    font-weight: bold;
+    color: #575757;
+}
+
+.collection-details {
+    width: 450px;
+    float: right;
+}
+
+.collection-map {
+    width: 450px;
+    float: left;   
+}
+
+.collection-items {
+    float: left;
+    clear: both;
+}
+
+
+/* Item list tables */
+table.search-results {
+    width: 945px;
+}

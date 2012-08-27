@@ -1,39 +1,43 @@
-{% extends "base_generic.html" %}
+{% extends "base_wide.html" %}
 
 {% block content %}
+<style>
+li.active {
+    background-color: red;
+}
+</style>
+
+
+{% if user.is_staff %}
 <div style="float:right;font-size: 80%;">
     {% if user.is_staff %}
         <a href={% url admin:parties_person_change person.id %}>Admin</a>
     {% endif %}
 </div>
+{% endif %}
+
+
 <h1>{{ person.display_name }}</h1>
 
 <p>{{ person.comments }}</p>
 
-<h3>Related Documents</h3>
+<ul>
+{% for type in counts %}
+    <li{% if type.0 == item_type %} class="active"{%endif%}><a href="{% url parties.views.person_detail pk=person.id item_type=type.0 %}">{{type.1}} ({{type.2}})</a></li>
+{% endfor %}
+</ul>
+
+<h2>Related Documents</h2>
 {% for doc in person.related_documents.all %}
 <a href="{{doc.document.url}}">{{doc.name}}</a> <br>
 {% endfor %}
 
 
-<div class="span-12">
-<h2>Collected Objects</h2>
-{% for mo in person.collected_objects.all %}
+<h2>{{item_type}}</h2>
+{% include "snippets/museum_item_list.html" with items=items page_type="page" %}
 
-<a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
-<br>
-{% endfor %}
-</div>
 
-<div class="span-12 last">
 
-<h2>Donated Objects</h2>
-{% for mo in person.donated_objects.all %}
-
-<a href="{{mo.get_absolute_url}}">{{mo.registration_number}} {{mo.artefact_type}}</a>
-<br>
-{% endfor %}
-</div>
 
 
 

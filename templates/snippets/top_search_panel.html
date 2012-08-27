@@ -1,26 +1,132 @@
-<div id="search-panel">
-    <form method="get" action="/search/">
-    <fieldset>
-    {{form.q}}
-    <input name="submit" value="Search" class="submit" title="Search" type="submit" />
+<style type="text/css">
+.conditions-statement {
+  color: #4f4f4f;
+  font-family:"Arial";
+  font-size: 7pt;
+  font-weight: bold;
+  font-style: normal;
+  text-align: left;
+  position: absolute;
+  top: 13px;
+  left: 25px;
+  display: none;
+}
+.browse-by-button {
+  width: 306px;
+  height: 50px;
+  border-radius: 3px;
+  color: rgb(255, 255, 255);
+  font-family: arial;
+  font-size: 14pt;
+  font-weight: bold;
+  text-decoration: none;
+  display: table;
+  border: 1px solid rgb(0, 84, 163);
+  background-color: rgb(61, 136, 204);
+  float: none;
+  background-image: -moz-linear-gradient(270deg, rgb(61, 136, 204) 0%, rgb(3, 81, 153) 100%);
+  background-image: -webkit-linear-gradient(270deg, rgb(61, 136, 204) 0%, rgb(3, 81, 153) 100%);
+  background-image: -o-linear-gradient(270deg, rgb(61, 136, 204) 0%, rgb(3, 81, 153) 100%);
+  background-image: linear-gradient(270deg, rgb(61, 136, 204) 0%, rgb(3, 81, 153) 100%);
+  font-style: normal;
+  position: absolute;
+  top: 30px;
+  left: 634px;
+}
+.search-button {
+  width: 96px;
+  height: 48px;
+  border-radius: 3px;
+  color: rgb(255, 255, 255);
+  font-family: arial;
+  font-size: 14pt;
+  font-weight: bold;
+  text-decoration: none;
+  display: table;
+  border: 1px solid rgb(0, 163, 3);
+  background-color: rgb(68, 204, 70);
+  float: none;
+  background-image: -moz-linear-gradient(270deg, rgb(68, 204, 70) 0%, rgb(9, 153, 12) 100%);
+  background-image: -webkit-linear-gradient(270deg, rgb(68, 204, 70) 0%, rgb(9, 153, 12) 100%);
+  background-image: -o-linear-gradient(270deg, rgb(68, 204, 70) 0%, rgb(9, 153, 12) 100%);
+  background-image: linear-gradient(270deg, rgb(68, 204, 70) 0%, rgb(9, 153, 12) 100%);
+  font-style: normal;
+  position: absolute;
+  top: 32px;
+  left: 498px;
+}
+.textinput {
+  width: 458px;
+  height: 35px;
+  padding: 5px 8px;
+  font-size: 12pt;
+  font-family: arial;
+  color: rgb(51, 51, 51);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(207, 207, 207);
+  border-radius: 3px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.0976563) 0px 1px 8px 0px inset;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.0976563) 0px 1px 8px 0px inset;
+  -o-box-shadow: rgba(0, 0, 0, 0.0976563) 0px 1px 8px 0px inset;
+  box-shadow: rgba(0, 0, 0, 0.0976563) 0px 1px 8px 0px inset;
+  font-weight: normal;
+  float: none;
+  font-style: normal;
+  text-shadow: none;
+  position: absolute;
+  top: 33px;
+  left: 21px;
+}
+.text-1 {
+  color: #707070;
+  font-family:"Arial";
+  font-size: 8pt;
+  font-weight: bold;
+  font-style: normal;
+  text-align: left;
+  position: absolute;
+  top: 51px;
+  left: 608px;
+}
+.additional-search-button {
+  width: 183px;
+  height: 23px;
+  border-radius: 3px;
+  color: rgb(0, 0, 0);
+  font-family: arial;
+  font-size: 10pt;
+  font-weight: normal;
+  text-decoration: none;
+  display: table;
+  border: 1px solid rgb(196, 188, 204);
+  background-color: rgb(249, 243, 255);
+  float: none;
+  background-image: -moz-linear-gradient(270deg, rgb(249, 243, 255) 0%, rgb(185, 178, 191) 100%);
+  background-image: -webkit-linear-gradient(270deg, rgb(249, 243, 255) 0%, rgb(185, 178, 191) 100%);
+  background-image: -o-linear-gradient(270deg, rgb(249, 243, 255) 0%, rgb(185, 178, 191) 100%);
+  background-image: linear-gradient(270deg, rgb(249, 243, 255) 0%, rgb(185, 178, 191) 100%);
+  font-style: normal;
+  position: absolute;
+  top: 96px;
+  left: 22px;
+}
+.top-search-panel {
+    height: 92px;
+}
+ </style>
 
+
+<div class="top-search-panel">
+    <div class="conditions-statement">By using the UQ Anthropology Museum Online Catalogue you agree to the conditions
+      of the Copyright Statement.</div>
+    <form method="get" action="/search/">
+    <fieldset class="search">
+        <input type="text" value="Search the collection..." class="textinput" id="dom-elem-17" name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}">
+        
+        <button class="search-button" id="dom-elem-18"><span>SEARCH<br></span></button>
     </fieldset>
     </form>
-
-    <div class="browse-by-link">
-        or
-        <a href="#">
-            Browse by
-        </a>
-    </div>
-
-    <div class="advanced-search-link">
-        <a href="#">
-            Advanced search >
-        </a>
-    </div>
-
-    <div class="search-conditions-statement">
-        By using the UQ Anthropology Museum Online Catalogue you agree to the conditions of the Copyright Statement below.
-    </div>
+    <button class="browse-by-button" id="dom-elem-19"><span>BROWSE BY</span></button>
+    <div class="text-1">OR</div>
+    <button class="additional-search-button" id="dom-elem-20"><span>&nbsp;Additional Search Options</span></button>
 </div>

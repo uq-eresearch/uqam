@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
 
     'smart_selects',
+    'endless_pagination',
 )
 
 LOGS_ROOT = os.path.join(DIRNAME, 'logs')

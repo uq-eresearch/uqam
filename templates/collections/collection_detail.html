@@ -8,39 +8,51 @@
     <a href="{{collection.get_absolute_url}}/atom">Atom</a>
 </div>
 <h1>{{ collection.title }}</h1>
+<div class="collection-details">
+    <dl>
+        <dt>Description</dt>
+        <dd>{{ collection.description }} </dd>
+        <dt>Author</dt>
+        <dd>{{ collection.author.first_name }} {{ collection.author.last_name }} </dd>
+        <dt>Copyright</dt>
+        <dd>{{ collection.rights }}</dd>
+        <dt>Access rights</dt>
+        <dd>{{ collection.access_rights }}</dd>
+        {% if collection.categories %}
+        <dt>Keywords</dt>
+        <dd>{{ collection.categories }}</dd>
+        {% endif %}
+        <dd><dt>Date updated</dt> {{ collection.last_published }}</dd>
 
-<b>Description:</b> {{ collection.description }} <br>
-<b>Author:</b> {{ collection.author.first_name }} {{ collection.author.last_name }} <br>
-<b>Copyright:</b> {{ collection.rights }}<br>
-<b>Access rights:</b> {{ collection.access_rights }}<br>
-{% if collection.categories %}
-<b>Keywords:</b> {{ collection.categories }}<br>
-{% endif %}
-<b>Date updated:</b> {{ collection.last_published }}<br>
+        <dt>Categories</dt>
+        <dd>
+        {% for category in collection.get_categories %}
+        <a href="{{category.get_absolute_url}}">{{category.name}}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </dd>
 
-<b>Categories:</b>
-{% for category in collection.get_categories %}
-<a href="{{category.get_absolute_url}}">{{category.name}}</a>{% if not forloop.last %}, {% endif %}
-{% endfor %}
+        <dt>Places</dt>
+        <dd>
+        {% for place in collection.get_places %}
+        <a href="{{place.get_absolute_url}}">{{place}}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </dd>
 
-<br>
-<b>Places:</b>
-{% for place in collection.get_places %}
-<a href="{{place.get_absolute_url}}">{{place}}</a>{% if not forloop.last %}, {% endif %}
-{% endfor %}
+    </dl>
+</div>
 
 
-<div id="map_canvas" style="height:300px; width:400px;"></div>
-
-<br>
-{% for p in collection.get_places %}
-
-{% endfor %}
+<div class="collection-map">
+    <div id="map_canvas" style="height:320px; width:420px;"></div>
+</div>
 
 
-<h2>Items</h2>
-{% include "snippets/paged_object_list.html" %}
+<div class="collection-items">
 
+    <h2>Items</h2>
+    {% include "snippets/paged_object_list.html" %}
+
+</div>
 
 {% endblock %}
 
