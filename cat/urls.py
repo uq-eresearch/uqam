@@ -61,43 +61,6 @@ urlpatterns = patterns('cat.views',
     url(r'^categories/(?P<full_slug>.+)/$', 'categories_list',
         name='categories_list'),
 
-    url(r'^person/$',
-        TemplateView.as_view(template_name="parties/person.html"),
-        name='person_list'),
-    url(r'^person/(?P<pk>\d+)$',
-        DetailView.as_view(model=Person), name="person_detail"),
-
-    url(r'^maker/$',
-            RedirectView.as_view(url='/maker/a/'), name='maker_list'),
-    url(r'^maker/(?P<letter>[a-z])/$',
-        PeopleListView.as_view(
-            model=Maker,
-            view_name='maker_list',
-            page_title='Makers',
-        ), name='maker_list'),
-    url(r'^maker/(?P<pk>\d+)/$',
-        DetailView.as_view(model=Maker), name='maker_detail'),
-
-
-    url(r'^donor/$',
-            RedirectView.as_view(url='/donor/a/'), name='donor_list'),
-    url(r'^donor/(?P<letter>[a-z])/$',
-        PeopleListView.as_view(
-            model=Person,
-            counted_obj='donated_objects',
-            view_name='donor_list',
-            page_title='Donors',
-        ), name='donor_list'),
-
-    url(r'^collector/$',
-            RedirectView.as_view(url='/collector/a/'), name='collector_list'),
-    url(r'^collector/(?P<letter>[a-z])/$',
-        PeopleListView.as_view(
-            model=Person,
-            counted_obj='collected_objects',
-            view_name='collector_list',
-            page_title='Collectors',
-        ), name='collector_list'),
 # Custom search to redirect straight to objects
 #    url(r'^search/', 'search', name='search'),
 )

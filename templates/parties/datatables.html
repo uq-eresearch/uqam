@@ -4,15 +4,15 @@
 
 <h1>People</h1>
 
-<ul id="type-filter">
-    <li><a href="#all">All</a></li>
+<ul id="people-type-filter">
+    <li class="active"><a href="#all">All</a></li>
     <li><a href="#makers">Makers</a></li>
     <li><a href="#donors">Donors</a></li>
     <li><a href="#collectors">Collectors</a></li>
 </ul>
 
 
-<table id="people_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+<table id="people-table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Name</th>
@@ -38,21 +38,19 @@
 {% endblock content %}
 
 {% block javascript %}
-<style type="text/css">
-#type-filter li.active {
-    background-color: red;
-}
-</style>
 
 <script type="text/javascript" language="javascript" src="{{STATIC}}/datatables/js/jquery.dataTables.js"></script>
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         var hash = window.location.hash;
-        $('#type-filter li a[href="'+hash+'"]').parent().addClass('active')
+        if (hash !== '') {
+            $('#people-type-filter li').removeClass('active');
+            $('#people-type-filter li a[href="'+hash+'"]').parent().addClass('active')
+        }
 
-        $('#type-filter a').click(function() {
-            $('#type-filter li').removeClass('active');
+        $('#people-type-filter a').click(function() {
+            $('#people-type-filter li').removeClass('active');
             $(this).parent().addClass('active');
 
             /* redraw table with new filter */
@@ -61,7 +59,7 @@
 
         $.fn.dataTable.ext.afnFiltering.push(
             function( oSettings, aData, iDataIndex ) {
-                var curFilter = $('#type-filter .active').text();
+                var curFilter = $('#people-type-filter .active').text();
                 if (curFilter === 'All') {
                     return true;
                 } else if (curFilter === 'Makers') {
@@ -77,8 +75,8 @@
             }
         );
 
-        var oTable = $('#people_table').dataTable( {
-            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        var oTable = $('#people-table').dataTable( {
+//            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
             "bLengthChange": false,
             "iDisplayLength": 20,
 //        "sScrollY": "600px",
@@ -87,7 +85,8 @@
             "bStateSave": true,
             "oLanguage": {
                 "sSearch": "Search all columns:"
-            }
+            },
+            "sPaginationType": "full_numbers"
 
         } );
     });
