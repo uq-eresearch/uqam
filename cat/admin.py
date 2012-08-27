@@ -169,7 +169,7 @@ class MOAdmin(UndeleteableModelAdmin):
                     'collector', 'donor', 'record_status',
                     'global_region', CountryListFilter, StateProvinceListFilter,
                     RegionDistrictListFilter, LocalityListFilter, 'is_public_comment',
-                    'public', 'maker')
+                    'public', 'maker', 'acquisition_method')
 
     search_fields = ['registration_number', 'description', 'comment',
                      'donor__name', 'collector__name', 'maker__name',
