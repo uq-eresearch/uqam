@@ -70,9 +70,8 @@
                     <li><a href="{% url collections_home %}">Sub collections</a></li>
                 </ul>
             </li>
-            <li><a href="/events/">Exhibitions and Events</a></li>
-            <li><a href="/other_activities/">Other activities</a></li>
-            <li><a href="/contact/">Contact us</a></li>
+            <li><a href="{% url haystack_search %}">Search</a></li>
+            
          {% if user.is_staff %}
             <li style=""><a href="/admin/">Admin</a></li>
          {% endif %}
