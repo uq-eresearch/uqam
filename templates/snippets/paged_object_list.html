@@ -1,12 +1,22 @@
 {% if objects.object_list %}
 
-<div class="search-results-head">
+{% load paginator %}
 
-    {% load paginator %}{% paginator 4 %}
+<div class="item-listing-head">
+    <div class="grid-list-selector">
+        <div class="display-as">Display as:</div>
+        <button class="grid">Grid View</button>
+        <button class="list">List View</button>
+    </div>
+    <div class="pagination">
+        <div class="num-results">
+        Results {{ objects.start_index }} - {{ objects.end_index }} of {{ objects.paginator.object_list.count }}</div>
+        {% paginator 5 extra_class="top"%}
+    </div>
 </div><!-- /search-results-head -->
 
-<div class="search-results">
-    <table class="search-results">
+<div class="item-listing">
+    <table id="item-listing-table">
         <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
     {% for object in objects.object_list %}
         <tr>
@@ -33,13 +43,27 @@
                   <a href="{{object.country.get_absolute_url}}">
                     {{ object.country }}</a>
             </td>
+        </tr>
     {% empty %}
         <tr><td colspan="4">No results found.</td></tr>
     {% endfor %}
     </table>
 
-    {% load paginator %}{% paginator 4 %}
+    <div id="item-listing-grid">
+        <ul>
+    {% for object in objects.object_list %}
+          <li><a href="{{ object.get_absolute_url }}">
+            <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt=""><br>
+                <span class="item-name">{{ object.artefact_type }}</span></a><br>
+                <span class="global-region">{{ object.global_region }}</span>
+          </li>
+    {% endfor %}
+        </ul>
+    </div>
+
+{% paginator 5 extra_class="bottom" %}
 </div><!-- /search-results -->
+
 
 
 {% endif %}
