@@ -2,9 +2,10 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
 from exceptions import IllegalMove, SameLevelMove, WrongLevelMove
-from django.db.utils import IntegrityError
+
 
 slug_length = 50
+
 
 class LocationBase(models.Model):
     name = models.CharField(max_length=255)
@@ -133,6 +134,10 @@ def calc_field_changes(element):
 
 
 class GlobalRegion(LocationBase):
+    icon_path = models.CharField(max_length=255, blank=True,
+        help_text="Relative path to icon")
+    icon_title = models.CharField(max_length=255, blank=True,
+        help_text="Icon title, displayed on browse page")
 
     class Meta(LocationBase.Meta):
         pass
