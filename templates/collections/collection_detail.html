@@ -58,6 +58,7 @@
 
 
 {% block javascript %}
+{{ block.super }}
 {% with places=collection.get_places %}
 {% if places %}
 <script type="text/javascript"
