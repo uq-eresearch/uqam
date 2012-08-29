@@ -10,7 +10,8 @@ from django import template
 register = template.Library()
 
 
-def paginator(context, adjacent_pages=2):
+@register.inclusion_tag('paginator.html', takes_context=True)
+def paginator(context, adjacent_pages=2, extra_class=""):
     """
     To be used with a Django paginator.
 
@@ -44,6 +45,6 @@ def paginator(context, adjacent_pages=2):
         'page_numbers': page_numbers,
         'show_first': 1 not in page_numbers,
         'show_last': paginator.num_pages not in page_numbers,
+        'extra_class': extra_class
     }
 
-register.inclusion_tag('paginator.html', takes_context=True)(paginator)
