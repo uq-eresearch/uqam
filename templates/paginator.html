@@ -13,7 +13,7 @@
       {% endifequal %}
    {% endfor %}
    {% if show_last %}
-      <div class="ellipsis">...</div>
+      <div class="page ellipsis">...</div>
       <div class="page"><a href="?page={{ objects.paginator.num_pages }}{{ query }}">{{ objects.paginator.num_pages }}</a></div>
    {% endif %}
    <div class="page next">{% if objects.has_next %}<a href="?page={{ objects.next_page_number }}{{ query }}">&raquo;</a>{% else %}&raquo;{% endif %}</div>
