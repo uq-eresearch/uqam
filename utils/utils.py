@@ -30,3 +30,13 @@ def do_paging(request, queryset):
 
 def url_with_querystring(path, **kwargs):
     return path + '?' + urllib.urlencode(kwargs, True)
+
+
+def split_list(alist, parts=1):
+    """
+    Split a list into a number of parts
+    http://stackoverflow.com/a/752562/119603
+    """
+    length = len(alist)
+    return [ alist[i*length // parts: (i+1)*length // parts] 
+             for i in range(parts) ]

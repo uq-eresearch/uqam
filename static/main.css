@@ -349,3 +349,11 @@ table.table {
   top: 96px;
   left: 22px;
 }
+
+/* Places */
+.places-subplaces ul {
+  float: left;
+}
+.places-subplaces ul.hidden {
+  display: none;
+}

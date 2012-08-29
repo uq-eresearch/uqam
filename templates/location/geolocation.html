@@ -3,30 +3,38 @@
 {% load uqam %}
 {% block content %}
 
+<div class="breadcrumbs">
+    <a href="{% url view_places %}">Places</a></li>
+    {% for parent in geolocation.get_parents %}
+     > <a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a></li>
+    {% endfor %}
+</div>
 
-<a href="{% url view_places %}">Places</a></li>
-{% for parent in geolocation.get_parents %}
- > <a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a></li>
-{% endfor %}
+{% if geolocation %}
+    <h1>{{geolocation.name}}</h1>
 
-
-<h1>{{geolocation.name}}</h1>
-
-{% if geolocation.description %}
-<h2>Description</h2>
-<p>{{ geolocation.description }}</p>
-{% endif %}
-{% if places %}
-
+    {% if geolocation.description %}
+    <p>{{ geolocation.description }}</p>
+    {% endif %}
 {% endif %}
 
+
+<div class="places-subplaces">
 {% if children %}
-<ul>
-{% for child in children %}
-    <li><a href="{{child.get_absolute_url}}">{{child.name}}&nbsp;</a></li>
-{% endfor %}
-</ul>
+    {% if num_children > 30 %}
+        <div class="show-all">
+            <button onclick="$('.places-subplaces ul.column').toggle();">Show all: {{num_children}} sub places</button>
+        </div>
+    {% endif %}
+    {% for column in children %}
+    <ul class="column {% if num_children > 30 %}hidden{% endif %}">
+        {% for child in column %}
+        <li><a href="{{child.get_absolute_url}}">{{child.name}}&nbsp;</a></li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
 {% endif %}
+</div>
 
 {% if objects %}
     <h2>Items ({{objects.paginator.count}})</h2>

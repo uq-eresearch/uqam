@@ -5,7 +5,8 @@ from django.utils.xmlutils import SimplerXMLGenerator
 from models import Place, Region
 from models import Locality
 from models import GlobalRegion
-from utils.utils import do_paging
+from cat.models import MuseumObject
+from utils.utils import do_paging, split_list
 from django.db.models import Count
 from django.contrib.contenttypes.models import ContentType
 import json
@@ -70,12 +71,6 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     handler.endElement(u"kml")
 
     return response
-
-
-def place_map(request):
-    kml_url = request.build_absolute_uri(reverse('place_kml'))
-    return render(request, "location/map.html",
-            {"kml_url": kml_url})
 
 
 def place_mapcluster(request):
@@ -143,27 +138,43 @@ def serialize_locs_jstree(objs):
     return nodes
 
 
+def place_map(request):
+    kml_url = request.build_absolute_uri(reverse('place_kml'))
+    return render(request, "location/map.html",
+            {"kml_url": kml_url})
+
 def view_places(request):
     grs = GlobalRegion.objects.all()
+    items = MuseumObject.objects.all()
 
-    return render(request, 'location/geolocation.html',
-        {'children': grs})
+    kml_url = request.build_absolute_uri(reverse('place_kml'))
+
+    objects = do_paging(request, items)
+
+    return render(request, 'location/map.html',
+        {'children': grs,
+         'objects': objects,
+         'kml_url': kml_url})
 
 
 def view_geoloc(request, loctype, id):
+
     geolocation = find_location(loctype, id)
 
     items = geolocation.museumobject_set.all()
 
-    objects = do_paging(request, items)
     children = []
     if hasattr(geolocation, 'children'):
         children = geolocation.children.all()
 
+
+    objects = do_paging(request, items)
+
     return render(request, 'location/geolocation.html',
         {'geolocation': geolocation,
          'objects': objects,
-         'children': children})
+         'num_children': len(children),
+         'children': split_list(children, parts=3)})
 
 
 def view_location(request, global_region, country=None, state_prov=None, local_region=None, locality=None):
