@@ -11,9 +11,9 @@
     <div class="pagination">
         <div class="num-results">
         Results {{ objects.start_index }} - {{ objects.end_index }} of {{ objects.paginator.object_list.count }}</div>
-        {% paginator 5 extra_class="top"%}
+{% paginator 5 extra_class="top"%}
     </div>
-</div><!-- /search-results-head -->
+</div><!-- /item-listing-head -->
 
 <div class="item-listing">
     <table id="item-listing-table">
@@ -62,7 +62,7 @@
     </div>
 
 {% paginator 5 extra_class="bottom" %}
-</div><!-- /search-results -->
+</div><!-- /item-listing -->
 
 
 
