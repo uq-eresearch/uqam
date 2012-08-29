@@ -1,5 +1,5 @@
 {% extends "base_wide.html" %}
-
+{% load static %}
 {% block content %}
 <div>
 <div style="float:right;font-size: 80%;">
@@ -11,7 +11,17 @@
 
 
 <h2><a href="{% url view_places %}">Browse hierarchy</a></h2>
-
+<div class="places-subplaces">
+{% if children %}
+    <ul class="column {% if num_children > 30 %}hidden{% endif %}">
+        {% for child in children %}
+        <li><a href="{{child.get_absolute_url}}">
+            <img src="{% static child.icon_path %}" title="{{child.icon_title}}">
+            {{child.name}}&nbsp;</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+</div>
 
 
 
