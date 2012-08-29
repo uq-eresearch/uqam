@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from parties.models import Person
 from django.shortcuts import get_object_or_404
+from utils.utils import do_paging
 
 
 def people_aggregate(request, template_name='parties/datatables.html'):
@@ -16,32 +17,39 @@ def people_aggregate(request, template_name='parties/datatables.html'):
             {'person_list': people})
 
 
-def person_detail(request, pk, item_type='docs', template_name='parties/person_detail.html'):
+def person_detail(request, pk, item_type='default', template_name='parties/person_detail.html'):
 
     person = get_object_or_404(Person, pk=int(pk))
 
-    if item_type == 'docs':
-        items = person.related_documents.all()
-    elif item_type == 'created':
-        items = person.created_items.all()
-    elif item_type == 'collected':
-        items = person.collected_objects.all()
-    elif item_type == 'donated':
-        items = person.donated_objects.all()
+    mapping = {'docs': ('related_documents', 'Related documents', person.related_documents.count()),
+               'created': ('created_items', 'Created items', person.created_items.count()),
+               'collected': ('collected_objects', 'Collected items', person.collected_objects.count()),
+               'donated': ('donated_objects', 'Donated items', person.donated_objects.count())}
+
+    if item_type == 'default':
+        # Select max count type
+        item_count = -1
+        for k, v in mapping.items():
+            if v[2] > item_count:
+                item_count = v[2]
+                item_type = k
+
+    # output types in correct order
+    types = [(key, mapping[key][1], mapping[key][2]) for key in ('docs', 'created', 'collected', 'donated')]
+
+    if item_type in mapping.keys():
+        items = getattr(person, mapping[item_type][0]).all()
     else:
         items = []
 
-    counts = []
-    counts.append(('docs', 'Related documents', person.related_documents.count()))
-    counts.append(('created', 'Created items', person.created_items.count()))
-    counts.append(('collected', 'Collected items', person.collected_objects.count()))
-    counts.append(('donated', 'Donated items', person.donated_objects.count()))
+    objects = do_paging(request, items)
 
     return render(request, template_name, {
         'person': person,
-        'items': items,
-        'counts': counts,
-        'item_type': item_type
+        'objects': objects,
+        'types': types,
+        'item_type': item_type,
+        'item_name': mapping[item_type][1]
         })
 
 

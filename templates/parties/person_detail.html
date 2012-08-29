@@ -1,12 +1,6 @@
 {% extends "base_wide.html" %}
 
 {% block content %}
-<style>
-li.active {
-    background-color: red;
-}
-</style>
-
 
 {% if user.is_staff %}
 <div style="float:right;font-size: 80%;">
@@ -19,22 +13,28 @@ li.active {
 
 <h1>{{ person.display_name }}</h1>
 
-<p>{{ person.comments }}</p>
+<p class="person-comments">{{ person.comments }}</p>
 
-<ul>
-{% for type in counts %}
+<ul id="people-type-filter">
+{% for type in types %}
     <li{% if type.0 == item_type %} class="active"{%endif%}><a href="{% url parties.views.person_detail pk=person.id item_type=type.0 %}">{{type.1}} ({{type.2}})</a></li>
 {% endfor %}
 </ul>
 
-<h2>Related Documents</h2>
-{% for doc in person.related_documents.all %}
-<a href="{{doc.document.url}}">{{doc.name}}</a> <br>
-{% endfor %}
 
+{% if item_type == 'docs' %}
+<table id="item-listing-table">
+    <tr><th></th><th>Document</th></tr>
+    {% for doc in person.related_documents.all %}
+    <tr><td></td>
+        <td><a href="{{doc.document.url}}">{{doc.name}}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
 
-<h2>{{item_type}}</h2>
-{% include "snippets/museum_item_list.html" with items=items page_type="page" %}
+    {% include "snippets/paged_object_list.html" %}
+{% endif %}
 
 
 
