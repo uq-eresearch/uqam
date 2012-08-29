@@ -1,14 +1,14 @@
-{% extends "base_generic.html" %}
+{% extends "base_wide.html" %}
 
 {% load uqam %}
 {% block content %}
 
-<ul>
-    <li><a href="{% url view_places %}">Places</a></li>
+
+<a href="{% url view_places %}">Places</a></li>
 {% for parent in geolocation.get_parents %}
-    <li>{{parent|verbose_name|capfirst}}:<a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a></li>
+ > <a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a></li>
 {% endfor %}
-</ul>
+
 
 <h1>{{geolocation.name}}</h1>
 
@@ -35,4 +35,4 @@
 
 
 
-{% endblock %}
+{% endblock content %}
