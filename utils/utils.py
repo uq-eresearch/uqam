@@ -12,7 +12,7 @@ def get_site_url(site, path):
 
 
 def do_paging(request, queryset):
-    paginator = Paginator(queryset, 25)
+    paginator = Paginator(queryset, 16)
 
     # Make sure page request is an int. If not, deliver first page.
     try:
