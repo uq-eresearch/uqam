@@ -25,3 +25,22 @@
 
 
 {% endblock %}
+
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('.grid-list-selector button').click(function (e) {
+        if ($(this).hasClass('grid')) {
+            $('#item-listing-table').hide();
+            $('#item-listing-grid').show();
+        } else if ($(this).hasClass('list')) {
+            $('#item-listing-table').show();
+            $('#item-listing-grid').hide();
+        }
+    });
+});
+</script>
+{% endblock javascript %}
