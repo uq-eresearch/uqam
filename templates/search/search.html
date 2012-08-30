@@ -6,9 +6,8 @@
 {% if query %}
 <div class="search-results-head">
     <h2>Search Results</h2>
-    <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
-
     {% load paginator %}{% paginator 4 %}
+    <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
 </div><!-- /search-results-head -->
 
 <!-- Begin faceting. -->
