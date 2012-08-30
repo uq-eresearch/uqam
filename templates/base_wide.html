@@ -19,14 +19,14 @@
 
 <!-- #### CHANGED THIS FOR DROPDOWN BUTTONS #####-->
     <div class="browse-by-link">
-        <p class="search-options-divider">or</p> <!-- ADDED <p> tags around this with a class -->
+        <p class="search-options-divider">or</p>
         <div class="btn-group" id="browseMenu">
       <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>Browse by
       </button>
           <ul class="dropdown-menu">
-            <li><a href="#">Categories</a></li>
-            <li><a href="#">People</a></li>
-            <li><a href="#">Places</a></li>
+            <li><a href="{% url categories_list %}">Categories</a></li>
+            <li><a href="{% url parties_browse %}">People</a></li>
+            <li><a href="{% url view_places %}">Places</a></li>
           </ul>
         </div>
 
