@@ -286,6 +286,11 @@ class Category(models.Model):
     suggested_artefact_types = models.ManyToManyField(ArtefactType,
             related_name='categories', null=True)
 
+    icon_path = models.CharField(max_length=255, blank=True,
+        help_text="Relative path to icon")
+    icon_title = models.CharField(max_length=255, blank=True,
+        help_text="Icon title, displayed on browse page")
+
     def __unicode__(self):
         if self.parent:
             return self.parent.__unicode__() + u" » " + self.name
