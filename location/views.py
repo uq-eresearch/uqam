@@ -73,12 +73,6 @@ def place_kml(request, encoding='utf-8', mimetype='text/plain'):
     return response
 
 
-def place_mapcluster(request):
-    kml_url = request.build_absolute_uri(reverse('place_kml'))
-    return render(request, "location/mapcluster.html",
-            {"kml_url": kml_url})
-
-
 def place_duplicates(request):
     '''
     Used for finding duplicate places, by Geoname ID
@@ -137,11 +131,6 @@ def serialize_locs_jstree(objs):
         nodes.append(node)
     return nodes
 
-
-def place_map(request):
-    kml_url = request.build_absolute_uri(reverse('place_kml'))
-    return render(request, "location/map.html",
-            {"kml_url": kml_url})
 
 def view_places(request):
     grs = GlobalRegion.objects.exclude(icon_path="")

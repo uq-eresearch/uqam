@@ -19,8 +19,6 @@ urlpatterns = patterns('location.views',
         ListView.as_view(
             model=Place), name='place_list'),
     url(r'^kml$', 'place_kml', name='place_kml'),
-    url(r'^map$', 'place_map', name='place_map'),
-    url(r'^map_cluster$', 'place_mapcluster', name='place_mapcluster'),
     url(r'^json$', 'place_json', name='place_json'),
     url(r'^(?P<place_id>\d+)$', 'place_detail', name='place_detail'),
 
