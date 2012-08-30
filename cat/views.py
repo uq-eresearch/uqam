@@ -84,6 +84,9 @@ def regions(request, country):
 
 
 def categories_browse(request):
+    """
+    Main browse page for categories
+    """
     categories = Category.objects.filter(parent=None).exclude(icon_path="")
     equipment = Category.objects.filter(parent__name='Equipment')
     return render(request, 'cat/category_browse.html', {
@@ -111,10 +114,11 @@ def categories_list(request, full_slug=None):
     objects = MuseumObject.objects.filter(category=parent)
     objects = do_paging(request, objects)
 
-    return render(request, "cat/category_list.html",
-            {"categories": cat_list,
-             "objects": objects,
-             "breadcrumbs": breadcrumbs})
+    return render(request, "cat/category_list.html", {
+            "category": parent,
+            "categories": cat_list,
+            "objects": objects,
+            "breadcrumbs": breadcrumbs[0:-1]})
 
 
 def search(request):
