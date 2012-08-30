@@ -144,7 +144,7 @@ def place_map(request):
             {"kml_url": kml_url})
 
 def view_places(request):
-    grs = GlobalRegion.objects.all()
+    grs = GlobalRegion.objects.exclude(icon_path="")
     items = MuseumObject.objects.all()
 
     kml_url = request.build_absolute_uri(reverse('place_kml'))

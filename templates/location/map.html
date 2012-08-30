@@ -1,25 +1,25 @@
 {% extends "base_wide.html" %}
 {% load static %}
 {% block content %}
-<div>
 <div style="float:right;font-size: 80%;">
     <a href="{% url place_kml %}">View in Google Earth</a>
 </div>
 <h1>Places</h1>
 
 
-
-
-<h2><a href="{% url view_places %}">Browse hierarchy</a></h2>
 <div class="places-subplaces">
 {% if children %}
-    <ul class="column {% if num_children > 30 %}hidden{% endif %}">
         {% for child in children %}
-        <li><a href="{{child.get_absolute_url}}">
+        <div class="dropdown globalregion-icon"><a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" href="{{child.get_absolute_url}}">
             <img src="{% static child.icon_path %}" title="{{child.icon_title}}">
-            {{child.name}}&nbsp;</a></li>
+            <p>{{child.name}}</p></a>
+            <ul class="dropdown-menu" role="menu">
+                {% for country in child.children.all %}
+                <li><a href="{{country.get_absolute_url}}">{{country.name}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
         {% endfor %}
-    </ul>
 {% endif %}
 </div>
 
@@ -27,14 +27,7 @@
 
 <div id="map_canvas" style="width:100%; height:600px"></div>
 
-</div>
-<div>
-    <ul><li>
-        <img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF9999'> less than 10</li>
-        <li><img src='https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin||FF4c4c'> less than 100</li>
-        <li><img src='https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.7|0|FF0000|1|_|'FF0000> 100 or more</li>
-    </ul>
-</div>
+
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript"
