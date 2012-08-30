@@ -211,14 +211,32 @@
 
     <script type="text/javascript" src="{{STATIC}}js/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="{{STATIC}}js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="{{STATIC}}js/jquery.hoverIntent.minified.js"></script>
     <!-- NEED TO CALL THIS FOR DROPDOWNS -->
     <script>
         $(document).ready(function(){
             $('.dropdown-toggle').dropdown();
         });
+
+        // Drop Down Menu in Header
+        $(function () {
+            $('.dropdown').each(function () {
+                $(this).parent().eq(0).hoverIntent({
+                    timeout: 20,
+                    over: function () {
+                        var current = $('.dropdown:eq(0)', this);
+                        current.slideDown(300);
+                    },
+                    out: function () {
+                        var current = $('.dropdown:eq(0)', this);
+                        current.fadeOut(200);
+                    }
+                });
+            });
+        });
+
     </script>
     {% block javascript %}
     {% endblock %}
-    <script type="text/javascript" src="/static/fancydropdown.js"></script>
 </body>
 </html>
