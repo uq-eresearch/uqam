@@ -37,6 +37,7 @@
 
 {% endblock %}
 {% block javascript %}
+{{block.super}}
 <script type="text/javascript"
     src="http{% if request.is_secure %}s{% endif %}://maps.googleapis.com/maps/api/js?sensor=false"></script>
 

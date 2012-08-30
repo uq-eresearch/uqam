@@ -314,6 +314,7 @@
 
 
 {% block javascript %}
+{{block.super}}
 {% if museumobject.place.latitude %}
 {% with p=museumobject.place %}
 <script type="text/javascript"
