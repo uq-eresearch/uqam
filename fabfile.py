@@ -150,6 +150,15 @@ def reload_servers():
         sudo('initctl stop uqam-gunicorn')
         sudo('initctl start uqam-gunicorn')
 
+def stop_servers():
+    with settings(user=sudouser):
+        sudo('service celeryd restart')
+        sudo('initctl stop uqam-gunicorn')
+def start_servers():
+    with settings(user=sudouser):
+        sudo('service celeryd start')
+        sudo('initctl start uqam-gunicorn')
+
 
 def rebuild_index():
     """
