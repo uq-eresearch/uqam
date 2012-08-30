@@ -1,6 +1,6 @@
 <div class="pager {{extra_class}}">
    
-      <div class="page">{% if objects.has_previous %}<a href="?page={{ objects.previous_page_number }}{{ query }}">&laquo;</a>{% else %}&laquo;{% endif %}</div>
+      <div class="page prev">{% if objects.has_previous %}<a href="?page={{ objects.previous_page_number }}{{ query }}">&laquo;</a>{% else %}&laquo;{% endif %}</div>
    {% if show_first %}
       <div class="page prev"><a href="?page=1{{ query }}">1</a></div>
       <div class="page ellipsis">...</div>
