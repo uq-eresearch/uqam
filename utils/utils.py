@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.contrib.syndication.views import add_domain
 import urllib
+import math
 
 
 def get_site_url(site, path):
@@ -34,9 +35,8 @@ def url_with_querystring(path, **kwargs):
 
 def split_list(alist, parts=1):
     """
-    Split a list into a number of parts
-    http://stackoverflow.com/a/752562/119603
+    Split a list into thirds
     """
     length = len(alist)
-    return [ alist[i*length // parts: (i+1)*length // parts] 
-             for i in range(parts) ]
+    size = int(math.ceil(length / float(parts)))
+    return [alist[size * i:size * (i + 1)] for i in range(parts)]
