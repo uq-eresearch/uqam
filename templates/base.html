@@ -6,7 +6,7 @@
     <title>{% block title %}UQ Anthropology Museum{% endblock %}</title>
 
     <link rel="stylesheet" href="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/css/default.css" media="screen" type="text/css" />
-    <link rel="stylesheet" href="{{STATIC}}main.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{STATIC}}css/custom.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="{{STATIC}}fancydropdown.css" type="text/css">
 
  	<!--[if IE 6]><link rel="stylesheet" href="http{% if request.issecure %}s{% endif %}://uq.edu.au/templates/web/css/ie6bugs.css" media="screen" type="text/css" /><![endif]-->
@@ -93,7 +93,7 @@
     <!-- START: Breadcrumb Trails -->
     <div id="pagebase">
       <div id="breadCrumb1" class="breadCrumb module">
-        <div style="overflow: hidden; position: relative; width: 860px;">
+        <div style="overflow: hidden; position: relative; width: 820px;">
           <div>
             <ul style="width: 5000px; ">
               <li class="first">
@@ -110,10 +110,17 @@
     </div>
     <!-- END: Breadcrumb Trails -->
     {% endblock bottom_breadcrumbs %}
-    <div id="copyright-statement">
-        {% include "snippets/copyright_statement.html" %}
-    </div>
   </div><!-- /content -->
+  <div id="copyright-statement">
+    <div class="copyright-statement">
+      <p>
+          The UQ Anthropology Museum respects the rights of artists and copyright holders. Every effort is made to trace the copyright holders and gain permission for use of the images within this collection. We would be grateful to receive any information concerning copyright of images.
+      </p>
+      <p>
+          No image or information displayed on this site may be reproduced, transmitted or copied other than for the purpose of fair dealing (e.g. for research and study) as permitted under the Copyright Act 1968 and subsequent amendments, without the permission of the copyright holders and the UQ Anthropology Museum.
+      </p>
+    </div>
+  </div>
 
 </div><!-- /wrapper -->
 
@@ -202,9 +209,16 @@
 <!-- END: Footer  --><!-- This page loaded in 0.00619 seconds. --><!-- QC: 1 --><!--END: Footer -->
 
 
-    <script type="text/javascript" src="{{STATIC}}jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{STATIC}}fancydropdown.js"></script>
+    <script type="text/javascript" src="{{STATIC}}js/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="{{STATIC}}js/bootstrap-dropdown.js"></script>
+    <!-- NEED TO CALL THIS FOR DROPDOWNS -->
+    <script>
+        $(document).ready(function(){
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
     {% block javascript %}
     {% endblock %}
+    <script type="text/javascript" src="/static/fancydropdown.js"></script>
 </body>
 </html>

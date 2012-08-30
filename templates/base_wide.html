@@ -8,17 +8,43 @@
 {% block body %}
 
 
-  <div id="search-tool" class="fullwidth">
-    <p class="conditions-agreement-statement">
-      By using the UQ Anthropology Museum Online Catalogue you agree to the conditions
-      of the <a href="#">Copyright Statement</a>.
-    </p>
+<div id="search-panel">
+  
+    <!-- Changed this from bottom to top -->
+    <div class="search-conditions-statement">
+        By using the UQ Anthropology Museum Online Catalogue you agree to the conditions of the <a href="#">Copyright Statement</a> below.
+    </div>
 
-{% include "snippets/top_search_panel.html" %}
+    <form method="get" action="/search/">
+    <fieldset>
+    <input size="15" type="text" value="Search the collection..." name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
+    <input name="submit" value="Search" class="submit btn" title="Search" type="submit" />
+    </fieldset>
+    </form>
 
-  </div>
+<!-- #### CHANGED THIS FOR DROPDOWN BUTTONS #####-->
+    <div class="browse-by-link">
+        <p class="search-options-divider">or</p> <!-- ADDED <p> tags around this with a class -->
+        <div class="btn-group" id="browseMenu">
+      <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>Browse by
+      </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">People</a></li>
+            <li><a href="#">Places</a></li>
+          </ul>
+        </div>
 
-<div id="content-primary" class="fullwidth">
+    </div>
+
+    <div class="advanced-search-link">
+    <!-- CHANGED TEXT OF THIS LINK -->
+        <a href="#" class="btn"><i class="icon-plus-sign"></i> Additional search options</a>
+    </div>
+
+</div>
+
+<div id="content-section" class="fullwidth">
     {% block content %}
     {% endblock %}
 </div>

@@ -20,7 +20,7 @@
     </div>
     <div class="paging">
 
-       {{search_index}} of {{search_results.count}}
+      <p>{{search_index}} of {{search_results.count}}</p>
 
       {% if search_prev_obj %}
         <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_index|add:'-1'}}">Prev</a>
@@ -52,17 +52,12 @@
     <div class="item-image">
       <img class="placeholder" src="http://placehold.it/384x256" alt="placeholder">
     </div>
-  {% endfor %}
-  </div>
+  {% endfor %}    
 
-  <div class="extra-representations">
-    <div class="view-3d">
-      View in 3D
+    <div class="view-3d btn">
+      <a href="#">View in 3D</a>
     </div>
-    <div class="view-pseudo-3d">
-      View in Pseudo-3D
-    </div>
-  </div><!-- /extra-representations -->
+  </div>
 </div> <!-- /item-representations -->
 
 
@@ -74,8 +69,8 @@
     <dt class="registration-number">Registration number</dt>
     <dd class="registration-number">{{ museumobject.registration_number }}</dd>
 
-    <dt class="item-name">Item name</dt>
-    <dd class="item-name">{{ museumobject.artefact_type }}</dd>
+    <dt class="item-type">Item name</dt>
+    <dd class="item-type">{{ museumobject.artefact_type }}</dd>
 
     <dt class="category">Category</dt>
     <dd class="category">
@@ -302,16 +297,16 @@
 </div><!-- /staff-information -->
 {% endif %} {# is_staff #}
 
+<div class="secondary-item-info">
+  <div class="physical-description">
+    <h3>Description</h3>
+    <p>{{ museumobject.description|linebreaks }}</p>
+  </div>
 
-<div class="physical-description">
-  <h3>Description</h3>
-  {{ museumobject.description|linebreaks }}
-</div>
-
-<div class="research-notes">
-  <h3>Research notes</h3>
-  {{ museumobject.comment|linebreaks }}
-</div>
+  <div class="research-notes">
+    <h3>Research notes</h3>
+    <p>{{ museumobject.comment|linebreaks }}</p>
+  </div>
 
 
 
@@ -330,7 +325,7 @@
         var myOptions = {
             zoom: 3, // Zoomed out to show location in country
             disableDefaultUI: true,
-            mapTypeId: google.maps.MapTypeId.SATELLITE
+            mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
         var latlng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}})
