@@ -12,7 +12,7 @@ urlpatterns = patterns('cat.views',
 
 
 
-    url(r'^categories/$', 'categories_list', name='categories_list'),
+    url(r'^categories/$', 'categories_browse', name='categories_list'),
 
     url(r'^categories/(?P<full_slug>.+)/$', 'categories_list',
         name='categories_list'),

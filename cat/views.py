@@ -83,6 +83,14 @@ def regions(request, country):
             {'regions': regions})
 
 
+def categories_browse(request):
+    categories = Category.objects.filter(parent=None).exclude(icon_path="")
+    equipment = Category.objects.filter(parent__name='Equipment')
+    return render(request, 'cat/category_browse.html', {
+        'categories': categories,
+        'equipment': equipment})
+
+
 def categories_list(request, full_slug=None):
     """
     Hierarchical browsing of categories

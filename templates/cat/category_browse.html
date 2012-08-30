@@ -1,0 +1,43 @@
+{% extends "base_wide.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Categories</h1>
+
+  <ul class="breadcrumb">
+      <li><a href="{% url categories_list %}">Categories</a></li>
+  {% for level in breadcrumbs %}
+  <span class="divider">»</span>
+  <li{% if forloop.last %} class="active"{% endif %}><a href="{{ level.get_absolute_url }}">{{ level.name }}</a>
+  </li>
+  {% endfor %}
+  </ul>
+
+<div>
+{% for category in categories %}
+  {% if category.name == 'Equipment' %}
+    <div class="dropdown category-icon">
+      <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" href="{{category.get_absolute_url}}">
+        <img src="{% static category.icon_path %}" title="{{category.icon_title}}">
+        <p>{{category.name}}</p>
+      </a>
+        <ul class="dropdown-menu" role="menu">
+            {% for equip in equipment %}
+            <li><a href="{{equip.get_absolute_url}}">{{equip.name}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+  {% else %}
+  <div class="category-icon">
+    <a href="{{category.get_absolute_url}}">
+      <img src="{% static category.icon_path %}" title="{{category.icon_title}}">
+      <p>{{category.name}}</p>
+    </a>
+  </div>
+  {% endif %}
+{% endfor %}
+</div>
+
+
+
+{% endblock %}
