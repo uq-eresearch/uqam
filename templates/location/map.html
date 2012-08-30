@@ -7,7 +7,7 @@
 <h1>Places</h1>
 
 
-<div class="places-subplaces">
+<div class="places-icons">
 {% if children %}
         {% for child in children %}
         <div class="dropdown globalregion-icon"><a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" href="{{child.get_absolute_url}}">
@@ -24,6 +24,13 @@
 </div>
 
 
+<div class="big-or">
+    <p>OR</p>
+</div>
+
+<p class="map-instructions">
+    Browse items by place using the map by zooming and hovering over the dots to view the items at this place. Click on a dot to go to a list of of the items and view their records.
+</p>
 
 <div id="map_canvas" style="width:100%; height:600px"></div>
 
@@ -40,7 +47,7 @@
         var myOptions = {
             zoom: 4, // Zoomed out to show location in world
             disableDefaultUI: false,
-            mapTypeId: google.maps.MapTypeId.SATELLITE
+            mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var center = new google.maps.LatLng(-23.5, 145.3); // Near Barcaldine
         myOptions.center = center;
