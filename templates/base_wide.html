@@ -1,21 +1,20 @@
 {% extends "base.html" %}
-
+{% load uqam %}
 {% block body %}
 
 
 <div id="search-panel">
   
+  <form method="get" action="/search/">
     <!-- Changed this from bottom to top -->
     <div class="search-conditions-statement">
         By using the UQ Anthropology Museum Online Catalogue you agree to the conditions of the <a href="#">Copyright Statement</a> below.
     </div>
 
-    <form method="get" action="/search/">
     <fieldset>
-    <input size="15" type="text" value="Search the collection..." name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
-    <input name="submit" value="Search" class="submit btn" title="Search" type="submit" />
+        <input size="15" type="text" value="Search the collection..." name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
+        <input name="submit" value="Search" class="submit btn" title="Search" type="submit" />
     </fieldset>
-    </form>
 
 <!-- #### CHANGED THIS FOR DROPDOWN BUTTONS #####-->
     <div class="browse-by-link">
@@ -32,11 +31,16 @@
 
     </div>
 
-    <div class="advanced-search-link">
-    <!-- CHANGED TEXT OF THIS LINK -->
-        <a href="#" class="btn"><i class="icon-plus-sign"></i> Additional search options</a>
+    <div class="advanced-search-fields">
+
+        {% advanced_search_fields %} {# uses /snippets/advanced_search_fields #}
     </div>
 
+    <div class="advanced-search-link">
+        <button type="button" class="btn"><i class="icon-plus-sign"></i> Additional search options</button>
+    </div>
+
+  </form>
 </div>
 
 <div id="content-section" class="fullwidth">
@@ -60,6 +64,17 @@ $(document).ready(function () {
         } else if ($(this).hasClass('list')) {
             $('#item-listing-table').show();
             $('#item-listing-grid').hide();
+        }
+    });
+
+    $('.advanced-search-link button').click(function (e) {
+        var fields = $('.advanced-search-fields');
+        if (fields.is(":visible")) {
+            fields.hide();
+            $(this).html('<i class="icon-plus-sign"></i> Additional search options');
+        } else {
+            fields.show();
+            $(this).html('<i class="icon-minus-sign"></i> Basic search');
         }
     });
 });

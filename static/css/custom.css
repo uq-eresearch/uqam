@@ -76,6 +76,12 @@ filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:rela
 #search-panel .browse-by-link #browseMenu button span.caret{float:right}
 #search-panel .advanced-search-link{clear:both;font-size:13px;padding:10px 0}
 
+/* Addition search options */
+#search-panel .advanced-search-fields {
+    display: none;
+}
+
+
 /************************************************* 			
 **				ITEM DETAILS					**
 **************************************************/

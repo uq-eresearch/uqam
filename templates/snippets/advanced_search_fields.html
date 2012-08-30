@@ -1,0 +1,32 @@
+
+<div class="advanced-search-filter category">
+    <p>Category</p>
+    <select name='category'>
+        <option>Select Category...</option>
+    {% for cat in categories %}
+        <option>{{cat}}</option>
+    {% endfor %}
+    </select>
+</div>
+
+<div class="advanced-search-filter place">
+    <p>Place</p>
+    <select name='place'>
+        <option>Select location...</option>
+    {% for place in places %}
+        <option>{{place.name}}</option>
+    {% endfor %}
+    </select>
+</div>
+
+<div class="advanced-search-filter person">
+    <p>Person</p>
+    <input name="person">
+</div>
+
+<div class="advanced-search-filter images">
+    <p>
+        <input type="checkbox" id="has_images" name="has_images" value="True">
+        <label for="has_images">Only return results with an associated image</label>
+    </p>
+</div>

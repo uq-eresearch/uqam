@@ -31,3 +31,18 @@ def pdb(element):
     import ipdb
     ipdb.set_trace()
     return element
+
+
+from cat.models import Category
+from location.models import Country
+
+
+@register.inclusion_tag('snippets/advanced_search_fields.html')
+def advanced_search_fields():
+    categories = Category.objects.all()
+    places = Country.objects.all()
+
+    return {
+        'categories': categories,
+        'places': places,
+    }
