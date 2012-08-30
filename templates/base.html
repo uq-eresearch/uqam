@@ -61,7 +61,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/about/">About Us</a></li>
             <li class="hasmore"><a href="#">Collection</a>
-                <ul class="dropdown">
+                <ul class="menu-dropdown">
                     <li><a href="/about-collection/">About the Collection</a></li>
                     <li><a href="{% url categories_list %}">Categories</a></li>
                     <li><a href="{% url parties_browse %}">People</a></li>
@@ -220,15 +220,15 @@
 
         // Drop Down Menu in Header
         $(function () {
-            $('.dropdown').each(function () {
+            $('.menu-dropdown').each(function () {
                 $(this).parent().eq(0).hoverIntent({
                     timeout: 20,
                     over: function () {
-                        var current = $('.dropdown:eq(0)', this);
+                        var current = $('.menu-dropdown:eq(0)', this);
                         current.slideDown(300);
                     },
                     out: function () {
-                        var current = $('.dropdown:eq(0)', this);
+                        var current = $('.menu-dropdown:eq(0)', this);
                         current.fadeOut(200);
                     }
                 });
