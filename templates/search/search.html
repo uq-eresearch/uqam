@@ -1,13 +1,16 @@
 {% extends 'base_wide.html' %}
 
-{% block headextra %}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}temppublicstyles.css" />
-{% endblock %}
-
 {% block content %}
 
 
 {% if query %}
+<div class="search-results-head">
+    <h2>Search Results</h2>
+    <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
+
+    {% load paginator %}{% paginator 4 %}
+</div><!-- /search-results-head -->
+
 <!-- Begin faceting. -->
 <div class="filter-bar">
 <h2>By Category</h2>
@@ -106,15 +109,6 @@
 </div>
 
     <!-- End faceting -->
-
-
-
-<div class="search-results-head">
-    <h3>Search Results</h3>
-    <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
-
-    {% load paginator %}{% paginator 4 %}
-</div><!-- /search-results-head -->
 
 <div class="search-results">
     <table class="search-results">
