@@ -1,5 +1,6 @@
 {% if objects.object_list %}
 
+{% load thumbnail %}
 {% load paginator %}
 
 <div class="item-listing-head">
@@ -22,7 +23,12 @@
         <tr>
             <td class="thumbnail">
                 <a href="{{ object.get_absolute_url }}">
-                    <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt="">
+                    {% if object.artefactrepresentation_set.all.0 %}
+                    <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
+                    {% else %}
+                    <img src="http://placehold.it/105x70" width="105" height="70" alt="">
+                    {% endif %}
+
                 </a>
             </td>
             <td class="item">
@@ -53,7 +59,11 @@
         <ul>
     {% for object in objects.object_list %}
           <li><a href="{{ object.get_absolute_url }}">
-            <img src="{% firstof object.artefactrepresentation_set.all.0.image.url_105x70 "http://placehold.it/105x70" %}" width="105" height="70" alt=""><br>
+                {% if object.artefactrepresentation_set.all.0 %}
+                    <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
+                {% else %}
+                    <img src="http://placehold.it/105x70" width="105" height="70" alt="">
+                {% endif %}<br>
                 <span class="item-name">{{ object.artefact_type }}</span></a><br>
                 <span class="global-region">{{ object.global_region }}</span>
           </li>
