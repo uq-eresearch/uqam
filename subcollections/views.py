@@ -91,7 +91,7 @@ from django.contrib.sites.models import Site
 import StringIO
 
 
-def atom_feed(request, encoding='utf-8', mimetype='text/plain'):
+def atom_feed(request, encoding='utf-8', mimetype='application/atom+xml'):
     feed_attrs = {u"xmlns": u"http://www.w3.org/2005/Atom"}
     collections = Collection.objects.filter(is_public=True)
     site = Site.objects.get(id=1)
