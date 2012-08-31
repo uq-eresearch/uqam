@@ -39,8 +39,9 @@
 <!--#####  ITEM REPRESENTATIONS ##### -->
 <div id="item-representations">
   <div id="item-images">
-  {% for ar in museumobject.artefactrepresentation_set.all %}
-    <div class="item-image {% if forloop.first%}active{%endif%}">
+    <div class="slides_container">
+  {% for ar in images %}
+    <div class="item-image">
     {% if ar.url %}
       <a href="{{ ar.url }}" >
     {% else %}
@@ -52,7 +53,8 @@
     <div class="item-image">
       <img class="placeholder" src="http://placehold.it/384x256" alt="placeholder">
     </div>
-  {% endfor %}    
+  {% endfor %}
+    </div>
 
     <div class="view-3d btn">
       <a href="#">View in 3D</a>
@@ -341,6 +343,12 @@
         });
         google.maps.event.addListener(marker, 'click', function() {
             window.location.href = marker.url;
+        });
+
+
+        $('#item-representations').slides({
+          generateNextPrev: true,
+
         });
     });
 </script>

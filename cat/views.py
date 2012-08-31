@@ -24,7 +24,9 @@ def home_page(request):
 def item_detail(request, reg_num):
     mo = get_object_or_404(MuseumObject, registration_number=reg_num)
 
-    context = {'museumobject': mo}
+    images = mo.artefactrepresentation_set.filter(public=True)
+
+    context = {'museumobject': mo, 'images': images}
     search_context = _current_search_results(request, reg_num)
     context.update(search_context)
 
