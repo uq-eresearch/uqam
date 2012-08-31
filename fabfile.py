@@ -286,5 +286,5 @@ def backup():
     filename = 'backups/backup-' + now + '-preupgrade'
     run('mkdir -p backups')
     run('pg_dump --clean -h localhost -U uqam uqam | '
-            ' gzip -c > %s.sql' % filename)
+            ' gzip -c > %s.sql.gz' % filename)
     run('tar czf %s.tar.gz uqam' % filename)
