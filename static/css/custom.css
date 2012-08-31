@@ -56,7 +56,7 @@ table.table{clear:both;margin-bottom:6px !important}
 #content{border-top-left-radius:8px;border-top-right-radius:8px;background:white;float:left;display:inline-block;width:960px;margin:16px 0 10px 0;position:relative;font-family:Arial, Helvetica, sans-serif;border:1px solid #f0eeef}
 #content-section{padding:0 20px;width:920px}
 
-/*************************************************     		
+/*************************************************   		
 **				MAIN SEARCH PANEL					**
 **************************************************/
 /* Search bar */
@@ -528,3 +528,18 @@ color:#2788db !important}
 .paging_full_numbers a.paginate_active{color:#666 !important;background-color:#f5f5f5}
 .paging_full_numbers a.paginate_button.first{-webkit-border-radius:4px 0 0 4px;-moz-border-radius:4px 0 0 4px;border-radius:4px 0 0 4px}
 .paging_full_numbers a.paginate_button.last{border-right:1px solid #ddd;-webkit-border-radius:0 4px 4px 0;-moz-border-radius:0 4px 4px 0;border-radius:0 4px 4px 0}
+
+/* Homepage
+------------------------------------------------------------------------*/
+.homePrimary{margin:0 10px;border-bottom:1px solid #7f7f7f;display:inline-block;clear:both}
+.homePrimLeft{width:540px;height:185px;float:left;background:#f8f8f8;border-top:4px solid #e3e3e3;padding:15px}
+.homePrimLeft{width:364px;height:185px;float:left;background:#fff5e5;border-top:4px solid #ffbe4e;border-left:1px solid #fcf2e3;padding:15px}
+.homePrimary img{border:3px solid #fff}
+
+.homeSecondary{margin:0 10px;display:inline-block;clear:both}
+.homeSecondary .col{width:275px;float:left;padding:0 20px;border-right:1px solid #ccc}
+.homeSecondary .col.copyright{border:0}
+.homeSecondary .col h3{font:700 14px arial;color:#555}
+.homeSecondary .notes h3{background:url(../images/icon-notes.gif) no-repeat 0 0;padding:0 0 0 40px}
+.homeSecondary .atsisWarn h3{background:url(../images/icon-warning.gif) no-repeat 0 0;padding:0 0 0 40px}
+.homeSecondary .copyright h3{background:url(../images/icon-copyright.gif) no-repeat 0 0;padding:0 0 0 40px}
