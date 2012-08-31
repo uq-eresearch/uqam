@@ -3,7 +3,33 @@ import ImageDraw
 import ImageEnhance
 
 
-def watermark_processor(image, watermark=False, **kwargs):
+def expand_canvas(image, size, expand=False, expand_colour="white", **kwargs):
+    """
+    Expand canvas of the image to the full requested size
+
+    Centers the scaled image within the new canvas.
+    Useful when using image sliders.
+    """
+    if expand:
+        source_x, source_y = image.size
+        target_x, target_y = size
+
+        new_image = Image.new("RGB", size, expand_colour)
+
+        if source_x < target_x:
+            x1, y1 = ((target_x - source_x) / 2, 0)
+        else:
+            x1, y1 = (0, (target_y - source_y) / 2)
+
+        new_image.paste(image, (x1, y1))
+        return new_image
+    else:
+        return image
+
+
+
+
+def watermark_processor(image, watermark=None, **kwargs):
     """
     Add a watermark to the image
     """

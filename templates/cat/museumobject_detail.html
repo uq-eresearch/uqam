@@ -44,9 +44,9 @@
     {% if ar.url %}
       <a href="{{ ar.url }}" >
     {% else %}
-      <a href="{{ ar.image.url }}">
+      <a href="{{ ar.image|thumbnail_url:'large_display' }}">
     {% endif %}
-    <img src="{% thumbnail ar.image 384x256 crop=scale watermark='UQ Anthropology Museum' %}" width="384" height="256" alt=""></a>
+    <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt=""></a>
     </div>
   {% empty %}
     <div class="item-image">
