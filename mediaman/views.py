@@ -80,16 +80,22 @@ def ignore_file(uploaded_file):
 def handle_item_image(formdata, ufile, user):
     reg_num = name_to_id(ufile.name, formdata['pathinfo0'])[0]
 
-    if ArtefactRepresentation.objects.filter(
+    ars = ArtefactRepresentation.objects.filter(
         artefact__registration_number=reg_num,
-        md5sum=formdata['md5sum0']).exists():
-        # Representation already exists
-        return
+        md5sum=formdata['md5sum0'])
+
+    if ars.exists():
+        ar = ars[0]
+        if ar.image.storage.exists(ar.image.name):
+            # Representation already exists
+            return
+    else:
+        ar = ArtefactRepresentation()
+        ar.position = 0
+        ar.artefact = MuseumObject.objects.get(registration_number=reg_num)
 
     ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, formdata, user)
-    ar.position = 0
     ar.image = ufile
-    ar.artefact = MuseumObject.objects.get(registration_number=reg_num)
     ar.save()
 
 
