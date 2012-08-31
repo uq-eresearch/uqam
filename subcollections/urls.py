@@ -5,6 +5,8 @@ from feeds import AllCollectionsFeed, CollectionFeed
 urlpatterns = patterns('subcollections.views',
     url(r'^$', 'collections_home', name='collections_home'),
 
+    url(r'^atom$', 'atom_feed', name='atom_feed'),
+
     url(r'^(\d+)$', 'collection_detail', name='collection_detail'),
 
     url(r'^add_objects', 'collection_add', name='collection_add'),

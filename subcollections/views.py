@@ -81,3 +81,59 @@ def atom_detail(request, collection_id):
     atom = collection.as_atom()
     response = HttpResponse(atom, mimetype=mimetype)
     return response
+
+
+from django.utils.xmlutils import SimplerXMLGenerator
+from django.utils.feedgenerator import rfc3339_date
+from utils.utils import get_site_url
+from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
+import StringIO
+
+
+def atom_feed(request, encoding='utf-8', mimetype='text/plain'):
+    feed_attrs = {u"xmlns": u"http://www.w3.org/2005/Atom"}
+    collections = Collection.objects.filter(is_public=True)
+    site = Site.objects.get(id=1)
+
+    updated = collections.order_by('-updated')[0].updated
+    feed_id = get_site_url(site, reverse('atom_feed'))
+
+    output = StringIO.StringIO()
+    handler = SimplerXMLGenerator(output, encoding)
+    handler.startDocument()
+    handler.startElement(u"feed", feed_attrs)
+
+    # Required Attributes
+    handler.addQuickElement(u"id", feed_id)
+    handler.addQuickElement(u"title", u"UQ Anthropology Museum Sub-collections")
+    handler.addQuickElement(u"updated", rfc3339_date(updated).decode('utf-8'))
+
+    # Optional
+    handler.addQuickElement(u"link", attrs={
+        u'rel': u'alternate',
+        u'href': reverse('collections_home'),
+        u'type': u'html'
+        })
+
+    for collection in collections:
+        entry_id = get_site_url(site, collection.get_absolute_url())
+        entry_updated = rfc3339_date(collection.updated).decode('utf-8')
+
+        handler.startElement(u"entry", {})
+        handler.addQuickElement(u"id", entry_id)
+        handler.addQuickElement(u"title", collection.title)
+        handler.addQuickElement(u'updated', entry_updated)
+        handler.addQuickElement(u'content', attrs={
+            u'src': collection.get_atom_url(),
+            u'type': u'application/atom+xml'
+            })
+
+        handler.endElement(u'entry')
+
+    handler.endElement(u'feed')
+
+    atom = output.getvalue()
+    response = HttpResponse(atom, mimetype=mimetype)
+    return response
+

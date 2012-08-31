@@ -4,7 +4,7 @@ from django.db.models.signals import post_save, post_delete
 from cat.models import Category
 from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
 from django.utils.xmlutils import SimplerXMLGenerator
-from django.conf import settings
+from django.core.urlresolvers import reverse
 from utils.utils import get_site_url
 import StringIO
 from django.contrib.sites.models import Site
@@ -66,6 +66,9 @@ class Collection(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('collection_detail', [str(self.id)])
+
+    def get_atom_url(self):
+        return reverse('collection_atom_detail', args=[self.id])
 
     @staticmethod
     def entry_attributes():
