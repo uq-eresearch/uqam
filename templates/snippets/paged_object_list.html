@@ -3,7 +3,7 @@
 {% load thumbnail %}
 {% load paginator %}
 
-<div class="item-listing-head">
+<div class="item-listing-head results-head">
     <div class="grid-list-selector">
         <div class="display-as">Display as:</div>
         <button class="grid">Grid View</button>
@@ -16,7 +16,7 @@
     </div>
 </div><!-- /item-listing-head -->
 
-<div class="item-listing">
+<div class="item-listing list-view">
     <table id="item-listing-table">
         <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
     {% for object in objects.object_list %}
@@ -55,7 +55,7 @@
     {% endfor %}
     </table>
 
-    <div id="item-listing-grid">
+    <div id="item-listing-grid grid-view">
         <ul>
     {% for object in objects.object_list %}
           <li><a href="{{ object.get_absolute_url }}">
