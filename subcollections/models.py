@@ -322,19 +322,19 @@ class Syndication(models.Model):
 def queue_for_syndication(instance, **kwargs):
     collection = instance
 
-    syndication = Syndication.objects.get(id=1)
-
     # Collection is updated with new dates and edit urls
     # we need to disconnect signal handler to prevent a loop
     post_save.disconnect(queue_for_syndication, sender=Collection)
 
     if collection.is_syndicated:
+        syndication = Syndication.objects.get(id=1)
         try:
             syndication.syndicate_collection(collection)
         except:
             logger.exception("Error syndicating collection (id=%s)", collection.id)
     else:
         if collection.edit_url != '':
+            syndication = Syndication.objects.get(id=1)
             syndication.delete_collection(collection)
             collection.save()
 
