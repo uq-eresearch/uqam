@@ -1,14 +1,41 @@
-    <div class="top-search-panel">
-        <div class="conditions-statement">By using the UQ Anthropology Museum Online Catalogue you agree to the conditions
-          of the Copyright Statement.</div>
-        <form method="get" action="/search/">
-        <fieldset class="search">
-            <input type="text" value="Search the collection..." class="textinput" id="dom-elem-17" name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}">
-            
-            <button class="search-button" id="dom-elem-18"><span>SEARCH<br></span></button>
-        </fieldset>
-        </form>
-        <button class="browse-by-button" id="dom-elem-19"><span>BROWSE BY</span></button>
-        <div class="or-text">OR</div>
-        <button class="additional-search-button" id="dom-elem-20"><span>&nbsp;Additional Search Options</span></button>
+
+{% load uqam %}
+<div id="search-panel">
+  
+  <form method="get" action="/search/">
+    <!-- Changed this from bottom to top -->
+    <div class="search-conditions-statement">
+        By using the UQ Anthropology Museum Online Catalogue you agree to the conditions of the <a href="#">Copyright Statement</a> below.
     </div>
+
+    <fieldset>
+        <input size="15" type="text" value="Search the collection..." name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
+        <input name="submit" value="Search" class="submit btn" title="Search" type="submit" />
+    </fieldset>
+
+<!-- #### CHANGED THIS FOR DROPDOWN BUTTONS #####-->
+    <div class="browse-by-link">
+        <p class="search-options-divider">or</p>
+        <div class="btn-group" id="browseMenu">
+      <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>Browse by
+      </button>
+          <ul class="dropdown-menu">
+            <li><a href="{% url categories_list %}">Categories</a></li>
+            <li><a href="{% url parties_browse %}">People</a></li>
+            <li><a href="{% url view_places %}">Places</a></li>
+          </ul>
+        </div>
+
+    </div>
+
+    <div class="advanced-search-fields">
+
+        {% advanced_search_fields %} {# uses /snippets/advanced_search_fields #}
+    </div>
+
+    <div class="advanced-search-link">
+        <button type="button" class="btn"><i class="icon-plus-sign"></i> Additional search options</button>
+    </div>
+
+  </form>
+</div>

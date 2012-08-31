@@ -3,45 +3,7 @@
 {% block body %}
 
 
-<div id="search-panel">
-  
-  <form method="get" action="/search/">
-    <!-- Changed this from bottom to top -->
-    <div class="search-conditions-statement">
-        By using the UQ Anthropology Museum Online Catalogue you agree to the conditions of the <a href="#">Copyright Statement</a> below.
-    </div>
-
-    <fieldset>
-        <input size="15" type="text" value="Search the collection..." name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
-        <input name="submit" value="Search" class="submit btn" title="Search" type="submit" />
-    </fieldset>
-
-<!-- #### CHANGED THIS FOR DROPDOWN BUTTONS #####-->
-    <div class="browse-by-link">
-        <p class="search-options-divider">or</p>
-        <div class="btn-group" id="browseMenu">
-      <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>Browse by
-      </button>
-          <ul class="dropdown-menu">
-            <li><a href="{% url categories_list %}">Categories</a></li>
-            <li><a href="{% url parties_browse %}">People</a></li>
-            <li><a href="{% url view_places %}">Places</a></li>
-          </ul>
-        </div>
-
-    </div>
-
-    <div class="advanced-search-fields">
-
-        {% advanced_search_fields %} {# uses /snippets/advanced_search_fields #}
-    </div>
-
-    <div class="advanced-search-link">
-        <button type="button" class="btn"><i class="icon-plus-sign"></i> Additional search options</button>
-    </div>
-
-  </form>
-</div>
+{% include "snippets/top_search_panel.html" %}
 
 <div id="content-section" class="fullwidth">
     {% block content %}
@@ -64,17 +26,6 @@ $(document).ready(function () {
         } else if ($(this).hasClass('list')) {
             $('#item-listing-table').show();
             $('#item-listing-grid').hide();
-        }
-    });
-
-    $('.advanced-search-link button').click(function (e) {
-        var fields = $('.advanced-search-fields');
-        if (fields.is(":visible")) {
-            fields.hide();
-            $(this).html('<i class="icon-plus-sign"></i> Additional search options');
-        } else {
-            fields.show();
-            $(this).html('<i class="icon-minus-sign"></i> Basic search');
         }
     });
 });
