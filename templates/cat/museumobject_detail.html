@@ -16,17 +16,17 @@
 {% if search_results %}
   <div class="search-results-navigation">
     <div class="back-to-results">
-      <a href="{{search_url}}">Back to results</a>
+      <a href="{{search_url}}" class="btn">Back to results</a>
     </div>
     <div class="paging">
 
       <p>{{search_index}} of {{search_results.count}}</p>
 
       {% if search_prev_obj %}
-        <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_index|add:'-1'}}">Prev</a>
+        <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_index|add:'-1'}}" class="btn">Prev</a>
       {% endif %}
       {% if search_next_obj %}
-        <a href="{{ search_next_obj.get_absolute_url }}?search_result={{search_index|add:'1'}}">Next</a>
+        <a href="{{ search_next_obj.get_absolute_url }}?search_result={{search_index|add:'1'}}" class="btn">Next</a>
       {% endif %}
     </div>
   </div><!-- /search-results-navigation -->
@@ -56,8 +56,8 @@
   {% endfor %}
     </div>
 
-    <div class="view-3d btn">
-      <a href="#">View in 3D</a>
+    <div class="view-3d">
+      <a href="#" class="btn">View in 3D</a>
     </div>
   </div>
 </div> <!-- /item-representations -->
