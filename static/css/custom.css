@@ -392,9 +392,9 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini{*padding-top:1px;*padding
 .results-head .results-count{float:right;margin:20px 20px 0 0}
 .results-head .grid-list-selector{float:left}
 .results-head .grid-list-selector .display-as{float:left;font-size:14px}
-.results-head .grid-list-selector .grid{width:35px;height:28px;background:url(../images/btn-viewChange.gif) no-repeat 100% 100%;text-indent:-9999px}
+.results-head .grid-list-selector .grid{width:35px;height:28px;background:url(../images/btn-viewChange.gif) no-repeat 100% 100%;text-indent:-9999px;border:0}
 .results-head .grid-list-selector .grid.selected{width:35px;height:28px;background:url(../images/btn-viewChange.gif) no-repeat 100% 0}
-.results-head .grid-list-selector .list{width:35px;height:28px;background:url(../images/btn-viewChange.gif) no-repeat 0 0;text-indent:-9999px}
+.results-head .grid-list-selector .list{width:35px;height:28px;background:url(../images/btn-viewChange.gif) no-repeat 0 0;text-indent:-9999px;border:0}
 .results-head .grid-list-selector .list.selected{width:35px;height:28px;background:url(../images/btn-viewChange.gif) no-repeat 0 100%}
 
 /* Pager - pagination on search results top & bottom */
