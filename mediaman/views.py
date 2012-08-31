@@ -94,7 +94,7 @@ def handle_item_image(formdata, ufile, user):
         ar.position = 0
         ar.artefact = MuseumObject.objects.get(registration_number=reg_num)
 
-    ar = set_mediafile_attrs(ArtefactRepresentation(), ufile, formdata, user)
+    ar = set_mediafile_attrs(ar, ufile, formdata, user)
     ar.image = ufile
     ar.save()
 
