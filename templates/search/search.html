@@ -4,7 +4,7 @@
 
 
 {% if query %}
-<div class="search-results-head">
+<div class="search-results-head results-head">
     <h2>Search Results</h2>
     {% load paginator %}{% paginator 4 %}
     <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
@@ -109,7 +109,7 @@
 
     <!-- End faceting -->
 
-<div class="search-results">
+<div class="search-results list-view">
     <table class="search-results">
         <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
     {% for result in page.object_list %}
