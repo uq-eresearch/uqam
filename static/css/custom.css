@@ -78,13 +78,14 @@ filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:rela
 /* Advanced search fields */
 #search-panel .advanced-search-link{clear:both;font-size:13px;padding:10px 0}
 .advanced-search-fields{border:1px solid #d9d9d9;background:#fcfcfc;padding:15px;width:880px;float:left;margin:15px 0 0 0;position:relative}
-.advanced-search-fields .category{width:260px;float:left;padding:0 20px 0 0;border-right:1px solid #d9d9d9}
-.advanced-search-fields .place{width:260px;float:left;padding:0 20px;border-right:1px solid #d9d9d9}
-.advanced-search-fields .person{width:260px;float:left;margin:0 0 0 20px}
+.advanced-search-fields .category{width:260px;float:left;padding:0 18px 0 0;border-right:1px solid #d9d9d9}
+.advanced-search-fields .place{width:260px;float:left;padding:0 18px 0 25px;border-right:1px solid #d9d9d9}
+.advanced-search-fields .person{width:260px;float:left;margin:0 0 0 25px}
 .advanced-search-fields .images{width:880px;float:left;clear:both;margin:15px 0 0 0}
 .advanced-search-fields .advanced-search-filter p{font:700 12px arial;color:#333;text-transform:uppercase;margin:0 0 5px 0}
 .advanced-search-fields .upArrow{background:url(../images/advSearchBgArrow.gif) no-repeat 0 0;width:19px;height:11px;position:absolute;left:20px;top:-11px}
-.advanced-search-fields .advanced-search-filter select,.advanced-search-fields .advanced-search-filter input{width:258px;border:1px solid #ccc;padding:2px}
+.advanced-search-fields .advanced-search-filter select,.advanced-search-fields .advanced-search-filter input{width:250px;border:1px solid #ccc;padding:4px}
+.advanced-search-fields .advanced-search-filter select option{padding:1px 5px}
 .advanced-search-fields .advanced-search-filter #has_images{width:auto}
 
 /************************************************* 			
@@ -429,8 +430,10 @@ div.search-results{width:679px;float:left}
 /* Browse by categories
 ------------------------------------------------------------------------*/
 .category-icon{width:180px;float:left;border-bottom:1px solid #ccc;border-right:1px solid #eee;margin:10px 0;text-align:center}
+.category-icon:nth-child(5n),.category-icon:last-child{border-right:0}
 .category-icon a{font:700 12px arial;color:#333}
 .category-icon img{margin:0 auto}
+.category-icon p{padding:0 20px}
 
 /* Categories - list view */
 div.item-listing{}
@@ -549,15 +552,23 @@ color:#2788db !important}
 
 /* Homepage
 ------------------------------------------------------------------------*/
-.homePrimary{margin:0 10px;border-bottom:1px solid #7f7f7f;display:inline-block;clear:both}
-.homePrimLeft{width:540px;height:185px;float:left;background:#f8f8f8;border-top:4px solid #e3e3e3;padding:15px}
+.homePrimary{margin:0 10px 20px 10px;border-bottom:1px solid #7f7f7f;display:inline-block;clear:both}
+.homePrimLeft{width:515px;height:185px;float:left;background:#f8f8f8;border-top:4px solid #e3e3e3;padding:15px}
 .homePrimRight{width:364px;height:185px;float:left;background:#fff5e5;border-top:4px solid #ffbe4e;border-left:1px solid #fcf2e3;padding:15px}
 .homePrimary img{border:3px solid #fff}
 
 .homeSecondary{margin:0 10px;display:inline-block;clear:both}
-.homeSecondary .col{width:275px;float:left;padding:0 20px;border-right:1px solid #ccc}
+.homeSecondary h2{color:#555;font:700 18px arial}
+.homeSecondary .col{width:270px;float:left;padding:0 20px;border-right:1px solid #ccc;min-height:310px;color:#888}
 .homeSecondary .col.copyright{border:0}
 .homeSecondary .col h3{font:700 14px arial;color:#555}
 .homeSecondary .notes h3{background:url(../images/icon-notes.gif) no-repeat 0 0;padding:0 0 0 40px}
 .homeSecondary .atsisWarn h3{background:url(../images/icon-warning.gif) no-repeat 0 0;padding:0 0 0 40px}
-.homeSecondary .copyright h3{background:url(../images/icon-copyright.gif) no-repeat 0 0;padding:0 0 0 40px}
+.homeSecondary .copyright h3{background:url(../images/icon-copyright.gif) no-repeat 0 0;padding:0 0 10px 40px}
+
+.acknowledgement{margin:10px 20px;clear:both;border-top:1px solid #ccc;padding:10px 0 0 0}
+
+/* Innerpage - standard content page
+------------------------------------------------------------------------*/
+#content-primary{width:900px;padding:30px;-webkit-border-top-left-radius:8px;-webkit-border-top-right-radius:8px;-moz-border-radius-topleft:8px;-moz-border-radius-topright:8px;border-top-left-radius:8px;border-top-right-radius:8px;}
+#content-primary h1{border-bottom:1px solid #eee}
