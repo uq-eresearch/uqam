@@ -1,6 +1,9 @@
 @charset "utf-8";
 
 body{background:transparent url('../img/body-bg.jpg') repeat-x scroll 0 130px;font:12px arial;color:#333}
+a,a:visited{color:#4c80e1}
+a:hover{text-decoration:underline}
+
 #header-inner h2 a{background:transparent url('/static/masthead-logo-anthmuseum.gif') no-repeat scroll 0pt 0pt;width:350px}
 #topnav ul li{margin:0 24px 0 0}
 #content-image-table{margin-top:16px}
@@ -26,7 +29,7 @@ body{background:transparent url('../img/body-bg.jpg') repeat-x scroll 0 130px;fo
 .item-listing-head{clear:both;display:inline-block;width:100%;margin:0 0 20px 0}
 table#item-listing-table{width:920px}
 div#item-listing-grid{display:none}
-#item-listing-grid .item-name{font:700 14px arial}
+#item-listing-grid .item-name{font:700 14px arial;color:#333}
 
 /* paged_object_list */
 div.item-listing{width:920px;margin:0}
@@ -64,6 +67,7 @@ table.table{clear:both;margin-bottom:6px !important}
 #search-panel .search-conditions-statement{font-size:10px;color:#636363;padding-bottom:10px}
 #search-panel fieldset{float:left;width:618px}
 #search-panel form input.s{float:left;padding:10px 10px 9px 40px;background:#fff url(../img/search-icon.gif) no-repeat 10px 10px;width:466px;font-size:16px;color:#ccc;border:1px solid #ccc;-webkit-box-shadow:inset 0 0 0 3px #f7f7f7;-moz-box-shadow:inset 0 0 0 3px #f7f7f7;box-shadow:inset 0 0 0 3px #f7f7f7}
+#search-panel form input.s:focus{color:#333}
 #search-panel form input.submit{display:inline-block;font-size:16px;text-transform:uppercase;font-weight:bold;color:#fff;text-align:center;text-shadow:0 -2px 0 rgba(0, 0, 0, 0.2);vertical-align:middle;cursor:pointer;height:41px;width:98px;background-color:#688F29;background-image:-moz-linear-gradient(top, #97b940, #688f29);background-image:-ms-linear-gradient(top, #97b940, #688f29);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#97b940), to(#688f29));background-image:-webkit-linear-gradient(top, #97b940, #688f29);background-image:-o-linear-gradient(top, #97b940, #688f29);background-image:linear-gradient(top, #97b940, #688f29);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#97b940', endColorstr='#688f29', GradientType=0);border-color:#618926 #618926 #618926;border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:relative;float:left;margin:0 0 0 -1px;-webkit-border-radius:0 3px 3px 0;-moz-border-radius:0 3px 3px 0;border-radius:0 3px 3px 0}
 
@@ -400,7 +404,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini{*padding-top:1px;*padding
 
 /* Pager - pagination on search results top & bottom */
 .pager{float:right}
-.pager.bottom{margin:10px 0}
+.pager.bottom{margin:10px 0;clear:both}
 .pager .page{border:1px #ccc solid;float:left;padding:10px 15px;display:block;margin:0 0 0 -1px}
 .pager .page a{float:left;color:#2662E3;display:block}
 .pager .page a:hover,.pager .page:hover{background:#eee}
@@ -557,7 +561,7 @@ color:#2788db !important}
 .homePrimary h2{color:#555;font:700 18px arial}
 .homePrimLeft{width:515px;height:185px;float:left;background:#f8f8f8;border-top:4px solid #e3e3e3;padding:15px}
 .homePrimRight{width:364px;height:185px;float:left;background:#fff5e5;border-top:4px solid #ffbe4e;border-left:1px solid #fcf2e3;padding:15px}
-.homePrimary img{border:3px solid #fff}
+.homePrimary img{border:3px solid #fff;margin:0 20px 10px 0}
 
 .homeSecondary{margin:0 10px;display:inline-block;clear:both}
 .homeSecondary .col{width:270px;float:left;padding:0 20px;border-right:1px solid #ccc;min-height:310px;color:#888}
@@ -567,7 +571,7 @@ color:#2788db !important}
 .homeSecondary .atsisWarn h3{background:url(../images/icon-warning.gif) no-repeat 0 0;padding:0 0 0 40px}
 .homeSecondary .copyright h3{background:url(../images/icon-copyright.gif) no-repeat 0 0;padding:0 0 10px 40px}
 
-.acknowledgement{margin:10px 20px;clear:both;border-top:1px solid #ccc;padding:10px 0 0 0}
+.acknowledgement{margin:20px;clear:both;border-top:1px solid #ccc;padding:10px 0 0 0}
 
 /* Innerpage - standard content page
 ------------------------------------------------------------------------*/
