@@ -8,7 +8,7 @@ icons_data = {
     "Architecture/Environment": ("images/categories/archenv-thumb.jpg", "House lintel decoration | East Sepik Province, Papua New Guinea | Unknown maker(s) | Acquired from Mr Edward A. Tull, 1981"),
     "Bodywear": ("images/categories/bodywear-thumb.jpg", "Headdress | Gulf Province, Papua New Guinea | Unknown maker(s) | Donated by R. Joyce, 1950"),
     "Cloth/Textile": ("images/categories/clothtextile-thumb.jpg", "Tapa cloth | Unknown maker(s) | West New Britain Province, Papua New Guinea | Acquired from Mr Edward A. Tull, 1965"),
-    "Container": ("images/categories/container-thumb.jpg", "Jawun, basket | Unknown maker(s) | Cardwell region, Queensland, Australia | Donated by Miss E. M. Boddington, 1953"),
+    "Container": ("images/categories/container-thumb.jpg", "Basket | Unknown maker(s) | Arnhem Land, Northern Territory, Australia | Donated by Mr John Sharwood, 1987"),
     "Currency/Trade": ("images/categories/currencytrade-thumb.jpg", "Touau, Feather money | Unknown maker(s) | Santa Cruz Islands, Temotu Province, Solomon Islands | Purchased from Denis G. Bailey, 1975"),
     "Drug/Medicine": ("images/categories/drugmedicine-thumb.jpg", "Pharmaceutical | Unknown maker(s) | Malawi, Africa | Donated by Professor John Mitchell Watt, 1974"),
     "Equipment": ("images/categories/equipment-thumb.jpg", "Hook | Unknown maker(s) | Solomon Islands | Donated by Mr William Effey, 1950"),
