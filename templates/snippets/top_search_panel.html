@@ -28,14 +28,17 @@
 
     </div>
 
-    <div class="advanced-search-fields">
+    <div class="advanced-search-fields" {% if advanced_fields == 'hidden' %}style="display: none;"{% endif %}>
 
         {% advanced_search_fields %} {# uses /snippets/advanced_search_fields #}
     </div>
 
     <div class="advanced-search-link">
+    {% if advanced_fields == 'hidden' %}
         <button type="button" class="btn"><i class="icon-plus-sign"></i> Additional search options</button>
+    {% endif %}
     </div>
+
 
   </form>
 </div>
