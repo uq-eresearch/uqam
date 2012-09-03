@@ -10,7 +10,7 @@
         <button class="grid">Grid View</button>
     </div>
     <div class="pagination">
-        <div class="num-results">
+        <div class="results-count">
         Results {{ objects.start_index }} - {{ objects.end_index }} of {{ objects.paginator.object_list.count }}</div>
 {% paginator 5 extra_class="top"%}
     </div>
