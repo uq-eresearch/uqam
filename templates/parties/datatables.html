@@ -24,7 +24,7 @@
     <tbody>
 {% for person in person_list %}
         <tr>
-            <td><a href="{{ person.get_absolute_url}}">{{ person.display_name }}</a></td>
+            <td><a href="{{ person.get_absolute_url}}">{{ person }}</a></td>
             <td>{{ person.documents_count }}</td>
             <td>{{ person.created_count }}</td>
             <td>{{ person.donated_count }}</td>
