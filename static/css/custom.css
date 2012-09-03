@@ -572,3 +572,12 @@ color:#2788db !important}
 ------------------------------------------------------------------------*/
 #content-primary{width:900px;padding:30px;-webkit-border-top-left-radius:8px;-webkit-border-top-right-radius:8px;-moz-border-radius-topleft:8px;-moz-border-radius-topright:8px;border-top-left-radius:8px;border-top-right-radius:8px;}
 #content-primary h1{border-bottom:1px solid #eee}
+
+/* Places
+------------------------------------------------------------------------*/
+.globalregion-icon{float:left;width:129px;border-left:1px solid #eee;border-bottom:1px solid #ccc;text-align:center}
+.globalregion-icon:first-child{border-left:0}
+.globalregion-icon b a{color:#333;font:700 14px arial}
+
+.big-or{border-top:1px solid #000;width:100%;clear:both}
+.big-or p{font:18px arial;background:#fff;padding:0 30px;margin:-10px}
