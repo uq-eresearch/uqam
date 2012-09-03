@@ -42,7 +42,10 @@
                 {# Provide only the top 5 item_name #}
                 {% for name in facets.fields.item_name|slice:":5" %}
                   {% if name.1 > 0 %}
-                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=item_name_exact:{{ name.0|urlencode }}">{{ name.0 }}</a> ({{ name.1 }})</dd>
+                    <dd>
+                        <input type="checkbox" id="has_images" name="item_name" value="{{ name.0 }}">
+                        <label for="has_images">{{ name.0 }}</a> ({{ name.1 }})</label>
+                    </dd>
                   {% endif %}
                 {% endfor %}
             {% else %}
@@ -84,17 +87,7 @@
 <h2>People</h2>
     <div>
         <dl>
-            {% if facets.fields.people %}
-                <dt>People</dt>
-                {# Provide only the top 5 people #}
-                {% for people in facets.fields.people|slice:":5" %}
-                  {% if people.1 > 0 %}
-                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=people_exact:{{ people.0|urlencode }}">{{ people.0 }}</a> ({{ people.1 }})</dd>
-                  {% endif %}
-                {% endfor %}
-            {% else %}
-                <p>No people facets.</p>
-            {% endif %}
+            <p>No people facets.</p>
         </dl>
     </div>
 <h2>Other</h2>
@@ -102,6 +95,8 @@
         <dl>
             {% if facets.fields.has_images %}
                 <dt>Has images</dt>
+                <input type="checkbox" id="has_images" name="has_images" value="True">
+                <label for="has_images">Only return results with an associated image</label>
                 {# Provide only the top 5 has_images #}
                 {% for has_images in facets.fields.has_images|slice:":5" %}
                     <dd><a href="{{ request.get_full_path }}&amp;selected_facets=has_images_exact:{{ has_images.0|urlencode }}">{{ has_images.0 }}</a> ({{ has_images.1 }})</dd>
