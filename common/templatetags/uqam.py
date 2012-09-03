@@ -39,7 +39,7 @@ from location.models import Country
 
 @register.inclusion_tag('snippets/advanced_search_fields.html')
 def advanced_search_fields():
-    categories = Category.objects.all()
+    categories = Category.objects.all().order_by('name')
     places = Country.objects.all()
 
     return {
