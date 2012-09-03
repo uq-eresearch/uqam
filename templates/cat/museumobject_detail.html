@@ -136,7 +136,7 @@
     <dt class="collector">Collector</dt>
     <dd class="collector">
     <a href="{{museumobject.collector.get_absolute_url}}">
-      {{ museumobject.collector }}</a>
+      {{ museumobject.collector.display_name }}</a>
     </dd>
 
     <dt class="acquisition-date">Acquisition date</dt>
@@ -147,7 +147,7 @@
     <dt class="acquisition-method">Acquisition method</dt>
     <dd class="acquisition-method">
     {{ museumobject.acquisition_method }} <b>{{ museumobject.acquisition_method.preposition }}</b>
-     <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor }}</a>
+     <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor.display_name }}</a>
     </dd>
   </dl><!-- /aquisition-info -->
 
