@@ -12,7 +12,7 @@
         {% for child in children %}
         <div class="dropdown globalregion-icon"><a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" href="{{child.get_absolute_url}}">
             <img src="{% static child.icon_path %}" title="{{child.icon_title}}">
-            <p>{{child.name}}</p></a>
+            <b>{{child.name}}</b></a>
             <ul class="dropdown-menu" role="menu">
                 {% for country in child.children.all %}
                 <li><a href="{{country.get_absolute_url}}">{{country.name}}</a></li>
