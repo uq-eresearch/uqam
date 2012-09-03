@@ -12,7 +12,7 @@
 		<button class="grid">Grid View</button>
 	</div>
 	<div class="pagination">
-		{% load paginator %}{% paginator 4 %}
+		{% load paginator %}{% paginator 4 extra_class="top" %}
 		<div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
 	</div>
 </div><!-- /search-results-head -->
@@ -144,7 +144,7 @@
     {% endfor %}
     </table>
 
-    {% load paginator %}{% paginator 4 %}
+    {% load paginator %}{% paginator 4 extra_class="bottom" %}
 </div><!-- /search-results -->
 {% else %}
     {# Show some example queries to run, maybe query syntax, something else? #}
