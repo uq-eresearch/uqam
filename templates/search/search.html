@@ -6,8 +6,15 @@
 {% if query %}
 <div class="search-results-head results-head">
     <h2>Search Results</h2>
-    {% load paginator %}{% paginator 4 %}
-    <div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
+    <div class="grid-list-selector">
+		<div class="display-as">Display as:</div>
+		<button class="list">List View</button>
+		<button class="grid">Grid View</button>
+	</div>
+	<div class="pagination">
+		{% load paginator %}{% paginator 4 %}
+		<div class="results-count">Results {{page.start_index}} to {{page.end_index}} of {{page.paginator.count}}</div>
+	</div>
 </div><!-- /search-results-head -->
 
 <!-- Begin faceting. -->
