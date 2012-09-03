@@ -34,13 +34,13 @@ def pdb(element):
 
 
 from cat.models import Category
-from location.models import Country
+from location.models import GlobalRegion
 
 
 @register.inclusion_tag('snippets/advanced_search_fields.html')
 def advanced_search_fields():
     categories = Category.objects.all().order_by('name')
-    places = Country.objects.all()
+    places = GlobalRegion.objects.all()
 
     return {
         'categories': categories,
