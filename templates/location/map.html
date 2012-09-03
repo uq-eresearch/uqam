@@ -1,12 +1,11 @@
 {% extends "base_wide.html" %}
 {% load static %}
 {% block content %}
-<div style="float:right;font-size: 80%;">
-    <a href="{% url place_kml %}">View in Google Earth</a>
-</div>
+
 <h1>Places</h1>
-
-
+<div class="googleEarthBtn">
+    <a href="{% url place_kml %}" class="btn">View in Google Earth</a>
+</div>
 <div class="places-icons">
 {% if children %}
         {% for child in children %}
@@ -32,8 +31,7 @@
     Browse items by place using the map by zooming and hovering over the dots to view the items at this place. Click on a dot to go to a list of of the items and view their records.
 </p>
 
-<div id="map_canvas" style="width:100%; height:600px"></div>
-
+<div id="map_canvas" style="width:100%; height:450px"></div>
 
 {% endblock %}
 {% block javascript %}
