@@ -13,7 +13,7 @@ class MuseumObjectIndex(SearchIndex):
     has_images = BooleanField(faceted=True)
 
     def prepare_categories(self, object):
-        return [unicode(cat) for cat in object.category.all()]
+        return [unicode(cat.name) for cat in object.category.all()]
 
     def prepare_people(self, object):
         people = set()
