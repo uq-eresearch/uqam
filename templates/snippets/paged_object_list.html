@@ -54,27 +54,27 @@
         <tr><td colspan="4">No results found.</td></tr>
     {% endfor %}
     </table>
+</div>
 
-    <div id="item-listing-grid grid-view">
-        <ul>
-    {% for object in objects.object_list %}
-          <li><a href="{{ object.get_absolute_url }}">
-                {% if object.artefactrepresentation_set.all.0 %}
-                    <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
-                {% else %}
-                    <img src="http://placehold.it/105x70" width="105" height="70" alt="">
-                {% endif %}<br>
-                <span class="item-name">{{ object.artefact_type }}</span></a><br>
-                <span class="global-region">{{ object.global_region }}</span>
+<div id="item-listing-grid" class="grid-view">
+    <ul>
+        {% for object in objects.object_list %}
+          <li>
+            <a href="{{ object.get_absolute_url }}">
+            {% if object.artefactrepresentation_set.all.0 %}
+                <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
+            {% else %}
+                <img src="http://placehold.it/105x70" width="105" height="70" alt="">
+            {% endif %}<br />
+            <span class="item-name">{{ object.artefact_type }}</span></a><br />
+            <span class="global-region">{{ object.global_region }}</span>
           </li>
-    {% endfor %}
-        </ul>
-    </div>
+{% endfor %}
+    </ul>
+</div>
 
 {% paginator 5 extra_class="bottom" %}
 </div><!-- /item-listing -->
-
-
 
 {% endif %}
 
