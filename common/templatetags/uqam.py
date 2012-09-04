@@ -44,11 +44,13 @@ def advanced_search_fields(form=None):
 
     selected_category = None
     selected_global_region = None
+    has_images = False
     if form and form.is_valid():
         if form.cleaned_data['category']:
             selected_category = form.cleaned_data['category'][0]
         if form.cleaned_data['global_region']:
             selected_global_region = form.cleaned_data['global_region'][0]
+        has_images = form.cleaned_data['has_images']
 
 
     return {
@@ -56,5 +58,6 @@ def advanced_search_fields(form=None):
         'global_regions': global_regions,
         'form': form,
         'selected_category': selected_category,
-        'selected_global_region': selected_global_region
+        'selected_global_region': selected_global_region,
+        'has_images': has_images
     }

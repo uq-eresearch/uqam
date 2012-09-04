@@ -251,7 +251,7 @@
             }
         });
 
-  // Tune the search form to not submit extra fields
+  // Tune the search form to not submit unchanged fields
       $('form#main-search').submit(function() {
           if ($('#search-main-category').val() == "Select category...") {
               $('#search-main-category').attr("disabled", "disabled");

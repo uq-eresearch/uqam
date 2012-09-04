@@ -1,0 +1,31 @@
+{% load thumbnail %}
+        <tr>
+            <td class="thumbnail">
+                <a href="{{ object.get_absolute_url }}{% if search_result %}?search_result={{search_result}}{% endif %}">
+                    {% if object.artefactrepresentation_set.all.0 %}
+                    <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
+                    {% else %}
+                    <img src="http://placehold.it/105x70" width="105" height="70" alt="">
+                    {% endif %}
+
+                </a>
+            </td>
+            <td class="item">
+                <a href="{{ object.get_absolute_url }}{% if search_result %}?search_result={{search_result}}{% endif %}">
+                    <span class="item_type">{{ object.artefact_type }}</span><br>
+                <span class="registration_number">Registration No. <span class="number">{{ object.registration_number }}</span></span>
+                </a>
+            </td>
+            <td class="category">
+                {% for category in object.category.all %}
+                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
+                {% endfor %}
+            </td>
+            <td class="place">
+                  <a href="{{object.global_region.get_absolute_url}}">
+                    {{ object.global_region }}</a>
+                    >
+                  <a href="{{object.country.get_absolute_url}}">
+                    {{ object.country }}</a>
+            </td>
+        </tr>

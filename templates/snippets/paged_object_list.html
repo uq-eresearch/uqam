@@ -12,7 +12,7 @@
     <div class="pagination">
         <div class="results-count">
         Results {{ objects.start_index }} - {{ objects.end_index }} of {{ objects.paginator.object_list.count }}</div>
-{% paginator 5 extra_class="top"%}
+{% paginator 4 extra_class="top"%}
     </div><!-- /pagination -->
 </div><!-- /item-listing-head -->
 
@@ -20,36 +20,7 @@
     <table id="item-listing-table">
         <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
     {% for object in objects.object_list %}
-        <tr>
-            <td class="thumbnail">
-                <a href="{{ object.get_absolute_url }}">
-                    {% if object.artefactrepresentation_set.all.0 %}
-                    <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
-                    {% else %}
-                    <img src="http://placehold.it/105x70" width="105" height="70" alt="">
-                    {% endif %}
-
-                </a>
-            </td>
-            <td class="item">
-                <a href="{{ object.get_absolute_url }}">
-                    <span class="item_type">{{ object.artefact_type }}</span><br>
-                <span class="registration_number">Registration No. <span class="number">{{ object.registration_number }}</span></span>
-                </a>
-            </td>
-            <td class="category">
-                {% for category in object.category.all %}
-                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
-                {% endfor %}
-            </td>
-            <td class="place">
-                  <a href="{{object.global_region.get_absolute_url}}">
-                    {{ object.global_region }}</a>
-                    >
-                  <a href="{{object.country.get_absolute_url}}">
-                    {{ object.country }}</a>
-            </td>
-        </tr>
+        {% include "snippets/item_list_row.html" with object=object %}
     {% empty %}
         <tr><td colspan="4">No results found.</td></tr>
     {% endfor %}
@@ -59,16 +30,7 @@
 <div id="item-listing-grid" class="grid-view">
     <ul>
         {% for object in objects.object_list %}
-          <li>
-            <a href="{{ object.get_absolute_url }}">
-            {% if object.artefactrepresentation_set.all.0 %}
-                <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
-            {% else %}
-                <img src="http://placehold.it/105x70" width="105" height="70" alt="">
-            {% endif %}<br />
-            <span class="item-name">{{ object.artefact_type }}</span></a><br />
-            <span class="global-region">{{ object.global_region }}</span>
-          </li>
+            {% include "snippets/item_grid_element.html" with object=result.object %}
         {% endfor %}
     </ul>
 </div><!-- /item-listing-grid -->

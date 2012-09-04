@@ -24,6 +24,6 @@
 </div>
 
 <div class="advanced-search-filter images">
-    <input type="checkbox" id="has_images" name="has_images" value="True">
+    <input type="checkbox" id="has_images" name="has_images" value="True"{% if has_images %} checked="checked"{% endif %}>
     <label for="has_images">Only return results with an associated image</label>
 </div>
