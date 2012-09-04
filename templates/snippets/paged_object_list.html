@@ -8,12 +8,12 @@
         <div class="display-as">Display as:</div>
         <button class="list">List View</button>
         <button class="grid">Grid View</button>
-    </div>
+    </div><!-- /grid-list-selector -->
     <div class="pagination">
         <div class="results-count">
         Results {{ objects.start_index }} - {{ objects.end_index }} of {{ objects.paginator.object_list.count }}</div>
 {% paginator 5 extra_class="top"%}
-    </div>
+    </div><!-- /pagination -->
 </div><!-- /item-listing-head -->
 
 <div class="item-listing list-view">
@@ -54,7 +54,7 @@
         <tr><td colspan="4">No results found.</td></tr>
     {% endfor %}
     </table>
-</div>
+</div><!-- /item-listing -->
 
 <div id="item-listing-grid" class="grid-view">
     <ul>
@@ -69,12 +69,11 @@
             <span class="item-name">{{ object.artefact_type }}</span></a><br />
             <span class="global-region">{{ object.global_region }}</span>
           </li>
-{% endfor %}
+        {% endfor %}
     </ul>
-</div>
+</div><!-- /item-listing-grid -->
 
 {% paginator 5 extra_class="bottom" %}
-</div><!-- /item-listing -->
 
 {% endif %}
 
