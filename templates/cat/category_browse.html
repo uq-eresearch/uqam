@@ -22,7 +22,7 @@
     <div class="dropdown category-icon">
       <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" href="{{category.get_absolute_url}}">
         <img src="{% static category.icon_path %}" title="{{category.icon_title}}">
-        <p>{{category.name}}</p>
+        <b>{{category.name}}</b>
       </a>
         <ul class="dropdown-menu" role="menu">
             {% for equip in equipment %}
@@ -34,7 +34,7 @@
   <div class="category-icon">
     <a href="{{category.get_absolute_url}}">
       <img src="{% static category.icon_path %}" title="{{category.icon_title}}">
-      <p>{{category.name}}</p>
+      <b>{{category.name}}</b>
     </a>
   </div>
   {% endif %}
