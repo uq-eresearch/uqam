@@ -22,7 +22,7 @@
 <div class="places-subplaces">
     {% if num_children > 30 %}
         <div class="show-all">
-            <button onclick="$('.places-subplaces ul.column').toggle();">Show all: {{num_children}} sub places</button>
+            <button onclick="$('.places-subplaces ul.column').toggle();" class="btn">Show all: {{num_children}} sub places</button>
         </div>
     {% endif %}
     {% for column in children %}
