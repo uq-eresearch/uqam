@@ -1,4 +1,3 @@
-
 {% load uqam %}
 <div id="search-panel">
   
@@ -10,7 +9,7 @@
 
     <fieldset>
         <input size="15" type="text" value="{% if form.q.value %}{{form.q.value}}{% else %}Search the collection...{%endif%}" name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" id="main-search-q" />
-        <input class="submit btn" title="Search" type="submit" id="top-search-submit" />
+        <input class="submit btn" title="Search" value="Search" type="submit" id="top-search-submit" />
     </fieldset>
 
 <!-- #### CHANGED THIS FOR DROPDOWN BUTTONS #####-->
