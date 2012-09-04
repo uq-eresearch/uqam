@@ -56,6 +56,8 @@ table.table{clear:both;margin-bottom:6px !important}
 #content{border-top-left-radius:8px;border-top-right-radius:8px;background:white;float:left;display:inline-block;width:960px;margin:16px 0 10px 0;position:relative;font-family:Arial, Helvetica, sans-serif;border:1px solid #f0eeef}
 #content-section{padding:0 20px;width:920px}
 
+.breadcrumbs{margin:0 0 10px 0}
+
 /************************************************* 			
 **				MAIN SEARCH PANEL					**
 **************************************************/
@@ -601,6 +603,14 @@ color:#2788db !important}
 .places-subplaces ul.column{float:left;margin:0 20px 0 0}
 .places-subplaces ul.column li{width:180px;list-style:none}
 .places-subplaces ul.hidden{display:none}
+.places-subplaces .show-all{margin:0 0 10px 0}
+
+.placeDesc{color:#777}
 
 /* Slideshow images on item pages
 ------------------------------------------------------------------------*/
+#item-representations .slides_container{margin:0 0 10px 0;border-bottom:1px solid #eee}
+#item-representations .prev{margin:0 20px 0 0}
+#item-representations .pagination{float:left;clear:both}
+#item-representations .pagination li{list-style:none;float:left;margin:0 10px 0 0;padding:2px 4px;border:1px solid #eee;border-radius:4px}
+#item-representations .pagination li.current{background:#eee}
