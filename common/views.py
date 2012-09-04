@@ -6,7 +6,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from itertools import chain, ifilter, ifilterfalse, islice
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.forms import CheckboxInput
