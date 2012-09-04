@@ -2,41 +2,17 @@
 
 
 {% block body %}
-<div class="homeBanner">
-  <!-- START: Feature  -->
-	<div id="feature">
-		<div id="feature-image">
-			<!--START: Banner -->
-			<div id="main-photo-slider" class="csw">
-				<div class="panelContainer">
-					<div class="panel" title="">
-						<a href="#" name="1" class="noicon"><img src="/static/images/banners/homebanner-01.jpg" alt="Online Catalogue - Anthropology Museum" width="960" height="236" /></a>
-					</div>
-					<div class="panel" title="">
-						<a href="#" name="2" class="noicon"><img src="/static/images/banners/homebanner-02.jpg" alt="Online Catalogue - Anthropology Museum" width="960" height="236" /></a>
-					</div>
-					<div class="panel" title="">
-						<a href="#" name="3" class="noicon"><img src="/static/images/banners/homebanner-03.jpg" alt="Online Catalogue - Anthropology Museum" width="960" height="236" /></a>
-					</div>
-				</div>
-			</div>
-			<div id="movers-row">
-				<div>
-					<a href="#1" class="cross-link active-thumb" title=""><img src="http://uq.edu.au/templates/web/images/icon-blank-box.png" class="nav-thumb" alt="" /></a>
-				</div>
-				<div>
-					<a href="#2" class="cross-link" title=""><img src="http://uq.edu.au/templates/web/images/icon-blank-box.png" class="nav-thumb" alt="" /></a>
-				</div>
-				<div>
-					<a href="#3" class="cross-link" title=""><img src="http://uq.edu.au/templates/web/images/icon-blank-box.png" class="nav-thumb" alt="" /></a>
-				</div>
-			</div>
-			<!--END: Banner -->
-		</div>
-		<!-- END: Feature Image -->
-	</div>
-	<!-- END: Feature  --> 
+<div class="homeBanner" id="homeBanner">
+    <div class="slides_container">
+        <div class="mainBanner">
+            <img src="/static/images/banners/homebanner-01.jpg" alt="Online Catalogue - Anthropology Museum" />
+        </div>
+        <div class="mainBanner">
+            <img src="/static/images/banners/homebanner-01.jpg" alt="Online Catalogue - Anthropology Museum" />
+        </div>
+    </div>
 </div>
+
 <div id="home">
   {% include "snippets/top_search_panel.html" %}
   <div class="homePrimary">
@@ -70,3 +46,15 @@
   <div class="acknowledgement"><p>We would like to acknowledge <strong>Ms Lesley Bryant</strong> for her generous contribution toward developing the new catalogue.</p></div>
 </div>
 {% endblock %}
+
+{% block javascript %}
+
+    <script>
+        $(document).ready(function(){
+            $('#homeBanner').slides({
+                'play': 5000,
+                'generatePagination': false
+            });
+        });
+    </script>
+{% endblock javascript %}
