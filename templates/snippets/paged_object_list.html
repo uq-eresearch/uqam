@@ -30,7 +30,7 @@
 <div id="item-listing-grid" class="grid-view">
     <ul>
         {% for object in objects.object_list %}
-            {% include "snippets/item_grid_element.html" with object=result.object %}
+            {% include "snippets/item_grid_element.html" with object=object %}
         {% endfor %}
     </ul>
 </div><!-- /item-listing-grid -->
