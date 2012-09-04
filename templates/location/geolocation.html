@@ -6,7 +6,7 @@
 <div class="breadcrumbs">
     <a href="{% url view_places %}">Places</a>
     {% for parent in geolocation.get_parents %}
-     > <a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a>
+     &rsaquo; <a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a>
     {% endfor %}
 </div>
 
