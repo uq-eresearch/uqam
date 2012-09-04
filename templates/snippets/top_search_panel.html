@@ -9,8 +9,8 @@
     </div>
 
     <fieldset>
-        <input size="15" type="text" value="Search the collection..." name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
-        <input name="submit-btn" value="Search" class="submit btn" title="Search" type="submit" />
+        <input size="15" type="text" value="{% if form.q.value %}{{form.q.value}}{% else %}Search the collection...{%endif%}" name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" />
+        <input class="submit btn" title="Search" type="submit" id="top-search-submit" />
     </fieldset>
 
 <!-- #### CHANGED THIS FOR DROPDOWN BUTTONS #####-->
@@ -29,7 +29,7 @@
 
     <div class="advanced-search-fields" {% if advanced_fields == 'hidden' %}style="display: none;"{% endif %}>
 
-        {% advanced_search_fields %} {# uses /snippets/advanced_search_fields #}
+        {% advanced_search_fields form %} {# uses /snippets/advanced_search_fields #}
     </div>
 
     <div class="advanced-search-link">

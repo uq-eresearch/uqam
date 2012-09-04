@@ -1,26 +1,26 @@
 <div class="upArrow"></div>
 <div class="advanced-search-filter category">
     <p>Category</p>
-    <select name='category'>
-        <option>Select Category...</option>
+    <select name='category' id="search-main-category">
+        <option>Select category...</option>
     {% for cat in categories %}
-        <option>{{cat.name}}</option>
+        <option{% if cat.name == selected_category %} selected="selected"{% endif %}>{{cat.name}}</option>
     {% endfor %}
     </select>
 </div>
 
 <div class="advanced-search-filter place">
     <p>Place</p>
-    <select name='place'>
+    <select name='global_region' id="search-main-region">
         <option>Select location...</option>
-    {% for place in places %}
-        <option>{{place.name}}</option>{% endfor %}
+    {% for place in global_regions %}
+        <option {% if place.name == selected_global_region %} selected="selected"{% endif %}>{{place.name}}</option>{% endfor %}
     </select>
 </div>
 
 <div class="advanced-search-filter person">
     <p>Person</p>
-    <input name="person">
+    <input name="person" value="{% if form.person.value %}{{form.person.value}}{% endif %}" id="search-main-person">
 </div>
 
 <div class="advanced-search-filter images">

@@ -3,7 +3,7 @@
 {% block body %}
 
 
-{% include "snippets/top_search_panel.html" with advanced_fields="hidden" %}
+{% include "snippets/top_search_panel.html" with advanced_fields="hidden" form=form %}
 
 <div id="content-section" class="fullwidth">
     {% block content %}
@@ -16,10 +16,10 @@
 
 
 {% block javascript %}
-
+{{block.super}}
 <script type="text/javascript">
 $(document).ready(function () {
-
+// Setup item listing to display in a grid or a list
     $('#item-listing-table').hide();
     $('#item-listing-grid').hide();
     $('.grid-list-selector button').removeClass('selected');
@@ -48,6 +48,7 @@ $(document).ready(function () {
             $.cookie('item-listing', 'list');
         }
     });
+
 });
 </script>
 {% endblock javascript %}

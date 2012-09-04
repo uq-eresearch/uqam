@@ -78,7 +78,7 @@ class UnvalidatedMultipleChoiceField(forms.MultipleChoiceField):
 
 
 class CatalogueSearchForm(SearchForm):
-    categories = UnvalidatedMultipleChoiceField(required=False)
+    category = UnvalidatedMultipleChoiceField(required=False)
     global_region = UnvalidatedMultipleChoiceField(required=False)
     country = UnvalidatedMultipleChoiceField(required=False)
     item_name = UnvalidatedMultipleChoiceField(required=False)
@@ -159,7 +159,7 @@ def catalogue_search(request, template='search/search.html', load_all=True, form
 
     if form.is_valid():
         results = filter_with_facet(form, results, facets, 'item_name', 'item_name')
-        results = filter_with_facet(form, results, facets, 'categories', 'categories')
+        results = filter_with_facet(form, results, facets, 'category', 'categories')
         results = filter_with_facet(form, results, facets, 'global_region', 'global_region')
         results = filter_with_facet(form, results, facets, 'country', 'country')
 

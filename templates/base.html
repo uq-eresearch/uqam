@@ -239,6 +239,7 @@
             });
         });
 
+        // 
         $('.advanced-search-link button').click(function (e) {
             var fields = $('.advanced-search-fields');
             if (fields.is(":visible")) {
@@ -249,6 +250,20 @@
                 $(this).html('<i class="icon-minus-sign"></i> Basic search');
             }
         });
+
+  // Tune the search form to not submit extra fields
+      $('form#main-search').submit(function() {
+          if ($('#search-main-category').val() == "Select category...") {
+              $('#search-main-category').attr("disabled", "disabled");
+          }
+          if ($('#search-main-region').val() == "Select location...") {
+              $('#search-main-region').attr("disabled", "disabled");
+          }
+          if ($('#search-main-person').val() == "") {
+              $('#search-main-person').attr("disabled", "disabled");
+          }
+
+      });
     </script>
     {% block javascript %}
     {% endblock %}
