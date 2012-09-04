@@ -3,7 +3,6 @@
 {% block content %}
 
 
-{% if query %}
 <div class="search-results-head results-head">
     <h2>Search Results</h2>
     <div class="grid-list-selector">
@@ -19,75 +18,65 @@
 
 <!-- Begin faceting. -->
 <div class="filter-bar">
+<form id="filter-form">
+    <div class="filter-clear">
+        <p>Filter results:</p>
+        <button type="clear">Clear</button>
+    </div>
 <h2>By Category</h2>
     <div>
         <dl>
-            {% if facets.fields.categories %}
-                <dt>Categories</dt>
-                {# Provide only the top 5 categories #}
-                {% for category in facets.fields.categories|slice:":5" %}
-                  {% if category.1 > 0 %}
-                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=categories_exact:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</dd>
-                  {% endif %}
-                {% endfor %}
+            <dt>Categories</dt>
+            {% if form.categories %}
+                <dd>
+                    {{ form.categories }}
+                </dd>
             {% else %}
-                <p>No categories facets.</p>
+                <dd>None</dd>
             {% endif %}
         </dl>
     </div>
     <div>
         <dl>
-            {% if facets.fields.item_name %}
-                <dt>Item name</dt>
-                {# Provide only the top 5 item_name #}
-                {% for name in facets.fields.item_name|slice:":5" %}
-                  {% if name.1 > 0 %}
-                    <dd>
-                        <input type="checkbox" id="has_images" name="item_name" value="{{ name.0 }}">
-                        <label for="has_images">{{ name.0 }}</a> ({{ name.1 }})</label>
-                    </dd>
-                  {% endif %}
-                {% endfor %}
+            <dt>Item name</dt>
+            {% if form.item_name %}
+                <dd>
+                    {{ form.item_name }}
+                </dd>
             {% else %}
-                <p>No item_name facets.</p>
+                <dd>None</dd>
             {% endif %}
         </dl>
     </div>
 <h2>Places</h2>
     <div>
         <dl>
-            {% if facets.fields.global_region %}
-                <dt>Global region</dt>
-                {# Provide only the top 5 global_region #}
-                {% for global_region in facets.fields.global_region|slice:":5" %}
-                  {% if global_region.1 > 0 %}
-                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=global_region_exact:{{ global_region.0|urlencode }}">{{ global_region.0 }}</a> ({{ global_region.1 }})</dd>
-                  {% endif %}
-                {% endfor %}
+            <dt>Global region</dt>
+            {% if form.global_region %}
+                <dd>
+                    {{ form.global_region }}
+                </dd>
             {% else %}
-                <p>No global_region facets.</p>
+                <dd>None</dd>
             {% endif %}
         </dl>
     </div>
     <div>
         <dl>
-            {% if facets.fields.country %}
-                <dt>Country</dt>
-                {# Provide only the top 5 country #}
-                {% for country in facets.fields.country|slice:":5" %}
-                  {% if country.1 > 0 %}
-                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=country_exact:{{ country.0|urlencode }}">{{ country.0 }}</a> ({{ country.1 }})</dd>
-                  {% endif %}
-                {% endfor %}
+            <dt>Country</dt>
+            {% if form.country %}
+                <dd>
+                    {{ form.country }}
+                </dd>
             {% else %}
-                <p>No country facets.</p>
+                <dd>None</dd>
             {% endif %}
         </dl>
     </div>
 <h2>People</h2>
     <div>
         <dl>
-            <p>No people facets.</p>
+            {{form.person}}
         </dl>
     </div>
 <h2>Other</h2>
@@ -106,11 +95,12 @@
             {% endif %}
         </dl>
     </div>
-
+</form>
 </div>
 
     <!-- End faceting -->
 
+{% if query %}
 <div class="search-results list-view">
     <table class="search-results">
         <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
@@ -148,5 +138,25 @@
 </div><!-- /search-results -->
 {% else %}
     {# Show some example queries to run, maybe query syntax, something else? #}
+    <p class="no-results">Use the search options above or browse by categories, people, or places to view the collection.</p>
 {% endif %}
 {% endblock %}
+
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#filter-form input').click(function() {
+        $('#filter-form :checked').clone().hide().appendTo('form#main-search');
+        $('#filter-form :text').clone().hide().appendTo('form#main-search');
+
+        $('form#main-search').submit();
+
+    });
+
+
+});
+</script>
+{% endblock javascript %}
