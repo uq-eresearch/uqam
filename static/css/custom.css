@@ -56,7 +56,7 @@ table.table{clear:both;margin-bottom:6px !important}
 #content{border-top-left-radius:8px;border-top-right-radius:8px;background:white;float:left;display:inline-block;width:960px;margin:16px 0 10px 0;position:relative;font-family:Arial, Helvetica, sans-serif;border:1px solid #f0eeef}
 #content-section{padding:0 20px;width:920px}
 
-/*************************************************   		
+/************************************************* 			
 **				MAIN SEARCH PANEL					**
 **************************************************/
 /* Search bar */
@@ -87,7 +87,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:rela
 .advanced-search-fields .upArrow{background:url(../images/advSearchBgArrow.gif) no-repeat 0 0;width:19px;height:11px;position:absolute;left:20px;top:-11px}
 .advanced-search-fields .advanced-search-filter select,.advanced-search-fields .advanced-search-filter input{width:250px;border:1px solid #ccc;padding:4px}
 .advanced-search-fields .advanced-search-filter select option{padding:1px 5px}
-.advanced-search-fields .advanced-search-filter #has_images{width:auto}
+.advanced-search-fields .advanced-search-filter #has_images{width:auto;border:0}
 
 /************************************************* 			
 **				ITEM DETAILS					**
@@ -436,7 +436,7 @@ div.search-results{width:679px;float:left}
 
 /* Browse by categories
 ------------------------------------------------------------------------*/
-.category-icon{width:183px;float:left;border-bottom:1px solid #ccc;border-right:1px solid #eee;margin:10px 0;text-align:center}
+.category-icon{width:183px;float:left;border-bottom:1px solid #ccc;border-right:1px solid #eee;padding:10px 0;text-align:center}
 .category-icon:nth-child(5n),.category-icon:last-child{border-right:0}
 .category-icon a{font:700 12px arial;color:#333}
 .category-icon img{margin:0 auto}
@@ -583,7 +583,7 @@ color:#2788db !important}
 
 /* Places
 ------------------------------------------------------------------------*/
-.googleEarthBtn{float:right}
+.googleEarthBtn{float:right;margin:-40px 0 0 0}
 
 .places-icons{display:inline-block;border-bottom:1px solid #ccc;padding:0 0 15px 0}
 .globalregion-icon{float:left;width:129px;border-left:1px solid #eee;text-align:center}
@@ -598,8 +598,8 @@ color:#2788db !important}
 /* Places - sub-places
 ------------------------------------------------------------------------*/
 .places-subplaces{display:inline-block;width:100%;margin:0 0 20px 0}
-.places-subplaces ul.column{float:left;margin:0 10px 0 0}
-.places-subplaces ul.column li{width:120px;list-style:none}
+.places-subplaces ul.column{float:left;margin:0 20px 0 0}
+.places-subplaces ul.column li{width:180px;list-style:none}
 .places-subplaces ul.hidden{display:none}
 
 /* Slideshow images on item pages
