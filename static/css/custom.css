@@ -415,7 +415,7 @@ div.search-results{width:679px;float:left}
 .list-view table{width:100%;margin:-35px 0 0 0}
 .list-view table trnth-child(2n){background:#fbfbfb}
 .list-view table th{font:700 12px arial;color:#515251;text-transform:uppercase;padding:0 0 10px 0;text-align:left}
-.list-view table td{padding:10px 0;border-bottom:1px solid #eee;vertical-align:middle}
+	.list-view table td{padding:10px 0;border-bottom:1px solid #eee;vertical-align:middle}
 .list-view table .item_type{color:#333;font:700 14px arial}
 
 /* Search Results - grid view */
@@ -423,10 +423,16 @@ div.search-results{width:679px;float:left}
 .grid-view li{list-style:none;float:left;width:150px;margin:0 20px 20px 0}
 
 /* Search Filter side bar */
-.filter-bar{background:#f6f6f6;border:1px solid #ccc;width:217px;float:left;margin:0 20px 0 0;padding:10px 0 20px 0;border-radius:8px}
+.filter-bar{background:#f6f6f6;border:1px solid #ccc;width:217px;float:left;margin:0 20px 20px 0;padding:10px 0 20px 0;border-radius:8px}
 .filter-bar h2{color:#585858;font:700 12px arial;text-transform:uppercase;padding:10px 15px 5px;margin:10px 0 0 0;border-top:1px solid #ccc}
 .filter-bar div{margin:0 15px}
 .filter-bar dt{font-weight:700;margin:10px 0 3px 0}
+.filter-bar ul li{list-style:none}
+.filter-bar ul li label input{margin:2px 5px 2px 0}
+.filter-bar input#id_person{border:1px solid #ccc;padding:4px}
+
+/* Search results - no results */
+.no-results{color:#ccc;font:22px arial;float:left;width:670px;text-align:center}
 
 /* Browse by categories
 ------------------------------------------------------------------------*/
@@ -554,10 +560,11 @@ color:#2788db !important}
 ------------------------------------------------------------------------*/
 .homePrimary{margin:0 10px 20px 10px;border-bottom:1px solid #7f7f7f;display:inline-block;clear:both}
 .homePrimary h2{color:#555;font:700 18px arial}
+.homePrimary p{font:14px/18px arial}
 .homePrimLeft{width:515px;height:185px;float:left;background:#f8f8f8;border-top:4px solid #e3e3e3;padding:15px}
+.homePrimLeft .learnMore{float:right;clear:both}
 .homePrimRight{width:364px;height:185px;float:left;background:#fff5e5;border-top:4px solid #ffbe4e;border-left:1px solid #fcf2e3;padding:15px}
 .homePrimary img{border:3px solid #fff;margin:0 20px 10px 0;float:left}
-.homePrimRight .learnMore{float:right;clear:both}
 
 .homeSecondary{margin:0 10px;display:inline-block;clear:both}
 .homeSecondary .col{width:270px;float:left;padding:0 20px;border-right:1px solid #ccc;min-height:310px;color:#888}
@@ -597,17 +604,3 @@ color:#2788db !important}
 
 /* Slideshow images on item pages
 ------------------------------------------------------------------------*/
-#item-representations #item-images{position:absolute;top:15px;left:4px;z-index:100}
-#item-representations .slides_container{width:384px;overflow:hidden;position:relative;display:none}
-#item-representations .slides_container a{width:384px;height:270px;display:block}
-#item-representations .slides_container a img{display:block}
-
-/* Next/prev buttons */
-#item-representations #item-images .next,#item-representations #slides .prev{position:absolute;top:107px;left:-39px;width:24px;height:43px;display:block;z-index:101}
-#item-representations #item-images .next{left:399px}
-
-/* Pagination */
-#item-representations .pagination{margin:26px auto 0;width:100px}
-#item-representations .pagination li{float:left;margin:0 1px;list-style:none}
-#item-representations .pagination li a{display:block;width:12px;height:0;padding-top:12px;background-image:url(../img/pagination.png);background-position:0 0;float:left;overflow:hidden}
-#item-representations .pagination li.current a{background-position:0 -12px}
