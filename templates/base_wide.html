@@ -19,15 +19,33 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
+
+    $('#item-listing-table').hide();
+    $('#item-listing-grid').hide();
+    $('.grid-list-selector button').removeClass('selected');
+    if ($.cookie('item-listing') === 'grid') {
+        $('#item-listing-table').hide();
+        $('#item-listing-grid').show();
+        $('.grid-list-selector button.grid').addClass('selected');
+    } else {
+        $('#item-listing-table').show();
+        $('#item-listing-grid').hide();
+        $('.grid-list-selector button.list').addClass('selected');
+    }
+
     $('.grid-list-selector button').click(function (e) {
         $('.grid-list-selector button').removeClass('selected');
         $(this).addClass('selected');
         if ($(this).hasClass('grid')) {
             $('#item-listing-table').hide();
             $('#item-listing-grid').show();
+
+            $.cookie('item-listing', 'grid');
         } else if ($(this).hasClass('list')) {
             $('#item-listing-table').show();
             $('#item-listing-grid').hide();
+
+            $.cookie('item-listing', 'list');
         }
     });
 });
