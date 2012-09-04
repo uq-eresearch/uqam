@@ -20,8 +20,9 @@
 <div class="filter-bar">
 <form id="filter-form">
     <div class="filter-clear">
-        <p>Filter results:</p>
-        <button type="clear">Clear</button>
+        <p>Filter results: 
+        <button type="clear" class="btn">Clear</button>
+        </p>
     </div>
 <h2>By Category</h2>
     <div>
@@ -79,13 +80,13 @@
             {{form.person}}
         </dl>
     </div>
-<h2>Other</h2>
     <div>
         <dl>
             {% if facets.fields.has_images %}
-                <dt>Has images</dt>
-                <input type="checkbox" id="has_images" name="has_images" value="True">
-                <label for="has_images">Only return results with an associated image</label>
+                <label for="has_images">
+                	<input type="checkbox" id="has_images" name="has_images" value="True">
+                	Only return results with an associated image
+                </label>
                 {# Provide only the top 5 has_images #}
                 {% for has_images in facets.fields.has_images|slice:":5" %}
                     <dd><a href="{{ request.get_full_path }}&amp;selected_facets=has_images_exact:{{ has_images.0|urlencode }}">{{ has_images.0 }}</a> ({{ has_images.1 }})</dd>
