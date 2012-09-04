@@ -149,12 +149,29 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-    $('#filter-form input').click(function() {
+    function copyAndSubmit() {
         $('#filter-form :checked').clone().hide().appendTo('form#main-search');
         $('#filter-form :text').clone().hide().appendTo('form#main-search');
 
         $('form#main-search').submit();
+    }
 
+    $('#filter-form :checkbox').click(copyAndSubmit);
+    $('#filter-form :text').bind("enterKey", copyAndSubmit);
+    $('#filter-form :text').blur(copyAndSubmit);
+
+    $('.extra-options').hide();
+
+    $('.filter-bar a.display-more').click(function(event) {
+        event.preventDefault();
+        var extra = $(this).prev();
+        if (extra.is(':visible')) {
+            extra.slideUp();
+            $(this).text('more...')
+        } else {
+            $(this).text('less...');
+            extra.slideDown();
+        }
     });
 
 
