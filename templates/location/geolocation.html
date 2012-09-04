@@ -8,7 +8,7 @@
     {% for parent in geolocation.get_parents %}
      > <a href="{{parent.get_absolute_url}}"> {{parent.name}}&nbsp;</a>
     {% endfor %}
-</div>
+</div><!-- /breadcrumbs -->
 
 {% if geolocation %}
     <h1>{{geolocation.name}}</h1>
@@ -34,7 +34,7 @@
     </ul>
     {% endfor %}
 {% endif %}
-</div>
+</div><!-- /places-subplaces -->
 
 {% if objects %}
     {% include "snippets/paged_object_list.html" %}
