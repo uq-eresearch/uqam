@@ -39,13 +39,14 @@ class ExpandableCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
         output.append(u'</ul>')
 
         if choices[5:]:
-            output.append(u'<a href="#" class="display-more">more...</a>')
             output.append(u'<ul class="extra-options">')
 
             for i, (option_value, option_label) in enumerate(choices[5:]):
                 self.render_checkbox(output, has_id, final_attrs,
                     attrs, i, str_values, option_value, name, option_label)
             output.append(u'</ul>')
+
+            output.append(u'<a href="#" class="display-more">more...</a>')
 
         return mark_safe(u'\n'.join(output))
 
@@ -82,7 +83,7 @@ class CatalogueSearchForm(SearchForm):
     country = UnvalidatedMultipleChoiceField(required=False)
     item_name = UnvalidatedMultipleChoiceField(required=False)
     person = forms.CharField(required=False)
-    has_images = forms.BooleanField(required=False)
+    has_images = forms.BooleanField(required=False, label="Only return results with an associated image")
 
     # def __init__(self, *args, **kwargs):
     #     self.item_names = kwargs.pop("item_names", [])
@@ -161,6 +162,9 @@ def catalogue_search(request, template='search/search.html', load_all=True, form
         results = filter_with_facet(form, results, facets, 'categories', 'categories')
         results = filter_with_facet(form, results, facets, 'global_region', 'global_region')
         results = filter_with_facet(form, results, facets, 'country', 'country')
+
+        if form.cleaned_data['has_images'] == True:
+            results = results.narrow(u'has_images_exact:true')
 
     paginator = Paginator(results, results_per_page or RESULTS_PER_PAGE)
 

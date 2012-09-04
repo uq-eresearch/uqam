@@ -82,18 +82,12 @@
     </div>
     <div>
         <dl>
-            {% if facets.fields.has_images %}
+            <dt> </dt>
+            <dd><ul><li>
                 <label for="has_images">
-                	<input type="checkbox" id="has_images" name="has_images" value="True">
-                	Only return results with an associated image
-                </label>
-                {# Provide only the top 5 has_images #}
-                {% for has_images in facets.fields.has_images|slice:":5" %}
-                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=has_images_exact:{{ has_images.0|urlencode }}">{{ has_images.0 }}</a> ({{ has_images.1 }})</dd>
-                {% endfor %}
-            {% else %}
-                <p>No has_images facets.</p>
-            {% endif %}
+                {{ form.has_images }}Only return results with an associated image
+            </label></li></ul>
+            </dd>
         </dl>
     </div>
 </form>
@@ -146,7 +140,7 @@
 
 
 {% block javascript %}
-
+{{block.super}}
 <script type="text/javascript">
 $(document).ready(function () {
     function copyAndSubmit() {
