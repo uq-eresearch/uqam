@@ -24,7 +24,7 @@ class MuseumObjectIndex(SearchIndex):
         return list(people)
 
     def prepare_has_images(self, object):
-        return object.artefactrepresentation_set.exists()
+        return object.artefactrepresentation_set.filter(public=True).exists()
 
     def get_model(self):
         return MuseumObject
