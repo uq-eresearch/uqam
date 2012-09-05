@@ -146,7 +146,7 @@ def view_places(request):
          'kml_url': kml_url})
 
 
-def view_geoloc(request, loctype, id):
+def view_geoloc(request, loctype, id, columns=3):
 
     geolocation = find_location(loctype, id)
 
@@ -156,14 +156,13 @@ def view_geoloc(request, loctype, id):
     if hasattr(geolocation, 'children'):
         children = geolocation.children.all()
 
-
     objects = do_paging(request, items)
 
     return render(request, 'location/geolocation.html',
         {'geolocation': geolocation,
          'objects': objects,
          'num_children': len(children),
-         'children': split_list(children, parts=3)})
+         'children': split_list(children, parts=columns)})
 
 
 def view_location(request, global_region, country=None, state_prov=None, local_region=None, locality=None):

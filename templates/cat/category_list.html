@@ -10,6 +10,17 @@
 
 <h1>{{ category.name }}</h1>
 
+{% if category.suggested_artefact_types.exists %}
+<div class="places-subplaces">
+    {% for column in item_types %}
+    <ul class="column">
+        {% for item_type in column %}
+        <li><a href="{% url item_type_list item_name=item_type.name category=category.slug %}">{{item_type.name}}</a></li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+</div><!-- /places-subplaces -->
+{% endif %}
 
 {% if categories %}
 <ul class="nav nav-list">

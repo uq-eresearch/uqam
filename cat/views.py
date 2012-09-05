@@ -66,7 +66,7 @@ def categories_browse(request):
         'equipment': equipment})
 
 
-def categories_list(request, full_slug=None):
+def categories_list(request, full_slug=None, columns=3):
     """
     Hierarchical browsing of categories
 
@@ -83,6 +83,11 @@ def categories_list(request, full_slug=None):
 
     cat_list = Category.objects.filter(parent=parent)
 
+    ms = parent.museumobject_set.all()
+    item_types = ArtefactType.objects.filter(
+        id__in=ms.values_list('artefact_type', flat=True).distinct())
+    # item_types = parent.suggested_artefact_types.all()
+
     objects = MuseumObject.objects.filter(category=parent)
     objects = do_paging(request, objects)
 
@@ -90,6 +95,28 @@ def categories_list(request, full_slug=None):
             "category": parent,
             "categories": cat_list,
             "objects": objects,
-            "breadcrumbs": breadcrumbs[0:-1]})
+            "breadcrumbs": breadcrumbs[0:-1],
+            "num_item_types": len(item_types),
+            "item_types": split_list(item_types, parts=columns)})
+
+
+def item_type_list(request, category=None, item_name=None):
+    category = get_object_or_404(Category, slug__exact=category)
+    artefact_type = get_object_or_404(ArtefactType, name=item_name)
+
+    breadcrumbs = []
+    if category.parent:
+        breadcrumbs.append(category.parent)
+    breadcrumbs.append(category)
+
+    objects = MuseumObject.objects.filter(
+        category=category, artefact_type=artefact_type)
+    objects = do_paging(request, objects)
+
+    return render(request, "cat/category_list.html", {
+            "breadcrumbs": breadcrumbs,
+            "category": artefact_type,
+            "objects": objects
+        })
 
 

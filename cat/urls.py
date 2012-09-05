@@ -17,4 +17,7 @@ urlpatterns = patterns('cat.views',
     url(r'^categories/(?P<full_slug>.+)/$', 'categories_list',
         name='categories_list'),
 
+    url(r'^itemtype/(?P<category>.+)/(?P<item_name>.+)/$', 'item_type_list',
+        name='item_type_list'),
+
 )
