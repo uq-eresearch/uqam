@@ -85,7 +85,7 @@ admin.site.register(Document, DocumentAdmin)
 
 class ArtefactRepresentationAdmin(MediaFileAdmin):
     readonly_fields = ('item_link',) + mediafile_readonly + ('thumbnail',)
-    fields = ('public',) + readonly_fields
+    fields = ('public', 'photographer') + readonly_fields
     list_display = ('__unicode__', 'artefact', 'upload_date', 'public')
 
     def item_link(self, obj):
