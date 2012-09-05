@@ -3,9 +3,9 @@
 {% block content %}
 
 <h1>Places</h1>
-<div class="googleEarthBtn">
+{% comment %}<div class="googleEarthBtn">
     <a href="{% url place_kml %}" class="btn">View in Google Earth</a>
-</div>
+</div>{% endcomment %}
 <div class="places-icons">
 {% if children %}
         {% for child in children %}

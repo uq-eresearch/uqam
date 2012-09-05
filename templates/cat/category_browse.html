@@ -4,18 +4,6 @@
 {% block content %}
 <h1>Categories</h1>
 
-<div class="breadcrumbs">
-<a href="{% url categories_list %}">Categories</a>
-  {% for level in breadcrumbs %}
-  <span class="divider">></span>
-    {% if forloop.last %}
-      <a href="{{ level.get_absolute_url }}">{{ level.name }}</a>
-    {% else %}
-      {{ level.name}}
-    {% endif %}>
-  {% endfor %}
-</div>
-
 <div>
 {% for category in categories %}
   {% if category.name == 'Equipment' %}
