@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth import models as auth_models
 from django.contrib.auth.management import create_superuser
 from django.db.models import signals
+from django.db import models
 
 # From http://stackoverflow.com/questions/1466827/ --
 #
@@ -32,3 +33,9 @@ def create_testuser(app, created_models, verbosity, **kwargs):
 
 signals.post_syncdb.connect(create_testuser,
     sender=auth_models, dispatch_uid='common.models.create_testuser')
+
+
+class SiteConfiguration(models.Model):
+    homepage_item = models.ForeignKey('cat.MuseumObject')
+    homepage_item_description = models.TextField(blank=True)
+    
