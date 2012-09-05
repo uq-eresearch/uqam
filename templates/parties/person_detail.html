@@ -18,7 +18,7 @@
 
 <p class="person-comments">{{ person.comments }}</p>
 
-<ul id="people-type-filter">
+<ul id="people-type-filter" class="nav nav-tabs">
 {% for type in types %}
     <li{% if type.0 == item_type %} class="active"{%endif%}><a href="{% url parties.views.person_detail pk=person.id item_type=type.0 %}">{{type.1}} ({{type.2}})</a></li>
 {% endfor %}
