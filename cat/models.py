@@ -225,6 +225,9 @@ class MuseumObject(models.Model):
     def __unicode__(self):
         return "%s: %d" % (self.artefact_type, self.registration_number)
 
+    def public_images(self):
+        return self.artefactrepresentation_set.filter(public=True)
+
     @staticmethod
     def autocomplete_search_fields():
         return ("id__iexact",)

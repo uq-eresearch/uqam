@@ -1,8 +1,8 @@
 {% load thumbnail %}
           <li>
             <a href="{{ object.get_absolute_url }}{% if search_result %}?search_result={{search_result}}{% endif %}">
-            {% if object.artefactrepresentation_set.all.0 %}
-                <img src="{{ object.artefactrepresentation_set.all.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
+            {% if object.public_images.0 %}
+                <img src="{{ object.public_images.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
             {% else %}
                 <img src="http://placehold.it/105x70" width="105" height="70" alt="">
             {% endif %}<br />
