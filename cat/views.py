@@ -39,12 +39,12 @@ def _current_search_results(request, reg_num):
 
     search_query = request.session.get('search_query', {})
     if index is not None and search_query:
-        index = int(index)
+        index = int(index) - 1
 
         results = request.session.get('search_results', [])
         results_per_page = request.session.get('search_results_per_page')
 
-        context['search_index'] = index
+        context['search_result'] = index + 1
         context['search_results'] = results
         page_num = (index / results_per_page) + 1
         search_query.update({'page': page_num})

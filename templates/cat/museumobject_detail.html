@@ -20,13 +20,13 @@
     </div>
     <div class="paging">
 
-      <p>{{search_index}} of {{search_results.count}}</p>
+      <p>{{search_result}} of {{search_results.count}}</p>
 
       {% if search_prev_obj %}
-        <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_index|add:'-1'}}" class="btn">Prev</a>
+        <a href="{{ search_prev_obj.get_absolute_url }}?search_result={{search_result|add:'-1'}}" class="btn">Prev</a>
       {% endif %}
       {% if search_next_obj %}
-        <a href="{{ search_next_obj.get_absolute_url }}?search_result={{search_index|add:'1'}}" class="btn">Next</a>
+        <a href="{{ search_next_obj.get_absolute_url }}?search_result={{search_result|add:'1'}}" class="btn">Next</a>
       {% endif %}
     </div>
   </div><!-- /search-results-navigation -->
