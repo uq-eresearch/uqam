@@ -21,7 +21,7 @@
 <form id="filter-form">
     <div class="filter-clear">
         <p>Filter results: 
-        <button type="clear" class="btn">Clear</button>
+        <button type="button" class="btn">Clear</button>
         </p>
     </div>
 <h2>By Category</h2>
@@ -148,6 +148,7 @@ $(document).ready(function () {
 
     $('.extra-options').hide();
 
+// Display More in filter bar
     $('.filter-bar a.display-more').click(function(event) {
         event.preventDefault();
         var extra = $(this).prev();
@@ -158,6 +159,14 @@ $(document).ready(function () {
             $(this).text('less...');
             extra.slideDown();
         }
+    });
+
+// Clear filters
+    $('.filter-clear button').click(function(event) {
+        $('#main-search :input').attr("disabled", "disabled");
+        $('#main-search-q').removeAttr("disabled");
+
+        $('form#main-search').submit();
     });
 
 
