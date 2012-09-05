@@ -55,6 +55,7 @@ class ArtefactRepresentation(MediaFile):
         thumbnail_storage=default_storage)
     position = models.PositiveSmallIntegerField()
     artefact = models.ForeignKey(MuseumObject)
+    photographer = models.CharField(max_length=200, blank=True)
 
     class Meta(MediaFile.Meta):
         ordering = ['position']
