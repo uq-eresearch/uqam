@@ -47,19 +47,19 @@
     {% else %}
       <a href="{{ ar.image|thumbnail_url:'large_display' }}">
     {% endif %}
-    <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt="" width="384" height="256"></a>
+      <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt="" width="384" height="256"></a>
     </div>
   {% empty %}
     <div class="item-image">
       <img class="placeholder" src="http://placehold.it/384x256" alt="placeholder">
     </div>
   {% endfor %}
-    </div>
+    </div><!-- /slides_container -->
 
     <div class="view-3d">
       <a href="#" class="btn">View in 3D</a>
     </div>
-  </div>
+  </div><!-- /item-images -->
 </div> <!-- /item-representations -->
 
 
@@ -318,14 +318,18 @@
 
 {% block javascript %}
 {{block.super}}
-{% if museumobject.place.latitude %}
-{% with p=museumobject.place %}
 <script type="text/javascript"
   src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
+    $(document).ready(function() {
+        $('#item-representations').slides({
+            generateNextPrev: true,
+        });
+    });
+{% if museumobject.place.latitude %}
+{% with p=museumobject.place %}
     var geocoder, map;
-    $(document).ready(
-    function initialize() {
+    $(document).ready(function initialize() {
         var myOptions = {
             zoom: 3, // Zoomed out to show location in country
             disableDefaultUI: true,
@@ -345,14 +349,8 @@
         google.maps.event.addListener(marker, 'click', function() {
             window.location.href = marker.url;
         });
-
-
-        $('#item-representations').slides({
-          generateNextPrev: true,
-
-        });
     });
-</script>
 {% endwith %}
 {% endif %}
+</script>
 {% endblock %}
