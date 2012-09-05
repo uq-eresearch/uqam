@@ -320,10 +320,17 @@
 {{block.super}}
 <script type="text/javascript"
   src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
+
+<script type="text/javascript">
+$(function() {
+  $('.item-image a').lightBox(); // Select all links in object with item-image class
+});
+</script>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $('#item-representations').slides({
-            generateNextPrev: true,
+            generateNextPrev: true
         });
     });
 {% if museumobject.place.latitude %}
