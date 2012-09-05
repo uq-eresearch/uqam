@@ -1,14 +1,23 @@
 {% extends "base.html" %}
-
+{% load static %}
 
 {% block body %}
 <div class="homeBanner" id="homeBanner">
     <div class="slides_container">
         <div class="mainBanner">
-            <img src="/static/images/banners/homebanner-01.jpg" alt="Online Catalogue - Anthropology Museum" />
+            <img src="{% static 'images/banners/banner-01.jpg' %}" alt="Online Catalogue - Anthropology Museum" />
         </div>
         <div class="mainBanner">
-            <img src="/static/images/banners/homebanner-01.jpg" alt="Online Catalogue - Anthropology Museum" />
+            <img src="{% static 'images/banners/banner-02.jpg' %}" alt="Online Catalogue - Anthropology Museum" />
+        </div>
+        <div class="mainBanner">
+            <img src="{% static 'images/banners/banner-03.jpg' %}" alt="Online Catalogue - Anthropology Museum" />
+        </div>
+        <div class="mainBanner">
+            <img src="{% static 'images/banners/banner-04.jpg' %}" alt="Online Catalogue - Anthropology Museum" />
+        </div>
+        <div class="mainBanner">
+            <img src="{% static 'images/banners/banner-05.jpg' %}" alt="Online Catalogue - Anthropology Museum" />
         </div>
     </div>
 </div>
