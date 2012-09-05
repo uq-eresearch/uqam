@@ -33,9 +33,12 @@ def paginator(context, adjacent_pages=2, extra_class=""):
     page_numbers = [n for n in range(startPage, endPage) \
             if n > 0 and n <= paginator.num_pages]
 
-    query = context.get('query', '')
-    if query != '':
-        query = "&q=" + query
+    query = ''
+    get_params = context.get('request').GET.copy()
+    if get_params:
+        if 'page' in get_params:
+            del get_params['page']
+        query = "&" + get_params.urlencode()
 
     return {
         'query': query,

@@ -119,7 +119,9 @@ from django.http import Http404
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 
-def catalogue_search(request, template='search/search.html', load_all=True, form_class=CatalogueSearchForm, searchqueryset=None, context_class=RequestContext, extra_context=None, results_per_page=None):
+def catalogue_search(request, template='search/search.html', load_all=True,
+    form_class=CatalogueSearchForm, searchqueryset=None, extra_context=None,
+    results_per_page=None):
     """
     A more traditional view that also demonstrate an alternative
     way to use Haystack.
@@ -142,6 +144,7 @@ def catalogue_search(request, template='search/search.html', load_all=True, form
     """
     query = ''
     results = EmptySearchQuerySet()
+    results_per_page = results_per_page or RESULTS_PER_PAGE
 
     if request.GET.get('q'):
         form = form_class(request.GET, searchqueryset=searchqueryset, load_all=load_all)
@@ -165,7 +168,7 @@ def catalogue_search(request, template='search/search.html', load_all=True, form
         if form.cleaned_data['has_images'] == True:
             results = results.narrow(u'has_images_exact:true')
 
-    paginator = Paginator(results, results_per_page or RESULTS_PER_PAGE)
+    paginator = Paginator(results, results_per_page)
 
     try:
         page = paginator.page(int(request.GET.get('page', 1)))
@@ -180,6 +183,15 @@ def catalogue_search(request, template='search/search.html', load_all=True, form
         'suggestion': None,
         'facets': facets,
     }
+
+    # Store query for paging through results on item detail page
+    if form.is_valid():
+        request.session['search_query'] = form.cleaned_data
+    # Access the first result to prevent ZeroDivisionError
+    if results:
+        results[0]
+    request.session['search_results'] = results
+    request.session['search_results_per_page'] = results_per_page
 
     if getattr(settings, 'HAYSTACK_INCLUDE_SPELLING', False):
         context['suggestion'] = form.get_suggestion()

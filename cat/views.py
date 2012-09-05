@@ -37,7 +37,8 @@ def _current_search_results(request, reg_num):
     context = {}
     index = request.GET.get('search_result', None)
 
-    if index is not None:
+    search_query = request.session.get('search_query', {})
+    if index is not None and search_query:
         index = int(index)
 
         results = request.session.get('search_results', [])
@@ -45,10 +46,8 @@ def _current_search_results(request, reg_num):
 
         context['search_index'] = index
         context['search_results'] = results
-        search_query = request.session['search_query']
         page_num = (index / results_per_page) + 1
         search_query.update({'page': page_num})
-        search_query.update({'selected_facets': request.session['search_facets']})
         search_url = url_with_querystring(
             reverse('haystack_search'), **search_query)
         context['search_url'] = search_url
