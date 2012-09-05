@@ -1,6 +1,6 @@
 {% extends "base_wide.html" %}
 
-{% load uqam %}
+{% load uqam %}{% load static %}
 {% load thumbnail %}
 {% block content %}
 
@@ -321,10 +321,16 @@
 {{block.super}}
 <script type="text/javascript"
   src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
-
+<script type="text/javascript" src="{{STATIC}}js/jquery.lightbox-0.5.min.js"></script>
 <script type="text/javascript">
 $(function() {
-  $('.item-image a').lightBox(); // Select all links in object with item-image class
+  $('.item-image a').lightBox({
+    imageLoading: '{% static "images/lightbox-ico-loading.gif" %}',
+    imageBtnClose: '{% static "images/lightbox-btn-close.gif" %}',
+    imageBtnPrev: '{% static "images/lightbox-btn-prev.gif" %}',
+    imageBtnNext: '{% static "images/lightbox-btn-next.gif" %}',
+    imageBlank: '{% static "images/lightbox-blank.gif" %}'
+  }); // Select all links in object with item-image class
 });
 </script>
 
