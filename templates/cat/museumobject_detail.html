@@ -48,6 +48,9 @@
       <a href="{{ ar.image|thumbnail_url:'large_display' }}">
     {% endif %}
       <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt="" width="384" height="256"></a>
+      {% if ar.photographer %}<div class="caption">
+        <p>Photographer: {{ ar.photographer }}</p>
+      </div>{% endif %}
     </div>
   {% empty %}
     <div class="item-image">
