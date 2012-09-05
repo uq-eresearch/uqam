@@ -1,10 +1,10 @@
-{% load thumbnail %}
+{% load thumbnail %}{% load static %}
           <li>
             <a href="{{ object.get_absolute_url }}{% if search_result %}?search_result={{search_result}}{% endif %}">
             {% if object.public_images.0 %}
                 <img src="{{ object.public_images.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
             {% else %}
-                <img src="http://placehold.it/105x70" width="105" height="70" alt="">
+                <img src="{% static 'images/noimageavail-small.gif' %}" width="105" height="70" alt="">
             {% endif %}<br />
             <span class="item-name">{{ object.artefact_type }}</span></a><br />
             <span class="global-region">{{ object.global_region }}</span>
