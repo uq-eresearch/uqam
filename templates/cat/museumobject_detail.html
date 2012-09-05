@@ -47,7 +47,7 @@
     {% else %}
       <a href="{{ ar.image|thumbnail_url:'large_display' }}">
     {% endif %}
-    <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt=""></a>
+    <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt="" width="384" height="256"></a>
     </div>
   {% empty %}
     <div class="item-image">
