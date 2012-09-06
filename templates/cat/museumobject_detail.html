@@ -340,7 +340,9 @@ $(function() {
 <script type="text/javascript">
     $(document).ready(function() {
         $('#item-representations').slides({
-            generateNextPrev: true
+            generateNextPrev: true,
+            preload: true,
+            preloadImage: '{% static "img/slides/loading.gif" %}'
         });
     });
 {% if museumobject.place.latitude %}
