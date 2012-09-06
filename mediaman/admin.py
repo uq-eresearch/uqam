@@ -88,6 +88,9 @@ class ArtefactRepresentationAdmin(MediaFileAdmin):
     fields = ('public', 'photographer') + readonly_fields
     list_display = ('__unicode__', 'artefact', 'upload_date', 'public')
 
+    list_filter = ('uploaded_by', 'public', 'photographer')
+    search_fields = ('artefact', 'original_filename')
+
     def item_link(self, obj):
         if obj.artefact:
             admin_url = urlresolvers.reverse('admin:cat_museumobject_change', args=(obj.artefact_id,))
