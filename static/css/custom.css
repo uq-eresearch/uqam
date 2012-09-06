@@ -399,7 +399,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini{*padding-top:1px;*padding
 
 /* Pager - pagination on search results top & bottom */
 .pager{float:right}
-.pager.bottom{margin:10px 0;clear:both}
+.pager.bottom{margin:10px 0;}
 .pager .page{border:1px #ccc solid;float:left;padding:10px 15px;display:block;margin:0 0 0 -1px}
 .pager .page a{float:left;color:#2662E3;display:block;padding:10px;margin:-10px}
 .pager .page a:hover,.pager .page:hover{background:#eee}
