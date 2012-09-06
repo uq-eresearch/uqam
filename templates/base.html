@@ -263,6 +263,9 @@
           if ($('#search-main-person').val() == "") {
               $('#search-main-person').attr("disabled", "disabled");
           }
+          if ($('#main-search-q').val() === "" || $('#main-search-q').val() == "Search the collection...") {
+              $('#main-search-q').val(' ');
+          }
 
       });
     </script>
