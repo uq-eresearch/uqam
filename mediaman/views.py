@@ -35,6 +35,7 @@ class UploadFileForm(forms.Form):
     relpathinfo0 = forms.CharField(max_length=255, required=False)
     md5sum0 = forms.CharField(max_length=32)
     uploadtype = forms.ChoiceField(choices=UPLOAD_TYPE_CHOICES)
+    photographer_name = forms.CharField(max_length=200, required=False)
 
 
 @permission_required('mediaman.add_document')
@@ -95,6 +96,8 @@ def handle_item_image(formdata, ufile, user):
         ar.artefact = MuseumObject.objects.get(registration_number=reg_num)
 
     ar = set_mediafile_attrs(ar, ufile, formdata, user)
+    if formdata['photographer_name']:
+        ar.photographer = formdata['photographer_name']
     ar.image = ufile
     ar.save()
 

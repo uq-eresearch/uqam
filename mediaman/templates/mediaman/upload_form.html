@@ -15,8 +15,14 @@
 
 <form method="post" enctype="multipart/form-data"
     action="/mediaman/handle_upload/" name="uploaddetails">
-    Type of files being uploaded:
-    {{ form.uploadtype }}
+    <div>
+        Type of files being uploaded:
+        {{ form.uploadtype }}
+    </div>
+    <div id="photographer_name">
+        Photographer name:
+    {{ form.photographer_name }}
+    </div>
     <hr>
     <!--
     Extra fields applet sends
@@ -62,6 +68,23 @@
 {% block footer %}
 
 <script src="{{STATIC_URL}}jquery-1.7.1.min.js" type="text/javascript">
+</script>
+<script>
+$(function() {
+    var upload_type = $('#id_uploadtype');
+    $('#photographer_name').hide();
+    $('#id_photographer_name').attr("disabled", "disabled");
+    upload_type.change(function() {
+        if (upload_type.val() === 'II') {
+            $('#photographer_name').show();
+            $('#id_photographer_name').removeAttr("disabled");
+        } else {
+            $('#photographer_name').hide();
+            $('#id_photographer_name').attr("disabled", "disabled");
+        }
+
+    })
+});
 </script>
 
 {% endblock footer %}
