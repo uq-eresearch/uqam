@@ -1,6 +1,7 @@
 import Image
 import ImageDraw
 import ImageEnhance
+from django.conf import settings
 
 
 def expand_canvas(image, size, expand=False, expand_colour="white", **kwargs):
@@ -27,6 +28,18 @@ def expand_canvas(image, size, expand=False, expand_colour="white", **kwargs):
         return image
 
 
+def watermark_overlay(image, watermark_image=None, wm_margin=15, **kwargs):
+    # import ipdb; ipdb.set_trace()
+    if watermark_image is None:
+        return image
+    overlay_path = settings.STATICFILES_DIRS[0] + '/' + watermark_image
+    # import ipdb; ipdb.set_trace()
+    overlay = Image.open(overlay_path)
+
+    upperLeft = [(image.size[i] - overlay.size[i]) / 2 for i in [0, 1]]
+    upperLeft = (image.size[0] - overlay.size[0] - wm_margin, image.size[1] - overlay.size[1] - wm_margin)
+    image.paste(overlay, tuple(upperLeft), overlay)  # use overlay as image and mask
+    return image
 
 
 def watermark_processor(image, watermark=None, **kwargs):

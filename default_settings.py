@@ -314,6 +314,7 @@ THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.autocrop',
     'easy_thumbnails.processors.scale_and_crop',
     'easy_thumbnails.processors.filters',
+    'mediaman.thumbnail_processors.watermark_overlay',
     'mediaman.thumbnail_processors.expand_canvas',
     'mediaman.thumbnail_processors.watermark_processor',
 )
@@ -345,10 +346,14 @@ THUMBNAIL_ALIASES = {
     '': {
         'large_display': {
             'size': (1024, 768),
+            'watermark_image': 'watermark-large.png',
+            'wm_margin': 15,
         },
         'item_display': {
             'size': (384, 256),
-            'watermark': 'UQ Anthropology Museum',
+            'watermark_image': 'watermark-medium.png',
+            'wm_margin': 5,
+#            'watermark': 'UQ Anthropology Museum',
             'expand': True
 
         },
