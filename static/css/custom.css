@@ -33,7 +33,7 @@ div#item-listing-grid{display:none}
 /* paged_object_list */
 div.item-listing{margin:0}
 #item-listing-grid ul{list-style-type:none}
-#item-listing-grid li{display:block;float:left;background:none;width:115px;margin:0 20px 20px 0}
+#item-listing-grid li{display:block;float:left;background:none;width:125px;margin:0 40px 40px 0}
 
 /* Person list */
 div.dataTables_length label{float:left;text-align:left}
@@ -412,6 +412,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini{*padding-top:1px;*padding
 
 /* Search Results - list view */
 .search-results{width:679px;float:left}
+.search-results img {border: 1px solid #ccc;}
 .list-view table{width:100%;margin:-35px 0 0 0}
 .list-view table trnth-child(2n){background:#fbfbfb}
 .list-view table th{font:700 12px arial;color:#515251;text-transform:uppercase;padding:0 0 10px 0;text-align:left}
