@@ -351,7 +351,7 @@ THUMBNAIL_ALIASES = {
         },
         'item_display': {
             'size': (384, 256),
-            'watermark_image': 'watermark-medium.png',
+            'watermark_image': 'watermark-small.png',
             'wm_margin': 5,
 #            'watermark': 'UQ Anthropology Museum',
             'expand': True
