@@ -165,6 +165,9 @@ def catalogue_search(request, template='search/search.html', load_all=True,
         results = filter_with_facet(form, results, facets, 'global_region', 'global_region')
         results = filter_with_facet(form, results, facets, 'country', 'country')
 
+        if form.cleaned_data['person']:
+            results = results.narrow(u'people:"%s"' % form.cleaned_data['person'])
+
         if form.cleaned_data['has_images'] == True:
             results = results.narrow(u'has_images_exact:true')
 
