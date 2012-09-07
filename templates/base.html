@@ -61,16 +61,11 @@
     <div id="topnav-inner">
         <ul class="tabs">
             <li><a href="/">Home</a></li>
-            <li><a href="/about/">About Us</a></li>
-            <li class="hasmore"><a href="#">Collection</a>
-                <ul class="menu-dropdown">
-                    <li><a href="/about-collection/">About the Collection</a></li>
-                    <li><a href="{% url categories_list %}">Categories</a></li>
-                    <li><a href="{% url parties_browse %}">People</a></li>
-                    <li><a href="{% url view_places %}">Places</a></li>
-                    <li><a href="{% url collections_home %}">Sub collections</a></li>
-                </ul>
-            </li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="{% url categories_list %}">Categories</a></li>
+            <li><a href="{% url parties_browse %}">People</a></li>
+            <li><a href="{% url view_places %}">Places</a></li>
+            <li><a href="{% url collections_home %}">Sub collections</a></li>
             <li><a href="{% url haystack_search %}">Search</a></li>
             
          {% if user.is_staff %}
