@@ -15,7 +15,7 @@ def home_page(request):
 
 
 def item_detail(request, reg_num):
-    mo = get_object_or_404(MuseumObject, registration_number=reg_num)
+    mo = get_object_or_404(MuseumObject, registration_number=reg_num, public=True)
 
     images = mo.public_images()
 
@@ -83,12 +83,12 @@ def categories_list(request, full_slug=None, columns=3):
 
     cat_list = Category.objects.filter(parent=parent)
 
-    ms = parent.museumobject_set.all()
+    ms = parent.museumobject_set.filter(public=True)
     item_types = ArtefactType.objects.filter(
         id__in=ms.values_list('artefact_type', flat=True).distinct())
     # item_types = parent.suggested_artefact_types.all()
 
-    objects = MuseumObject.objects.filter(category=parent)
+    objects = MuseumObject.objects.filter(category=parent, public=True)
     objects = do_paging(request, objects)
 
     return render(request, "cat/category_list.html", {
@@ -110,7 +110,7 @@ def item_type_list(request, category=None, item_name=None):
     breadcrumbs.append(category)
 
     objects = MuseumObject.objects.filter(
-        category=category, artefact_type=artefact_type)
+        category=category, artefact_type=artefact_type, public=True)
     objects = do_paging(request, objects)
 
     return render(request, "cat/category_list.html", {

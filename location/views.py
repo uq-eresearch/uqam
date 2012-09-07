@@ -21,7 +21,7 @@ def place_detail(request, place_id):
         region = Region.objects.get(name=place.region)
     except:
         region = None
-    place_objects = place.museumobject_set.all()
+    place_objects = place.museumobject_set.filter(public=True)
 
     objects = do_paging(request, place_objects)
 
@@ -150,7 +150,7 @@ def view_geoloc(request, loctype, id, columns=3):
 
     geolocation = find_location(loctype, id)
 
-    items = geolocation.museumobject_set.all()
+    items = geolocation.museumobject_set.filter(public=True)
 
     children = []
     if hasattr(geolocation, 'children'):
@@ -164,8 +164,3 @@ def view_geoloc(request, loctype, id, columns=3):
          'num_children': len(children),
          'children': split_list(children, parts=columns)})
 
-
-def view_location(request, global_region, country=None, state_prov=None, local_region=None, locality=None):
-    geolocation = 'foo'
-    return render(request, 'location/geolocation.html',
-        {'geolocation': geolocation})

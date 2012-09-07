@@ -38,7 +38,7 @@ def person_detail(request, pk, item_type='default', template_name='parties/perso
     types = [(key, mapping[key][1], mapping[key][2]) for key in ('docs', 'created', 'collected', 'donated')]
 
     if item_type in mapping.keys():
-        items = getattr(person, mapping[item_type][0]).all()
+        items = getattr(person, mapping[item_type][0]).filter(public=True)
     else:
         items = []
 
