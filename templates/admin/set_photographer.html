@@ -1,39 +1,29 @@
 {% extends "admin/base_site.html" %}
 {# load form_tags #}
-{% block title %}Add to Collection{% endblock %}
+{% block title %}Set photographer{% endblock %}
 {% block breadcrumbs %}{#{{ block.super }}#}
         <div id="breadcrumbs">
             <a href="../../">Home</a> &rsaquo;
             <a href="../">{{app_label|capfirst|escape }}</a> &rsaquo;
             {{ cl.opts.verbose_name_plural|capfirst }} &rsaquo;
-            Add to Collection
+            Set photographer
         </div>{% endblock %}
 
 <!-- CONTENT-TITLE -->
 {% block content_title %}
-    <h1>Add to Collection</h1>
+    <h1>Set photographer</h1>
 {% endblock %}
 
 {% block content %}
 <div class="span-24">
-<p>Please select which collection you wish to add these items to.</p>
+<p>Enter the photographer name for these items. Any existing name will be overridden.</p>
 <hr />
 <form method="POST">{% csrf_token %}
 <table class="admin small no_actions">
-    <thead>
-        <tr>
-            <th>&nbsp;</th>
-            <th>Collection</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for collection in collections %}
-        <tr class="{% cycle '' 'clarify' %}">
-            <td><input type="radio" name="selected_collection" value="{{ collection.id }}"></td>
-            <td>{{collection.title}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+    <tr>
+        <td>Photographer name</td>
+        <td><input type="text" name="photographer_name"></td>
+    </tr>
 </table>
 <br>
 
@@ -44,6 +34,7 @@
 <input type="hidden" name="return_url" value="{{ return_url }}">
 
 <input type="submit">
+
 </form>
 </div>
 {% endblock %}

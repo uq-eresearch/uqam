@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
 from django import forms
 from datetime import datetime
@@ -190,3 +190,19 @@ def name_to_id(filename, path=None):
                 return [int(match.group(1))]
 
     raise ParseError
+
+
+def set_photographer(request):
+    """
+    Bulk set a photographers name
+    """
+    ids = []
+    if 'ids' in request.GET:
+        ids = request.GET.get('ids').split(',')
+    if 'photographer_name' in request.POST:
+        ars = ArtefactRepresentation.objects.filter(pk__in=ids)
+        ars.update(photographer=request.POST['photographer_name'])
+        return HttpResponseRedirect("/admin/mediaman/artefactrepresentation/")
+
+    return render(request, "admin/set_photographer.html",
+        {'ids': ids})

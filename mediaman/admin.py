@@ -1,11 +1,21 @@
 from django.contrib import admin
 from models import Document, ArtefactRepresentation
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from cat.models import MuseumObject
 from parties.models import Person
 from django.core import urlresolvers
 
 mediafile_readonly = ('file_size', 'uploaded_by', 'mime_type',
         'original_filename', 'original_path', 'original_filedate',)
+
+
+def set_photographer_name(modeladmin, request, queryset):
+    """
+    Bulk set photographer name
+    """
+    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+    return HttpResponseRedirect(reverse('set_photographer') + "?ids=%s" % ",".join(selected))
 
 
 class MOInline(admin.TabularInline):
@@ -88,8 +98,10 @@ class ArtefactRepresentationAdmin(MediaFileAdmin):
     fields = ('public', 'photographer') + readonly_fields
     list_display = ('__unicode__', 'artefact', 'upload_date', 'public')
 
-    list_filter = ('uploaded_by', 'public', 'photographer')
+    list_filter = ('uploaded_by', 'public', 'photographer', 'artefact__artefact_type')
     search_fields = ('artefact', 'original_filename')
+
+    actions = [make_public, make_private, set_photographer_name]
 
     def item_link(self, obj):
         if obj.artefact:
