@@ -99,7 +99,7 @@ class ArtefactRepresentationAdmin(MediaFileAdmin):
     list_display = ('__unicode__', 'artefact', 'upload_date', 'public')
 
     list_filter = ('uploaded_by', 'public', 'photographer', 'artefact__artefact_type')
-    search_fields = ('artefact', 'original_filename')
+    search_fields = ('artefact__artefact_type__name', 'original_filename')
 
     actions = [make_public, make_private, set_photographer_name]
 
