@@ -133,16 +133,12 @@ def serialize_locs_jstree(objs):
 
 
 def view_places(request):
-    grs = GlobalRegion.objects.exclude(icon_path="")
-    items = MuseumObject.objects.all()
+    grs = GlobalRegion.objects.exclude(icon_path="").prefetch_related('children')
 
     kml_url = request.build_absolute_uri(reverse('place_kml'))
 
-    objects = do_paging(request, items)
-
     return render(request, 'location/map.html',
         {'children': grs,
-         'objects': objects,
          'kml_url': kml_url})
 
 
@@ -150,7 +146,10 @@ def view_geoloc(request, loctype, id, columns=3):
 
     geolocation = find_location(loctype, id)
 
-    items = geolocation.museumobject_set.filter(public=True)
+    items = geolocation.museumobject_set.select_related().filter(public=True
+        ).prefetch_related('category', 'country', 'global_region'
+        ).extra(
+            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id'})
 
     children = []
     if hasattr(geolocation, 'children'):

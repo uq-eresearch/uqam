@@ -175,7 +175,7 @@
 </div><!-- /item-record -->
 
 
-
+{% comment %}
 {% if user.is_staff %}
 <div style="display: none;" class="staff-information">
   <h3>Staff information</h3>
@@ -302,6 +302,7 @@
   </dl>
 </div><!-- /staff-information -->
 {% endif %} {# is_staff #}
+{% endcomment %}
 
 <div class="secondary-item-info">
   <div class="physical-description">

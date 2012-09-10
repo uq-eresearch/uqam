@@ -1,7 +1,7 @@
 {% load thumbnail %}{% load static %}
           <li>
             <a href="{{ object.get_absolute_url }}{% if search_result %}?search_result={{search_result}}{% endif %}">
-            {% if object.public_images.0 %}
+            {% if object.public_images_count > 0 %}
                 <img src="{{ object.public_images.0.image|thumbnail_url:'small_thumb'  }}" width="105" height="70" alt="">
             {% else %}
                 <img src="{% static 'images/noimageavail-small.gif' %}" width="105" height="70" alt="">

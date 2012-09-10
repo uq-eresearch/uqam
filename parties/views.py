@@ -6,7 +6,7 @@ from utils.utils import do_paging
 
 def people_aggregate(request, template_name='parties/datatables.html'):
     people = Person.objects.raw("""
-        select id, display_name,
+        select id, display_name, name,
           (select count(id) from cat_museumobject where donor_id = parties_person.id) as donated_count,
           (select count(id) from cat_museumobject where collector_id = parties_person.id) as collected_count,
           (select count(id) from cat_museumobject where maker_id = parties_person.id) as created_count,
@@ -38,7 +38,11 @@ def person_detail(request, pk, item_type='default', template_name='parties/perso
     types = [(key, mapping[key][1], mapping[key][2]) for key in ('docs', 'created', 'collected', 'donated')]
 
     if item_type in mapping.keys():
-        items = getattr(person, mapping[item_type][0]).filter(public=True)
+        items = getattr(person, mapping[item_type][0]).select_related().filter(public=True
+            ).prefetch_related('category', 'country', 'global_region', 'artefactrepresentation_set'
+            ).extra(
+                select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id'})
+
     else:
         items = []
 

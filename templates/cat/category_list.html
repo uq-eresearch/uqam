@@ -10,7 +10,7 @@
 
 <h1>{{ category.name }}</h1>
 
-{% if category.suggested_artefact_types.exists %}
+{% if item_types %}
 <div class="places-subplaces">
     {% for column in item_types %}
     <ul class="column">

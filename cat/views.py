@@ -5,17 +5,10 @@ from uqam.utils.utils import url_with_querystring
 from utils.utils import do_paging, split_list
 
 
-def home_page(request):
-    objects = MuseumObject.objects.exclude(
-            artefactrepresentation__isnull=True)
-    objects = do_paging(request, objects)
-
-    return render(request, 'index.html',
-            {'objects': objects})
-
-
 def item_detail(request, reg_num):
-    mo = get_object_or_404(MuseumObject, registration_number=reg_num, public=True)
+    mo = get_object_or_404(MuseumObject.objects.select_related('global_region', 'state_province',
+        'locality', 'region_district', 'country', 'category', 'artefact_type', 'place',
+        'acquisition_method', 'donor', 'artefactrepresentation_set', 'collector'), registration_number=reg_num, public=True)
 
     images = mo.public_images()
 
@@ -60,7 +53,7 @@ def categories_browse(request):
     Main browse page for categories
     """
     categories = Category.objects.filter(parent=None).exclude(icon_path="")
-    equipment = Category.objects.filter(parent__name='Equipment')
+    equipment = Category.objects.select_related('parent').filter(parent__name='Equipment')
     return render(request, 'cat/category_browse.html', {
         'categories': categories,
         'equipment': equipment})
@@ -88,7 +81,10 @@ def categories_list(request, full_slug=None, columns=3):
         id__in=ms.values_list('artefact_type', flat=True).distinct())
     # item_types = parent.suggested_artefact_types.all()
 
-    objects = MuseumObject.objects.filter(category=parent, public=True)
+    objects = MuseumObject.objects.select_related().filter(category=parent, public=True
+        ).prefetch_related('category', 'country', 'global_region'
+        ).extra(
+            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id'})
     objects = do_paging(request, objects)
 
     return render(request, "cat/category_list.html", {
@@ -109,8 +105,12 @@ def item_type_list(request, category=None, item_name=None):
         breadcrumbs.append(category.parent)
     breadcrumbs.append(category)
 
-    objects = MuseumObject.objects.filter(
-        category=category, artefact_type=artefact_type, public=True)
+    objects = MuseumObject.objects.select_related().filter(
+        category=category, artefact_type=artefact_type, public=True
+        ).prefetch_related('category', 'country', 'global_region'
+        ).extra(
+            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id'})
+
     objects = do_paging(request, objects)
 
     return render(request, "cat/category_list.html", {

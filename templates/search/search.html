@@ -99,8 +99,9 @@
 <div class="item-listing list-view">
     <table id="item-listing-table">
         <tr><th></th><th>Item</th><th>Category</th><th>Place</th></tr>
+        {% load uqam %}
     {% for result in page.object_list %}
-        {% include "snippets/item_list_row.html" with object=result.object search_result=forloop.counter0|add:page.start_index %}
+        {% add_search_results_param result.list_row forloop.counter0 page.start_index %}
     {% empty %}
         <tr><td colspan="4">No results found.</td></tr>
     {% endfor %}
@@ -110,7 +111,7 @@
 <div id="item-listing-grid" class="grid-view">
     <ul>
         {% for result in page.object_list %}
-            {% include "snippets/item_grid_element.html" with object=result.object search_result=forloop.counter0|add:page.start_index %}
+            {% add_search_results_param result.grid_element forloop.counter0 page.start_index %}
         {% endfor %}
     </ul>
 </div><!-- /item-listing-grid -->
@@ -130,6 +131,11 @@
 {{block.super}}
 <script type="text/javascript">
 $(document).ready(function () {
+    // Fix up item links with search-result identifier
+    $('#item-listing-table a[href*="/item/"]');
+
+
+
     function copyAndSubmit() {
         $('#main-search :input').attr("disabled", "disabled");
         $('#main-search-q').removeAttr("disabled");

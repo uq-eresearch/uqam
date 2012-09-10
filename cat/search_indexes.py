@@ -3,6 +3,12 @@ from haystack import site
 from .models import MuseumObject
 
 
+class MuseumObjectImagesCharField(CharField):
+    def prepare(self, obj):
+        obj.public_images_count = obj.artefactrepresentation_set.count()
+        return super(MuseumObjectImagesCharField, self).prepare(obj)
+
+
 class MuseumObjectIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
     categories = MultiValueField(faceted=True)
@@ -11,6 +17,8 @@ class MuseumObjectIndex(SearchIndex):
     country = CharField(model_attr='country', faceted=True, default='')
     people = MultiValueField(faceted=True)
     has_images = BooleanField(faceted=True)
+    list_row = MuseumObjectImagesCharField(use_template=True, template_name='snippets/item_list_row.html', indexed=False)
+    grid_element = MuseumObjectImagesCharField(use_template=True, template_name='snippets/item_grid_element.html', indexed=False)
 
     def prepare_categories(self, object):
         return [unicode(cat.name) for cat in object.category.all()]

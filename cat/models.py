@@ -265,6 +265,7 @@ class ArtefactType(DataDictionary):
     """
     name = models.CharField(max_length=150, unique=True)
     see_also = models.CharField(max_length=150, blank=True)
+#    slug = models.SlugField(help_text="Used in URLs", unique=True)
 
     def __unicode__(self):
         return self.name
@@ -305,11 +306,17 @@ class Category(models.Model):
         unique_together = (("slug", "parent"), ("name", "parent"))
 
     def get_absolute_url(self):
+        """
+        Hacky optimisation, the only category that can be a parent
+        is 'equipment', avoid lots of database queries
+        """
         url = "/%s/" % self.slug
-        category = self
-        while category.parent:
-            url = "/%s%s" % (category.parent.slug, url)
-            category = category.parent
+        if self.parent_id:
+            url = "/equipment%s" % url
+        # category = self
+        # while category.parent:
+        #     url = "/%s%s" % (category.parent.slug, url)
+        #     category = category.parent
         url = "/categories" + url
         return url
 
