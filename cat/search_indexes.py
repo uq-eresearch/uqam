@@ -13,7 +13,7 @@ class MuseumObjectIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
     categories = MultiValueField(faceted=True)
     item_name = CharField(model_attr='artefact_type', faceted=True)
-    global_region = CharField(model_attr='global_region', faceted=True)
+    global_region = CharField(model_attr='global_region', faceted=True, default='')
     country = CharField(model_attr='country', faceted=True, default='')
     people = MultiValueField(faceted=True)
     has_images = BooleanField(faceted=True)
