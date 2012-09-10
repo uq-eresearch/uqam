@@ -38,8 +38,11 @@ import re
 
 @register.simple_tag
 def add_search_results_param(html, start_index, count):
-    param = "?search_result=" + str(start_index + count)
-    return re.sub(r'(/item/\d+)', r'\1' + param, html)
+    if html:
+        param = "?search_result=" + str(start_index + count)
+        return re.sub(r'(/item/\d+)', r'\1' + param, html)
+    else:
+        return ""
 
 
 
