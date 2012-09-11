@@ -76,13 +76,13 @@
     <dd class="registration-number">{{ museumobject.registration_number }}</dd>
 
     <dt class="item-type">Item name</dt>
-    <dd class="item-type">{{ museumobject.artefact_type }}</dd>
+    <dd class="item-type">{{ museumobject.artefact_type }}&nbsp;</dd>
 
     <dt class="category">Category</dt>
     <dd class="category">
     {% for category in museumobject.category.all %}
       <a href="{{ category.get_absolute_url }}">{{ category.name }}</a><br>
-    {% endfor %}
+    {% endfor %}&nbsp;
     </dd>
   </dl><!-- /catalogue-info -->
 
@@ -140,18 +140,18 @@
     <dt class="collector">Collector</dt>
     <dd class="collector">
     <a href="{{museumobject.collector.get_absolute_url}}">
-      {{ museumobject.collector.display_name }}</a>
+      {{ museumobject.collector.display_name }}</a>&nbsp;
     </dd>
 
     <dt class="acquisition-date">Acquisition date</dt>
     <dd class="acquisition-date">
-      {{ museumobject.acquisition_date|date:"F d, Y" }}
+      {{ museumobject.acquisition_date|date:"F d, Y" }}&nbsp;
     </dd>
 
     <dt class="acquisition-method">Acquisition method</dt>
     <dd class="acquisition-method">
     {{ museumobject.acquisition_method }} <b>{{ museumobject.acquisition_method.preposition }}</b>
-     <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor.display_name }}</a>
+     <a href="{{museumobject.donor.get_absolute_url}}">{{ museumobject.donor.display_name }}</a>&nbsp;
     </dd>
   </dl><!-- /aquisition-info -->
 
