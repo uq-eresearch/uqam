@@ -49,7 +49,7 @@
     {% endif %}
       <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt="" width="384" height="256"></a>
       {% if ar.photographer %}<div class="caption">
-        <p>Photographer: {{ ar.photographer }}</p>
+        <p class='photography'>Photography {{ ar.photographer }}</p>
       </div>{% endif %}
     </div>
   {% empty %}

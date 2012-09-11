@@ -618,3 +618,4 @@ color:#2788db !important}
 #item-representations .pagination{float:left;clear:both;display: none;} /* Hidden for now */
 #item-representations .pagination li{list-style:none;float:left;margin:0 10px 0 0;padding:2px 4px;border:1px solid #eee;border-radius:4px}
 #item-representations .pagination li.current{background:#eee}
+#item-representations .caption p{color: #636363;}
