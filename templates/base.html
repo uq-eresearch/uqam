@@ -239,11 +239,12 @@
         $('.advanced-search-link button').click(function (e) {
             var fields = $('.advanced-search-fields');
             if (fields.is(":visible")) {
-                fields.hide();
-                $(this).html('<i class="icon-plus-sign"></i> Additional search options');
+                // fields.hide();
+                // $(this).html('<i class="icon-plus-sign"></i> Additional search options');
             } else {
                 fields.show();
-                $(this).html('<i class="icon-minus-sign"></i> Basic search');
+                $(this).hide();
+                // $(this).html('<i class="icon-minus-sign"></i> Basic search');
             }
         });
 

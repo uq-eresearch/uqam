@@ -1,29 +1,40 @@
-<div class="upArrow"></div>
-<div class="advanced-search-filter category">
-    <p>Category</p>
-    <select name='category' id="search-main-category">
-        <option>Select category...</option>
-    {% for cat in categories %}
-        <option{% if cat.name == selected_category %} selected="selected"{% endif %}>{{cat.name}}</option>
-    {% endfor %}
-    </select>
+<div class="advanced-search-fields" {% if not expanded %}style="display: none;"{% endif %}>
+
+    <div class="upArrow"></div>
+    <div class="advanced-search-filter category">
+        <p>Category</p>
+        <select name='category' id="search-main-category">
+            <option>Select category...</option>
+        {% for cat in categories %}
+            <option{% if cat.name == selected_category %} selected="selected"{% endif %}>{{cat.name}}</option>
+        {% endfor %}
+        </select>
+    </div>
+
+    <div class="advanced-search-filter place">
+        <p>Place</p>
+        <select name='global_region' id="search-main-region">
+            <option>Select location...</option>
+        {% for place in global_regions %}
+            <option {% if place.name == selected_global_region %} selected="selected"{% endif %}>{{place.name}}</option>{% endfor %}
+        </select>
+    </div>
+
+    <div class="advanced-search-filter person">
+        <p>Person</p>
+        <input name="person" value="{% if form.person.value %}{{form.person.value}}{% endif %}" id="search-main-person">
+    </div>
+
+    <div class="advanced-search-filter images">
+        <input type="checkbox" id="has_images" name="has_images" value="True"{% if has_images %} checked="checked"{% endif %}>
+        <label for="has_images">Only return results with an associated image</label>
+    </div>
+
+
 </div>
 
-<div class="advanced-search-filter place">
-    <p>Place</p>
-    <select name='global_region' id="search-main-region">
-        <option>Select location...</option>
-    {% for place in global_regions %}
-        <option {% if place.name == selected_global_region %} selected="selected"{% endif %}>{{place.name}}</option>{% endfor %}
-    </select>
-</div>
-
-<div class="advanced-search-filter person">
-    <p>Person</p>
-    <input name="person" value="{% if form.person.value %}{{form.person.value}}{% endif %}" id="search-main-person">
-</div>
-
-<div class="advanced-search-filter images">
-    <input type="checkbox" id="has_images" name="has_images" value="True"{% if has_images %} checked="checked"{% endif %}>
-    <label for="has_images">Only return results with an associated image</label>
+<div class="advanced-search-link">
+{% if not expanded %}
+    <button type="button" class="btn"><i class="icon-plus-sign"></i> Additional search options</button>
+{% endif %}
 </div>

@@ -8,7 +8,7 @@
     </div>
 
     <fieldset>
-        <input size="15" type="text" value="{% if form.q.value %}{{form.q.value}}{% else %}Search the collection...{%endif%}" name="q" class="s" onfocus="if (this.value == 'Search the collection...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search the collection...';}" tabindex="1" id="main-search-q" />
+        <input size="15" type="text" value="{% if form.q.value %}{{form.q.value}}{% else %}Search the collection...{%endif%}" name="q" class="s{% if form.q.value %} active{% endif %}" onfocus="if (this.value == 'Search the collection...') {this.value = ''; $(this).addClass('active');}" onblur="if (this.value == '') {this.value = 'Search the collection...'; $(this).removeClass('active')}" tabindex="1" id="main-search-q" />
         <button class="submit btn" title="Search" type="submit" id="top-search-submit">Search</button>
     </fieldset>
 
@@ -26,16 +26,8 @@
         </div>
     </div>
 
-    <div class="advanced-search-fields" {% if advanced_fields == 'hidden' %}style="display: none;"{% endif %}>
 
-        {% advanced_search_fields form %} {# uses /snippets/advanced_search_fields #}
-    </div>
-
-    <div class="advanced-search-link">
-    {% if advanced_fields == 'hidden' %}
-        <button type="button" class="btn"><i class="icon-plus-sign"></i> Additional search options</button>
-    {% endif %}
-    </div>
+    {% advanced_search_fields form expanded=expanded %} {# uses /snippets/advanced_search_fields #}
 
 
   </form>
