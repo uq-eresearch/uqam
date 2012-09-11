@@ -157,19 +157,34 @@ def catalogue_search(request, template='search/search.html', load_all=True,
 
     results = results.facet('categories').facet('country').facet('has_images').facet('global_region').facet('item_name')
 
-    facets = results.facet_counts()
-
     if form.is_valid():
-        results = filter_with_facet(form, results, facets, 'item_name', 'item_name')
-        results = filter_with_facet(form, results, facets, 'category', 'categories')
-        results = filter_with_facet(form, results, facets, 'global_region', 'global_region')
-        results = filter_with_facet(form, results, facets, 'country', 'country')
+        results = filter_with_facet(form, results, 'item_name', 'item_name')
+        results = filter_with_facet(form, results, 'category', 'categories')
+        results = filter_with_facet(form, results, 'global_region', 'global_region')
+        results = filter_with_facet(form, results, 'country', 'country')
 
         if form.cleaned_data['person']:
             results = results.narrow(u'people:"%s"' % form.cleaned_data['person'])
 
         if form.cleaned_data['has_images'] == True:
             results = results.narrow(u'has_images_exact:true')
+
+    facets = results.facet_counts()
+
+    # Prepare the form with all the available facets
+    load_facets_into_form(form, facets, 'item_name', 'item_name')
+    load_facets_into_form(form, facets, 'category', 'categories')
+    load_facets_into_form(form, facets, 'global_region', 'global_region')
+    load_facets_into_form(form, facets, 'country', 'country')
+
+    # Append count of images into form
+    appended_count = False
+    for name, val in facets['fields']['has_images']:
+        if name == 'true':
+            form.fields['has_images'].label += ' (%s)' % val
+            appended_count = True
+    if not appended_count:
+        form.fields['has_images'].label += ' (0)'
 
     paginator = Paginator(results, results_per_page)
 
@@ -205,7 +220,7 @@ def catalogue_search(request, template='search/search.html', load_all=True,
     return render(request, template, context)
 
 
-def filter_with_facet(form, results, facets, form_field_name, facet_name):
+def filter_with_facet(form, results, form_field_name, facet_name):
     if form.cleaned_data[form_field_name]:
         ins = None
         for itn in form.cleaned_data[form_field_name]:
@@ -217,9 +232,11 @@ def filter_with_facet(form, results, facets, form_field_name, facet_name):
 
         results = results.narrow(facet_name + u'_exact:%s' % ins)
 
+    return results
+
+
+def load_facets_into_form(form, facets, form_field_name, facet_name):
     if facets['fields'][facet_name]:
         form.fields[form_field_name].choices = [
             (facet[0], "%s (%s)" % (facet[0], facet[1]))
-            for facet in facets['fields'][facet_name]]
-
-    return results
+                for facet in facets['fields'][facet_name]]
