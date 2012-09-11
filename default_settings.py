@@ -362,9 +362,9 @@ THUMBNAIL_ALIASES = {
             'expand': True,
         },
         'large_thumb': {
-
+            'size': (180, 120),
+            'expand': True,
         }
-
     }
 }
 

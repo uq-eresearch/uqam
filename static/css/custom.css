@@ -33,7 +33,7 @@ div#item-listing-grid{display:none}
 /* paged_object_list */
 div.item-listing{margin:0}
 #item-listing-grid ul{list-style-type:none}
-#item-listing-grid li{display:block;float:left;background:none;width:125px;margin:0 40px 40px 0; min-height: 130px;}
+#item-listing-grid li{display:block;float:left;background:none;width:185px;margin:0 40px 40px 0; min-height: 130px;}
 
 /* Person list */
 div.dataTables_length label{float:left;text-align:left}
