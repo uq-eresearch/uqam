@@ -171,20 +171,21 @@ def catalogue_search(request, template='search/search.html', load_all=True,
 
     facets = results.facet_counts()
 
-    # Prepare the form with all the available facets
-    load_facets_into_form(form, facets, 'item_name', 'item_name')
-    load_facets_into_form(form, facets, 'category', 'categories')
-    load_facets_into_form(form, facets, 'global_region', 'global_region')
-    load_facets_into_form(form, facets, 'country', 'country')
+    if facets:
+        # Prepare the form with all the available facets
+        load_facets_into_form(form, facets, 'item_name', 'item_name')
+        load_facets_into_form(form, facets, 'category', 'categories')
+        load_facets_into_form(form, facets, 'global_region', 'global_region')
+        load_facets_into_form(form, facets, 'country', 'country')
 
-    # Append count of images into form
-    appended_count = False
-    for name, val in facets['fields']['has_images']:
-        if name == 'true':
-            form.fields['has_images'].label += ' (%s)' % val
-            appended_count = True
-    if not appended_count:
-        form.fields['has_images'].label += ' (0)'
+        # Append count of images into form
+        appended_count = False
+        for name, val in facets['fields']['has_images']:
+            if name == 'true':
+                form.fields['has_images'].label += ' (%s)' % val
+                appended_count = True
+        if not appended_count:
+            form.fields['has_images'].label += ' (0)'
 
     paginator = Paginator(results, results_per_page)
 
@@ -236,7 +237,7 @@ def filter_with_facet(form, results, form_field_name, facet_name):
 
 
 def load_facets_into_form(form, facets, form_field_name, facet_name):
-    if facets['fields'][facet_name]:
+    if 'fields' in facets and facet_name in facets['fields']:
         form.fields[form_field_name].choices = [
             (facet[0], "%s (%s)" % (facet[0], facet[1]))
                 for facet in facets['fields'][facet_name]]
