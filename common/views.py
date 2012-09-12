@@ -226,7 +226,7 @@ def filter_with_facet(form, results, form_field_name, facet_name):
         ins = None
         for itn in form.cleaned_data[form_field_name]:
             if ins:
-                ins += u' OR '
+                ins += u' AND '
             else:
                 ins = u''
             ins += u'"%s"' % results.query.clean(itn)
