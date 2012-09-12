@@ -5,7 +5,7 @@ from .models import MuseumObject
 
 class MuseumObjectImagesCharField(CharField):
     def prepare(self, obj):
-        obj.public_images_count = obj.artefactrepresentation_set.count()
+        obj.public_images_count = obj.public_images().count()
         return super(MuseumObjectImagesCharField, self).prepare(obj)
 
 
