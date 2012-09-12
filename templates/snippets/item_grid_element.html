@@ -8,6 +8,9 @@
             {% endif %}<br />
             <span class="item-name">{{ object.artefact_type }}</span></a><br />
             <span class="global-region">
-                {{ object.global_region }}
-                >    {{ object.country }}</span>
+                <a href="{{object.global_region.get_absolute_url}}">
+                    {{ object.global_region }}</a>
+                    >
+                  <a href="{{object.country.get_absolute_url}}">
+                    {{ object.country }}</a></span>
           </li>
