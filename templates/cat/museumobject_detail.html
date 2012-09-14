@@ -45,7 +45,7 @@
     {% if ar.url %}
       <a href="{{ ar.url }}" >
     {% else %}
-      <a href="{{ ar.image|thumbnail_url:'large_display' }}">
+      <a href="{{ ar.image|thumbnail_url:'large_display' }}" rel="item-image">
     {% endif %}
       <img src="{{ ar.image|thumbnail_url:'item_display' }}" alt="" width="384" height="256"></a>
       {% if ar.photographer %}<div class="caption">
@@ -325,6 +325,7 @@
 {{block.super}}
 <script type="text/javascript"
   src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
+{% comment %}
 <script type="text/javascript" src="{{STATIC}}js/jquery.lightbox-0.5.min.js"></script>
 <script type="text/javascript">
 $(function() {
@@ -337,13 +338,37 @@ $(function() {
   }); // Select all links in object with item-image class
 });
 </script>
+{% endcomment %}
+<link rel="stylesheet" href="{% static "fancybox/source/jquery.fancybox.css" %}" type="text/css" media="screen" />
+<script type="text/javascript" src="{% static "fancybox/source/jquery.fancybox.pack.js" %}"></script>
+<script type="text/javascript" src="{% static "fancybox/lib/jquery.mousewheel-3.0.6.pack.js" %}"></script>
+<script type="text/javascript">
+$(function() {
+    $('.item-image a').fancybox({
+        prevEffect    : 'none',
+        nextEffect    : 'none',
+        helpers   : {
+          title : { type : 'outside' },
+          thumbs  : {
+            width : 150,
+            height  : 150
+          }
+        },
+        padding: 0
+
+    });
+});
+</script>
+
 
 <script type="text/javascript">
     $(document).ready(function() {
         $('#item-representations').slides({
             generateNextPrev: true,
             preload: true,
-            preloadImage: '{% static "img/slides/loading.gif" %}'
+            preloadImage: '{% static "img/slides/loading.gif" %}',
+            effect: 'fade',
+            fadeSpeed: 0
         });
     });
 {% if museumobject.place.latitude %}
