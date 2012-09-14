@@ -11,12 +11,10 @@ from django.db.models import Q
 
 
 class ItemTable(tables.Table):
-    photo = tables.TemplateColumn('<img src="{% firstof '
-    'record.artefactrepresentation_set.all.0.image.url_64x64 '
-    '"http://placehold.it/48" %}" width="64px" height="64px" '
+    photo = tables.TemplateColumn('{% load thumbnail %}<img src="{{ record.artefactrepresentation_set.all.0.image|thumbnail_url:\'small_thumb\'  }}" width="105px" height="70px" '
     'alt="">')
     registration_number = tables.LinkColumn(
-            'artefact_view', args=[A('registration_number')])
+            'admin:cat_museumobject_change', args=[A('registration_number')])
     category = tables.TemplateColumn('{{ record.categories }}')
 
     class Meta:
