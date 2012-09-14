@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 
 
 class ExpandableCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
-    def render(self, name, value, attrs=None, choices=()):
+    def render(self, name, value, attrs=None, choices=(), num_before_fold=5):
         if value is None:
             value = []
         has_id = attrs and 'id' in attrs
@@ -31,16 +31,16 @@ class ExpandableCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
             self.render_checkbox(output, has_id, final_attrs,
                 attrs, i, str_values, option_value, name, option_label)
 
-        for i, (option_value, option_label) in enumerate(choices[:5]):
+        for i, (option_value, option_label) in enumerate(choices[:num_before_fold], start=len(selected_choices)):
             self.render_checkbox(output, has_id, final_attrs,
                 attrs, i, str_values, option_value, name, option_label)
 
         output.append(u'</ul>')
 
-        if choices[5:]:
+        if choices[num_before_fold:]:
             output.append(u'<ul class="extra-options">')
 
-            for i, (option_value, option_label) in enumerate(choices[5:]):
+            for i, (option_value, option_label) in enumerate(choices[num_before_fold:], start=(len(selected_choices) + num_before_fold)):
                 self.render_checkbox(output, has_id, final_attrs,
                     attrs, i, str_values, option_value, name, option_label)
             output.append(u'</ul>')
