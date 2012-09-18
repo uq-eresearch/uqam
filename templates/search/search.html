@@ -136,7 +136,7 @@ $(document).ready(function () {
 
 
 
-    function copyAndSubmit() {
+    function copyAndSubmit(event) {
         $('#main-search :input').attr("disabled", "disabled");
         $('#main-search-q').removeAttr("disabled");
         $('#filter-form :checked').clone().hide().appendTo('form#main-search');
@@ -149,8 +149,10 @@ $(document).ready(function () {
     }
 
     $('#filter-form :checkbox').click(copyAndSubmit);
-    $('#filter-form :text').bind("enterKey", copyAndSubmit);
-    $('#filter-form :text').blur(copyAndSubmit);
+    $('#filter-form').submit(function(event) {
+        event.preventDefault();
+        copyAndSubmit();
+    });
 
     $('.extra-options').hide();
 
