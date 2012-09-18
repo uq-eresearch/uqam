@@ -312,7 +312,9 @@
 
   <div class="research-notes">
     <h3>Research notes</h3>
+    {% if museumobject.is_public_comment %}
     {{ museumobject.comment|linebreaks }}
+    {% endif %}
   </div>
 </div>
 

@@ -12,8 +12,7 @@ from common.adminactions import generate_xls, add_to_opener
 from admin_views import search_home, search_xls
 from django.core import urlresolvers
 from django.utils.datastructures import SortedDict
-from django.db.models import F
-from location.models import GlobalRegion, Country, StateProvince, RegionDistrict, Locality
+from location.models import Country, StateProvince, RegionDistrict, Locality
 
 
 class MediaFileInline(admin.TabularInline):
@@ -230,8 +229,8 @@ class MOAdmin(UndeleteableModelAdmin):
         }),
         ('Details', {
             'classes': ('collapse',),
-            'fields': ('description', 'is_public_comment',
-                'comment', 'private_comment', 'significance')
+            'fields': ('description', 'comment', 'is_public_comment',
+                'private_comment', 'significance')
         }),
         ('Extra details', {
             'fields': ('maker', 'manufacture_technique', 'creation_date',
@@ -258,11 +257,11 @@ class MOAdmin(UndeleteableModelAdmin):
 
     def make_comment_public(self, request, queryset):
         queryset.update(is_public_comment=True)
-    make_comment_public.short_description = "Make comments public"
+    make_comment_public.short_description = "Make research notes public"
 
     def make_comment_private(self, request, queryset):
         queryset.update(is_public_comment=False)
-    make_comment_private.short_description = "Make comments private"
+    make_comment_private.short_description = "Make research notes private"
 
     def make_record_public(self, request, queryset):
         queryset.update(public=True, is_public_comment=True)
@@ -277,7 +276,7 @@ class MOAdmin(UndeleteableModelAdmin):
             mo.reg_info = mo.reg_info + '\n\n' + mo.comment
             mo.comment = ''
             mo.save()
-    move_comment_to_reg_info.short_description = "Move comment field to registration notes"
+    move_comment_to_reg_info.short_description = "Move research notes field to registration notes"
 
     def get_urls(self):
         urls = super(MOAdmin, self).get_urls()
