@@ -5,7 +5,6 @@ from django.utils.xmlutils import SimplerXMLGenerator
 from models import Place, Region
 from models import Locality
 from models import GlobalRegion
-from cat.models import MuseumObject
 from utils.utils import do_paging, split_list
 from django.db.models import Count
 from django.contrib.contenttypes.models import ContentType
