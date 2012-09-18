@@ -133,6 +133,9 @@ def serialize_locs_jstree(objs):
 
 def view_places(request):
     grs = GlobalRegion.objects.exclude(icon_path="").prefetch_related('children')
+    d = dict((g.name, g) for g in grs)
+    grs = [d['Australia'], d['Pacific'], d['Asia'], d['Europe'], d['Americas'], d['Africa'],
+        d['Middle East']]
 
     kml_url = request.build_absolute_uri(reverse('place_kml'))
 
