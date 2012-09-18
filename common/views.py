@@ -110,11 +110,11 @@ class PersistentSearchView(FacetedSearchView):
         return extra
 
 from django.core.paginator import Paginator, InvalidPage
-from django.template import RequestContext
 from haystack.query import EmptySearchQuerySet
 from django.conf import settings
 from django.shortcuts import render
 from django.http import Http404
+from haystack.query import SearchQuerySet
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
@@ -164,7 +164,10 @@ def catalogue_search(request, template='search/search.html', load_all=True,
         results = filter_with_facet(form, results, 'country', 'country')
 
         if form.cleaned_data['person']:
-            results = results.narrow(u'people:"%s"' % form.cleaned_data['person'])
+            sqs = SearchQuerySet()
+            for p in form.cleaned_data['person'].split():
+                term = sqs.query.clean(p)
+                results = results.narrow(u'people:"%s"' % term)
 
         if form.cleaned_data['has_images'] == True:
             results = results.narrow(u'has_images_exact:true')
