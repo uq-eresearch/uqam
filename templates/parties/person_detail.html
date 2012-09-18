@@ -28,7 +28,7 @@
 {% if item_type == 'docs' %}
 <table id="item-listing-table">
     <tr><th></th><th>Document</th></tr>
-    {% for doc in person.related_documents.all %}
+    {% for doc in related_documents %}
     <tr><td></td>
         <td><a href="{{doc.document.url}}">{{doc.name}}</a></td>
     </tr>

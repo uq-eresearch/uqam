@@ -10,7 +10,7 @@ def people_aggregate(request, template_name='parties/datatables.html'):
           (select count(id) from cat_museumobject where donor_id = parties_person.id and public = true) as donated_count,
           (select count(id) from cat_museumobject where collector_id = parties_person.id and public = true) as collected_count,
           (select count(id) from cat_museumobject where maker_id = parties_person.id and public = true) as created_count,
-          (select count(id) from parties_person_related_documents where person_id = parties_person.id) as documents_count
+          (select count(mediaman_document.id) from mediaman_document, parties_person_related_documents where person_id = parties_person.id and mediaman_document.id = document_id and public = true) as documents_count
         from parties_person
         """)
     return render(request, template_name,
@@ -21,7 +21,7 @@ def person_detail(request, pk, item_type='default', template_name='parties/perso
 
     person = get_object_or_404(Person, pk=int(pk))
 
-    mapping = {'docs': ('related_documents', 'Related documents', person.related_documents.count()),
+    mapping = {'docs': ('related_documents', 'Related documents', person.related_documents.filter(public=True).count()),
                'created': ('created_items', 'Created items', person.created_items.filter(public=True).count()),
                'collected': ('collected_objects', 'Collected items', person.collected_objects.filter(public=True).count()),
                'donated': ('donated_objects', 'Donated items', person.donated_objects.filter(public=True).count())}
@@ -48,9 +48,12 @@ def person_detail(request, pk, item_type='default', template_name='parties/perso
 
     objects = do_paging(request, items)
 
+    related_documents = person.related_documents.filter(public=True)
+
     return render(request, template_name, {
         'person': person,
         'objects': objects,
+        'related_documents': related_documents,
         'types': types,
         'item_type': item_type,
         'item_name': mapping[item_type][1]
