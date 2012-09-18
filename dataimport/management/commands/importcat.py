@@ -2,15 +2,12 @@ from django.core.management.base import BaseCommand, CommandError
 from cat.models import MuseumObject, FunctionalCategory
 from cat.models import ArtefactType, CulturalBloc, Reference
 from location.models import Place, Region
-from cat.models import Category
 from cat.models import Obtained, PhotoType, PhotoRecord
 from parties.models import Person, Maker, Client, MuseumStaff
 from loans.models import LoanAgreement, LoanItem
 from loans.models import LoanPurpose
 from condition.models import ConditionReport, ConservationAction
 from condition.models import  Deaccession, Conservator, ConservationActionType
-from dataimport.models import ImportIssue
-from django.core import management
 from django.db import transaction
 from django import db
 from os.path import join
