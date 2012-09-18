@@ -58,11 +58,11 @@
     </div>
   {% endfor %}
     </div><!-- /slides_container -->
-{% comment %}
+{% if museumobject.three_d_link %}
     <div class="view-3d">
-      <a href="#" class="btn">View in 3D</a>
+      <a href="{{ museumobject.three_d_link }}" class="btn">View in 3D</a>
     </div>
-{% endcomment %}
+{% endif %}
   </div><!-- /item-images -->
 </div> <!-- /item-representations -->
 

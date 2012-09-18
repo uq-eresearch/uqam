@@ -199,6 +199,9 @@ class MuseumObject(models.Model):
             'mediaman.Document',
             null=True, blank=True)
 
+    three_d_link = models.CharField(max_length=255, blank=True,
+        help_text="Link to 3D representation of this item")
+
     public = models.BooleanField(default=True, db_index=True)
 
     def dimensions(self):
