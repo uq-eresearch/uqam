@@ -138,7 +138,7 @@ def view_places(request):
     kml_url = request.build_absolute_uri(reverse('place_kml'))
 
     return render(request, 'location/map.html',
-        {'children': grs,
+        {'global_regions': grs,
          'kml_url': kml_url})
 
 

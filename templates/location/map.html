@@ -7,15 +7,21 @@
     <a href="{% url place_kml %}" class="btn">View in Google Earth</a>
 </div>{% endcomment %}
 <div class="places-icons">
-{% if children %}
-        {% for child in children %}
+{% if global_regions %}
+        {% for child in global_regions %}
         <div class="dropdown globalregion-icon"><a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" href="{{child.get_absolute_url}}">
             <img src="{% static child.icon_path %}" title="{{child.icon_title}}">
             <b>{{child.name}}</b></a>
             <ul class="dropdown-menu" role="menu">
+            {% if child.name == 'Australia' %}
+                {% for state in child.children.all.0.children.all %}
+                <li><a href="{{state.get_absolute_url}}">{{state.name}}</a></li>
+                {% endfor %}
+            {% else %}
                 {% for country in child.children.all %}
                 <li><a href="{{country.get_absolute_url}}">{{country.name}}</a></li>
                 {% endfor %}
+            {% endif %}
             </ul>
         </div>
         {% endfor %}
