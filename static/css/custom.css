@@ -110,7 +110,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:rela
 /* Secondary Item Details */
 .secondary-item-info{background-color:#f2f2f2;border-top:1px solid #ccc;clear:both;overflow:auto}
 div.physical-description, div.research-notes{float:left;width:420px;padding:20px}
-div.physical-description h3, div.research-notes h3{text-transform:uppercase;font-size:14px;color:#545454;font-weight:bold}
+div.physical-description h3, div.research-notes h3{font-size:14px;color:#545454;font-weight:bold}
 
 /************************************************* 			
 **					FOOTER						**
