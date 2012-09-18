@@ -8,7 +8,7 @@
     </div>
 
     <fieldset>
-        <input size="15" type="text" value="{% if form.q.value %}{{form.q.value}}{% else %}Search the collection...{%endif%}" name="q" class="s{% if form.q.value %} active{% endif %}" onfocus="if (this.value == 'Search the collection...') {this.value = ''; $(this).addClass('active');}" onblur="if (this.value == '') {this.value = 'Search the collection...'; $(this).removeClass('active')}" tabindex="1" id="main-search-q" />
+        <input size="15" type="text" value="{% if form.q.value %}{{form.q.value}}{% else %}Search the collection...{%endif%}" name="q" class="s{% if form.q.value %} active{% endif %}" onfocus="if (this.value == 'Search the collection...' || this.value == ' ') {this.value = ''; $(this).addClass('active');}" onblur="if (this.value == '') {this.value = 'Search the collection...'; $(this).removeClass('active')}" tabindex="1" id="main-search-q" />
         <button class="submit btn" title="Search" type="submit" id="top-search-submit">Search</button>
     </fieldset>
 
