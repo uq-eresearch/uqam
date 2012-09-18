@@ -12,7 +12,6 @@ def people_aggregate(request, template_name='parties/datatables.html'):
           (select count(id) from cat_museumobject where maker_id = parties_person.id and public = true) as created_count,
           (select count(id) from parties_person_related_documents where person_id = parties_person.id) as documents_count
         from parties_person
-        where name not like '%%?%%'
         """)
     return render(request, template_name,
             {'person_list': people})
