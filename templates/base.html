@@ -144,9 +144,9 @@
 			<h3>A Member of</h3>
 	
 			<div class="member-logo">
-		    <a href="http://www.universitas21.com/"><img src="http://uq.edu.au/templates/web/images/logo-universitas.gif" width="25" height="25" alt="Universitas 21" /></a> &nbsp;&nbsp;
+		    <a href="http://www.universitas21.com/"><img src="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/images/logo-universitas.gif" width="25" height="25" alt="Universitas 21" /></a> &nbsp;&nbsp;
 
-				<a href="http://www.go8.edu.au/"><img src="http://uq.edu.au/templates/web/images/logo-go8.gif" width="123" height="18" alt="Group of 8" /></a>
+				<a href="http://www.go8.edu.au/"><img src="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/images/logo-go8.gif" width="123" height="18" alt="Group of 8" /></a>
 		  </div>
 	
 			<p><a href="http://www.uq.edu.au/terms-of-use/">Terms of use</a> | <a target="_blank" href="https://www.uq.edu.au/feedback">Feedback</a></p><br />
@@ -193,10 +193,10 @@
 			
 			<div id="navLogos">
 			<h3>Need Help?</h3>
-			<p><a href="http://www.uq.edu.au/uqanswers/" class="opacity-toggle"><img src="http://uq.edu.au/templates/web/images/button-uqanswers.png" width="102" height="28" alt="UQ Answers" /></a></p>			
+			<p><a href="http://www.uq.edu.au/uqanswers/" class="opacity-toggle"><img src="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/images/button-uqanswers.png" width="102" height="28" alt="UQ Answers" /></a></p>			
 			
 
-			<p class="centenary"><a href="http://www.uq.edu.au/centenary/" class="opacity-toggle"><img src="http://uq.edu.au/templates/web/images/logo-centenary.png" width="102" height="69" alt="UQ Centenary" /></a></p>
+			<p class="centenary"><a href="http://www.uq.edu.au/centenary/" class="opacity-toggle"><img src="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/images/logo-centenary.png" width="102" height="69" alt="UQ Centenary" /></a></p>
 			</div>				
 
 		</div>
