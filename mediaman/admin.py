@@ -113,9 +113,9 @@ class ArtefactRepresentationAdmin(MediaFileAdmin):
 
     def thumbnail(self, obj):
         try:
-            thumb_opts = {'size': (64, 64), 'watermark': ''}
-            thumb = obj.image.get_thumbnail(thumb_opts)
-            return '<a href="%s"><img src="%s"></a>' % (obj.image.url, thumb.url)
+            thumb = obj.image['large_thumb']
+            display = obj.image['large_display']
+            return '<a href="%s"><img src="%s"></a><br><a href="%s">Download/view original</a>' % (display.url, thumb.url, obj.image.url)
         except:
             return 'Error generating thumbnail'
     thumbnail.allow_tags = True
