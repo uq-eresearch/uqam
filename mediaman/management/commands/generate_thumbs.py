@@ -14,7 +14,7 @@ class Command(BaseCommand):
         self.stdout = unbuffered
         ImageFile.MAXBLOCK = 1024 * 1024 * 10  # default is 64k, fixes "Suspension not allowed here" error from PIL
 
-        ars = ArtefactRepresentation.objects.filter(public=True)
+        ars = ArtefactRepresentation.objects.all()
         self.stdout.write("Found %s public images\n" % ars.count())
 
         for ar in ars:
