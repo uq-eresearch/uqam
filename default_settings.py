@@ -114,7 +114,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'uqam.middleware.ReverseProxyHttpsHeadersMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'uqam.middleware.SecureRequiredMiddleware'
+    'uqam.middleware.SecureRequiredMiddleware',
+    'uqam.middleware.XSessionMiddleware'
 )
 
 ROOT_URLCONF = 'uqam.urls'
@@ -292,12 +293,16 @@ PROJECT_APPS = (
 )
 
 LOGIN_REQUIRED_URLS = (
-    r'/(.*)$',
+    r'/admin/(.*)$',
+    r'/accounts/(.*)$',
+    r'/(.*)$'
 )
+
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/accounts/login(.*)$',
+    r'/accounts/logout(.*)$',
     r'/admin/logout(.*)$',
-    r'/place/kml$',
+    r'/place/kml$'
 )
 
 GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
@@ -324,10 +329,13 @@ THUMBNAIL_PROCESSORS = (
 SESSION_COOKIE_HTTPONLY = False
 
 
+XSESSION_DOMAINS = ['https://anthropology.metadata.net', 'http://catalogue.anthropologymuseum.uq.edu.au']
 HTTPS_SUPPORT = True
 SECURE_REQUIRED_PATHS = (
     '/admin/',
     '/accounts/',
+    '/chaining/',
+    '/grappelli/'
 )
 
 
@@ -367,7 +375,6 @@ THUMBNAIL_ALIASES = {
         }
     }
 }
-
 
 
 ### Testing ###
