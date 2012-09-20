@@ -7,7 +7,7 @@ from parties.models import Person, Maker, Client, MuseumStaff
 from loans.models import LoanAgreement, LoanItem
 from loans.models import LoanPurpose
 from condition.models import ConditionReport, ConservationAction
-from condition.models import  Deaccession, Conservator, ConservationActionType
+from condition.models import Deaccession, Conservator, ConservationActionType
 from django.db import transaction
 from django import db
 from os.path import join
