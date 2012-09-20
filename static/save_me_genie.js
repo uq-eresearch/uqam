@@ -10,12 +10,13 @@
         });
 	  
 	// Wait until the form has the "csrfmiddlewaretoken" when trying to
+	// Wait until the form has the "locality"
 	// serialize it and then store it to "original_form_state".
 	var original_form_state = null;
 	$(window).load(function() {
 		function set_form_state() {
 			var tmp = $('form').serialize();
-			if (tmp.indexOf('csrfmiddlewaretoken=') !== -1) {
+			if (tmp.indexOf('locality=') !== -1) {
 				original_form_state = tmp;
 			} else {
 				setTimeout(set_form_state, 50);
