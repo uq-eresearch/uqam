@@ -8,8 +8,8 @@ class SecureRequiredMiddleware(object):
     def __init__(self):
         self.paths = getattr(settings, 'SECURE_REQUIRED_PATHS')
         self.enabled = self.paths and getattr(settings, 'HTTPS_SUPPORT')
-        self.public_domain = 'anth-real.uqdayers.local'
-        self.secure_domain = 'anth.metadata.net.local'
+        self.public_domain = getattr(settings, 'PUBLIC_DOMAIN')
+        self.secure_domain = getattr(settings, 'SECURE_DOMAIN')
 
     def process_request(self, request):
         # if self.enabled and not request.is_secure():
