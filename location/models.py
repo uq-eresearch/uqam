@@ -232,19 +232,6 @@ class Place(models.Model):
         self.latitude = lat
         self.longitude = lng
 
-    def geocode(self, force=False):
-        from geonames.models import Geoname
-        country = Geoname.objects.countries(name__contains=self.country)[0]
-        geonames = Geoname.objects.filter(name__icontains=self.name,
-                country=country.country)
-        if geonames:
-            g = geonames[0]
-            self.gn_name = g.name
-            self.gn_id = g.geonameid
-            p = g.point.split(',')
-            self.longitude = float(p[0])
-            self.latitude = float(p[1])
-
     @staticmethod
     def autocomplete_search_fields():
         return ("country__icontains", "region__icontains",
