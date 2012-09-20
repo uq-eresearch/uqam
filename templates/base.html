@@ -1,4 +1,5 @@
 {% load static %}
+{% load django_xsession %}
 {% get_static_prefix as STATIC %}
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,7 @@
     <!--[if IE 7]><link rel="stylesheet" href="{{STATIC}}ie7bugs.css" media="screen" type="text/css" /><![endif]-->
 	<!--[if IE 8]><link rel="stylesheet" href="http{% if request.is_secure %}s{% endif %}://uq.edu.au/templates/web/css/ie8bugs.css" media="screen" type="text/css" /><![endif]-->
     <link rel="shortcut icon" href="{{STATIC}}favicon.ico" />
+    {% xsession_loader %}
     {% block headextra %}
     {% endblock headextra %}
 </head>
