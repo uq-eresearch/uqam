@@ -30,9 +30,9 @@ class ArtefactRepInline(MediaFileInline):
 
     def thumbnail(self, obj):
         try:
-            thumb_opts = {'size': (64, 64), 'watermark': ''}
-            thumb = obj.image.get_thumbnail(thumb_opts)
-            return '<a href="%s"><img src="%s"></a>' % (obj.image.url, thumb.url)
+            thumb = obj.image['small_thumb']
+            display = obj.image['large_display']
+            return '<a href="%s"><img src="%s"></a>' % (display.url, thumb.url)
         except:
             return 'Error generating thumbnail'
 
