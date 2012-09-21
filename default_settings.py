@@ -302,7 +302,8 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/accounts/login(.*)$',
     r'/accounts/logout(.*)$',
     r'/admin/logout(.*)$',
-    r'/place/kml$'
+    r'/place/kml$',
+    r'/$'
 )
 
 GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
