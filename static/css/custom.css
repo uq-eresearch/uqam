@@ -567,7 +567,7 @@ color:#2788db !important}
 .homePrimary h2{color:#555;font:700 18px arial}
 .homePrimary p{font:14px/18px arial}
 .homePrimLeft{width:515px;height:185px;float:left;background:#f8f8f8;border-top:4px solid #e3e3e3;padding:15px}
-.homePrimLeft .learnMore{float:right;clear:both}
+.homePrimLeft .learnMore{float:right;}
 .homePrimRight{width:364px;height:185px;float:left;background:#fff5e5;border-top:4px solid #ffbe4e;border-left:1px solid #fcf2e3;padding:15px}
 .homePrimRight h4{font:16px arial}
 .homePrimary img{border:3px solid #fff;margin:0 20px 10px 0;float:left}
