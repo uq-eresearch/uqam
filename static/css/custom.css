@@ -620,3 +620,9 @@ color:#2788db !important}
 #item-representations .pagination li{list-style:none;float:left;margin:0 10px 0 0;padding:2px 4px;border:1px solid #eee;border-radius:4px}
 #item-representations .pagination li.current{background:#eee}
 #item-representations .caption p{color: #636363; font-size: 10px;}
+
+/* About the catalogue
+------------------------------------------------------------------------*/
+#about-the-catalogue {width: 700px; line-height: 133%;}
+#about-the-catalogue h2 {font: normal 24px Arial, Helvetica, sans-serif; color: #555;}
+#about-the-catalogue h3 {font: normal 18px Arial, Helvetica, sans-serif; color: #555;}
