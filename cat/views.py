@@ -84,7 +84,8 @@ def categories_list(request, full_slug=None, columns=3):
     objects = MuseumObject.objects.select_related().filter(category=parent, public=True
         ).prefetch_related('category', 'country', 'global_region'
         ).extra(
-            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'})
+            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'}
+            ).order_by('-public_images_count')
     objects = do_paging(request, objects)
 
     return render(request, "cat/category_list.html", {
@@ -109,7 +110,8 @@ def item_type_list(request, category=None, item_name=None):
         category=category, artefact_type=artefact_type, public=True
         ).prefetch_related('category', 'country', 'global_region'
         ).extra(
-            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'})
+            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'}
+            ).order_by('-public_images_count')
 
     objects = do_paging(request, objects)
 

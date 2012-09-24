@@ -119,7 +119,8 @@ def view_geoloc(request, loctype, id, columns=3):
     items = geolocation.museumobject_set.select_related().filter(public=True
         ).prefetch_related('category', 'country', 'global_region'
         ).extra(
-            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'})
+            select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'}
+            ).order_by('-public_images_count')
 
     children = []
     if hasattr(geolocation, 'children'):

@@ -41,7 +41,8 @@ def person_detail(request, pk, item_type='default', template_name='parties/perso
         items = getattr(person, mapping[item_type][0]).select_related().filter(public=True
             ).prefetch_related('category', 'country', 'global_region', 'artefactrepresentation_set'
             ).extra(
-                select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'})
+                select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'}
+                ).order_by('-public_images_count')
 
     else:
         items = []
