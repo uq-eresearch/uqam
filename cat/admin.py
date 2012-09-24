@@ -156,6 +156,20 @@ class LocalityListFilter(HierarchyListFilter):
     parent_parameter_name = 'region_district_id'
     model = Locality
 
+class HasThreeDFilter(SimpleListFilter):
+    title = 'has 3d scan'
+    parameter_name = 'has_3d'
+    def lookups(self, request, model_admin):
+        return (
+            ('true', 'Yes'),
+            ('false', 'No'),
+            )
+    def queryset(self, request, queryset):
+        if self.value() == 'true':
+            return queryset.exclude(three_d_link='')
+        if self.value() == 'false':
+            return queryset.filter(three_d_link='')
+
 
 class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
@@ -168,7 +182,7 @@ class MOAdmin(UndeleteableModelAdmin):
                     'collector', 'donor', 'record_status',
                     'global_region', CountryListFilter, StateProvinceListFilter,
                     RegionDistrictListFilter, LocalityListFilter, 'is_public_comment',
-                    'public', 'maker', 'acquisition_method')
+                    'public', 'maker', 'acquisition_method', HasThreeDFilter)
 
     search_fields = ['registration_number', 'description', 'comment',
                      'donor__name', 'collector__name', 'maker__name',
