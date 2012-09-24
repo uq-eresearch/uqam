@@ -1,0 +1,8 @@
+--- models.py.old	2012-09-24 17:59:31.664411004 +1000
++++ models.py	2012-09-24 17:46:54.984437238 +1000
+@@ -182,3 +182,5 @@
+         """
+         self.__dict__.update(d)
+         self.log = self._get_log()
++        from haystack import site
++        self.searchsite = site
