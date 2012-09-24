@@ -294,8 +294,7 @@ PROJECT_APPS = (
 
 LOGIN_REQUIRED_URLS = (
     r'/admin/(.*)$',
-    r'/accounts/(.*)$',
-    r'/(.*)$'
+    r'/accounts/(.*)$'
 )
 
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (
