@@ -58,3 +58,5 @@ ARCHIVAL_STORAGE = FileSystemStorage(
         location=MEDIA_ROOT + '/archival',
         base_url=MEDIA_URL + 'archival/')
 
+
+MIDDLEWARE_CLASSES = tuple([middleware for middleware in MIDDLEWARE_CLASSES if not "XSession" in middleware])
