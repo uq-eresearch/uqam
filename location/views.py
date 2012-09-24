@@ -99,38 +99,6 @@ def find_location(model_type, id):
     return element_type.get_object_for_this_type(id=id)
 
 
-def find_children(request, type=None, id=None):
-    if type:
-        object = find_location(type, id)
-        children = object.children.annotate(Count('museumobject'))
-    else:
-        children = GlobalRegion.objects.annotate(Count('museumobject'))
-
-    nodes = serialize_locs_jstree(children)
-    return HttpResponse(
-        json.dumps(nodes, sort_keys=True, indent=4),
-        content_type='application/json')
-
-
-def serialize_locs_jstree(objs):
-    """Serialize a single level of objs for use with jstree"""
-    if objs:
-        contenttype = ContentType.objects.get_for_model(objs[0])
-    else:
-        return None
-    type_name = contenttype.model
-    has_children = hasattr(objs[0], 'children')
-    nodes = []
-    for obj in objs:
-        node = {}
-        node['data'] = obj.name + " (%d)" % obj.museumobject__count
-        node['attr'] = {'id': type_name + '-' + str(obj.id), 'rel': type_name}
-        if has_children:
-            node['state'] = 'closed'
-        nodes.append(node)
-    return nodes
-
-
 def view_places(request):
     grs = GlobalRegion.objects.exclude(icon_path="").prefetch_related('children')
     d = dict((g.name, g) for g in grs)

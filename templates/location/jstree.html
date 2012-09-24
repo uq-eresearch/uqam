@@ -165,9 +165,9 @@ $(function() {
             "ajax": {
                 "url": function(node) {
                     if (node === -1) {
-                        return "{% url find_children %}";
+                        return "{% url admin:find_children %}";
                     } else {
-                        return "{% url find_children %}" + node.attr('id');
+                        return "{% url admin:find_children %}" + node.attr('id');
                     }
                 }
             }

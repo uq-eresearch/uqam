@@ -7,8 +7,6 @@ urlpatterns = patterns('location.views',
 
     url(r'^places$', 'view_places', name='view_places'),
     url(r'^tree_view$', 'tree_view', name='tree_view'),
-    url(r'^find_children/$', 'find_children', name='find_children'),
-    url(r'^find_children/(?P<type>[\w ]+)-(?P<id>\d+)', 'find_children', name='find_children'),
 
 
     url(r'^(?P<loctype>[\w ]+)-(?P<id>\d+)$', 'view_geoloc', name='view_geoloc'),

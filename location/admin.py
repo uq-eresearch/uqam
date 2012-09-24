@@ -6,10 +6,14 @@ from common.adminactions import merge_selected
 from django.contrib import admin
 from django.conf.urls.defaults import patterns, url
 from admin_views import jstree, move_element, rename_element
-from admin_views import create_element, delete_element
+from admin_views import create_element, delete_element, find_children
 
 
-class GlobalRegionAdmin(admin.ModelAdmin):
+class GeolocationAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description', 'gn_name']
+
+
+class GlobalRegionAdmin(GeolocationAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
     def get_urls(self):
@@ -20,13 +24,15 @@ class GlobalRegionAdmin(admin.ModelAdmin):
             url(r'^rename_element', self.admin_site.admin_view(rename_element), name='rename_element'),
             url(r'^create_element', self.admin_site.admin_view(create_element), name='create_element'),
             url(r'^delete_element', self.admin_site.admin_view(delete_element), name='delete_element'),
+            url(r'^find_children/$', self.admin_site.admin_view(find_children), name='find_children'),
+            url(r'^find_children/(?P<type>[\w ]+)-(?P<id>\d+)', self.admin_site.admin_view(find_children), name='find_children'),
         )
         return my_urls + urls
 admin.site.register(GlobalRegion, GlobalRegionAdmin)
 
 
-class CountryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
+class CountryAdmin(GeolocationAdmin):
+    pass
 admin.site.register(Country, CountryAdmin)
 
 
@@ -43,18 +49,22 @@ class StateProvinceAdmin(admin.ModelAdmin):
 
     def state_province(self, obj):
         return obj.name
-    list_display = ('global_region', 'country', 'state_province')
+    list_display = ('global_region', 'country', 'state_province', 'gn_name')
 admin.site.register(StateProvince, StateProvinceAdmin)
 
 
-class RegionDistrictAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
+class RegionDistrictAdmin(GeolocationAdmin):
+    pass
 admin.site.register(RegionDistrict, RegionDistrictAdmin)
 
 
-class LocalityAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
+class LocalityAdmin(GeolocationAdmin):
+    pass
 admin.site.register(Locality, LocalityAdmin)
+
+
+##############################################
+# Old Style Places, shouldn't be used any more
 
 
 class RegionAdmin(admin.ModelAdmin):
@@ -73,9 +83,6 @@ class PlaceAdmin(admin.ModelAdmin):
         for place in queryset:
             GeocodePlace.delay(place.id)
     geocode_place.short_description = "Lookup latitude/longitude"
-
-    def geocode_local(modeladmin, request, queryset):
-        pass
 
     actions = [merge_selected, geocode_place]
     search_fields = ['country', 'region', 'australian_state', 'name']
