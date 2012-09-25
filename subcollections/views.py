@@ -44,7 +44,11 @@ def collection_edit(request, collection_id):
 
 def collection_detail(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id, is_public=True)
-    collection_objects = collection.items.all()
+    collection_objects = collection.items.filter(public=True
+            ).prefetch_related('category', 'country', 'global_region', 'artefactrepresentation_set'
+            ).extra(
+                select={'public_images_count': 'select count(*) from mediaman_artefactrepresentation a WHERE a.artefact_id = cat_museumobject.id AND a.public'}
+                ).order_by('-public_images_count')
 
     objects = do_paging(request, collection_objects)
 

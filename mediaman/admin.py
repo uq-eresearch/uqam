@@ -120,5 +120,7 @@ class ArtefactRepresentationAdmin(MediaFileAdmin):
             return 'Error generating thumbnail'
     thumbnail.allow_tags = True
 
+    
+
 
 admin.site.register(ArtefactRepresentation, ArtefactRepresentationAdmin)
