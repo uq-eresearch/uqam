@@ -130,7 +130,14 @@
     {% if museumobject.place.latitude %}
     <dt class="map">Map</dt>
     <dd class="map">
-        <div id="map_canvas" style="height:105px"></div>
+        <div id="map_canvas" style="height:105px">
+
+{% with p=museumobject.place %}
+        <a href="{{p.get_absolute_url}}">
+          <img src="http://maps.googleapis.com/maps/api/staticmap?zoom=3&amp;size=320x105&amp;maptype=roadmap&amp;markers=color:red|{{p.latitude}},{{p.longitude}}&amp;sensor=false" title="{{p.name}}, {{p.country}}" /></a>
+{% endwith %}
+
+        </div>
     </dd>
     {% endif %}
   </dl><!-- /culturallocation-info -->
@@ -325,8 +332,6 @@
 
 {% block javascript %}
 {{block.super}}
-<script type="text/javascript"
-  src="{% if request.is_secure %}https://maps-api-ssl.google.com{% else %}http://maps.googleapis.com{% endif %}/maps/api/js?sensor=false"></script>
 {% comment %}
 <script type="text/javascript" src="{{STATIC}}js/jquery.lightbox-0.5.min.js"></script>
 <script type="text/javascript">
@@ -373,31 +378,5 @@ $(function() {
             fadeSpeed: 0
         });
     });
-{% if museumobject.place.latitude %}
-{% with p=museumobject.place %}
-    var geocoder, map;
-    $(document).ready(function initialize() {
-        var myOptions = {
-            zoom: 3, // Zoomed out to show location in country
-            disableDefaultUI: true,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        var latlng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}})
-
-        myOptions.center = latlng;
-        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: latlng,
-            title: "{{p.name}}, {{p.country}}",
-            url: "{{p.get_absolute_url}}"
-        });
-        google.maps.event.addListener(marker, 'click', function() {
-            window.location.href = marker.url;
-        });
-    });
-{% endwith %}
-{% endif %}
 </script>
 {% endblock %}
