@@ -16,12 +16,17 @@
                 $(this).parents('tr').find('td[name="geonameId"]').text());
             $('#id_gn_name').val(
                 $(this).parents('tr').find('td[name="name"]').text() + ', ' +
+                $(this).parents('tr').find('td[name="adminName1"]').text() + ', ' +
                 $(this).parents('tr').find('td[name="country"]').text());
             $('#id_latitude').val(
                 $(this).parents('tr').find('td[name="lat"]').text());
             $('#id_longitude').val(
                 $(this).parents('tr').find('td[name="lng"]').text());
         });
+
+        if ($('#id_gn_id').val() === '') {
+            search();
+        }
     });
 })(django.jQuery);
 function search() {
@@ -37,7 +42,7 @@ function search() {
             console.log(data);
             $.each(data.geonames, function(i, place) {
                 $('#geonames-table'
-                    ).append('<tr><td name="name">' + place.name + '</td><td name="adminName">' + place.adminName1 + '</td><td name="country">' + place.countryName + '</td></td><td name="geonameId">' + place.geonameId + '</td><td name="lat">' + place.lat + '</td><td name="lng">' + place.lng + '</td><td><a class="selectPlace" href="#">Select</a></td></tr>');
+                    ).append('<tr><td name="name">' + place.name + '</td><td name="adminName1">' + place.adminName1 + '</td><td name="country">' + place.countryName + '</td></td><td name="geonameId">' + place.geonameId + '</td><td name="lat">' + place.lat + '</td><td name="lng">' + place.lng + '</td><td><a class="selectPlace" href="#">Select</a></td></tr>');
             });
         });
 }
