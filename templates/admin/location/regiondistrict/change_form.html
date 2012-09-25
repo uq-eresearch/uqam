@@ -1,0 +1,66 @@
+{% extends "admin/change_form.html" %}
+
+
+{% block javascripts %}
+    {{ block.super }}
+
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function() {
+        $('#geonames-q').val($('#id_name').val());
+
+        $(document).on('click', '.selectPlace', function(event) {
+            event.preventDefault();
+
+            $('#id_gn_id').val(
+                $(this).parents('tr').find('td[name="geonameId"]').text());
+            $('#id_gn_name').val(
+                $(this).parents('tr').find('td[name="name"]').text() + ', ' +
+                $(this).parents('tr').find('td[name="country"]').text());
+            $('#id_latitude').val(
+                $(this).parents('tr').find('td[name="lat"]').text());
+            $('#id_longitude').val(
+                $(this).parents('tr').find('td[name="lng"]').text());
+        });
+    });
+})(django.jQuery);
+function search() {
+    var $ = django.jQuery;
+    var searchterm = $('#geonames-q').val();
+
+    // Empty the table
+    $('#geonames-table > tbody:last').children().remove()
+
+
+    $.getJSON('http://ws.geonames.org/searchJSON?q=' + encodeURIComponent(searchterm) + '&maxRows=10',
+        function (data) {
+            console.log(data);
+            $.each(data.geonames, function(i, place) {
+                $('#geonames-table'
+                    ).append('<tr><td name="name">' + place.name + '</td><td name="adminName">' + place.adminName1 + '</td><td name="country">' + place.countryName + '</td></td><td name="geonameId">' + place.geonameId + '</td><td name="lat">' + place.lat + '</td><td name="lng">' + place.lng + '</td><td><a class="selectPlace" href="#">Select</a></td></tr>');
+            });
+        });
+}
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+{{ block.super }}
+<form id="searchForm" onsubmit="search(); return false;" style="display:inline">
+  <input id="geonames-q" type=text name=q>
+  <input type=submit value=search>
+</form>
+
+<table id="geonames-table">
+    <thead>
+        <tr><th>Place name</th><th>State/Prov</th><th>Country</th><th>Geonames ID</th><th>Lat</th><th>Lon</th><th></th></tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+{% endblock %}
