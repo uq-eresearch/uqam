@@ -231,6 +231,18 @@ class MuseumObject(models.Model):
     def public_images(self):
         return self.artefactrepresentation_set.filter(public=True)
 
+    def get_location(self):
+        if self.locality and self.locality.latitude:
+            return self.locality
+        if self.region_district and self.region_district.latitude:
+            return self.region_district
+        if self.state_province and self.state_province.latitude:
+            return self.state_province
+        if self.country and self.country.latitude:
+            return self.country
+        if self.global_region and self.global_region.latitude:
+            return self.global_region
+
     @staticmethod
     def autocomplete_search_fields():
         return ("id__iexact",)
