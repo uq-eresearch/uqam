@@ -348,9 +348,10 @@ post_save.connect(queue_for_syndication, sender=Collection)
 
 def delete_from_syndication(instance, **kwargs):
     collection = instance
-    syndication = Syndication.objects.get(id=1)
+    if collection.is_syndicated:
+        syndication = Syndication.objects.get(id=1)
+        syndication.delete_collection(collection)
 
-    syndication.delete_collection(collection)
 
 post_delete.connect(delete_from_syndication, sender=Collection)
 
