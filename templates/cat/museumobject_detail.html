@@ -134,7 +134,7 @@
 
 {% with p=museumobject.place %}
         <a href="{{p.get_absolute_url}}">
-          <img src="http://maps.googleapis.com/maps/api/staticmap?zoom=3&amp;size=320x105&amp;maptype=roadmap&amp;markers=color:red|{{p.latitude}},{{p.longitude}}&amp;sensor=false" title="{{p.name}}, {{p.country}}" /></a>
+          <img src="http://maps.googleapis.com/maps/api/staticmap?zoom=3&amp;size=320x105&amp;maptype=roadmap&amp;markers=color:red%7c{{p.latitude}},{{p.longitude}}&amp;sensor=false" title="{{p.name}}, {{p.country}}" /></a>
 {% endwith %}
 
         </div>
