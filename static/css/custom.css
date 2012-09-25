@@ -95,7 +95,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:rela
 **************************************************/
 .search-results-navigation{overflow:auto;padding:10px 0}
 .back-to-results{float:left}
-.paging{float:right;width:180px}
+.paging{float:right;width:220px}
 .paging p{float:left;font-size:12px;margin-right:10px;zoom:1;*display:inline-block}
 .paging a.btn{float:left;margin-left:5px}
 #item-representations, #item-record{float:left}
