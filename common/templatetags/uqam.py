@@ -1,4 +1,5 @@
 from django import template
+from django.core import urlresolvers
 
 register = template.Library()
 
@@ -44,6 +45,11 @@ def add_search_results_param(html, start_index, count):
     else:
         return ""
 
+
+@register.filter
+def admin_change_link(obj):
+    name = "admin:%s_%s_change" % (obj._meta.app_label, obj._meta.module_name)
+    return urlresolvers.reverse(name, args=(obj.id,))
 
 
 from cat.models import Category

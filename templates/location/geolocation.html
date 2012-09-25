@@ -10,6 +10,13 @@
     {% endfor %}
 </div><!-- /breadcrumbs -->
 
+{% if user.is_staff %}
+<div style="float:right;font-size: 80%;">
+  <a href="{{ geolocation|admin_change_link }}">Admin</a>
+</div>
+{% endif %}
+
+
 {% if geolocation %}
     <h1>{{geolocation.name}}</h1>
 
