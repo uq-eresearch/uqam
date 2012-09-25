@@ -242,6 +242,7 @@ class MuseumObject(models.Model):
             return self.country
         if self.global_region and self.global_region.latitude:
             return self.global_region
+        return None
 
     @staticmethod
     def autocomplete_search_fields():

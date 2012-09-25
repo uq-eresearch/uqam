@@ -127,19 +127,18 @@
       {% endif %}
     </dd>
 
-    {% if museumobject.place.latitude %}
+{% with p=museumobject.get_location %}
+    {% if p %}
     <dt class="map">Map</dt>
     <dd class="map">
         <div id="map_canvas" style="height:105px">
 
-{% with p=museumobject.place %}
         <a href="{{p.get_absolute_url}}">
-          <img src="http://maps.googleapis.com/maps/api/staticmap?zoom=3&amp;size=320x105&amp;maptype=roadmap&amp;markers=color:red%7c{{p.latitude}},{{p.longitude}}&amp;sensor=false" title="{{p.name}}, {{p.country}}" /></a>
-{% endwith %}
-
+          <img src="http://maps.googleapis.com/maps/api/staticmap?zoom=3&amp;size=320x105&amp;maptype=roadmap&amp;markers=color:red%7c{{p.latitude}},{{p.longitude}}&amp;sensor=false" title="{{p.name}}" /></a>
         </div>
     </dd>
     {% endif %}
+  {% endwith %}
   </dl><!-- /culturallocation-info -->
 
 
