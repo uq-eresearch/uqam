@@ -116,7 +116,7 @@ from django.shortcuts import render
 from django.http import Http404
 from haystack.query import SearchQuerySet
 
-RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
+RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 21)
 
 
 def catalogue_search(request, template='search/search.html', load_all=True,
@@ -189,6 +189,8 @@ def catalogue_search(request, template='search/search.html', load_all=True,
                 appended_count = True
         if not appended_count:
             form.fields['has_images'].label += ' (0)'
+
+    results = results.order_by('registration_number')
 
     paginator = Paginator(results, results_per_page)
 
