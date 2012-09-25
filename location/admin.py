@@ -38,8 +38,6 @@ admin.site.register(Country, CountryAdmin)
 
 class StateProvinceAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    fields = ('name', 'slug', 'description', 'gn_name',
-        'gn_id', 'parent')
 
     def global_region(self, obj):
         return obj.parent.parent.name
