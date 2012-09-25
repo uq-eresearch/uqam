@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 
 
 def collections_home(request):
-    collections = Collection.objects.filter(is_public=True)
+    collections = Collection.objects.filter(is_public=True).order_by('-title')
     return render(request, 'collections/collections_list.html',
             {'collections': collections})
 

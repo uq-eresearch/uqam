@@ -626,3 +626,11 @@ color:#2788db !important}
 #about-the-catalogue {width: 650px; line-height: 150%; margin-left: 20px; border-right: 1px solid #CCC; padding-right: 50px;}
 #about-the-catalogue h2 {font: normal 24px Arial, Helvetica, sans-serif; color: #555;}
 #about-the-catalogue h3 {font: normal 18px Arial, Helvetica, sans-serif; color: #555;}
+
+
+/* Sub-collections list view
+------------------------------------------------------------------------*/
+#collection-listing-table{}
+#collection-listing-table th{font:700 12px arial;color:#515251;text-transform:uppercase;padding:0 50px 10px 0;text-align:left}
+#collection-listing-table td{padding: 0 50px 10px 0;border-bottom:1px solid #eee;vertical-align:middle}
+#collection-listing-table td.title{color:#333;font:700 16px arial; width: 300px;}

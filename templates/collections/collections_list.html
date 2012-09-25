@@ -1,10 +1,36 @@
-{% extends "base_generic.html" %}
+{% extends "base_wide.html" %}
 
 {% block content %}
 <h1>Sub collections</h1>
 
+    <table id="collection-listing-table">
+        <tr><th></th><th>Description</th><th>Categories</th><th>Places</th></tr>
 {% for collection in collections %}
-<a href="{{collection.id}}">{{ collection.title }}</a><br>
+    <tr>
+        <td class="title">
+            <a href="{{collection.id}}">{{ collection.title }}</a>
+        </td>
+
+        <td>
+            {{ collection.description|truncatewords:"20" }}
+        </td>
+
+        <td class="categories">
+        {% with categories=collection.get_categories %}
+        {% for category in categories|slice:":5" %}{{category.name}}{% if not forloop.last %}, {% endif %}{% endfor %}{% if categories|length > 5 %}...{% endif %}
+        {% endwith %}
+        </td>
+
+        <td class="places">
+        {% with places=collection.get_places %}
+        {% for place in places|slice:":5" %}
+        {{place}}{% if not forloop.last %}, {% endif %}{% endfor %}{% if places|length > 5 %}...{% endif %}
+        {% endwith %}
+        </td>
+    </tr>
 {% endfor %}
+
+    </table>
+
 
 {% endblock %}

@@ -103,6 +103,12 @@ class Collection(models.Model):
         places.reverse()
         return places
 
+    def public_items(self):
+        """
+        Return a queryset of all public items
+        """
+        return self.items.filter(public=True)
+
     def as_atom(self, encoding='utf-8'):
         """
         Serialise to an Atom format

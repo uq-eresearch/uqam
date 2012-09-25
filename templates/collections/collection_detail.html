@@ -12,17 +12,17 @@
     <dl>
         <dt>Description</dt>
         <dd>{{ collection.description }} </dd>
+{% comment %}
         <dt>Author</dt>
         <dd>{{ collection.author.first_name }} {{ collection.author.last_name }} </dd>
         <dt>Copyright</dt>
         <dd>{{ collection.rights }}</dd>
         <dt>Access rights</dt>
         <dd>{{ collection.access_rights }}</dd>
-        {% if collection.categories %}
-        <dt>Keywords</dt>
-        <dd>{{ collection.categories }}</dd>
-        {% endif %}
-        <dd><dt>Date updated</dt> {{ collection.last_published }}</dd>
+
+        <dt>Date updated</dt>
+        <dd>{{ collection.last_published }}</dd>
+{% endcomment %}
 
         <dt>Categories</dt>
         <dd>
@@ -70,7 +70,7 @@
         var myOptions = {
             zoom: 3, // Zoomed out to show location in country
             disableDefaultUI: true,
-            mapTypeId: google.maps.MapTypeId.SATELLITE
+            mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
@@ -88,10 +88,10 @@
                 map: map,
                 position: latlng,
                 title: place[0],
-                url: place[4]
+                url: place[3]
             });
             google.maps.event.addListener(marker, 'click', function() {
-                window.location.href = marker.url;
+                window.location.href = this.url;
             });
             bounds.extend(latlng);
         }
