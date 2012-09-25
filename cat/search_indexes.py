@@ -1,4 +1,4 @@
-from haystack.indexes import SearchIndex, CharField, MultiValueField, BooleanField
+from haystack.indexes import SearchIndex, CharField, MultiValueField, BooleanField, IntegerField
 from haystack import site
 from .models import MuseumObject
 
@@ -11,6 +11,7 @@ class MuseumObjectImagesCharField(CharField):
 
 class MuseumObjectIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
+    registration_number = IntegerField(model_attr='registration_number')
     categories = MultiValueField(faceted=True)
     item_name = CharField(model_attr='artefact_type', faceted=True)
     global_region = CharField(model_attr='global_region', faceted=True, default='')
