@@ -52,7 +52,11 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-HTTPS_SUPPORT = False
+HTTPS_SUPPORT = True
+
+PUBLIC_DOMAIN = 'anth-real.uqdayers.local'
+SECURE_DOMAIN = 'anth.metadata.net.local'
+XSESSION_DOMAINS = ['https://anth.metadata.net.local', 'http://anth-real.uqdayers.local']
 
 ARCHIVAL_STORAGE = FileSystemStorage(
         location=MEDIA_ROOT + '/archival',
