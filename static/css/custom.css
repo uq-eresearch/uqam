@@ -615,8 +615,8 @@ color:#2788db !important}
 
 /* Slideshow images on item pages
 ------------------------------------------------------------------------*/
-#item-representations .slides_container{margin:0 0 10px 0; padding: 0 0 10px 0; border-bottom:1px solid #eee; width: 384px; height:256px;overflow:hidden;display:none;}
-#item-representations .slides_container div.item-image{display:block}
+#item-representations .slides_container{margin:0 0 10px 0; padding: 0 0 10px 0; border-bottom:1px solid #eee;}
+/*#item-representations .slides_container div.item-image{display:block}*/
 #item-representations .prev{margin:0 20px 0 0}
 #item-representations .next{float:right;}
 #item-representations .pagination{float:left;clear:both;display: none;} /* Hidden for now */
