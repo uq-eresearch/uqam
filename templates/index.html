@@ -70,7 +70,11 @@
             $('#homeBanner').slides({
                 'play': 7500,
                 'generatePagination': false,
-                'slideSpeed': 500
+                'slideSpeed': 500,
+                'hoverPause': true,
+                'preload': true,
+                'fadeSpeed': 350
+//                'preloadImage': "{% static 'img/slides/loading.gif' %}"
             });
         });
     </script>
