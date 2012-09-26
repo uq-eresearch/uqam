@@ -56,9 +56,6 @@ table.table{clear:both;margin-bottom:6px !important}
 
 .breadcrumbs{margin:0 0 10px 0}
 
-/**** FIX UQ Search Input ****/
-div#search input{line-height:18px};
-
 
 /*************************************************   		
 **				MAIN SEARCH PANEL					**
@@ -67,7 +64,7 @@ div#search input{line-height:18px};
 #search-panel{width:920px;padding:20px;background:url(../img/search-bg.jpg) repeat-x 0 100%;margin:0 0 10px 0}
 #search-panel .search-conditions-statement{font-size:10px;color:#636363;padding-bottom:10px}
 #search-panel fieldset{float:left;width:618px}
-#search-panel form input.s{float:left;padding:10px 10px 9px 40px;background:#fff url(../img/search-icon.gif) no-repeat 10px 10px;width:466px;font-size:16px;color:#ccc;border:1px solid #ccc;-webkit-box-shadow:inset 0 0 0 3px #f7f7f7;-moz-box-shadow:inset 0 0 0 3px #f7f7f7;box-shadow:inset 0 0 0 3px #f7f7f7}
+#search-panel form input.s{float:left;padding:10px 10px 9px 40px;background:#fff url(../img/search-icon.gif) no-repeat 10px 10px;width:466px;font-size:16px;color:#ccc;border:1px solid #ccc;-webkit-box-shadow:inset 0 0 0 3px #f7f7f7;-moz-box-shadow:inset 0 0 0 3px #f7f7f7;box-shadow:inset 0 0 0 3px #f7f7f7;line-height:20px;}
 #search-panel form input.s.active{color:#333}
 #search-panel form input.s:focus{color:#333}
 #search-panel form button.submit{display:inline-block;font-size:16px;text-transform:uppercase;font-weight:bold;color:#fff;text-align:center;text-shadow:0 -2px 0 rgba(0, 0, 0, 0.2);vertical-align:middle;cursor:pointer;height:41px;width:98px;background-color:#688F29;background-image:-moz-linear-gradient(top, #97b940, #688f29);background-image:-ms-linear-gradient(top, #97b940, #688f29);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#97b940), to(#688f29));background-image:-webkit-linear-gradient(top, #97b940, #688f29);background-image:-o-linear-gradient(top, #97b940, #688f29);background-image:linear-gradient(top, #97b940, #688f29);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#97b940', endColorstr='#688f29', GradientType=0);border-color:#618926 #618926 #618926;border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
