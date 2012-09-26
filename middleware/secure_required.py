@@ -22,13 +22,12 @@ class SecureRequiredMiddleware(object):
                 if request.get_full_path().startswith(path):
                     secure_path = True
 
+            request_url = request.build_absolute_uri(request.get_full_path())
             if secure_path and not request.is_secure():
-                request_url = request.build_absolute_uri(request.get_full_path())
                 secure_url = request_url.replace(self.public_domain, self.secure_domain)
                 secure_url = secure_url.replace('http://', 'https://')
                 return HttpResponseRedirect(secure_url)
-            if not secure_path and request.is_secure():
-                request_url = request.build_absolute_uri(request.get_full_path())
+            if not secure_path and (request.is_secure() or self.secure_domain in request_url):
                 public_url = request_url.replace(self.secure_domain, self.public_domain)
                 public_url = public_url.replace('https://', 'http://')
                 return HttpResponseRedirect(public_url)
