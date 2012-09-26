@@ -40,6 +40,8 @@ class SecureRequiredMiddleware(object):
         """
         if self.enabled and isinstance(response, HttpResponseRedirect):
             location = response['Location']
+            if location.startswith('..'):
+                return response
             for path in self.paths:
                 if path in location and self.secure_domain in location:
                     response['Location'] = location.replace('http://', 'https://').replace(
