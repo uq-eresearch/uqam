@@ -562,8 +562,9 @@ color:#2788db !important}
 
 /* Homepage
 ------------------------------------------------------------------------*/
-.homeBanner{height:239px;}
-.homeBanner .slides_container{height:239px;width:960px;overflow:hidden;display:none;}
+#homeBanner{height:239px;z-index:100;overflow:hidden;}
+#homeBanner .slides_container{height:239px;width:960px;display:none;}
+#homeBanner .slides_container div.mainBanner{width:960px;height:239px;display:block;}
 .homePrimary{margin:0 10px 20px 10px;border-bottom:1px solid #7f7f7f;display:inline-block;clear:both}
 .homePrimary h2{color:#555;font:700 18px arial}
 .homePrimary p{font:14px/18px arial}
@@ -615,6 +616,7 @@ color:#2788db !important}
 /* Slideshow images on item pages
 ------------------------------------------------------------------------*/
 #item-representations .slides_container{margin:0 0 10px 0; padding: 0 0 10px 0; border-bottom:1px solid #eee; width: 384px; height:256px;overflow:hidden;display:none;}
+#item-representations .slides_container div.item-image{display:block}
 #item-representations .prev{margin:0 20px 0 0}
 #item-representations .next{float:right;}
 #item-representations .pagination{float:left;clear:both;display: none;} /* Hidden for now */
