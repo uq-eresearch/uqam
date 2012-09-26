@@ -74,7 +74,7 @@ def installsyspackages():
         sudo('yum install postgresql-devel openldap-devel openssl-devel')
 
         #required for pgmagick, which is required for pdf thumbnails
-        sudo('yum install gcc-c++ GraphicsMagick-c++-devel boost-devel ghostscript')
+        sudo('yum install gcc-c++ GraphicsMagick-c++-devel boost-devel ghostscript ghostscript-devel')
 
 
 def reqs():

@@ -56,6 +56,10 @@ table.table{clear:both;margin-bottom:6px !important}
 
 .breadcrumbs{margin:0 0 10px 0}
 
+/**** FIX UQ Search Input ****/
+div#search input{line-height:18px};
+
+
 /*************************************************   		
 **				MAIN SEARCH PANEL					**
 **************************************************/
@@ -71,7 +75,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:rela
 
 /* Browse by button */
 #search-panel .browse-by-link{float:left;width:300px}
-#search-panel .browse-by-link p.search-options-divider{float:left;text-transform:uppercase;font:700 10px arial;margin:12px 10px;color:#9b9b9b;text-align:center}
+#search-panel .browse-by-link p.search-options-divider{float:left;text-transform:uppercase;font:700 10px arial;margin:16px 10px;color:#9b9b9b;text-align:center}
 #search-panel .browse-by-link #browseMenu{float:left}
 #search-panel .browse-by-link #browseMenu button{display:inline-block;padding:0 15px;margin:0;font:700 16px arial;text-transform:uppercase;color:#fff;text-align:left;text-shadow:0 -2px 0 rgba(0, 0, 0, 0.2);vertical-align:middle;cursor:pointer;height:41px;width:260px;background-color:#3a64c2;background-image:-moz-linear-gradient(top, #5187e9, #3a64c2);background-image:-ms-linear-gradient(top, #5187e9, #3a64c2);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#5187e9), to(#3a64c2));background-image:-webkit-linear-gradient(top, #5187e9, #3a64c2);background-image:-o-linear-gradient(top, #5187e9, #3a64c2);background-image:linear-gradient(top, #5187e9, #3a64c2);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5187e9', endColorstr='#3a64c2', GradientType=0);border-color:#3a64c2 #3a64c2 #3a64c2;border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:relative;float:left;-webkit-border-radius:3px 3px 3px 3px;-moz-border-radius:3px 3px 3px 3px;border-radius:3px 3px 3px 3px}
 #search-panel .browse-by-link #browseMenu ul.dropdown-menu{min-width:260px;font-size:14px}
@@ -80,10 +84,10 @@ filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);position:rela
 /* Advanced search fields */
 #search-panel .advanced-search-link{clear:both;font-size:13px;padding:10px 0}
 .advanced-search-fields{border:1px solid #d9d9d9;background:#fcfcfc;padding:15px;width:880px;float:left;margin:15px 0 0 0;position:relative}
-.advanced-search-fields .category{width:260px;float:left;padding:0 18px 0 0;border-right:1px solid #d9d9d9}
-.advanced-search-fields .place{width:260px;float:left;padding:0 18px 0 25px;border-right:1px solid #d9d9d9}
+.advanced-search-fields .category{width:260px;float:left;padding:0 18px 10px 0;border-right:1px solid #d9d9d9}
+.advanced-search-fields .place{width:260px;float:left;padding:0 18px 10px 25px;border-right:1px solid #d9d9d9}
 .advanced-search-fields .person{width:260px;float:left;margin:0 0 0 25px}
-.advanced-search-fields .images{width:880px;float:left;clear:both;margin:15px 0 0 0}
+.advanced-search-fields .images{width:880px;float:left;clear:both;margin:8px 0 0 0}
 .advanced-search-fields .advanced-search-filter p{font:700 12px arial;color:#333;text-transform:uppercase;margin:0 0 5px 0}
 .advanced-search-fields .upArrow{background:url(../images/advSearchBgArrow.gif) no-repeat 0 0;width:19px;height:11px;position:absolute;left:20px;top:-11px}
 .advanced-search-fields .advanced-search-filter select,.advanced-search-fields .advanced-search-filter input{width:250px;border:1px solid #ccc;padding:4px}
