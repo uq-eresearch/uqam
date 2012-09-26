@@ -1,6 +1,8 @@
 {% extends "base_wide.html" %}
-
 {% load uqam %}
+
+{% block title %}{{geolocation.name}} | {{block.super}}{% endblock %}
+
 {% block content %}
 
 <div class="breadcrumbs">

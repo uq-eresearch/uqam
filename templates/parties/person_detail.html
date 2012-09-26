@@ -1,5 +1,7 @@
 {% extends "base_wide.html" %}
 
+{% block title %}{{ person.display_name }} | {{block.super}}{% endblock %}
+
 {% block content %}
 
 {% if user.is_staff %}

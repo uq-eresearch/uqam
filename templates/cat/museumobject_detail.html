@@ -2,6 +2,9 @@
 
 {% load uqam %}{% load static %}
 {% load thumbnail %}
+
+{% block title %}{{ museumobject.artefact_type }} | {{block.super}}{% endblock %}
+
 {% block content %}
 
 {% if user.is_staff %}
