@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.utils.xmlutils import SimplerXMLGenerator
@@ -114,7 +115,10 @@ def view_places(request):
 
 def view_geoloc(request, loctype, id, columns=3):
 
-    geolocation = find_location(loctype, id)
+    try:
+        geolocation = find_location(loctype, id)
+    except ObjectDoesNotExist:
+        raise Http404
 
     items = geolocation.museumobject_set.select_related().filter(public=True
         ).prefetch_related('category', 'country', 'global_region'
