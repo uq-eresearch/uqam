@@ -96,7 +96,8 @@ import StringIO
 
 
 def atom_feed(request, encoding='utf-8', mimetype='application/atom+xml'):
-    feed_attrs = {u"xmlns": u"http://www.w3.org/2005/Atom"}
+    feed_attrs = {u"xmlns": u"http://www.w3.org/2005/Atom",
+                  u"fh": u"http://purl.org/syndication/history/1.0"}
     collections = Collection.objects.filter(is_public=True)
     site = Site.objects.get(id=1)
 
@@ -113,10 +114,13 @@ def atom_feed(request, encoding='utf-8', mimetype='application/atom+xml'):
     handler.addQuickElement(u"title", u"UQ Anthropology Museum Sub-collections")
     handler.addQuickElement(u"updated", rfc3339_date(updated).decode('utf-8'))
 
+    # A complete feed, so remote client will monitor for deletes/updates
+    handler.addQuickElement(u"fh:complete")
+
     # Optional
     handler.addQuickElement(u"link", attrs={
         u'rel': u'alternate',
-        u'href': reverse('collections_home'),
+        u'href': get_site_url(site, reverse('collections_home')),
         u'type': u'html'
         })
 
@@ -128,8 +132,9 @@ def atom_feed(request, encoding='utf-8', mimetype='application/atom+xml'):
         handler.addQuickElement(u"id", entry_id)
         handler.addQuickElement(u"title", collection.title)
         handler.addQuickElement(u'updated', entry_updated)
-        handler.addQuickElement(u'content', attrs={
-            u'src': collection.get_atom_url(),
+        handler.addQuickElement(u'link', attrs={
+            u'rel': u'alternate',
+            u'href': get_site_url(site, collection.get_atom_url()),
             u'type': u'application/atom+xml'
             })
 
