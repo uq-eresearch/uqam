@@ -1,10 +1,11 @@
 # Django settings for uqam project.
 import os.path
+from common.secret_key import gen_secret_key
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-DIRNAME = os.path.dirname(__file__)
+DJANGO_ROOT = os.path.dirname(__file__)
 
 ADMINS = (
     ('Damien Ayers', 'd.ayers@uq.edu.au'),
@@ -70,7 +71,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    DIRNAME + '/static',
+    DJANGO_ROOT + '/static',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -84,8 +85,24 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = ')v4z&afgu6!lzdoiez778vh4gm#h3jrpl5gpz7aj*+*f$qvj%o'
+# Absolute filesystem path to the secret file which holds this project's
+# SECRET_KEY. Will be auto-generated the first time this file is interpreted.
+SECRET_FILE = os.path.normpath(os.path.join(DJANGO_ROOT, 'deploy', 'SECRET'))
+
+########## KEY CONFIGURATION
+# Try to load the SECRET_KEY from our SECRET_FILE. If that fails, then generate
+# a random SECRET_KEY and save it into our SECRET_FILE for future loading. If
+# everything fails, then just raise an exception.
+try:
+    SECRET_KEY = open(SECRET_FILE).read().strip()
+except IOError:
+    try:
+        SECRET_KEY = gen_secret_key(50)
+        with open(SECRET_FILE, 'w') as f:
+            f.write(SECRET_KEY)
+    except IOError:
+        raise Exception('Cannot open file `%s` for writing.' % SECRET_FILE)
+########## END KEY CONFIGURATION
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -125,7 +142,7 @@ TEMPLATE_DIRS = (
     #  or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    DIRNAME + '/templates',
+    DJANGO_ROOT + '/templates',
 )
 
 INSTALLED_APPS = (
@@ -163,7 +180,7 @@ INSTALLED_APPS = (
     'endless_pagination',
 )
 
-LOGS_ROOT = os.path.join(DIRNAME, 'logs')
+LOGS_ROOT = os.path.join(DJANGO_ROOT, 'logs')
 backup_count = 1000
 if DEBUG:
     backup_count = 2
