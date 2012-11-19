@@ -52,7 +52,7 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-HTTPS_SUPPORT = True
+HTTPS_SUPPORT = False
 
 PUBLIC_DOMAIN = 'anth-real.uqdayers.local'
 SECURE_DOMAIN = 'anth.metadata.net.local'
