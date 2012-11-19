@@ -26,9 +26,9 @@ class Collection(models.Model):
             help_text="Should collection be visible to the public")
     is_syndicated = models.BooleanField(
             help_text="Should collection be sent for syndication")
-    rights = models.CharField(max_length=200,
+    rights = models.TextField(
             help_text="Information about rights held in and over the entity")
-    access_rights = models.CharField(max_length=200,
+    access_rights = models.TextField(
             help_text="Information about who can access the entity, "
             "including access restrictions based on privacy, security, "
             "or other policies.")
