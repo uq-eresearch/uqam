@@ -6,7 +6,7 @@ distribute==0.6.28
 django-auth-ldap==1.1
 django-extensions==0.9
 django-haystack==1.2.7
-django-grappelli==2.4.0
+django-grappelli==2.4.3
 python-ldap==2.4.10
 wsgiref==0.1.2
 gunicorn==0.14.6
