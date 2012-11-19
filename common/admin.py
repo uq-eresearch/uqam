@@ -1,5 +1,6 @@
 from django.contrib.admin import ModelAdmin
-
+from django.contrib import admin
+from common.models import SiteConfiguration
 
 class UndeleteableModelAdmin(ModelAdmin):
     """Disable deleting any objects through the admin"""
@@ -11,3 +12,11 @@ class UndeleteableModelAdmin(ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+class SiteConfigurationAdmin(admin.ModelAdmin):
+    raw_id_fields = ('homepage_item',)
+
+
+
+admin.site.register(SiteConfiguration, SiteConfigurationAdmin)
