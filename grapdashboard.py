@@ -63,5 +63,7 @@ class UQAMDashboard(Dashboard):
             children=(
                 ['Upload media', '/mediaman/bulk_upload/'],
                 ['Filter/query items', '/admin/cat/museumobject/search'],
+#                ['New acquisition', '/admin/common/siteconfiguration'],
+                ['Bulk update storage locations', '/admin/cat/museumobject/upload_storagelocations']
             )
         ))

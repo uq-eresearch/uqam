@@ -68,11 +68,14 @@ class MuseumObject(models.Model):
     category = models.ManyToManyField('Category', blank=True,
             help_text='New style categories')
 
-    storage_section = models.CharField(max_length=4, blank=True)
-    storage_unit = models.CharField(max_length=4, blank=True)
+    storage_row = models.CharField(max_length=4, blank=True)
     storage_bay = models.CharField(max_length=4, blank=True)
-    storage_shelf_box_drawer = models.CharField(max_length=4, blank=True,
-        verbose_name="Storage shelf/box/drawer")
+    storage_shelf_drawer = models.CharField("storage shelf/drawer", max_length=4, blank=True)
+#
+    old_storage_section = models.CharField(max_length=4, blank=True)
+    old_storage_unit = models.CharField(max_length=4, blank=True)
+    old_storage_bay = models.CharField(max_length=4, blank=True)
+    old_storage_shelf_box_drawer = models.CharField("old storage shelf/box/drawer", max_length=4, blank=True)
 
     acquisition_date = models.DateField("date acquired by museum",
             null=True, blank=True)

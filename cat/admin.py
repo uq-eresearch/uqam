@@ -13,6 +13,7 @@ from admin_views import search_home, search_xls
 from django.core import urlresolvers
 from django.utils.datastructures import SortedDict
 from location.models import Country, StateProvince, RegionDistrict, Locality
+from cat.admin_views import upload_storage_locations_spreadsheet
 
 
 class MediaFileInline(admin.TabularInline):
@@ -156,14 +157,17 @@ class LocalityListFilter(HierarchyListFilter):
     parent_parameter_name = 'region_district_id'
     model = Locality
 
+
 class HasThreeDFilter(SimpleListFilter):
     title = 'has 3d scan'
     parameter_name = 'has_3d'
+
     def lookups(self, request, model_admin):
         return (
             ('true', 'Yes'),
             ('false', 'No'),
             )
+
     def queryset(self, request, queryset):
         if self.value() == 'true':
             return queryset.exclude(three_d_link='')
@@ -175,14 +179,17 @@ class MOAdmin(UndeleteableModelAdmin):
     list_display = ('registration_number',
                     'description', 'comment', 'public', 'is_public_comment')
     readonly_fields = ('place', 'cultural_bloc', 'functional_category',
-        'donor_2', 'collector_2', 'old_registration_number',)
+        'donor_2', 'collector_2', 'old_registration_number',
+        'old_storage_section', 'old_storage_unit',
+                'old_storage_bay', 'old_storage_shelf_box_drawer')
 
     list_filter = ('artefact_type', 'category',
                     'access_status', 'loan_status',
                     'collector', 'donor', 'record_status',
                     'global_region', CountryListFilter, StateProvinceListFilter,
                     RegionDistrictListFilter, LocalityListFilter, 'is_public_comment',
-                    'public', 'maker', 'acquisition_method', HasThreeDFilter)
+                    'public', 'maker', 'acquisition_method', HasThreeDFilter,
+                    'storage_row', 'storage_bay', 'storage_shelf_drawer')
 
     search_fields = ['registration_number', 'description', 'comment',
                      'donor__name', 'collector__name', 'maker__name',
@@ -213,36 +220,41 @@ class MOAdmin(UndeleteableModelAdmin):
             'fields': ('cultural_bloc', 'place',)
         }),
         ('Geo-location', {
-            'classes': ('collapse',),
+            'classes': ('grp-collapse',),
             'fields': ('global_region', 'country', 'state_province',
                 'region_district', 'locality')
         }),
         ('Status', {
-            'classes': ('collapse',),
+            'classes': ('grp-collapse',),
             'fields': ('loan_status', 'access_status', 'record_status',)
         }),
         ('Storage location', {
-            'classes': ('collapse',),
-            'fields': ('storage_section', 'storage_unit',
-                'storage_bay', 'storage_shelf_box_drawer')
+            'classes': ('grp-collapse',),
+            'fields': ('storage_row', 'storage_bay',
+                'storage_shelf_drawer')
+        }),
+        ('Old storage location', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('old_storage_section', 'old_storage_unit',
+                'old_storage_bay', 'old_storage_shelf_box_drawer')
         }),
         ('Acquisition', {
-            'classes': ('collapse',),
+            'classes': ('',),
             'fields': ('acquisition_date', 'acquisition_method',
                        'reg_info')
         }),
         ('Collector', {
-            'classes': ('collapse',),
+            'classes': ('',),
             'fields': ('collector', 'collector_2',
                 'how_collector_obtained', 'when_collector_obtained')
         }),
         ('Donor', {
-            'classes': ('collapse',),
+            'classes': ('',),
             'fields': ('donor', 'donor_2',
                 'how_donor_obtained', 'when_donor_obtained')
         }),
         ('Details', {
-            'classes': ('collapse',),
+            'classes': ('',),
             'fields': ('description', 'comment', 'is_public_comment',
                 'private_comment', 'significance')
         }),
@@ -254,11 +266,11 @@ class MOAdmin(UndeleteableModelAdmin):
                 'artefact_illustrated')
         }),
         ('Location', {
-            'classes': ('collapse',),
+            'classes': ('',),
             'fields': (('longitude', 'latitude'),)
         }),
         ('Dimensions', {
-            'classes': ('collapse',),
+            'classes': ('',),
             'fields': (('length', 'width', 'height'),
                 ('depth', 'circumference'))
         }),
@@ -302,6 +314,8 @@ class MOAdmin(UndeleteableModelAdmin):
                 name='search_results'),
             url(r'^search_xls/$',  self.admin_site.admin_view(search_xls),
                 name='search_xls'),
+            url(r'^upload_storagelocations/$', self.admin_site.admin_view(upload_storage_locations_spreadsheet),
+                name='upload_storagelocations'),
 #            (r'^filter/$', self.admin_site.admin_view(self.my_view))
         )
         return my_urls + urls

@@ -132,7 +132,9 @@ MIDDLEWARE_CLASSES = (
     'uqam.middleware.ReverseProxyHttpsHeadersMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'uqam.middleware.SecureRequiredMiddleware',
-    'uqam.middleware.XSessionMiddleware'
+    'uqam.middleware.XSessionMiddleware',
+
+    'django.middleware.transaction.TransactionMiddleware',
 )
 
 ROOT_URLCONF = 'uqam.urls'
@@ -178,6 +180,8 @@ INSTALLED_APPS = (
 
     'smart_selects',
     'endless_pagination',
+
+    'libs.bulkimport'
 )
 
 LOGS_ROOT = os.path.join(DJANGO_ROOT, 'logs')

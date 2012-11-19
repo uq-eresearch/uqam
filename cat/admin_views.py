@@ -76,8 +76,8 @@ class ItemFilterSet(refinery.FilterTool):
         fields = ['registration_number', 'functional_category', 'category',
                 'artefact_type', 'loan_status', 'access_status',
                 'record_status', 'raw_material', 'description',
-                'storage_section', 'storage_unit', 'storage_bay',
-                'storage_shelf_box_drawer', 'acquisition_date',
+                'storage_row', 'storage_bay', 'storage_shelf_drawer',
+                'acquisition_date',
                 'acquisition_method', 'donor', 'collector',
                 'maker', 'has_images', 'global_region', 'country',
                 'state_province', 'region_district', 'locality'
@@ -274,4 +274,59 @@ def set_column_widths(worksheet, fields, default_width=15):
         column = get_col_by_fieldname(fields, name)
         if column:
             worksheet.column_dimensions[column].width = width
+
+
+from libs.bulkimport import BulkDataImportHandler, BulkImportForm
+from django.contrib import messages
+from django import db
+import logging
+logger = logging.getLogger(__name__)
+
+
+@db.transaction.commit_on_success
+def upload_storage_locations_spreadsheet(request):
+    if request.method == 'POST':
+        form = BulkImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            spreadsheet = form.files['spreadsheet']
+
+            updated_records = {'value': 0}
+
+            def update_storage_locations(headers, values):
+                try:
+                    reg_num = values[headers.index('Registration Number')]
+                    reg_num = int(reg_num)
+                except ValueError:
+                    messages.add_message(request, messages.ERROR, "Registration number not a number: '%s'" % reg_num)
+                    return
+
+                try:
+                    mo = MuseumObject.objects.get(registration_number=reg_num)
+                    mo.storage_row = str(values[headers.index('row')])
+                    mo.storage_bay = str(values[headers.index('bay')])
+                    mo.storage_shelf_drawer = str(values[headers.index('shelf/drawer')])
+                    mo.save()
+                    updated_records['value'] += 1
+                except MuseumObject.DoesNotExist:
+                    messages.add_message(request, messages.ERROR, "Unable to find registration number: %s" % reg_num)
+
+                db.reset_queries()
+                if (updated_records['value'] % 100) == 0:
+                    logger.error("Updated %s records, lasted update was: %s" % (updated_records['value'], reg_num))
+                    db.transaction.commit()
+
+            bi = BulkDataImportHandler()
+            bi.add_function_mapping(update_storage_locations)
+            bi.process_spreadsheet(spreadsheet)
+            db.transaction.commit()
+
+            messages.add_message(request, messages.SUCCESS, "Updated %s records" % updated_records['value'])
+
+    else:
+        form = BulkImportForm()
+
+    return render(request, 'storage_bulkupdate.html', {
+        'form': form,
+        'title': 'Bulk update storage locations'
+        })
 

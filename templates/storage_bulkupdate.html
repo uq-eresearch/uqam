@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+
+<!-- BREADCRUMBS -- >
+{% if not is_popup %}
+{% block breadcrumbs %}
+        <ul class="grp-horizontal-list">
+            <li><a href="{% url admin:index %}">Home</a></li>
+            <li>{{ title }}</li>
+        </ul>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<div class="grp-content-container">
+    <ul>
+    <li>
+        Import storage locations from the first sheet of a <strong>.xlsx</strong> spreadsheet.
+    </li><li>
+        The sheet must contain columns <em>Registration Number</em>, <em>row</em>,
+        <em>bay</em> and <em>shelf/drawer</em>.
+    </li><li>
+        The column names are case sensitive. Any extra columns are okay and are simply ignored.
+    </li><li>
+        The update can take quite a long time. It is best to do it in batches of less than 2000 records.
+    </li>
+</ul>
+</div>
+
+<div class="grp-content-container">
+    <form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form }}
+    </table>
+    <input type="submit">
+    </form>
+</div>
+{% endblock %}
