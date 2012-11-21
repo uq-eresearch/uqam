@@ -161,7 +161,6 @@ INSTALLED_APPS = (
 
     'smart_selects',
     'endless_pagination', # don't think this is used...
-    'graceful_session_cleanup'
 
 )
 
