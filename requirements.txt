@@ -28,3 +28,4 @@ pygments==1.5
 django-refinery==0.1
 pysolr==2.1.0-beta
 django-endless-pagination==1.1
+
