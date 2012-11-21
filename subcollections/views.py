@@ -97,7 +97,7 @@ import StringIO
 
 def atom_feed(request, encoding='utf-8', mimetype='application/atom+xml'):
     feed_attrs = {u"xmlns": u"http://www.w3.org/2005/Atom",
-                  u"fh": u"http://purl.org/syndication/history/1.0"}
+                  u"xmlns:fh": u"http://purl.org/syndication/history/1.0"}
     collections = Collection.objects.filter(is_public=True)
     site = Site.objects.get(id=1)
 
