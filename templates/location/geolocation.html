@@ -3,6 +3,14 @@
 
 {% block title %}{{geolocation.name}} | {{block.super}}{% endblock %}
 
+
+{% block headextra %}
+{% if geolocation.latitude %}
+<meta name="geo.position" content="{{geolocation.latitude}};{{geolocation.longitude}}" />
+{% endif %}
+{% endblock headextra %}
+
+
 {% block content %}
 
 <div class="breadcrumbs">
