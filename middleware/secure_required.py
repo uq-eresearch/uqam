@@ -5,6 +5,16 @@ from django.conf import settings
 
 
 class SecureRequiredMiddleware(object):
+    """
+    Django Middleware to enforce viewing some urls only over HTTPS
+
+    Has (crazy) support for using a different hostname to access HTTPS,
+    which can be useful if there are limits on the SSL certificate.
+
+    For these multiple hostname shenanigans to work, Xsession middleware
+    is also required.
+    """
+
     def __init__(self):
         self.paths = getattr(settings, 'SECURE_REQUIRED_PATHS')
         self.enabled = self.paths and getattr(settings, 'HTTPS_SUPPORT')
@@ -12,7 +22,6 @@ class SecureRequiredMiddleware(object):
         self.secure_domain = getattr(settings, 'SECURE_DOMAIN')
 
     def process_request(self, request):
-        # if self.enabled and not request.is_secure():
         if self.enabled:
             if request.get_full_path().startswith('/xsession_loader.js'):
                 return None
