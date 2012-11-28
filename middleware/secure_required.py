@@ -32,14 +32,18 @@ class SecureRequiredMiddleware(object):
                     secure_path = True
 
             request_url = request.build_absolute_uri(request.get_full_path())
+
+            new_url = request_url
             if secure_path and not request.is_secure():
-                secure_url = request_url.replace(self.public_domain, self.secure_domain)
-                secure_url = secure_url.replace('http://', 'https://')
-                return HttpResponseRedirect(secure_url)
+                new_url = request_url.replace(self.public_domain, self.secure_domain)
+                new_url = new_url.replace('http://', 'https://')
+
             if not secure_path and (request.is_secure() or self.secure_domain in request_url):
-                public_url = request_url.replace(self.secure_domain, self.public_domain)
-                public_url = public_url.replace('https://', 'http://')
-                return HttpResponseRedirect(public_url)
+                new_url = request_url.replace(self.secure_domain, self.public_domain)
+                new_url = new_url.replace('https://', 'http://')
+
+            if new_url and new_url != request_url:
+                return HttpResponseRedirect(new_url)
         return None
 
     def process_response(self, request, response):
