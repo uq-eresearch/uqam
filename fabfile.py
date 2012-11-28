@@ -11,7 +11,7 @@ env.logsdir = '/home/django/uqam/logs'
 env.tmpappdir = '/home/django/uqam_tmp'
 env.virtenv = '/home/django/env'
 env.reqfile = env.appdir + '/requirements.txt'
-sudouser = 'uqdayers'
+env.sudouser = 'uqdayers'
 
 
 def uname():
@@ -47,7 +47,7 @@ def bootstrap():
 def init_celery():
     put('etc/init-celery.conf', '/tmp/celery.conf')
     put('etc/init-celeryd', '/tmp/celeryd')
-    with settings(user=sudouser):
+    with settings(user=env.sudouser):
         sudo('mv /tmp/celery.conf /etc/default/celeryd')
         sudo('mv /tmp/celeryd /etc/init.d/')
         sudo('chown root.root /etc/init.d/celeryd /etc/default/celeryd')
@@ -62,7 +62,7 @@ def init_gunicorn():
 
     put('etc/init-gunicorn.conf', '/tmp/init-gunicorn.conf')
     put('etc/nginx-gunicorn.conf', '/tmp/nginx-gunicorn.conf')
-    with settings(user=sudouser):
+    with settings(user=env.sudouser):
         sudo('mv /tmp/init-gunicorn.conf %s' % initconf)
         sudo('mv /tmp/nginx-gunicorn.conf %s' % nginxconf)
         sudo('chown root.root %s %s' % (nginxconf, initconf))
@@ -70,7 +70,7 @@ def init_gunicorn():
 
 
 def installsyspackages():
-    with settings(user=sudouser):
+    with settings(user=env.sudouser):
         sudo('yum install postgresql-devel openldap-devel openssl-devel')
 
         #required for pgmagick, which is required for pdf thumbnails
@@ -134,7 +134,7 @@ def importimages():
 
 
 def copyimages():
-    local('rsync -rv %s(imagesdir) %(host_string)s:images' % env)
+    local('rsync -rv %(imagesdir)s %(host_string)s:images' % env)
 
 
 def _venv(cmd):
@@ -144,20 +144,20 @@ def _venv(cmd):
 
 
 def reload_servers():
-    with settings(user=sudouser):
+    with settings(user=env.sudouser):
         sudo('service nginx reload')
         sudo('service celeryd restart')
         sudo('initctl stop uqam-gunicorn')
         sudo('initctl start uqam-gunicorn')
 
 def stop_servers():
-    with settings(user=sudouser):
-        sudo('service celeryd restart')
-        sudo('initctl stop uqam-gunicorn')
+    with settings(user=env.sudouser):
+        sudo('service celeryd stop')
+        sudo('stop uqam-gunicorn')
 def start_servers():
-    with settings(user=sudouser):
+    with settings(user=env.sudouser):
         sudo('service celeryd start')
-        sudo('initctl start uqam-gunicorn')
+        sudo('start uqam-gunicorn')
 
 
 def rebuild_index():
@@ -224,58 +224,46 @@ def docs():
         local('make html')
 
 
-def push_local_database():
-    dumpfile = '/tmp/uqam_dump.sql.gz'
-
-    local('pg_dump --clean -h localhost -U uqam uqam | '
-            ' gzip -c > %s' % dumpfile)
-    put(dumpfile, dumpfile)
-
-    run('gunzip -c %s | psql -h localhost -U uqam -d uqam' % dumpfile)
-
-
-def dumpdata(app):
-    filename = '/tmp/%s.json' % app
-    _venv('./manage.py dumpdata %s > %s' % (app, filename))
-    get(filename, filename)
-
-
-def loaddata(app):
-    filename = '/tmp/%s.json' % app
-    put(filename, filename)
-    _venv('./manage.py loaddata %s' % filename)
-
-
-def migrate_live_to_uat():
-    dumpfile = '/tmp/uqam_dump.sql.gz'
-    run('pg_dump --clean -h localhost -U uqam uqam | '
-            ' gzip -c > %s' % dumpfile)
-
-
-def grab_live_data():
-    dumpfile = '/tmp/uqam_dump.sql.gz'
+def download_live_data(dumpfile='/tmp/uqam_dump.sql.gz'):
     with settings(host_string='django@anthropology'):
         run('pg_dump --clean -h localhost -U uqam uqam | '
                 ' gzip -c > %s' % dumpfile)
         get(dumpfile, dumpfile)
+
+    return dumpfile
+
+
+def grab_live_data():
+    dumpfile = download_live_data()
+
     local('sudo -u postgres dropdb uqam')
     local('sudo -u postgres createdb --owner uqam --encoding UTF8 uqam')
     local('echo "GRANT CONNECT ON DATABASE uqam TO uqam_read;" | sudo '
             '-u postgres psql')
-    local('gunzip -c /tmp/uqam_dump.sql.gz | psql -h localhost -U uqam -d'
-            'uqam')
+    local('gunzip -c %s | psql -h localhost -U uqam -d'
+            'uqam' % dumpfile)
 
 
-def update_uat():
-    dumpfile = '/tmp/uqam_dump.sql.gz'
-    with settings(host_string='django@anthropology'):
-        run('pg_dump --clean -h localhost -U uqam uqam | '
-                ' gzip -c > %s' % dumpfile)
-        get(dumpfile, dumpfile)
+def update_uat_from_live():
+    """
+    Drops the UAT DB and copies the live DB to it
 
+    Will stop the UAT app server, which should be updated
+    and then restarted manually.
+    """
+#    dumpfile = download_live_data()
+    dumpfile='/tmp/uqam_dump.sql.gz'
     with settings(host_string='django@anthropology-uat'):
         put(dumpfile, dumpfile)
-        run('sudo -u postgres dropdb uqam')
+        with settings(host_string="%s@anthropology-uat" % env.sudouser):
+            stop_servers()
+            run('sudo -u postgres dropdb uqam')
+            run('sudo -u postgres createdb --owner uqam --encoding UTF8 uqam')
+        run('gunzip -c %s | psql -h localhost -U uqam -d uqam' % dumpfile)
+
+        _venv("""echo "UPDATE django_site SET domain='anthropology.metadata.net, name='anthropology.metadata.net;" | ./manage.py dbshell""")
+
+
 
 
 def backup():
