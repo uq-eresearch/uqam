@@ -276,7 +276,7 @@ def set_column_widths(worksheet, fields, default_width=15):
             worksheet.column_dimensions[column].width = width
 
 
-from libs.bulkimport import BulkDataImportHandler, BulkImportForm
+from bulkimport import BulkDataImportHandler, BulkImportForm
 from django.contrib import messages
 from django import db
 import logging
