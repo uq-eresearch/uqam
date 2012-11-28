@@ -181,7 +181,7 @@ INSTALLED_APPS = (
     'smart_selects',
     'endless_pagination', # don't think this is used...
 
-    'libs.bulkimport'
+    'bulkimport'
 )
 
 LOGS_ROOT = os.path.join(DJANGO_ROOT, 'logs')

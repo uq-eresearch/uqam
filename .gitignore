@@ -9,3 +9,4 @@ celerybeat-schedule
 *.swp
 Guardfile
 deploy/
+bulkimport
