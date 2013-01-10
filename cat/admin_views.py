@@ -14,7 +14,7 @@ class ItemTable(tables.Table):
     photo = tables.TemplateColumn('{% load thumbnail %}<img src="{{ record.artefactrepresentation_set.all.0.image|thumbnail_url:\'small_thumb\'  }}" width="105px" height="70px" '
     'alt="">')
     registration_number = tables.LinkColumn(
-            'admin:cat_museumobject_change', args=[A('registration_number')])
+            'admin:cat_museumobject_change', args=[A('id')])
     category = tables.TemplateColumn('{{ record.categories }}')
 
     class Meta:
@@ -51,7 +51,7 @@ class ItemFilterSet(refinery.FilterTool):
 
     def registration_number_filter(values):
         if values:
-            values = [int(v) for v in values.split(' ')]
+            values = [int(v) for v in values.strip().split(' ')]
             return Q(registration_number__in=values)
         else:
             return Q()
@@ -312,7 +312,7 @@ def upload_storage_locations_spreadsheet(request):
 
                 db.reset_queries()
                 if (updated_records['value'] % 100) == 0:
-                    logger.error("Updated %s records, lasted update was: %s" % (updated_records['value'], reg_num))
+                    logger.info("Updated %s records, lasted update was: %s" % (updated_records['value'], reg_num))
                     db.transaction.commit()
 
             bi = BulkDataImportHandler()
