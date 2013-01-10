@@ -351,8 +351,8 @@ THUMBNAIL_PROCESSORS = (
 SESSION_COOKIE_HTTPONLY = False
 
 PUBLIC_DOMAIN = 'catalogue.anthropologymuseum.uq.edu.au'
-SECURE_DOMAIN = 'anthropology.metadata.net'
-XSESSION_DOMAINS = ['https://anthropology.metadata.net', 'http://catalogue.anthropologymuseum.uq.edu.au']
+SECURE_DOMAIN = 'catalogue.anthropologymuseum.uq.edu.au'
+XSESSION_DOMAINS = ['http://catalogue.anthropologymuseum.uq.edu.au']
 HTTPS_SUPPORT = True
 SECURE_REQUIRED_PATHS = (
     '/admin/',
