@@ -14,7 +14,7 @@ class ItemTable(tables.Table):
     photo = tables.TemplateColumn('{% load thumbnail %}<img src="{{ record.artefactrepresentation_set.all.0.image|thumbnail_url:\'small_thumb\'  }}" width="105px" height="70px" '
     'alt="">')
     registration_number = tables.LinkColumn(
-            'admin:cat_museumobject_change', args=[A('id')])
+            'admin:cat_museumobject_change', args=[A('pk')])
     category = tables.TemplateColumn('{{ record.categories }}')
 
     class Meta:
