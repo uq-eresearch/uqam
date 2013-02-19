@@ -393,6 +393,10 @@ THUMBNAIL_ALIASES = {
         'large_thumb': {
             'size': (180, 120),
             'expand': True,
+        },
+        'homepage_new_acquisition': {
+            'size': (165, 150),
+            'crop': False
         }
     }
 }

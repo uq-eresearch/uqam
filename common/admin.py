@@ -15,7 +15,7 @@ class UndeleteableModelAdmin(ModelAdmin):
 
 
 class SiteConfigurationAdmin(admin.ModelAdmin):
-    raw_id_fields = ('homepage_item',)
+    raw_id_fields = ('new_acquisition', 'new_acquisition_image')
 
 
 

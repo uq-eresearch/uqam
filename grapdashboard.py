@@ -44,8 +44,8 @@ class UQAMDashboard(Dashboard):
             title=_('Administration'),
             column=1,
             collapsible=True,
-            models=('django.contrib.*', 'djcelergy.*', 'reports.*',
-                'dataimport.*', 'mediaman.*'),
+            models=('django.contrib.*',
+                'djcelergy.*', 'mediaman.*', 'common.*'),
         ))
 
         # append a recent actions module

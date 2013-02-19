@@ -10,6 +10,8 @@ from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.forms import CheckboxInput
 from django.utils.safestring import mark_safe
+from django.views.generic import TemplateView
+from common.models import SiteConfiguration
 
 
 class ExpandableCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
@@ -246,3 +248,21 @@ def load_facets_into_form(form, facets, form_field_name, facet_name):
         form.fields[form_field_name].choices = [
             (facet[0], "%s (%s)" % (facet[0], facet[1]))
                 for facet in facets['fields'][facet_name]]
+
+
+class HomepageView(TemplateView):
+    template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(HomepageView, self).get_context_data(**kwargs)
+
+        # Add to the context
+        site_config = SiteConfiguration.objects.all()[0]
+
+        context['site_config'] = site_config
+        context['new_acquisition'] = site_config.new_acquisition
+        context['new_acquisition_text'] = site_config.new_acquisition_text
+        context['new_acquisition_image'] = site_config.new_acquisition_image
+
+        return context

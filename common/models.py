@@ -3,6 +3,7 @@ from django.contrib.auth import models as auth_models
 from django.contrib.auth.management import create_superuser
 from django.db.models import signals
 from django.db import models
+from mediaman.models import ArtefactRepresentation
 
 # From http://stackoverflow.com/questions/1466827/ --
 #
@@ -36,6 +37,10 @@ signals.post_syncdb.connect(create_testuser,
 
 
 class SiteConfiguration(models.Model):
-    homepage_item = models.ForeignKey('cat.MuseumObject')
-    homepage_item_description = models.TextField(blank=True)
+    new_acquisition = models.ForeignKey('cat.MuseumObject',
+        help_text="Use magnifying glass selector, the number displayed is an 'id' not a 'registration number'")
+    new_acquisition_text = models.TextField(blank=True)
+    new_acquisition_image = models.ForeignKey(ArtefactRepresentation, null=True)
     
+    class Meta:
+        verbose_name_plural = "Site configuration"

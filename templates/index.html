@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block body %}
 <div class="homeBanner" id="homeBanner">
@@ -37,8 +38,8 @@
     </div>
     <div class="homePrimRight">
       <h2>New Acquisition</h2>
-      <img src="/static/images/tapa-cloth.jpg" alt="Tapa cloth" /> <h4>Tapa Cloth</h4><p>Papua New Guinea</p>
-      <p><a href="/item/40575" class="learnMore btn btn-warning">Learn more</a></p>
+      <img src="{{ new_acquisition_image|thumbnail_url:'homepage_new_acquisition'}}" alt="Tapa cloth" /> <h4>Tapa Cloth</h4><p>{{ new_acquisition_text }}</p>
+      <p><a href="{{ new_acquisition.get_absolute_url }}" class="learnMore btn btn-warning">Learn more</a></p>
     </div>
   </div>
   <div class="homeSecondary">

@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.conf import settings
 from django.views.generic import TemplateView
+from common.views import HomepageView
 from django.contrib import admin
 
 admin.autodiscover()
@@ -8,7 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url('', include('uqam.cat.urls')),
 
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^$', HomepageView.as_view()),
 
     url(r'^about/$', TemplateView.as_view(template_name="about.html")),
 
@@ -32,7 +33,6 @@ urlpatterns = patterns('',
         {'next_page': '/', 'redirect_field_name': 'next'},
         name='auth_logout'),
 
-    url(r'^report/', include('reports.urls')),
     url(r'^', include('common.urls')),
 
     url(r'^place/', include('location.urls')),
