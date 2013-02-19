@@ -130,7 +130,6 @@ MIDDLEWARE_CLASSES = (
     'uqam.middleware.RequireLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'uqam.middleware.ReverseProxyHttpsHeadersMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'uqam.middleware.SecureRequiredMiddleware',
     'uqam.middleware.XSessionMiddleware',
 
@@ -174,7 +173,6 @@ INSTALLED_APPS = (
     'parties',
     'common',
     'location',
-    'django.contrib.flatpages',
     'django_tables2',
     'easy_thumbnails',
 
@@ -404,7 +402,6 @@ THUMBNAIL_ALIASES = {
 TEST_RUNNER = "ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
     'django.contrib.auth',
-    'django.contrib.flatpages',
     'django.contrib.messages',
     'easy_thumbnails',
 )
