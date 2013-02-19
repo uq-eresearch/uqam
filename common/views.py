@@ -258,11 +258,14 @@ class HomepageView(TemplateView):
         context = super(HomepageView, self).get_context_data(**kwargs)
 
         # Add to the context
-        site_config = SiteConfiguration.objects.all()[0]
+        results = SiteConfiguration.objects.all()
 
-        context['site_config'] = site_config
-        context['new_acquisition'] = site_config.new_acquisition
-        context['new_acquisition_text'] = site_config.new_acquisition_text
-        context['new_acquisition_image'] = site_config.new_acquisition_image
+        if len(results) > 0:
+            site_config = results[0]
+
+            context['site_config'] = site_config
+            context['new_acquisition'] = site_config.new_acquisition
+            context['new_acquisition_text'] = site_config.new_acquisition_text
+            context['new_acquisition_image'] = site_config.new_acquisition_image
 
         return context
