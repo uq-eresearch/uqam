@@ -8,7 +8,11 @@ This software is copyright The University of Queensland
 
 Install system requirements:
 
-    sudo apt-get install virtualenvwrapper
+    sudo apt-get update
+    sudo apt-get install virtualenvwrapper git python-dev libldap2-dev \
+      libjpeg62-dev postgresql postgresql-contrib libpq-dev
+    sudo apt-get install libgraphicsmagick++1-dev libboost-python-dev \
+      libsasl2-dev
 
 Clone from git:
 
@@ -18,9 +22,13 @@ Create virtual environment for python dependencies:
 
     mkvirtualenv uqam
 
-Install image library dependencies:
+If this fails, try logging out and logging in to enable
+virtualenvwrapper.
 
-    sudo apt-get install ...
+Can be activated later with:
+
+    workon uqam
+
 
 Install python dependencies:
 
@@ -29,6 +37,10 @@ Install python dependencies:
 Setup database:
 
 Create database tables:
+
+Use development settings file:
+
+    touch development_mode
 
 Run test server:
 
