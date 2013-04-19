@@ -22,7 +22,7 @@ psycopg2==2.4.5
 django-tables2==0.11.0
 easy-thumbnails==1.0.3
 pgmagick==0.5.1
-django-smart-selects==1.0.4
+django-smart-selects==1.0.6
 django-ignoretests==0.3.2
 pygments==1.5
 django-refinery==0.1
