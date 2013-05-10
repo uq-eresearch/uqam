@@ -2,53 +2,74 @@
 
 UQAM is a web-based catalogue used by the University of Queensland Anthropology Museum.
 
-This software is copyright The University of Queensland
+It has a public front end for people to browse the museum's holdings, including photographs, documents, maps and information on the people involved. As well, it provides tools for museum staff to manage the items in the museum, and import any related data.
 
-## Running Locally (with Ubuntu)
+It is developed using the [Python][] [Django][] web framework.
+
+This software was developed by the [eResearch Group][eResearch] at [The University of Queensland][uq] with funding from ANDS. It is copyright The University of Queensland.
+
+  [Python]: http://www.python.org/
+  [Django]: https://www.djangoproject.com/
+  [eResearch]: http://www.itee.uq.edu.au/eresearch
+  [uq]: http://www.uq.edu.au/
+
+## Development Setup (with Ubuntu)
 
 Install system requirements:
 
-    sudo apt-get update
-    sudo apt-get install virtualenvwrapper git python-dev libldap2-dev \
+    $ sudo apt-get update
+    $ sudo apt-get install virtualenvwrapper git python-dev libldap2-dev \
       libjpeg62-dev postgresql postgresql-contrib libpq-dev
-    sudo apt-get install libgraphicsmagick++1-dev libboost-python-dev \
+    $ sudo apt-get install libgraphicsmagick++1-dev libboost-python-dev \
       libsasl2-dev
 
-Clone from git:
+Clone the code from git:
 
-    git clone https://github.com/uq-eresearch/uqam.git
+    $ git clone https://github.com/uq-eresearch/uqam.git
+    $ cd uqam
 
-Create virtual environment for python dependencies:
+Create a python virtual environment:
 
-    mkvirtualenv uqam
+    $ mkvirtualenv uqam
 
-If this fails, try logging out and logging in to enable
-virtualenvwrapper.
+*If this fails, try logging out and logging in to enable virtualenvwrapper.*
 
-Can be activated later with:
+To re-enable the virtual environment later:
 
-    workon uqam
+    $ workon uqam
 
+Install python dependencies (*both dev and core*):
 
-Install python dependencies:
+    (uqam)$ pip install -r requirements_dev.txt -r requirements.txt
 
-    pip install -r requirements_dev.txt -r requirements.txt
+Setup database (*postgresql*):
 
-Setup database:
+    $ sudo -u postgres createuser -S -D -R -P uqam
+    $ sudo -u postgres createdb --owner uqam --encoding UTF8 uqam
 
 Create database tables:
 
-Use development settings file:
+    $ ./manage.py syncdb --all     # Create database tables
+    $ ./manage.py migrate --fake   # Enable migrations updates
+    $ ./manage.py createsuperuser  # Create admin user
 
-    touch development_mode
+Enable development settings file:
+
+    $ touch development_mode
 
 Run test server:
 
+    $ ./manage.py runserver 0.0.0.0:8000
 
 
+## Deployment on Red Hat (or compatible distribution)
 
+More details coming soon. For now refer to `fabfile.py` and `docs/`.
 
-## Installing on Red Hat Linux (or compatible distribution)
+## Further documentation
 
+Is available in `docs/`. It can be compiled to *HTML* by:
 
+    (uqam)$ pip install sphinx
+    (uqam)$ cd docs; make html
 
