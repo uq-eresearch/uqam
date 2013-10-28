@@ -316,7 +316,7 @@
 <div class="secondary-item-info">
   <div class="physical-description">
     <h3>Description</h3>
-    {{ museumobject.description|linebreaks }}
+    {{ museumobject.description|safe|linebreaks }}
   </div>
 
   <div class="research-notes">
