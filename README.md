@@ -66,6 +66,28 @@ Run test server:
 
 More details coming soon. For now refer to `fabfile.py` and `docs/`.
 
+http://www.nginxtips.com/how-to-install-nginx-on-centos-rhel/
+
+http://www.tecmint.com/how-to-enable-epel-repository-for-rhel-centos-6-5/
+## RHEL/CentOS 6 64-Bit ##
+
+wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+rpm -ivh epel-release-6-8.noarch.rpm
+
+wget http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm
+sudo rpm -Uvh nginx-release-centos-6-0.el6.ngx.noarch.rpm 
+
+
+
+sudo yum install postgresql-devel openldap-devel openssl-devel gcc-c++ GraphicsMagick-c++-devel boost-devel ghostscript ghostscript-devel git
+
+git clone https://github.com/uq-eresearch/uqam/
+
+
+sudo adduser uqam
+
+
+
 ## Further documentation
 
 Is available in `docs/`. It can be compiled to *HTML* by:
