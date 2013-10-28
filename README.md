@@ -86,6 +86,48 @@ git clone https://github.com/uq-eresearch/uqam/
 
 sudo adduser uqam
 
+## Setting up Python 2.7
+https://gist.github.com/hangtwenty/5546945
+
+sudo yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel
+libxml2-devel libxslt-devel sqlite sqlite-devel  readline-devel
+sudo yum -y groupinstall "Development tools"
+
+wget --no-check-certificate
+http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
+tar xf Python-2.7.5.tar.bz2 
+cd Python-2.7.5
+./configure --prefix=/usr/local
+make && sudo make altinstall
+
+wget --no-check-certificate
+https://pypi.python.org/packages/source/v/virtualenvwrapper/virtualenvwrapper-4.1.1.tar.gz
+wget --no-check-certificate
+https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
+
+cd virtualenv-
+sudo python setup.py install
+
+
+    sudo -u uqam -s
+    echo 'export WORKON_HOME=~/Envs' >> .bashrc # Change this directory if you don't like it
+    source $HOME/.bashrc
+    mkdir -p $WORKON_HOME
+    echo '. /usr/bin/virtualenvwrapper.sh' >> .bashrc
+    echo 'export PATH=$PATH:/usr/local/bin' >> .bashrc
+    source $HOME/.bashrc
+
+    mkvirtualenv uqam --python=/usr/local/bin/python2.7
+
+    cd uqam
+
+    pip install -r requirements.txt
+
+
+
+
+
+
 
 
 ## Further documentation
