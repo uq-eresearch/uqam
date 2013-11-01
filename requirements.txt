@@ -1,4 +1,4 @@
-Django==1.4.2
+Django==1.4.9
 PIL==1.1.7
 South==0.7.5
 Whoosh==2.3.0
@@ -21,7 +21,7 @@ docutils==0.8.1
 psycopg2==2.4.5
 django-tables2==0.11.0
 easy-thumbnails==1.0.3
-pgmagick==0.5.1
+pgmagick==0.5.7
 django-smart-selects==1.0.6
 django-ignoretests==0.3.2
 pygments==1.5
