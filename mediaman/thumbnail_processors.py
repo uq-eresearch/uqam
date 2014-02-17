@@ -1,7 +1,12 @@
-import Image
-import ImageDraw
-import ImageEnhance
 from django.conf import settings
+try:
+    from PIL import Image
+    from PIL import ImageDraw
+    from PIL import ImageEnhance
+except ImportError:
+    import Image
+    import ImageDraw
+    import ImageEnhance
 
 
 def expand_canvas(image, size, expand=False, expand_colour="white", **kwargs):
