@@ -623,6 +623,8 @@ color:#2788db !important}
 #item-representations .pagination li{list-style:none;float:left;margin:0 10px 0 0;padding:2px 4px;border:1px solid #eee;border-radius:4px}
 #item-representations .pagination li.current{background:#eee}
 #item-representations .caption p{color: #636363; font-size: 10px;}
+/* Fix bug introduced by updates to UQ default.css that causes IE8 to shrink the image width  DRA: 18/02/2014 */
+#item-representations .item-image img{max-width: none;}
 
 /* About the catalogue
 ------------------------------------------------------------------------*/
