@@ -1,5 +1,5 @@
-Django==1.4.9
-Pillow==2.2.1
+Django==1.4.10
+Pillow==2.3.0
 South==0.7.5
 Whoosh==2.3.0
 django-auth-ldap==1.1
