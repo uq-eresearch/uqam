@@ -169,7 +169,6 @@ INSTALLED_APPS = (
     'subcollections',
     'dataimport',
     'djkombu',
-    'reports',
     'parties',
     'common',
     'location',

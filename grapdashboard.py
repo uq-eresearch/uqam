@@ -11,9 +11,9 @@ class UQAMDashboard(Dashboard):
             column=1,
             collapsible=False,
             models=('cat.models.MuseumObject', 'parties.*',
-                'loans.models.LoanAgreement', 'condition.*',
-                'subcollections.*'),
-            exclude=('django.contrib.*', 'djcelery.*', 'reports.*',  'location.*'),
+                    'loans.models.LoanAgreement', 'condition.*',
+                    'subcollections.*'),
+            exclude=('django.contrib.*', 'djcelery.*', 'location.*'),
         ))
 
         self.children.append(modules.LinkList(
@@ -45,7 +45,7 @@ class UQAMDashboard(Dashboard):
             column=1,
             collapsible=True,
             models=('django.contrib.*',
-                'djcelergy.*', 'mediaman.*', 'common.*'),
+                    'djcelergy.*', 'mediaman.*', 'common.*'),
         ))
 
         # append a recent actions module
@@ -63,7 +63,7 @@ class UQAMDashboard(Dashboard):
             children=(
                 ['Upload media', '/mediaman/bulk_upload/'],
                 ['Filter/query items', '/admin/cat/museumobject/search'],
-#                ['New acquisition', '/admin/common/siteconfiguration'],
+#               ['New acquisition', '/admin/common/siteconfiguration'],
                 ['Bulk update storage locations', '/admin/cat/museumobject/upload_storagelocations'],
                 ['Update new acquisition', '/admin/common/siteconfiguration/1/']
             )
