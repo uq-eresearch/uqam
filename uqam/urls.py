@@ -7,7 +7,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url('', include('uqam.cat.urls')),
+    url('', include('cat.urls')),
 
     url(r'^$', HomepageView.as_view()),
 
@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^dashboard/', include('uqam.dashboard.urls')),
+    url(r'^dashboard/', include('dashboard.urls')),
 
     url(r'^grappelli/', include('grappelli.urls')),
 
