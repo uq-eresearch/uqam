@@ -1,11 +1,11 @@
 # Django settings for uqam project.
 import os.path
-from common.secret_key import gen_secret_key
+from utils.secret_key import gen_secret_key
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-DJANGO_ROOT = os.path.dirname(os.path.dirname(__file__))
+DJANGO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 ADMINS = (
     ('Damien Ayers', 'd.ayers@uq.edu.au'),

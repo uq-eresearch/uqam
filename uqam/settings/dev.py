@@ -3,7 +3,7 @@ Extra Development settings
 
 Will override any default settings if a 'development_mode' file exists.
 """
-from default_settings import *
+from common import *
 
 DEBUG = True
 TEMPLATE_DEBUG = True
