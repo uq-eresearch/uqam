@@ -71,11 +71,11 @@ http://www.nginxtips.com/how-to-install-nginx-on-centos-rhel/
 http://www.tecmint.com/how-to-enable-epel-repository-for-rhel-centos-6-5/
 ## RHEL/CentOS 6 64-Bit ##
 
-wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-rpm -ivh epel-release-6-8.noarch.rpm
+    wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    rpm -ivh epel-release-6-8.noarch.rpm
 
-wget http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm
-sudo rpm -Uvh nginx-release-centos-6-0.el6.ngx.noarch.rpm 
+    wget http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm
+    sudo rpm -Uvh nginx-release-centos-6-0.el6.ngx.noarch.rpm 
 
 
 
@@ -103,8 +103,8 @@ https://gist.github.com/hangtwenty/5546945
     wget --no-check-certificate https://pypi.python.org/packages/source/v/virtualenvwrapper/virtualenvwrapper-4.1.1.tar.gz
     wget --no-check-certificate https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
 
-cd virtualenv-
-sudo python setup.py install
+    cd virtualenv-
+    sudo python setup.py install
 
 
     sudo -u uqam -s
@@ -119,14 +119,41 @@ sudo python setup.py install
 
     cd uqam
 
-    pip install -r requirements.txt
+    pip install -r requirements/prod.txt
+
+
+### Setup nginx services
+
+    sudo yum install nginx
+    sudo chkconfig nginx on
+    sudo service nginx start
 
 
 
+### Setup database (*postgresql*):
 
+    $ sudo yum install postgresql-server
+    $ service postgresql initdb
+    $ sudo service postgresql start
+    $ sudo chkconfig postgresql on
 
+Create user and database for uqam:
 
+    $ sudo -u postgres createuser -S -D -R -P uqam
+    $ sudo -u postgres createdb --owner uqam --encoding UTF8 uqam
 
+Allow login with username/password from localhost:
+
+    # modify /var/lib/pgsql/data/pg_hba.conf
+    # changing 'ident' to 'md5' for the following two lines
+    host    all         all         127.0.0.1/32          md5
+    host    all         all         ::1/128               md5
+
+Create database tables:
+
+    $ ./manage.py syncdb --all     # Create database tables
+    $ ./manage.py migrate --fake   # Enable migrations updates
+    $ ./manage.py createsuperuser  # Create admin user
 
 ## Further documentation
 
