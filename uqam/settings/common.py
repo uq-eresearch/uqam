@@ -268,15 +268,15 @@ LOGGING = {
 
 EMAIL_HOST = 'mail.uq.edu.au'
 
-
-HAYSTACK_SITECONF = 'cat.search_sites'
-#HAYSTACK_SEARCH_ENGINE = 'whoosh'
-#HAYSTACK_WHOOSH_PATH = '/home/django/whoosh/cat_index'
-HAYSTACK_SEARCH_ENGINE = 'solr'
-HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
-HAYSTACK_SOLR_TIMEOUT = 60 * 5
-HAYSTACK_INCLUDE_SPELLING = True
-HAYSTACK_BATCH_SIZE = 100
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://localhost:8983/solr/collection1',
+        'TIMEOUT': 60 * 5,
+        'INCLUDE_SPELLING': True,
+        'BATCH_SIZE': 100,
+    }
+}
 
 # Keep ModelBackend around for per-user permissions and maybe a local
 # superuser.

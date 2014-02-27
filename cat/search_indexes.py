@@ -1,23 +1,22 @@
-from haystack.indexes import SearchIndex, CharField, MultiValueField, BooleanField, IntegerField
-from haystack import site
+from haystack import indexes
 from .models import MuseumObject
 
 
-class MuseumObjectImagesCharField(CharField):
+class MuseumObjectImagesCharField(indexes.CharField):
     def prepare(self, obj):
         obj.public_images_count = obj.public_images().count()
         return super(MuseumObjectImagesCharField, self).prepare(obj)
 
 
-class MuseumObjectIndex(SearchIndex):
-    text = CharField(document=True, use_template=True)
-    registration_number = IntegerField(model_attr='registration_number')
-    categories = MultiValueField(faceted=True)
-    item_name = CharField(model_attr='artefact_type', faceted=True)
-    global_region = CharField(model_attr='global_region', faceted=True, default='')
-    country = CharField(model_attr='country', faceted=True, default='')
-    people = MultiValueField(faceted=True)
-    has_images = BooleanField(faceted=True)
+class MuseumObjectIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    registration_number = indexes.IntegerField(model_attr='registration_number')
+    categories = indexes.MultiValueField(faceted=True)
+    item_name = indexes.CharField(model_attr='artefact_type', faceted=True)
+    global_region = indexes.CharField(model_attr='global_region', faceted=True, default='')
+    country = indexes.CharField(model_attr='country', faceted=True, default='')
+    people = indexes.MultiValueField(faceted=True)
+    has_images = indexes.BooleanField(faceted=True)
     list_row = MuseumObjectImagesCharField(use_template=True, template_name='snippets/item_list_row.html', indexed=False)
     grid_element = MuseumObjectImagesCharField(use_template=True, template_name='snippets/item_grid_element.html', indexed=False)
 
@@ -38,12 +37,9 @@ class MuseumObjectIndex(SearchIndex):
     def get_model(self):
         return MuseumObject
 
-    def index_queryset(self):
+    def index_queryset(self, using=None):
         """
         Used when the entire index for model is updated.
         """
-        ### TODO ###
-        # Ignore private/reserved etc objects
         return self.get_model().objects.filter(public=True)
 
-site.register(MuseumObject, MuseumObjectIndex)

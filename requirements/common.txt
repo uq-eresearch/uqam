@@ -4,7 +4,7 @@ South==0.7.5
 Whoosh==2.3.0
 django-auth-ldap==1.1
 django-extensions==0.9
-django-haystack==1.2.7
+django-haystack==2.1.0
 django-grappelli==2.4.3
 python-ldap==2.4.10
 wsgiref==0.1.2
@@ -25,7 +25,7 @@ django-smart-selects==1.0.6
 django-ignoretests==0.3.2
 pygments==1.5
 django-refinery==0.1
-pysolr==2.1.0-beta
+pysolr==3.2.0
 django-endless-pagination==1.1
 -e git+https://github.com/omad/django-bulkimport.git#egg=django-bulkimport
 
