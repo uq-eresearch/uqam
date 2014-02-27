@@ -155,6 +155,44 @@ Create database tables:
     $ ./manage.py migrate --fake   # Enable migrations updates
     $ ./manage.py createsuperuser  # Create admin user
 
+Prepare static files:
+
+    $ mkdir /home/uqam/public
+    $ ./manage.py collectstatic
+
+## Setup Solr for search
+
+    # Install Java
+    yum install java-1.7.0-openjdk.x86_64
+
+    # Download and install
+    wget http://mirror.rackcentral.com.au/apache/lucene/solr/4.7.0/solr-4.7.0.tgz
+    tar xvzf solr-4.7.0.tgz
+    sudo mv solr-4.7.0/example/ /opt/solr
+
+Create a user account to run Solr:
+
+    sudo useradd -r -d /opt/solr -M -c "Apache Solr" solr
+    sudo chown -R solr:solr /opt/solr/
+
+Copy etc files
+    
+    cp etc/solr-schema.xml /opt/solr/solr/collection1/conf/
+    cp etc/init-solr /etc/init.d/solr
+    chmod +x /etc/init.d/solr
+
+    cp etc/sysconfig-solr /etc/sysconfig/solr
+
+Test run:
+
+    sudo -i -u solr
+    java -jar start.jar
+
+Start Solr on boot:
+    
+    chkconfig solr on
+
+
 ## Further documentation
 
 Is available in `docs/`. It can be compiled to *HTML* by:
@@ -162,3 +200,6 @@ Is available in `docs/`. It can be compiled to *HTML* by:
     (uqam)$ pip install sphinx
     (uqam)$ cd docs; make html
 
+
+## References
+http://www.erikwebb.net/blog/installing-apache-solr-jetty-rhel-6/
