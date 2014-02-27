@@ -192,6 +192,14 @@ Test run:
 Start Solr on boot:
     
     chkconfig solr on
+    service solr start
+
+Update the index
+
+    ./manage.py rebuild_index
+
+### TODO
+Setup cron tasks to rebuild index and update thumbnails
 
 
 ## Further documentation
