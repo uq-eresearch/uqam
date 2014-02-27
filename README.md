@@ -177,8 +177,9 @@ Create a user account to run Solr:
 
 Copy etc files
     
-    cp etc/solr-schema.xml /opt/solr/solr/collection1/conf/
+    cp etc/solr-schema.xml /opt/solr/solr/collection1/conf/schema.xml
     cp etc/init-solr /etc/init.d/solr
+    chown root:root /etc/init.d/solr
     chmod +x /etc/init.d/solr
 
     cp etc/sysconfig-solr /etc/sysconfig/solr
