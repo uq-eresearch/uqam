@@ -34,10 +34,15 @@ function search() {
     var searchterm = $('#geonames-q').val();
 
     // Empty the table
-    $('#geonames-table > tbody:last').children().remove()
+    $('#geonames-table > tbody:last').children().remove();
 
 
-    $.getJSON('http://ws.geonames.org/searchJSON?q=' + encodeURIComponent(searchterm) + '&maxRows=10',
+    $.getJSON('http://ws.geonames.org/searchJSON',
+        {
+            q: searchterm,
+            maxRows: 10,
+            username: 'eheritage_au'
+        },
         function (data) {
             console.log(data);
             $.each(data.geonames, function(i, place) {
