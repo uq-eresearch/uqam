@@ -10,7 +10,7 @@ env.appdir = '/home/django/uqam'
 env.logsdir = '/home/django/uqam/logs'
 env.tmpappdir = '/home/django/uqam_tmp'
 env.virtenv = '/home/django/env'
-env.reqfile = env.appdir + '/requirements.txt'
+env.reqfile = env.appdir + '/requirements/prod.txt'
 env.sudouser = 'uqdayers'
 
 
