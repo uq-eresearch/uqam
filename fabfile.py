@@ -146,17 +146,14 @@ def _venv(cmd):
 def reload_servers():
     with settings(user=env.sudouser):
         sudo('service nginx reload')
-        sudo('service celeryd restart')
         sudo('initctl stop uqam-gunicorn')
         sudo('initctl start uqam-gunicorn')
 
 def stop_servers():
     with settings(user=env.sudouser):
-        sudo('service celeryd stop')
         sudo('stop uqam-gunicorn')
 def start_servers():
     with settings(user=env.sudouser):
-        sudo('service celeryd start')
         sudo('start uqam-gunicorn')
 
 
