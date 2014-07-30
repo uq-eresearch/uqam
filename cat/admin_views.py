@@ -294,7 +294,7 @@ def upload_storage_locations_spreadsheet(request):
 
             def update_storage_locations(headers, values):
                 try:
-                    reg_num = values[headers.index('Registration Number')]
+                    reg_num = values[headers.index('registration number')]
                     reg_num = int(reg_num)
                 except ValueError:
                     messages.add_message(request, messages.ERROR, "Registration number not a number: '%s'" % reg_num)
