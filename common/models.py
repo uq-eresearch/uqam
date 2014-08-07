@@ -40,7 +40,8 @@ class SiteConfiguration(models.Model):
     new_acquisition = models.ForeignKey('cat.MuseumObject',
         help_text="Use magnifying glass selector, the number displayed is an 'id' not a 'registration number'")
     new_acquisition_text = models.TextField(blank=True)
-    new_acquisition_image = models.ForeignKey(ArtefactRepresentation, null=True)
-    
+    new_acquisition_image = models.ForeignKey(ArtefactRepresentation, null=True,
+        on_delete=models.SET_NULL)
+
     class Meta:
         verbose_name_plural = "Site configuration"
