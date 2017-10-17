@@ -1,3 +1,6 @@
+# Bugfix for https://stackoverflow.com/a/39586528/701439
+import uuid
+uuid._uuid_generate_random = None
 # Django settings for uqam project.
 import os.path
 from utils.secret_key import gen_secret_key
