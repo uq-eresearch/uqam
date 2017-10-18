@@ -21,6 +21,7 @@ services:
 install:
   - pip install -r requirements/dev.txt
   - createuser -U postgres -S -D -R uqam
+  - createdb -U postgres --owner uqam --encoding UTF8 uqam
   - createdb -U postgres --owner uqam --encoding UTF8 test_uqam
   - mkdir logs
 script:
