@@ -20,18 +20,15 @@ class ViewTest(TestCase):
     def setUp(self):
         self.client = Client()
 
+    def test_museumobjects_list(self):
+        # Issue a GET request
+        response = self.client.get('/item/')
+
+        self.assertEqual(response.status_code, 200)
+
     def test_museumobjects_view(self):
         # Issue a GET request
         response = self.client.get('/item/1')
 
-        self.assertEqual(response.status_code, 200)
-
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
-
+        self.assertEqual(response.status_code, 404)
 
