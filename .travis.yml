@@ -4,7 +4,17 @@ python:
 addons:
   apt:
     packages:
+      - git
+      - libboost-python-dev
       - libgraphicsmagick++1-dev
+      - libjpeg62-turbo-dev
+      - libldap2-dev
+      - libpq-dev
+      - libsasl2-dev
+      - postgresql
+      - postgresql-contrib
+      - python-dev
+      - python-pip
 install:
   - pip install -r requirements/dev.txt
 before_script:
