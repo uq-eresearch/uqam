@@ -8,8 +8,6 @@ addons:
       - libboost-python-dev
       - libgraphicsmagick1-dev
       - libgraphicsmagick++1-dev
-      - libjpeg62-dev
-      - libldap2-dev
       - libpq-dev
       - libsasl2-dev
       - postgresql
