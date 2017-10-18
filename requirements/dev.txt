@@ -4,3 +4,4 @@ git+https://github.com/ebolwidt/fabric.git@defdc76bc5a1a0dc044a6c8971b6fd3148a32
 django-debug-toolbar==0.9.4
 ipython==0.13
 ipdb==0.6.1
+mock==2.0.0
