@@ -7,5 +7,8 @@ addons:
       - libgraphicsmagick++1-dev
 install:
   - pip install -r requirements/dev.txt
+before_script:
+  - createuser -U postgres -S -D -R -P uqam
+  - createdb -U postgres --owner uqam --encoding UTF8 uqam
 script:
   - ./manage.py test
