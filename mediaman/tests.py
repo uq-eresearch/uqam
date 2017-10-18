@@ -63,18 +63,18 @@ class SimpleTest(TestCase):
 
 
 
-class MediaTests(TestCase):
-
-    def item_image_handler():
-        pass
-
-    def test_upload(self):
-        uploader = Uploader()
-        uploader.add_handler('II', 'Item Images', item_image_handler)
-
-        uploader.add_handler('OH', 'Object Histories', object_history_handler)
-        
-
-        uploader.as_view()
+# class MediaTests(TestCase):
+# 
+#     def item_image_handler():
+#         pass
+# 
+#     def test_upload(self):
+#         uploader = Uploader()
+#         uploader.add_handler('II', 'Item Images', item_image_handler)
+# 
+#         uploader.add_handler('OH', 'Object Histories', object_history_handler)
+#         
+# 
+#         uploader.as_view()
 
 
