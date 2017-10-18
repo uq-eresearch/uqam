@@ -25,4 +25,6 @@ install:
   - createdb -U postgres --owner uqam --encoding UTF8 test_uqam
   - mkdir logs
 script:
-  - ./manage.py test --noinput
+  - echo 'from uqam.settings.dev import *; print "\n".join(INSTALLED_APPS)' > installed_apps.py
+  - export LOCAL_APPS=$(comm -12 <(./manage.py runscript installed_apps.py | uniq | sort) <(ls -1))
+  - ./manage.py test --noinput $LOCAL_APPS
