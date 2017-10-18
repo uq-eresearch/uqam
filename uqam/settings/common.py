@@ -41,7 +41,7 @@ TIME_ZONE = 'Australia/Brisbane'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-AU'
+LANGUAGE_CODE = 'en_GB'
 
 # There is only one site
 SITE_ID = 1
