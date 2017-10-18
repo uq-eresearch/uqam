@@ -7,7 +7,7 @@ addons:
       - git
       - libboost-python-dev
       - libgraphicsmagick++1-dev
-      - libjpeg62-turbo-dev
+      - libjpeg62-dev
       - libldap2-dev
       - libpq-dev
       - libsasl2-dev
