@@ -6,6 +6,7 @@ addons:
     packages:
       - git
       - libboost-python-dev
+      - libgraphicsmagick1-dev
       - libgraphicsmagick++1-dev
       - libjpeg62-dev
       - libldap2-dev
