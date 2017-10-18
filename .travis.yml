@@ -22,7 +22,6 @@ install:
   - pip install -r requirements/dev.txt
   - createuser -U postgres -S -d -R uqam
   - createdb -U postgres --owner uqam --encoding UTF8 uqam
-  - createdb -U postgres --owner uqam --encoding UTF8 test_uqam
   - mkdir logs
 script:
   - echo 'from uqam.settings.dev import *; print "\n".join(INSTALLED_APPS)' > installed_apps.py
