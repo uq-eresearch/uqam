@@ -24,4 +24,4 @@ before_script:
   - createuser -U postgres -S -D -R uqam
   - createdb -U postgres --owner uqam --encoding UTF8 uqam
 script:
-  - ./manage.py test
+  - ./manage.py test --noinput
