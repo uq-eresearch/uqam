@@ -214,30 +214,6 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
         },
-        'logfile': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_ROOT, "uqam.log"),
-            'maxBytes': 5000000,
-            'backupCount': backup_count,
-            'formatter': 'standard',
-        },
-        'errorlog': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_ROOT, "uqam.log"),
-            'maxBytes': 5000000,
-            'backupCount': backup_count,
-            'formatter': 'standard',
-        },
-        'db': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_ROOT, "db.log"),
-            'maxBytes': 5000000,
-            'backupCount': backup_count,
-            'formatter': 'standard',
-        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -246,24 +222,14 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'errorlog'],
-            'propagate': True,
+            'handlers': ['console'],
             'level': 'WARN',
-        },
-        'django.db.backends': {
-            'handlers': ['db'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
             'propagate': False,
         },
         #Default handler for everything that we're doing. Hopefully this doesn't double-print
         #the Django things as well. Not 100% sure how logging works :)
         '': {
-            'handlers': ['console', 'logfile'],
+            'handlers': ['console'],
             'level': 'DEBUG',
         },
     }
