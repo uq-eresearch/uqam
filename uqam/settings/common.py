@@ -253,7 +253,7 @@ AUTHENTICATION_BACKENDS = (
     'uqam.auth.backend.StricterLDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-AUTH_LDAP_SERVER_URI = "ldap://ldap.uq.edu.au"
+AUTH_LDAP_SERVER_URI = "ldaps://ldap.uq.edu.au"
 import ldap
 from django_auth_ldap.config import LDAPSearch
 AUTH_LDAP_BIND_DN = ""
