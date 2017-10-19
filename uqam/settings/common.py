@@ -133,9 +133,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'uqam.middleware.RequireLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'uqam.middleware.ReverseProxyHttpsHeadersMiddleware',
-    'uqam.middleware.SecureRequiredMiddleware',
-    'uqam.middleware.XSessionMiddleware',
 
     'django.middleware.transaction.TransactionMiddleware',
 )
