@@ -37,7 +37,7 @@ before_deploy:
   - openssl aes-256-cbc -K $encrypted_62dfdaf84d45_key -iv $encrypted_62dfdaf84d45_iv -in container-upload.json.enc -out container-upload.json -d
 deploy:
   provider: script
-  script: ./deploy_to_container.sh
+  script: ./backup2swift backup -c container-upload.json uqam.docker.xz
   skip_cleanup: true
   on:
     branch: master
