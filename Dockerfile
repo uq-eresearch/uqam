@@ -32,6 +32,7 @@ WORKDIR /app/
 ADD etc/services.d/ /etc/services.d/
 
 VOLUME /srv/uqam-media
+VOLUME /app/deploy
 
 RUN useradd -d /app -s /usr/sbin/nologin django && \
   (cd /app && ./manage.py collectstatic --noinput) && \
