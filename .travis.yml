@@ -28,5 +28,16 @@ script:
   - echo 'from uqam.settings.dev import *; print "\n".join(INSTALLED_APPS)' > installed_apps.py
   - export LOCAL_APPS=$(comm -12 <(./manage.py runscript installed_apps.py | uniq | sort) <(ls -1))
   - ./manage.py test --noinput $LOCAL_APPS
-after_success:
+before_deploy:
   - docker build -t uqam .
+  - docker save uqam > uqam.docker
+  - xz uqam.docker
+  - curl -sOL https://github.com/uq-eresearch/backup2swift/releases/download/0.1.1/backup2swift
+  - chmod +x backup2swift
+  - openssl aes-256-cbc -K $encrypted_62dfdaf84d45_key -iv $encrypted_62dfdaf84d45_iv -in container-upload.json.enc -out container-upload.json -d
+deploy:
+  provider: script
+  script: deploy_to_container.sh
+  skip_cleanup: true
+  on:
+    branch: master

@@ -10,3 +10,4 @@ celerybeat-schedule
 Guardfile
 deploy/
 bulkimport
+/container-upload.json
