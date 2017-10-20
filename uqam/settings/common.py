@@ -2,6 +2,7 @@
 import uuid
 uuid._uuid_generate_random = None
 # Django settings for uqam project.
+import os
 import os.path
 from utils.secret_key import gen_secret_key
 
@@ -23,7 +24,7 @@ DATABASES = {
         'NAME': 'uqam',
         'USER': 'uqam',
         'PASSWORD': 'uqam',
-        'HOST': 'localhost',
+        'HOST': os.getenv('UQAM_DB', 'localhost'),
         'PORT': '',
     },
 }
@@ -232,12 +233,13 @@ LOGGING = {
     }
 }
 
-EMAIL_HOST = 'mail.uq.edu.au'
+EMAIL_HOST = os.getenv('UQAM_SMTP', 'localhost')
 
+SOLR_HOST = os.getenv('UQAM_SOLR', 'localhost')
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://localhost:8983/solr/collection1',
+        'URL': 'http://%s:8983/solr/collection1' % (SOLR_HOST),
         'TIMEOUT': 60 * 5,
         'INCLUDE_SPELLING': True,
         'BATCH_SIZE': 100,

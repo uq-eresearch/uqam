@@ -34,7 +34,8 @@ ADD etc/services.d/ /etc/services.d/
 VOLUME /srv/uqam-media
 VOLUME /app/deploy
 
-RUN useradd -d /app -s /usr/sbin/nologin django && \
+RUN groupadd -g 495 django && \
+  useradd -d /app -s /usr/sbin/nologin -u 497 -g django django && \
   (cd /app && ./manage.py collectstatic --noinput) && \
   rm -f /etc/nginx/nginx.conf /etc/nginx/conf.d/* && \
   ln -s /app/etc/nginx.conf /etc/nginx/nginx.conf && \
