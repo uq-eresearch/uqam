@@ -43,8 +43,6 @@ DEBUG_TOOLBAR_CONFIG = {
 
 MEDIA_ROOT = os.path.join(DJANGO_ROOT, 'media')
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 # Disable Template Caching
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
