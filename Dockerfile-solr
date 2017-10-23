@@ -10,4 +10,4 @@ ADD etc/solr-schema.xml /opt/solr/solr/collection1/conf/schema.xml
 
 VOLUME /opt/solr/solr/data
 
-CMD ["java", "-Dsolr.solr.home=/opt/solr/solr", "-Djetty.logs=/opt/solr/logs", "-Djetty.home=/opt/solr", "-Djava.io.tmpdir=/tmp", "-jar", "/opt/solr/start.jar", "/opt/solr/etc/jetty-logging.xml", "/opt/solr/etc/jetty.xml"]
+CMD ["java", "-Dsolr.solr.home=/opt/solr/solr", "-Djetty.home=/opt/solr", "-Djava.io.tmpdir=/tmp", "-jar", "/opt/solr/start.jar", "/opt/solr/etc/jetty.xml"]
