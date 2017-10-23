@@ -1,0 +1,7 @@
+#!/usr/bin/execlineb -P
+with-contenv
+fdmove -c 2 1
+cd /app
+s6-envuidgid django
+s6-applyuidgid -U
+bash -ex -c "while nice -n 15 ./manage.py update_index --remove --batch-size 1000; do sleep 86400; done"

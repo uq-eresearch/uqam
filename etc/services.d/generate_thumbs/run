@@ -4,4 +4,4 @@ fdmove -c 2 1
 cd /app
 s6-envuidgid django
 s6-applyuidgid -U
-/usr/local/bin/gunicorn -c ./gunicorn.conf uqam.wsgi
+bash -ex -c "while nice -n 10 ./manage.py generate_thumbs; do sleep 7200; done"

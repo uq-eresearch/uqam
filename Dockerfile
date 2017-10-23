@@ -40,3 +40,10 @@ RUN groupadd -g 495 django && \
   rm -f /etc/nginx/nginx.conf /etc/nginx/conf.d/* && \
   ln -s /app/etc/nginx.conf /etc/nginx/nginx.conf && \
   ln -s /app/etc/nginx-gunicorn.conf /etc/nginx/conf.d/gunicorn.conf
+
+RUN DEBIAN_FRONTEND=noninteractive && \
+  echo "en_AU.UTF-8 UTF-8" > /etc/locale.gen && \
+  locale-gen en_AU.UTF-8 && \
+  /usr/sbin/update-locale LANG=en_AU.UTF-8
+
+ENV LC_ALL=en_AU.UTF-8

@@ -1,0 +1,13 @@
+FROM openjdk:7
+
+RUN groupadd -g 8983 solr && \
+  useradd -d /opt/solr -s /usr/sbin/nologin -u 8983 -g solr solr && \
+  curl -L https://swift.rc.nectar.org.au:8888/v1/AUTH_af890f2265094ba3a62141bfad1c832b/resources/ancient-solr.tar | \
+    tar xv -C / && \
+  chown -R solr:solr /opt/solr
+
+ADD etc/solr-schema.xml /opt/solr/solr/collection1/conf/schema.xml
+
+VOLUME /opt/solr/solr/data
+
+CMD ["java", "-Dsolr.solr.home=/opt/solr/solr", "-Djetty.logs=/opt/solr/logs", "-Djetty.home=/opt/solr", "-Djava.io.tmpdir=/tmp", "-jar", "/opt/solr/start.jar", "/opt/solr/etc/jetty-logging.xml", "/opt/solr/etc/jetty.xml"]

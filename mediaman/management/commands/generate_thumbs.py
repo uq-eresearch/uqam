@@ -18,12 +18,10 @@ class Command(BaseCommand):
         self.stdout.write("Found %s public images\n" % ars.count())
 
         for ar in ars:
-            # self.stdout.write(str(ar.image) + "\n")
             if ar.image.storage.exists(ar.image):
                 easy_thumbnails.files.generate_all_aliases(
                     ar.image, include_global=True)
-                self.stdout.write('.')
             else:
-                self.stdout.write('n')
+                pass
 
         self.stdout.write("\nProcessed all images\n")
