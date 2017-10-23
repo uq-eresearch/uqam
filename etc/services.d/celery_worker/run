@@ -4,4 +4,5 @@ fdmove -c 2 1
 cd /app
 s6-envuidgid django
 s6-applyuidgid -U
-nice -n 10 ./manage.py celery worker -l info -n worker --time-limit=300
+nice -n 10
+./manage.py celery worker -l info -n worker --events --time-limit=300 --maxtasksperchild=10 

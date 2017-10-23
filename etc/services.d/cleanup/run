@@ -4,4 +4,5 @@ fdmove -c 2 1
 cd /app
 s6-envuidgid django
 s6-applyuidgid -U
-bash -ex -c "while nice -n 10 ./manage.py cleanup; do sleep 7200; done"
+nice -n 10
+bash -e -c "while ./manage.py cleanup; do sleep 7200; done"

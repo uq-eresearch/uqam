@@ -290,7 +290,7 @@ GRAPPELLI_ADMIN_TITLE = "<a href='/'>UQ Anthropology Museum Catalogue</a>"
 
 import djcelery
 djcelery.setup_loader()
-BROKER_TRANSPORT = "django"
+BROKER_URL = 'amqp://'+os.getenv('UQAM_AMQP', 'localhost')
 
 GRAPPELLI_INDEX_DASHBOARD = 'uqam.grapdashboard.UQAMDashboard'
 
