@@ -1,10 +1,13 @@
 # UQ Anthropology Museum Catalogue
 
+[![License](https://img.shields.io/github/license/uq-eresearch/uqam.svg)](https://github.com/uq-eresearch/uqam/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/uq-eresearch/uqam.svg?branch=master)](https://travis-ci.org/uq-eresearch/uqam)
+
 UQAM is a web-based catalogue used by the University of Queensland Anthropology Museum.
 
 It has a public front end for people to browse the museum's holdings, including photographs, documents, maps and information on the people involved. As well, it provides tools for museum staff to manage the items in the museum, and import any related data.
 
-It is developed using the [Python][] [Django][] web framework.
+It is developed using the Python Django web framework.
 
 This software was developed by the [eResearch Group][eResearch] at [The University of Queensland][uq] with funding from ANDS. It is copyright The University of Queensland.
 
