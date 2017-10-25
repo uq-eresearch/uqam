@@ -31,10 +31,10 @@ script:
 before_deploy:
   - docker build -t uqam .
   - docker save uqam > uqam.docker
-  - xz uqam.docker
+  - travis_wait xz uqam.docker
   - docker build -f Dockerfile-solr -t uqam-solr .
   - docker save uqam-solr > uqam-solr.docker
-  - xz uqam-solr.docker
+  - travis_wait xz uqam-solr.docker
   - curl -sOL https://github.com/uq-eresearch/backup2swift/releases/download/0.1.1/backup2swift
   - chmod +x backup2swift
   - openssl aes-256-cbc -K $encrypted_62dfdaf84d45_key -iv $encrypted_62dfdaf84d45_iv -in container-upload.json.enc -out container-upload.json -d
