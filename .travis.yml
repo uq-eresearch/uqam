@@ -31,9 +31,9 @@ script:
   - ./manage.py test --noinput $LOCAL_APPS
 before_deploy:
   - docker build -t uqam .
-  - docker save uqam | pv | xz > uqam.docker.xz
+  - docker save uqam | pv -bfr | xz > uqam.docker.xz
   - docker build -f Dockerfile-solr -t uqam-solr .
-  - docker save uqam-solr | pv | xz > uqam-solr.docker.xz
+  - docker save uqam-solr | pv -bfr | xz > uqam-solr.docker.xz
   - curl -sOL https://github.com/uq-eresearch/backup2swift/releases/download/0.1.1/backup2swift
   - chmod +x backup2swift
   - openssl aes-256-cbc -K $encrypted_62dfdaf84d45_key -iv $encrypted_62dfdaf84d45_iv -in container-upload.json.enc -out container-upload.json -d
